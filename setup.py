@@ -7,7 +7,7 @@ setup(name='WTech',
         description="Hello there,let try it out.",
         long_description="hello there,this is make a pybot module.",
         packages=find_packages(),
-        install_requires=[], # add any additional packages that 
+        install_requires=["cryptography","requests"], # add any additional packages that 
         install_requires=[], # add any additional packages that 
         # 需要和你的包一起安装，例如：'caer'
         
