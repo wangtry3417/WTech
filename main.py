@@ -1,4 +1,5 @@
 from flask import Flask,render_template,jsonify,request,abort
+from cryptography.fernet import Fernet
 
 app = Flask("WTech")
 
@@ -27,6 +28,27 @@ def client():
     return render_template("client.html",user=user,count=count)
   else:
     return abort(405)
+
+@app.route("/wcoin/buy",methods=["GET"])
+def buy():
+  user = request.args.get("user")
+  if user == "wangtry":
+    count = 200000000
+    l = [user,count]
+    list_string = str(l)
+    fernet = Fernet("DUBWKuYEugUex8ynVKm-7ctcUmwaV0u0JpzLkoka8_Q=")
+    address = fernet.encrypt(list_string.encode()).decode()
+    return render_template("buy.html",address=address)
+  elif user == "Cw1023":
+    count = 25000000
+    l = [user,count]
+    list_string = str(l)
+    fernet = Fernet("DUBWKuYEugUex8ynVKm-7ctcUmwaV0u0JpzLkoka8_Q=")
+    address = fernet.encrypt(list_string.encode()).decode()
+    return render_template("buy.html",address=address)
+  else:
+    return abort(502)
+
 
 
 app.run(host="0.0.0.0",port=5000)
