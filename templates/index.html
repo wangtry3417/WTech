@@ -8,6 +8,31 @@
        padding: 30px 35px;
        font-size: 33px;
      }
+      #login {
+       width: 300px;
+       margin: auto;
+       background-color: #fff;
+       padding: 20px;
+       border-radius: 5px;
+       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      }
+      #btn1 {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border: none;
+        border-radius: 5px;
+        background-color: #007bff;
+        color: #fff;
+        cursor: pointer;
+      }
     </style>
   </head>
   <body>
@@ -16,5 +41,13 @@
     <div id="top">
        W Chat for user chat!
     </div>
+    <br>
+    <br>
+    <form id="login" action="/chat" method="post">
+       <label>Username:</label>
+      <input type="text" name="user">.
+      <br>
+      <button class="btn1" type="submit">Login</button>
+  </form>
   </body>
 </html>
