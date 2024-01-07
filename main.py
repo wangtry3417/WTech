@@ -1,8 +1,16 @@
 from flask import Flask,render_template,jsonify,request,abort
 from cryptography.fernet import Fernet
 import hashlib
+import psycopg2
+import os
 
 app = Flask("WTech")
+
+hostname = os.environ["Hostname"]
+dbURL = os.envion["dbURL"]
+
+conn = psycopg2.connect(dbURL, sslmode='require')
+
 
 def hash_value(user):
   u = user.encode()
