@@ -3,7 +3,7 @@ from cryptography.fernet import Fernet
 import hashlib
 import psycopg2
 import os
-import flask_sqlalchemy
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask("WTech")
 
