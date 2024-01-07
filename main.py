@@ -1,7 +1,13 @@
 from flask import Flask,render_template,jsonify,request,abort
 from cryptography.fernet import Fernet
+import hashlib
 
 app = Flask("WTech")
+
+def hash_value(user):
+  u = user.encode()
+  sha = hashlib.sha256(u).hexdigest()
+  return sha
 
 @app.route("/")
 def index():
@@ -28,6 +34,26 @@ def client():
     return render_template("client.html",user=user,count=count)
   else:
     return abort(405)
+
+@app.route("/wcoin/api/v1/mining",methods=["GET"])
+def mining():
+  user = request.args.get("user")
+  if user == "wangtry":
+    user_hash = hash_value(user=user)
+    return jsonify({
+       "user" : user,
+       "user-api-key" : user_hash,
+       "balance-on-decimal" : 200000000
+    })
+  elif user == "Cw1023":
+    user_hash = hash_value(user=user)
+    return jsonify({
+       "user" : user,
+       "user-api-key" : user_hash,
+       "balance-on-decimal" : 25000000
+    })
+  else:
+    return jsonify({"Invaild user":"Please correctly input!"})
 
 @app.route("/wcoin/buy",methods=["GET"])
 def buy():
