@@ -35,7 +35,7 @@ def client():
   else:
     return abort(405)
 
-@app.route("/wcoin/api/v1/mining",methods=["GET"])
+@app.route("/wcoin/api/v1/checkUser",methods=["GET"])
 def mining():
   user = request.args.get("user")
   if user == "wangtry":
