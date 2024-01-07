@@ -7,7 +7,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask("WTech")
 
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://wcoins_bke1_user:VZf7JqLqQnsNTDyZX7MlQFRppgWlsvkq@dpg-cmd3hb6d3nmc73dgg970-a.oregon-postgres.render.com/wcoins_bke1"
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://wcoins_bke1_user:VZf7JqLqQnsNTDyZX7MlQFRppgWlsvkq@dpg-cmd3hb6d3nmc73dgg970-a/wcoins_bke1"
 db = SQLAlchemy(app)
 
 class User(db.Model):
