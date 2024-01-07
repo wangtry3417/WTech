@@ -43,11 +43,6 @@ def client():
   elif user == "Cw1023" and pw == "1023":
     count = 25000000
     return render_template("client.html",user=user,count=count)
-  users = User.query.all()
-  for u in users:
-      if user == u.user and pw == user.pw:
-          count = 0
-          return render_template("client.html",user=user,count=count)
   else:
     return abort(405)
 
