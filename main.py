@@ -3,14 +3,17 @@ from cryptography.fernet import Fernet
 import hashlib
 import psycopg2
 import os
+import flask_sqlalchemy
 
 app = Flask("WTech")
 
-hostname = os.environ["Hostname"]
-dbURL = os.envion["dbURL"]
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://wcoins_bke1_user:VZf7JqLqQnsNTDyZX7MlQFRppgWlsvkq@dpg-cmd3hb6d3nmc73dgg970-a.oregon-postgres.render.com/wcoins_bke1
 
-conn = psycopg2.connect(dbURL, sslmode='require')
 
+class YourTable(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(50))
+    pw = db.Column(db.String(50))
 
 def hash_value(user):
   u = user.encode()
@@ -62,6 +65,10 @@ def mining():
     })
   else:
     return jsonify({"Invaild user":"Please correctly input!"})
+
+@app.route("/wcoin/create/account")
+def create():
+  return render_template("new.html")
 
 @app.route("/wcoin/buy",methods=["GET"])
 def buy():
