@@ -10,7 +10,7 @@ app = Flask("WTech")
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://wcoins_bke1_user:VZf7JqLqQnsNTDyZX7MlQFRppgWlsvkq@dpg-cmd3hb6d3nmc73dgg970-a.oregon-postgres.render.com/wcoins_bke1
 
 
-class YourTable(db.Model):
+class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50))
     pw = db.Column(db.String(50))
@@ -69,6 +69,26 @@ def mining():
 @app.route("/wcoin/create/account")
 def create():
   return render_template("new.html")
+
+@app.route("/wcoin/api/v1/new_client",methods=["GET")
+def cre():
+    clientID = request.args.get("clientID")
+    intents = request.args.get("intents")
+    fname = request.form.get("fname")
+    id = request.form.get("id")
+    user = request.form.get("user")
+    pw = request.form.get("pw")
+    with open("user.txt") as f:
+        fo = f"""
+         User full-name: {fname},
+         User id: {id}
+        """
+        f.write(fo)
+    new_data = User(column1=data[user], column2=data[pw])
+    db.session.add(new_data)
+    db.session.commit()
+    return render_tempate("tr.html")
+    
 
 @app.route("/wcoin/buy",methods=["GET"])
 def buy():
