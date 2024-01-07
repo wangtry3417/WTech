@@ -70,7 +70,7 @@ def mining():
 def create():
   return render_template("new.html")
 
-@app.route("/wcoin/api/v1/new_client",methods=["GET")
+@app.route("/wcoin/api/v1/new_client",methods=["GET"])
 def cre():
     clientID = request.args.get("clientID")
     intents = request.args.get("intents")
