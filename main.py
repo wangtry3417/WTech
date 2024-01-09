@@ -82,7 +82,7 @@ def cre():
 def worker():
   return render_template("worker.html")
 
-@app.route("/wtech/api/v1/login",method=["GET"])
+@app.route("/wtech/api/v1/login",methods=["GET"])
 def checkUser():
   clientID = request.args.get("clientID")
   user = request.form.get("user")
