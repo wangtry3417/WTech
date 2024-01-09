@@ -82,6 +82,18 @@ def cre():
 def worker():
   return render_template("worker.html")
 
+@app.route("/wtech/api/v1/login",method=["GET"])
+def checkUser():
+  clientID = request.args.get("clientID")
+  user = request.form.get("user")
+  pe = request.form.get("pw")
+  if clientID = "00001":
+    if user == "wangtry" and pw == "003417":
+      return "success"
+    else:
+      return abort(502)
+  else:
+    return jsonify({"Invaild clientID":"Client is not verified!"})
 
 @app.route("/wcoin/buy",methods=["GET"])
 def buy():
