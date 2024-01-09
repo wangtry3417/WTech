@@ -69,10 +69,11 @@ def cre():
     id = request.form.get("id")
     user = request.form.get("user")
     pw = request.form.get("pw")
-    with open("user.txt") as f:
+    with open("user.txt","a+") as f:
         fo = f"""
-         User full-name: {fname},
-         User id: {id}
+         User full-name: {fname}, \n
+         User id: {id} \n
+         --------------- \n
         """
         f.write(fo)
     return render_tempate("tr.html")
