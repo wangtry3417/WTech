@@ -76,7 +76,7 @@ def cre():
          --------------- \n
         """
         f.write(fo)
-    return render_tempate("tr.html")
+    return render_template("tr.html")
     
 @app.route("/work/login")
 def worker():
