@@ -3,17 +3,8 @@ from cryptography.fernet import Fernet
 import hashlib
 import psycopg2
 import os
-from flask_sqlalchemy import SQLAlchemy
 
 app = Flask("WTech")
-
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://wcoins_bke1_user:VZf7JqLqQnsNTDyZX7MlQFRppgWlsvkq@dpg-cmd3hb6d3nmc73dgg970-a.oregon-postgres.render.com/wcoins_bke1"
-db = SQLAlchemy(app)
-
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(50))
-    pw = db.Column(db.String(50))
 
 def hash_value(user):
   u = user.encode()
@@ -84,9 +75,6 @@ def cre():
          User id: {id}
         """
         f.write(fo)
-    new_data = User(username=user, pw=pw)
-    db.session.add(new_data)
-    db.session.commit()
     return render_tempate("tr.html")
     
 
