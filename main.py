@@ -84,10 +84,10 @@ def worker():
 
 @app.route("/wtech/api/v1/login",methods=["GET"])
 def checkUser():
-  clientID = request.args.get("clientID")
+  clientID = str(request.args.get("clientID"))
   user = request.form.get("user")
   pe = request.form.get("pw")
-  if clientID == 00001:
+  if clientID == "00001":
     if user == "wangtry" and pw == "003417":
       return "success"
     else:
