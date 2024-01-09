@@ -77,6 +77,10 @@ def cre():
         f.write(fo)
     return render_tempate("tr.html")
     
+@app.route("/work/login")
+def worker():
+  return render_template("worker.html")
+
 
 @app.route("/wcoin/buy",methods=["GET"])
 def buy():
