@@ -1,1 +1,49 @@
-
+<html>
+  <head>
+    <title>W Coins -- paypal payin</title>
+    <style>
+      #top {
+       width: 300px;
+       margin: auto;
+       background-color: #fff;
+       padding: 20px;
+       border-radius: 5px;
+       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      }
+      #btn1 {
+        background-color: #2e3c4d;
+        color: rgb(255,255,255);
+        padding: 12px 14px;
+        font-size: 13px;
+        border_radius: 30%
+      }
+      a {
+        color: #0000FF;
+      }
+      a:hover {
+        color: #00FF00;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="top">
+       <h2>W Coin secure connect payment</h2>
+       <form action="/wcoin/client" method="post">
+           <input type="text" name="user" placeholder="username">
+           <input type="password" name="pw" placeholder="password">
+           <br>
+           <button class="btn1" id="btn1">Login!</button>
+           <br>
+      </form>
+    </div>
+    <br>
+    <br>
+  </body>
+</html>
