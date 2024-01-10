@@ -63,7 +63,7 @@ def paypal_coins():
       },
       "transactions": [{
           "amount": {
-              "total": price,
+              "total": count,
               "currency": place
           },
           "description": "For Wcoins"
