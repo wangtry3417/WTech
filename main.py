@@ -69,12 +69,11 @@ def paypal_coins():
           "description": "For Wcoins"
       }]
     })
-    if paym.create():
-      # 获取支付链接
-      for link in paym.links:
-        if link.method == "REDIRECT":
-          redirect_url = link.href
-          return redirect(redirect_url)
+  if paym.create():
+    for link in paym.links:
+      if link.method == "REDIRECT":
+        redirect_url = link.href
+        return redirect(redirect_url)
   else:
     return jsonify({
       "msg" : "Invaild payment method!"
