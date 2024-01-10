@@ -51,7 +51,7 @@ def wpay_coin():
 @app.route("/wcoin/pay/paypal",methods=["GET"])
 def paypal_coins():
   count = request.args.get("price")
-  place = request.agrs.get("country")
+  place = request.args.get("country")
   paym = paypalrestsdk.Payment({
       "intent": "sale",
       "payer": {
