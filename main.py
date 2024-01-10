@@ -1,10 +1,17 @@
-from flask import Flask,render_template,jsonify,request,abort
+from flask import Flask,render_template,jsonify,request,abort,url_for,redirect
 from cryptography.fernet import Fernet
 import hashlib
 import psycopg2
 import os
+import paypalrestsdk
 
 app = Flask("WTech")
+
+paypalrestsdk.configure({
+  'mode': 'sandbox', 
+  'client_id': 'ASK8RjfrdCzGvCQRDvnfa321S_5OBGMK4KDGac5PreKf6NU-0d0MUPPrYe_S-fq4tcoHN22P8Nz4xZs3',
+  'client_secret': 'EB1-tdfv74XcCxkdDWjueV19ePB4Wf8uMKwdhE2robSWQF21i6nC6pm57zzVARTzJ03ah6X4ARc1GhBQ'
+})
 
 def hash_value(user):
   u = user.encode()
@@ -36,6 +43,42 @@ def client():
     return render_template("client.html",user=user,count=count)
   else:
     return abort(405)
+
+@app.route("/wcoin/pay")
+def wpay_coin():
+  return render_template("coin.html")
+
+@app.route("/wcoin/pay/paypal",methods=["GET"])
+def paypal_coins():
+  count = request.args.get("price")
+  place = request.agrs.get("country")
+  paym = paypalrestsdk.Payment({
+      "intent": "sale",
+      "payer": {
+          "payment_method": "paypal"
+      },
+      "redirect_urls": {
+          "return_url": "/wcoin/login",
+          "cancel_url": "/wcoin/pay"
+      },
+      "transactions": [{
+          "amount": {
+              "total": price,
+              "currency": place
+          },
+          "description": "For Wcoins"
+      }]
+    })
+    if paym.create():
+      # 获取支付链接
+      for link in paym.links:
+        if link.method == "REDIRECT":
+          redirect_url = link.href
+          return redirect(redirect_url)
+  else:
+    return jsonify({
+      "msg" : "Invaild payment method!"
+    })
 
 @app.route("/wcoin/api/v1/checkUser",methods=["GET"])
 def mining():
