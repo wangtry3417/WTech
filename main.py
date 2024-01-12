@@ -157,6 +157,8 @@ def buy():
   else:
     return abort(502)
 
-
+@app.route("/style/css/simple")
+def style():
+  return render_template("style.css")
 
 app.run(host="0.0.0.0",port=5000)
