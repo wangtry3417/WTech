@@ -18,6 +18,7 @@ class AIModules:
     nltk.download('stopwords')
     nltk.download('gutenberg')
     nltk.download('book')
+    nltk.download()
     book = text1
     tokens = word_tokenize(self.text)  # 分词
     tokens = [token.lower() for token in tokens]  # 转换为小写
