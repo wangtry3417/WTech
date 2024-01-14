@@ -27,6 +27,16 @@ def chat():
   username = request.form.get("user")
   return jsonify({"user":username})
 
+@app.route("/api/v1/chat/<code>",methods=["GET"])
+def chatCode(code : str):
+  prompt = request.form.get("prompt")
+  if code == "WTech1028":
+    pass
+  elif code == "WTech192828":
+    pass
+  else:
+    return jsonify({"Invaild code" : "Message not found"})
+
 @app.route("/wcoin/login")
 def lo():
   return render_template("wcoin.html")
