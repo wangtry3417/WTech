@@ -3,4 +3,4 @@ cryptography
 psycopg2
 flask_sqlalchemy
 paypalrestsdk
-nitk
+nltk
