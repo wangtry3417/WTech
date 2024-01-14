@@ -4,6 +4,7 @@ import hashlib
 import psycopg2
 import os
 import paypalrestsdk
+import chatBot
 
 app = Flask("WTech")
 
@@ -31,9 +32,21 @@ def chat():
 def chatCode(code : str):
   prompt = request.form.get("prompt")
   if code == "WTech1028":
-    pass
+    ai = AIModules(prompt)
+    response = ai.think()
+    return jsonify({
+       "Human-prompt" : prompt,
+       "gen-prompt" : response,
+       "Using module" : "FunGPT modules"
+    })
   elif code == "WTech192828":
-    pass
+    ai = AIModules(prompt)
+    response = ai.think()
+    return jsonify({
+       "Human-prompt" : prompt,
+       "gen-prompt" : response,
+       "Using module" : "FunGPT modules"
+    })
   else:
     return jsonify({"Invaild code" : "Message not found"})
 
