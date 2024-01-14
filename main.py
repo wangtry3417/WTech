@@ -15,11 +15,13 @@ class AIModules:
   def think(self):
     nltk.download('punkt')
     nltk.download('stopwords')
+    nltk.download('book')
+    book = text1
     tokens = word_tokenize(self.text)  # 分词
     tokens = [token.lower() for token in tokens]  # 转换为小写
     tokens = [token for token in tokens if token.isalpha()]  # 仅保留字母字符
     tokens = [token for token in tokens if token not in stopwords.words("english")]  # 去除停用词
-    response = " ".join(tokens)
+    response = book.concordance(self.text)
     return response
 
 app = Flask("WTech")
