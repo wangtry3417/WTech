@@ -7,7 +7,6 @@ import paypalrestsdk
 import nltk
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
-from nltk.book import *
 from nltk.stem import WordNetLemmatizer
 
 class AIModules:
