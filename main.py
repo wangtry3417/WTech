@@ -16,7 +16,7 @@ class AIModules:
   def think(self):
     #nltk.download('punkt')
     #nltk.download('stopwords')
-    nltk.download()
+    nltk.download('gutenberg')
     #tokens = word_tokenize(self.text)  # 分词
     #tokens = [token.lower() for token in tokens]  # 转换为小写
     #tokens = [token for token in tokens if token.isalpha()]  # 仅保留字母字符
