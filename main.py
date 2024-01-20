@@ -15,7 +15,7 @@ class AIModules:
     self.text = text
   def think(self):
     #nltk.download('punkt')
-    #nltk.download('stopwords')
+    nltk.download('stopwords')
     nltk.download('all-corpora')
     nltk.download('popular')
     #tokens = word_tokenize(self.text)  # 分词
