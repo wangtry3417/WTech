@@ -5,6 +5,7 @@ import psycopg2
 import os
 import paypalrestsdk
 import nltk
+import random
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 #from nltk.stem import WordNetLemmatizer
@@ -215,8 +216,9 @@ def crypto():
 def transferCrypto():
   address = request.form.get("address")
   amout = request.form.get("amout")
+  rate = random.randint(489,1000)
   if True:
-    return render_template("cryptoTran.html",address=address,amout=amout)
+    return render_template("cryptoTran.html",address=address,amout=amout,rate=rate)
   else:
     return jsonify({"Error 405":"Invaild infomation"})
 
