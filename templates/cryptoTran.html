@@ -7,28 +7,36 @@
        background-color: #0000FF;
        color: rgb(255,255,255);
     }
-    .loader {
-       border: 16px solid #f3f3f3;
-       border-top: 16px soild #3498db;
-       border-radius: 50%;
-       width: 120px;
-       height: 120px;
-       animation: spin 2s linear infinite;
-       margin: 150px auto;
-    }
-    @keyframes spin {
-        0% {
-          transform: rotate(0deg);
-        }
-        100% {
-          transform: rotate(360deg);
-        }
-    }
+
+.loader {
+  width: 120px; /* 设置加载动画的宽度 */
+  height: 120px; /* 设置加载动画的高度 */
+  position: absolute; /* 设置加载动画的绝对定位 */
+  top: 50%; /* 将加载动画垂直居中 */
+  left: 50%; /* 将加载动画水平居中 */
+  transform: translate(-50%, -50%); /* 通过平移来居中加载动画 */
+}
+
+.spinner {
+  width: 100%; /* 设置滚轮的宽度 */
+  height: 100%; /* 设置滚轮的高度 */
+  border: 16px solid #f3f3f3; /* 设置边框样式 */
+  border-top: 16px solid #3498db; /* 设置顶部边框的样式，即加载动画的颜色 */
+  border-radius: 50%; /* 设置边框圆角，使其呈现圆形 */
+  animation: spin 2s linear infinite; /* 设置加载动画的旋转效果 */
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); } /* 设置旋转动画的起始角度 */
+  100% { transform: rotate(360deg); } /* 设置旋转动画的结束角度 */
+}
   </style>
 </head>
 <body>
   <center>
-  <div class="loader"></div>
+  <div class="loader">
+    <div class="spinner"></div>
+  </div>
   <br>
    <h3>Loading...</h3>
  </center>
