@@ -211,6 +211,15 @@ def real():
 def crypto():
   return render_template("crypto.html")
 
+@app.route("/wcoin/transfer/crypto",methods=["GET"])
+def transferCrypto():
+  address = request.form.get("address")
+  amout = request.form.get("amout")
+  if True:
+    return render_template("cryptoTran.html",address=address,amout=amout)
+  else:
+    return jsonify({"Error 405":"Invaild infomation"})
+
 @app.route("/style/css/simple")
 def style():
   return render_template("style.css")
