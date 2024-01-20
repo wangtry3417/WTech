@@ -199,6 +199,10 @@ def buy():
   else:
     return abort(502)
 
+@app.route("/wcoin/sell")
+def sellCoin():
+  return render_template("sell.html")
+
 @app.route("/style/css/simple")
 def style():
   return render_template("style.css")
