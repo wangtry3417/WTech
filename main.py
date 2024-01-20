@@ -203,6 +203,14 @@ def buy():
 def sellCoin():
   return render_template("sell.html")
 
+@app.route("/wcoin/sell/real")
+def real():
+  return render_template("real.html")
+
+@app.route("/wcoin/sell/crypto")
+def crypto():
+  return render_template("crypto.html")
+
 @app.route("/style/css/simple")
 def style():
   return render_template("style.css")
