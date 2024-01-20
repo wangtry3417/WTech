@@ -210,15 +210,15 @@ def real():
 
 @app.route("/wcoin/sell/crypto")
 def crypto():
-  return render_template("crypto.html")
+  rate = random.randint(489,1000)
+  return render_template("crypto.html",rate=rate)
 
 @app.route("/wcoin/transfer/crypto",methods=["GET"])
 def transferCrypto():
   address = request.form.get("address")
   amout = request.form.get("amout")
-  rate = random.randint(489,1000)
   if True:
-    return render_template("cryptoTran.html",address=address,amout=amout,rate=rate)
+    return render_template("cryptoTran.html",address=address,amout=amout)
   else:
     return jsonify({"Error 405":"Invaild infomation"})
 
