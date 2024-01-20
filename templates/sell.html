@@ -1,1 +1,56 @@
-
+<html>
+  <head>
+    <title>WCoins sellOut</title>
+    <style>
+      #top {
+       width: 300px;
+       margin: auto;
+       background-color: #fff;
+       padding: 20px;
+       border-radius: 5px;
+       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      }
+      .btn1 {
+        background-color: #2e3c4d;
+        color: rgb(255,255,255);
+        padding: 12px 14px;
+        font-size: 13px;
+      }
+    </style>
+  </head>
+  <body>
+    <center>
+    <div id="top">
+       <h2>Sell coin page</h2>
+       <br>
+       <br>
+        <br>
+        <br>
+        <p>------------------</p>
+        <br>
+         <h5>Sell for real money:</h5>
+         <button class="btn1" onclick="real()"> Sell</button>
+         <br>
+        <h5>Sell for crypto coins:</h5>
+         <button class="btn1" onclick="crypto()"> Sell</button>
+    </div>
+  </center>
+    <br>
+    <br>
+    <script>
+      const real = () => {
+          window.location.href="{{ url_for('real') }}";
+      }
+      const crypto = () => {
+          window.location.href="{{ url_for('crypto') }}";
+      }
+    </script>
+  </body>
+</html>
