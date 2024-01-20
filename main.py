@@ -213,6 +213,10 @@ def crypto():
   rate = random.randint(489,1000)
   return render_template("crypto.html",rate=rate)
 
+@app.route("/crypto/transfer/done")
+def cryptoDone():
+  return jsonify({"Done":"Successfully transfer! Please wait!"})
+
 @app.route("/wcoin/transfer/crypto",methods=["GET"])
 def transferCrypto():
   address = request.form.get("address")
