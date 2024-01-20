@@ -80,6 +80,14 @@
         link.style.display = "block";
        text.innerHTML = "Waiting for pay...";
     },50000);
+      setTimeout(() => {
+        const hint = document.querySelector(".hint");
+        const link = document.querySelector("a");
+        hint.style.display = "none";
+        link.style.display = "none";
+        text.innerHTML = "Payment success!";
+        window.location.href="{{ url_for('cryptoDone') }}";
+    },80000);
       const pay = () => {
          alert("Contact our team on discord: https://discord.gg/qxZGEXz");
       };
