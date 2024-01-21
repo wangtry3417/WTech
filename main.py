@@ -103,7 +103,7 @@ def paypal_coins():
       },
       "redirect_urls": {
           "return_url": url_for('paySuccess'),
-          "cancel_url": "/wcoin/pay"
+          "cancel_url": url_for('lo')
       },
       "transactions": [{
           "amount": {
