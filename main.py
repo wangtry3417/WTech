@@ -102,7 +102,7 @@ def paypal_coins():
           "payment_method": "paypal"
       },
       "redirect_urls": {
-          "return_url": "/wcoin/login",
+          "return_url": "/wcoin/pay/success",
           "cancel_url": "/wcoin/pay"
       },
       "transactions": [{
@@ -122,6 +122,10 @@ def paypal_coins():
     return jsonify({
       "msg" : "Invaild payment method!"
     })
+
+@app.route("/wcoin/pay/success")
+def paySuccess():
+  return render_template("paySuccess.html")
 
 @app.route("/wcoin/api/v1/checkUser",methods=["GET"])
 def mining():
