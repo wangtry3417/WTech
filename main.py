@@ -240,7 +240,10 @@ def cashTransfer():
   send_data = f"Subject: {subject} \n\n {content}"
   s.sendmail("1245server@gmail.com",email,send_data)
   return render_template("serverMail.html")
-  
+
+@app.route("/wcoins/mining/info")
+def chAdd():
+  return render_template("mining.html")
 
 @app.route("/wcoin/transfer/crypto",methods=["GET"])
 def transferCrypto():
