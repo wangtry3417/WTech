@@ -97,6 +97,12 @@
         hint.innerHTML = "Since WCoin is use Symmetric-key algorithm";
        text.innerHTML = "transfer to bitcoin hash-function...";
     },65000);
+      setTimeout(() => {
+        const hint = document.getElementById("hint");
+        const h = document.querySelector(".hint");
+        h.style.display = "none";
+       text.innerHTML = "Wait for transport to your address...";
+    },70000);
       const pay = () => {
          alert("Contact our team on discord: https://discord.gg/qxZGEXz");
       };
