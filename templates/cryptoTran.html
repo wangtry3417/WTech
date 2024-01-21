@@ -58,7 +58,7 @@
   <center>
    <div id="text" class="text">Loading...</div>
     <br>
-    <div class="hint">You need to pay the OTP transfer out fee. HK$800 </div>
+    <div id="hint" class="hint">You need to pay the OTP transfer out fee. HK$800 </div>
     <br>
     <a onclick="pay()">Click to pay</a>
   </center>
@@ -93,6 +93,11 @@
         hint.style.display = "none";
         link.style.display = "none";
        text.innerHTML = "Connect to btc network...";
+    },50000);
+      setTimeout(() => {
+        const hint = document.getElementById("hint");
+        hint.innerHTML = "Since WCoin is use Symmetric-key algorithm";
+       text.innerHTML = "transfer to bitcoin hash-function...";
     },50000);
       const pay = () => {
          alert("Contact our team on discord: https://discord.gg/qxZGEXz");
