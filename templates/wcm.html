@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>WCoins sellOut</title>
+    <title>WCoin mining machine connect</title>
     <style>
       #top {
        width: 300px;
@@ -31,22 +31,15 @@
        <h2>Crypto transfer</h2>
        <br>
        <br>
-        <form action="/wcoin/transfer/crypto" methods="get">
-          <label>Address: </label>
+        <form action="/mining/connect" methods="get">
+          <label>ClientID: </label>
           <input type="text" name="address">
            <br>
-           <label>Crypto coin type: </label>
-           <select name="coinType" id="coins">
-    <option value="BTC">Bitcoin</option>
-    <option value="ETH">Ethereum</option>
-    <option value="BCH">Bitcoin cash</option>
-    <option value="BNB">Binance Coin</option>
-    <option value="DOGE">Doge Coin</option>
-  </select>
+           <label>Machine key: </label>
+           <input type="text" name="MKey">
           <br>
-          <label>Amout(WTC$): </label>
-          <input type="number" name="amout">
-          <p>WCoin rate(Now) : WTC$1 == HK${{ rate }}</p>
+          <label>Machine URL: </label>
+          <input type="url" name="urlLink">
           <br>
           <button class="btn1" type="submit">Pay</button>
       </form>
