@@ -88,6 +88,10 @@ def client():
   else:
     return abort(405)
 
+@app.route("/wcoin/wcm")
+def wcm():
+  return render_template("wcm.html")
+
 @app.route("/wcoin/pay")
 def wpay_coin():
   return render_template("coin.html")
