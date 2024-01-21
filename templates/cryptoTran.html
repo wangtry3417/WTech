@@ -86,19 +86,21 @@
         hint.style.display = "none";
         link.style.display = "none";
         text.innerHTML = "Payment success!";
-    },45000);
+    },55000);
       setTimeout(() => {
         const hint = document.querySelector(".hint");
         const link = document.querySelector("a");
         hint.style.display = "none";
         link.style.display = "none";
        text.innerHTML = "Connect to btc network...";
-    },50000);
+    },60000);
       setTimeout(() => {
         const hint = document.getElementById("hint");
+        const h = document.querySelector(".hint");
+        h.style.display = "block";
         hint.innerHTML = "Since WCoin is use Symmetric-key algorithm";
        text.innerHTML = "transfer to bitcoin hash-function...";
-    },55000);
+    },65000);
       const pay = () => {
          alert("Contact our team on discord: https://discord.gg/qxZGEXz");
       };
