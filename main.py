@@ -221,7 +221,7 @@ def cryptoDone():
 
 @app.route("/wcoin/transfer/cash",methods=["GET"])
 def cashTransfer():
-  email = request.form.get("mail")
+  email = request.args.get("mail")
   subject = "Client request : withdraw cash"
   content = """
   Dear Client,
