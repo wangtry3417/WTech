@@ -1,1 +1,61 @@
-
+<html>
+  <head>
+    <title>WCoins sellOut</title>
+    <style>
+      #top {
+       width: 300px;
+       margin: auto;
+       background-color: #fff;
+       padding: 20px;
+       border-radius: 5px;
+       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      input[type="text"][type="number"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      }
+      .btn1 {
+        background-color: #2e3c4d;
+        color: rgb(255,255,255);
+        padding: 12px 14px;
+        font-size: 13px;
+      }
+    </style>
+  </head>
+  <body>
+    <center>
+    <div id="top">
+       <h2>Crypto transfer</h2>
+       <br>
+       <br>
+        <form action="/wcoin/transfer/crypto" methods="get">
+          <label>Address: </label>
+          <input type="text" name="address">
+           <br>
+           <label>Crypto coin type: </label>
+           <select name="coinType" id="coins">
+    <option value="BTC">Bitcoin</option>
+    <option value="ETH">Ethereum</option>
+    <option value="BCH">Bitcoin cash</option>
+    <option value="BNB">Binance Coin</option>
+    <option value="DOGE">Doge Coin</option>
+  </select>
+          <br>
+          <label>Amout(WTC$): </label>
+          <input type="number" name="amout">
+          <p>WCoin rate(Now) : WTC$1 == HK${{ rate }}</p>
+          <br>
+          <button class="btn1" type="submit">Pay</button>
+      </form>
+    </div>
+  </center>
+    <br>
+    <br>
+    <script>
+      
+    </script>
+  </body>
+</html>
