@@ -234,7 +234,7 @@ def cashTransfer():
   s.starttls()
   s.login("1245server@gmail.com","jvbswpfesugcqazw")
   send_data = f"Subject: {subject} \n\n {content}"
-  s.sendmail("1245server@gmail.com",mail,send_data)
+  s.sendmail("1245server@gmail.com",email,send_data)
   return render_template("serverMail.html")
   
 
