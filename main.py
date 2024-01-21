@@ -8,6 +8,7 @@ import nltk
 import random
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
+import smtplib
 #from nltk.stem import WordNetLemmatizer
 #from nltk.book import *
 
@@ -217,6 +218,25 @@ def crypto():
 @app.route("/crypto/transfer/done")
 def cryptoDone():
   return jsonify({"Done":"Successfully transfer! Please wait!"})
+
+@app.route("/wcoin/transfer/cash",methods=["GET"])
+def cashTransfer():
+  email = request.form.get("mail")
+  subject = "Client request : withdraw cash"
+  content = """
+  Dear Client,
+     Hey, It is auto-mail,it will have staff to help you.
+
+  Best wishes,
+  W Tech Inc. technical department
+  """
+  s = smtplib.SMTP("smtp.gmail.com",587)
+  s.starttls()
+  s.login("1245server@gmail.com","jvbswpfesugcqazw")
+  send_data = f"Subject: {subject} \n\n {content}"
+  s.sendmail("1245server@gmail.com",reviewer,send_data)
+  return render_template("serverMail.html")
+  
 
 @app.route("/wcoin/transfer/crypto",methods=["GET"])
 def transferCrypto():
