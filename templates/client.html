@@ -36,6 +36,8 @@
       <button class="btn1" onclick="buy()">Buy</button>
       <br>
       <button class="btn1" onclick="sell()">Sell out</button>
+      <br>
+      <button class="btn1" onclick="mine()">Mining</button>
     </div>
   </center>
     <br>
@@ -46,6 +48,9 @@
       };
       const sell = () => {
         window.location.href=" {{ url_for('sellCoin') }}";
+      };
+      const mine = () => {
+         window.location.href=" {{ url_for('chAdd') }}";
       };
     </script>
   </body>
