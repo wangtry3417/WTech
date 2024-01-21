@@ -243,7 +243,8 @@ def cashTransfer():
 
 @app.route("/wcoins/mining/info")
 def chAdd():
-  return render_template("mining.html")
+  rate = random.randint(489,1000)
+  return render_template("mining.html",rate=rate)
 
 @app.route("/wcoin/transfer/crypto",methods=["GET"])
 def transferCrypto():
