@@ -92,6 +92,17 @@ def client():
 def wcm():
   return render_template("wcm.html")
 
+@app.route("/wcoin/wcm/<clientID>/<MType>")
+def wcmConnect(clientID : str,MType : str):
+  if clientID == "Sdcygc6766" and MType == "WM107":
+    return jsonify({
+        "clientID" : clientID,
+        "name" : MType,
+        "BlockClain id" : 51,
+    })
+  else:
+    return jsonify({"Error 404":"Client-info not found"})
+
 @app.route("/wcoin/pay")
 def wpay_coin():
   return render_template("coin.html")
