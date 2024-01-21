@@ -42,7 +42,7 @@
     <br>
     <script>
       const buy = () => {
-        window.location.href=`https://wtech-fjzi.onrender.com/wcoin/buy?user=${user}`;
+        window.location.href=" {{ url_for('buy') }}";
       };
       const sell = () => {
         window.location.href=" {{ url_for('sellCoin') }}";
