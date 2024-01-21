@@ -206,7 +206,8 @@ def sellCoin():
 
 @app.route("/wcoin/sell/real")
 def real():
-  return render_template("real.html")
+  rate = random.randint(489,1000)
+  return render_template("real.html",rate=rate)
 
 @app.route("/wcoin/sell/crypto")
 def crypto():
