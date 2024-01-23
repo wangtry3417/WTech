@@ -80,7 +80,7 @@ def client():
   user = request.form.get("user")
   pw = request.form.get("pw")
   if user == "wangtry" and pw == "003417":
-    count = 0
+    count = 20000
     return render_template("client.html",user=user,count=count)
   elif user == "Cw1023" and pw == "1023":
     count = 25000000
