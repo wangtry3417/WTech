@@ -86,7 +86,7 @@ def client():
     count = 25000000
     return render_template("client.html",user=user,count=count)
   elif user == "li-chen" and pw == "Abcd1234":
-    count = 200
+    count = 200.01
     return render_template("client.html",user=user,count=count)
   else:
     return abort(405)
