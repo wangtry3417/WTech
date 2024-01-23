@@ -87,7 +87,7 @@ def client():
     return render_template("client.html",user=user,count=count)
   elif user == "li-chen" and pw == "Abcd1234":
     count = 200.01
-    return render_template("client.html",user=user,count=count)
+    return render_template("block.html")
   else:
     return abort(405)
 
