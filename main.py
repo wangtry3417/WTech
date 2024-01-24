@@ -98,7 +98,7 @@ def sk():
                     'quantity': 1,
                 },
             ],
-            payment_methods=["card","alipay"],
+            payment_method_types=["card","alipay"],
             mode='payment',
             success_url=url_for('skDone'),
             cancel_url=url_for('buy'),
