@@ -53,7 +53,7 @@ def generate_data():
     for i in range(31):
         data.append({
             'date': f'2024-01-{i+1}',
-            'price': random.randint(1, 100)
+            'price': random.randint(180, 3000000)
         })
     return data
 
