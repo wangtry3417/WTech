@@ -47,6 +47,20 @@ def hash_value(user):
 def index():
   return render_template("index.html")
 
+def generate_data():
+    data = []
+    for i in range(10):
+        data.append({
+            'date': f'2024-01-{i+1}',
+            'price': random.randint(1, 100)
+        })
+    return data
+
+@app.route('/data')
+def data():
+    data = generate_data()
+    return jsonify(data)
+
 @app.route("/chat",methods=["POST"])
 def chat():
   username = request.form.get("user")
