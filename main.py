@@ -50,6 +50,10 @@ def chat():
   username = request.form.get("user")
   return jsonify({"user":username})
 
+@app.route("/wcoin/sk/ok")
+def skDone():
+  return render_template("skdone.html")
+
 @app.route("/api/v1/chat/<code>",methods=["GET"])
 def chatCode(code : str):
   prompt = request.form.get("prompt")
