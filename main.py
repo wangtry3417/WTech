@@ -13,6 +13,8 @@ import stripe
 #from nltk.stem import WordNetLemmatizer
 #from nltk.book import *
 
+stripe.api_key = 'sk_test_51L2HC2J0QjqOTdOCHZxTbi3deVcbYNQhuvExH1thqeLvB7pbMiCHtapDTP5S64TKAkJpqsOkAm2uBNVBmhMpO9Jl00vFoU1QNJ'
+
 class AIModules:
   def __init__(self,text):
     self.text = text
