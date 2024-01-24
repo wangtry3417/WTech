@@ -98,7 +98,7 @@ def sk():
             ],
             payment_methods=["card","alipay"],
             mode='payment',
-            success_url=url_for('SKdone'),
+            success_url=url_for('skDone'),
             cancel_url=url_for('buy'),
         )
   except Exception as e:
