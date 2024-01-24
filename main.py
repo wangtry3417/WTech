@@ -76,6 +76,10 @@ def chatCode(code : str):
 def lo():
   return render_template("wcoin.html")
 
+@app.route("/wcoin/sk/transfer")
+def skLoad():
+  return render_template("sk.html")
+
 @app.route("/wcoin/sk/buy/info",methods=["GET"])
 def sk():
   count = int(request.args.get("price"))
