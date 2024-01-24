@@ -10,6 +10,7 @@ from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 import smtplib
 import stripe
+import datetime
 #from nltk.stem import WordNetLemmatizer
 #from nltk.book import *
 
@@ -58,7 +59,13 @@ def generate_data():
 
 @app.route('/data')
 def data():
-    data = generate_data()
+    current_date = datetime.date.today()
+    data = []
+    for i in range(31):
+        data.append({
+            'date': (current_date + datetime.timedelta(days=i)).strftime('%Y-%m-%d %H:%M:%S'),
+            'price': random.randint(1, 100)
+        })
     return jsonify(data)
 
 @app.route("/chat",methods=["POST"])
