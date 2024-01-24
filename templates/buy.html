@@ -17,7 +17,7 @@
       border: 1px solid #ccc;
       border-radius: 5px;
       }
-      #btn1 {
+      .btn1 {
         background-color: #2e3c4d;
         color: rgb(255,255,255);
         padding: 12px 14px;
@@ -33,8 +33,11 @@
   </center>
     <br>
     <br>
+    <button class="btn1" onclick="buy()">Buy in</button>
     <script>
-      
+      const buy = () => {
+         window.location.href="{{ url_for('skBuy') }}";
+      };
     </script>
   </body>
 </html>
