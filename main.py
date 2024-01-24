@@ -49,7 +49,7 @@ def index():
 
 def generate_data():
     data = []
-    for i in range(10):
+    for i in range(31):
         data.append({
             'date': f'2024-01-{i+1}',
             'price': random.randint(1, 100)
