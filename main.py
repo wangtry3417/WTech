@@ -57,15 +57,20 @@ def generate_data():
         })
     return data
 
+current_datetime = datetime.datetime.now()
+
 @app.route('/data')
 def data():
-    current_date = datetime.date.today()
+    global current_datetime
+    
     data = []
     for i in range(31):
         data.append({
-            'date': (current_date + datetime.timedelta(days=i)).strftime('%Y-%m-%d %H:%M:%S'),
+            'date': current_datetime.strftime('%Y-%m-%d %H:%M:%S'),
             'price': random.randint(1, 100)
         })
+        current_datetime += datetime.timedelta(seconds=1)  # 每次递增1秒
+    
     return jsonify(data)
 
 @app.route("/chat",methods=["POST"])
