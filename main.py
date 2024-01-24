@@ -9,6 +9,7 @@ import random
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 import smtplib
+import stripe
 #from nltk.stem import WordNetLemmatizer
 #from nltk.book import *
 
@@ -74,6 +75,28 @@ def chatCode(code : str):
 @app.route("/wcoin/login")
 def lo():
   return render_template("wcoin.html")
+
+@app.route("/wcoin/sk/buy/info",methods=["GET"])
+def sk():
+  count = int(request.args.get("price"))
+  try:
+    checkout_session = stripe.checkout.Session.create(
+            line_items=[
+                {
+                    # Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+                    'price': count*10,
+                    'quantity': 1,
+                },
+            ],
+            mode='payment',
+            success_url=url_for('SKdone'),
+            cancel_url=url_for('buy'),
+        )
+  except Exception as e:
+    return str(e)
+
+  return redirect(checkout_session.url, code=303)
+
 
 @app.route("/wcoin/client",methods=["POST"])
 def client():
