@@ -123,7 +123,7 @@ def sk():
   except Exception as e:
     return str(e)
 
-  return url_for("skDone")
+  return render_template("skdone.html")
 
 
 @app.route("/wcoin/client",methods=["POST"])
