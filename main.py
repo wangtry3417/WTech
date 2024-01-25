@@ -116,23 +116,14 @@ def skLoad():
 def sk():
   count = int(request.args.get("price"))
   try:
-    checkout_session = stripe.checkout.Session.create(
-            line_items=[
-                {
-                    # Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-                    'price': count*10,
-                    'quantity': 1,
-                },
-            ],
-            payment_method_types=["card","alipay"],
-            mode='payment',
-            success_url=url_for('skDone'),
-            cancel_url=url_for('buy'),
-        )
+    intent = stripe.PaymentIntent.create(
+        amount=count*10,
+        currency="hkd"
+    )
   except Exception as e:
     return str(e)
 
-  return redirect(checkout_session.url, code=303)
+  return url_for("skDone")
 
 
 @app.route("/wcoin/client",methods=["POST"])
