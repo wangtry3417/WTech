@@ -116,9 +116,23 @@ def skLoad():
 def sk():
   count = int(request.args.get("price"))
   try:
-    intent = stripe.PaymentIntent.create(
-        amount=count*10,
-        currency="hkd"
+    session = checkout.Session.create(
+        payment_method_types=['card','wechat_pay', 'alipay','apple_pay'],
+        line_items=[
+            {
+                'price_data': {
+                    'currency': 'usd',
+                    'unit_amount': count*10,
+                    'product_data': {
+                        'name': 'W Coins'
+                    },
+                },
+                'quantity': 1,
+            },
+        ],
+        mode='payment',
+        success_url='https://yourwebsite.com/success',
+        cancel_url='https://yourwebsite.com/cancel',
     )
   except Exception as e:
     return str(e)
