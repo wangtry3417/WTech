@@ -118,6 +118,11 @@ def sk():
   try:
     session = stripe.checkout.Session.create(
         payment_method_types=['card','wechat_pay', 'alipay','us_bank_account'],
+        payment_method_options={
+        'wechat_pay': {
+            'client': 'web'
+        }
+    },
         line_items=[
             {
                 'price_data': {
