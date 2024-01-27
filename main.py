@@ -81,6 +81,10 @@ def chat():
 @app.route("/wcoin/sk/ok")
 def skDone():
   return render_template("skdone.html")
+#wcoin
+@app.route("/wcoin/shop")
+def cshop():
+  return render_template("cshop.html")
 
 @app.route("/api/v1/chat/<code>",methods=["GET"])
 def chatCode(code : str):
