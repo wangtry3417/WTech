@@ -140,6 +140,10 @@ def sk():
   return render_template("skdone.html")
 
 
+@app.route("/wtech/stock/chi")
+def stock():
+  return render_template("stock.html")
+
 @app.route("/wcoin/client",methods=["POST"])
 def client():
   user = request.form.get("user")
