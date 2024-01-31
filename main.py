@@ -78,6 +78,10 @@ def chat():
   username = request.form.get("user")
   return jsonify({"user":username})
 
+@app.route("/wcoin/sys")
+def wsys():
+  return render_template("sys.c")
+
 @app.route("/wcoin/sk/ok")
 def skDone():
   return render_template("skdone.html")
