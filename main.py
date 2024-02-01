@@ -139,8 +139,8 @@ def sk():
             },
         ],
         mode='payment',
-        success_url='https://yourwebsite.com/success',
-        cancel_url='https://yourwebsite.com/cancel',
+        success_url='/wcoin/sk/ok',
+        cancel_url='/wcoin/sys',
     )
   except Exception as e:
     return str(e)
