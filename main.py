@@ -90,7 +90,7 @@ def skDone():
 def cshop():
   return render_template("cshop.html")
 
-@app.route("/api/v1/chat/<code>",methods=["GET"])
+@app.route("/api/v1/chat/<code>",methods=["GET","POST"]])
 def chatCode(code : str):
   prompt = request.form.get("prompt")
   if code == "WTech1028":
