@@ -161,10 +161,14 @@ def client():
   res = requests.get(url=url).json()
   if user == "wangtry" and pw == "003417":
     count = 20000
+    last_json = res[-1]
+    first_json = res[0]
+    last_price = last_json["price"]
+    first_price = first_json["price"]
     for r in res:
       price = r["price"]
-      if int(str(price)[30]) >= int(str(price)[0]):
-        cp = int(str(price)[30]) - int(str(price)[0])
+      if int(str(last_price)[-1]) >= int(str(first_price)[0]):
+        cp = int(str(last_price)[-1]) - int(str(first_price)[0])
         count *= cp
       else:
         count -= 1000
