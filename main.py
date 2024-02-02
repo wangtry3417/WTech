@@ -222,6 +222,12 @@ def paypal_coins():
 def paySuccess():
   return render_template("paySuccess.html")
 
+@app.route("/wcoin/mining/starter",methods=["GET","POST"])
+def miningSt():
+  MKey = request.form.get("MKey")
+  if MKey == "Wc-12901929Kall":
+    return render_template("stMining.html")
+
 @app.route("/wcoin/api/v1/checkUser",methods=["GET"])
 def mining():
   user = request.args.get("user")
