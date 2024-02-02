@@ -162,12 +162,11 @@ def client():
   if user == "wangtry" and pw == "003417":
     count = 20000
     for r in res:
-      for price in r["price"]:
-        if int(price[30]) >= int(price[0]):
-          cp = int(price[30]) - int(price[0])
-          count = count*cp
-        else:
-          count -= 1000
+      if int(str(price)[30]) >= int(str(price)[0]):
+        cp = int(str(price)[30]) - int(str(price)[0])
+        count *= cp
+      else:
+        count -= 1000
     return render_template("client.html",user=user,count=count)
   elif user == "Cw1023" and pw == "1023":
     count = 25000000
