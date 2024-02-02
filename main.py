@@ -11,6 +11,7 @@ from nltk.corpus import stopwords
 import smtplib
 import stripe
 import datetime
+import requests
 #from nltk.stem import WordNetLemmatizer
 #from nltk.book import *
 
@@ -156,8 +157,17 @@ def stock():
 def client():
   user = request.form.get("user")
   pw = request.form.get("pw")
+  url = "https://wtech-fjzi.onrender.com/data"
+  res = requests.get(url=url).json()
   if user == "wangtry" and pw == "003417":
     count = 20000
+    for r in res:
+      for price in r["price"]:
+        if price[30] >= price[0]:
+          cp = price[30] - price[0]
+          count = count*cp
+        else:
+          count -= 1000
     return render_template("client.html",user=user,count=count)
   elif user == "Cw1023" and pw == "1023":
     count = 25000000
