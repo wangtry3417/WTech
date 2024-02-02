@@ -162,6 +162,7 @@ def client():
   if user == "wangtry" and pw == "003417":
     count = 20000
     for r in res:
+      price = r["price"]
       if int(str(price)[30]) >= int(str(price)[0]):
         cp = int(str(price)[30]) - int(str(price)[0])
         count *= cp
