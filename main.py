@@ -224,7 +224,7 @@ def paySuccess():
 
 @app.route("/wcoin/mining/starter",methods=["GET","POST"])
 def miningSt():
-  MKey = request.form.get("MKey")
+  MKey = request.args.get("MKey")
   if MKey == "Wc-12901929Kall":
     return render_template("stMining.html")
   else:
