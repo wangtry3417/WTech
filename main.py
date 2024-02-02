@@ -227,6 +227,8 @@ def miningSt():
   MKey = request.form.get("MKey")
   if MKey == "Wc-12901929Kall":
     return render_template("stMining.html")
+  else:
+    return jsonify({"Invaild key":"Cannot find machine"})
 
 @app.route("/wcoin/api/v1/checkUser",methods=["GET"])
 def mining():
