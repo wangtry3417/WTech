@@ -163,8 +163,8 @@ def client():
     count = 20000
     for r in res:
       for price in r["price"]:
-        if price[30] >= price[0]:
-          cp = price[30] - price[0]
+        if int(price[30]) >= int(price[0]):
+          cp = int(price[30]) - int(price[0])
           count = count*cp
         else:
           count -= 1000
