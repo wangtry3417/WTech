@@ -6,3 +6,4 @@ paypalrestsdk
 nltk
 random2
 stripe
+requests
