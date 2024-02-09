@@ -1,4 +1,3 @@
-
 from wcoins.trading import Bot
 from wcoins.trade import trading,comhex,payment_method
 
