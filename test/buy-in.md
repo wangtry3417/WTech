@@ -5,6 +5,7 @@
    
 1:平台購入 ：
 用戶可以透過W Coins官網或crypto transfer購入W Coins.同時，亦可透過Robux購買泓幣。
+
 2:
 以下將有教學。
 
