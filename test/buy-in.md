@@ -1,9 +1,14 @@
+# 如何購入泓幣？
+購入泓幣(wcoins) 有兩大方式。
+ - 平台購入
+ - API Auto-buy-in
 
+# -------------
 # 泓幣自動程式交易
 
-第一步：下載pip3
+第一步：下載wcoins.py
 ```
- pkg install wcoins-wtech
+ pip install wcoins-wtech
 ```
 第二步：setUp bot
 ``` python
