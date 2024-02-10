@@ -36,3 +36,7 @@ async def trade(complier : bot.hashTrade):
 ``` python
   bot.run()
 ```
+
+# ----------
+# 泓幣的起源地
+泓幣（W Coins）由泓技WTech開創。
