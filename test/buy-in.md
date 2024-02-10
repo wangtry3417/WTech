@@ -1,7 +1,12 @@
 # 如何購入泓幣？
 購入泓幣(wcoins) 有兩大方式。
- - 平台購入
- - API Auto-buy-in
+ - 1:平台購入
+ - 2:API Auto-buy-in
+1:平台購入 ：
+用戶可以透過W Coins官網或crypto transfer購入W Coins.同時，亦可透過Robux購買泓幣。
+2:
+以下將有教學。
+
 
 # -------------
 # 泓幣自動程式交易
