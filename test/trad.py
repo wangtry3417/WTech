@@ -24,3 +24,6 @@ async def trade(complier : bot.hashTrade):
     await complier.hashPay(wcoin_trader)
     
 bot.run()
+#Running result:
+#[Client]Connecting...
+#Ready to trasfer!...
