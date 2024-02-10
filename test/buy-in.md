@@ -7,5 +7,8 @@
 ```
 第二步：setUp bot
 ``` python
-
+  bot = Bot(
+    name="",
+    intents="trading"
+    ).starter()
 ```
