@@ -12,7 +12,7 @@
     intents="trading"
     ).starter()
 ```
-
+第三步：建立賬單
 ``` python
 @bot.event(event_type="create_order")
 async def create(complier : bot.Compliter):
@@ -20,4 +20,19 @@ async def create(complier : bot.Compliter):
     coins = "Wcoins"
     wcoin_trader = comhex(price=price,coin_name=coins,using_crypto="hash-function")
     await complier.complex(wcoin_trader)
+```
+第四步：付款交易
+``` python
+@bot.event(event_type="trading")
+async def trade(complier : bot.hashTrade):
+    hash = ""
+    #payment_method :
+    #["card","crypto","paypal","wpay"]
+    payment = payment_method[0]
+    wcoin_trader = hashTrade(hash).toPay(payment)
+    await complier.hashPay(wcoin_trader)
+```
+第五步：運行交易機器人
+``` python
+  bot.run()
 ```
