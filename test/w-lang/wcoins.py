@@ -26,4 +26,4 @@ class wcoins:
       if math1["ans"] > 10:
         return goto("wtps://wcoin.wtech.net","wtps",9087)
       else:
-        return thingsTransfer("wtps://wcoin.wtech.net","wtps",9088",data={"complie_data":math1["ans"]})
+        return thingsTransfer("wtps://wcoin.wtech.net","wtps",9088,data={"complie_data":math1["ans"]})
