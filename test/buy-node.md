@@ -1,4 +1,4 @@
-幣(wcoins) 有兩大方式。
+泓幣(wcoins) 有兩大方式。
  - 1:平台購入
  - 2:API Auto-buy-in
    
@@ -22,7 +22,7 @@
 
   const trader = new Trader();
   const bot = new Bot()
-              .name="",
+              .name=""
               .intents=Intents.TRADING;
 ```
 第三步：建立賬單
@@ -37,7 +37,7 @@
   bot.on("payment", async (complier) => {
      const trade = trader.createOrder("user","user",200);
   const payment = trader.payment = "card";
-  await complier.trade(trade.toHash(),payment).to.Pay();
+  await complier.trade(trade.toHash(),payment).toPay();
 });
 ```
 第五步：運行交易機器人
