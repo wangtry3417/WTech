@@ -1,7 +1,6 @@
 from flask import Flask,render_template,jsonify,request,abort,url_for,redirect
 from cryptography.fernet import Fernet
 import hashlib
-import psycopg2
 import os
 import paypalrestsdk
 import nltk
