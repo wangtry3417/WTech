@@ -2,6 +2,8 @@
 #include <string.h>
 #include <object.h>
 
-func main() {
+set main() into mainStage();
 
+func main() {
+  
 }
