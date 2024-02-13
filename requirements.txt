@@ -1,6 +1,5 @@
 flask
 cryptography
-psycopg2
 flask_sqlalchemy
 paypalrestsdk
 nltk
