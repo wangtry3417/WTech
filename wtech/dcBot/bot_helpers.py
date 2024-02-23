@@ -1,8 +1,9 @@
 import discord
 from discord.ext import commands
+from .bot_intents import *
 
 
-def setup_bot(prefix):
+def setup_bot(prefix,intents ):
     """
     創建和設置一個 Discord bot。
     
