@@ -11,6 +11,7 @@ setup(
         'cryptography',
         'flask',
         'requests',
-        'random2'
+        'random2',
+        'discord'
     ],
 )
