@@ -1,6 +1,6 @@
 from discord.ext import commands
 
-def register_command(bot, name=None):
+def add_command(bot, name=None):
     def decorator(func):
         nonlocal name
         if name is None:
