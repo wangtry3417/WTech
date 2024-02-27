@@ -156,7 +156,7 @@ def stock():
 def client():
   user = request.form.get("user")
   pw = request.form.get("pw")
-  url = "https://wtech-fjzi.onrender.com/data"
+  url = "https://wtech-5o6t.onrender.com/data"
   res = requests.get(url=url).json()
   if user == "wangtry" and pw == "003417":
     count = 20000
