@@ -233,7 +233,7 @@ W Tech Inc. technical department
   s.login("1245server@gmail.com","jvbswpfesugcqazw")
   send_data = f"Subject: {subject} \n\n {content}"
   s.sendmail("1245server@gmail.com",email,send_data)
-  return jsonify({"block":"true","code":code,"status":"Email sent!"})
+  return jsonify({"block":"true","status":"Email sent!"})
 
 @app.route("/wtech/stock/chi")
 def stock():
