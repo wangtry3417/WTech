@@ -90,18 +90,18 @@ def wtechDCUser():
         'code': code,
         'redirect_uri': 'https://wtech-5o6t.onrender.com/wtech/v2/checkuser',
     }
-    headers = {
+  headers = {
         'Content-Type': 'application/x-www-form-urlencoded'
     }
-    response = requests.post('https://discord.com/api/oauth2/token', data=data, headers=headers)
-    response_json = response.json()
-    access_token = response_json.get('access_token')
+  response = requests.post('https://discord.com/api/oauth2/token', data=data, headers=headers)
+  response_json = response.json()
+  access_token = response_json.get('access_token')
     user_info = requests.get(
     'https://discord.com/api/users/@me', 
     headers={'Authorization': f'Bearer {access_token}'}
 ).json()
-    email = user_info.get('email')
-    return jsonify({
+  email = user_info.get('email')
+  return jsonify({
     "user" : email
   })
 
