@@ -152,6 +152,25 @@ def sk():
   return render_template("skdone.html")
 
 
+@app.route("/wtech/v2/sms",methods=["POST"])
+def emailSms(url):
+  email = request.form.get("email")
+  code = random.randint(1001,9999)
+  subject = "Don't reply this mail"
+  content = f"""
+  Dear User,
+     Hey, this is the auto-mail, the code is : {code}
+
+  Best wishes,
+  W Tech Inc. technical department
+  """
+  s = smtplib.SMTP("smtp.gmail.com",587)
+  s.starttls()
+  s.login("1245server@gmail.com","jvbswpfesugcqazw")
+  send_data = f"Subject: {subject} \n\n {content}"
+  s.sendmail("1245server@gmail.com",email,send_data)
+  return render_template("wtechVerify.html",code=code")
+
 @app.route("/wtech/stock/chi")
 def stock():
   return render_template("stock.html")
