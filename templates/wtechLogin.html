@@ -1,1 +1,76 @@
-
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #ffffff;
+        }
+        .login-box {
+            box-sizing: border-box;
+            padding: 20px;
+            background-color: #ffffff;
+            border: 1px solid #000000;
+        }
+        .login-box input[type="email"], .login-box input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+      .login-box input[type="number"] {
+         width: 100%;
+         padding: 10px;
+         margin-bottom: 10px;
+         display: none;
+      }
+        .login-box input[type="submit"] {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 24px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+        .btn1 {
+           background-color: #0000FF;
+           color: rgb(255,255,255);
+           padding: 18px 20px;
+           font-size: 19px;
+           display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <form action="/wtech/v2/checkuser" method="post">
+            <input type="email" id="email" placeholder="電郵" name="email" required>
+            <input type="password" placeholder="密碼" name="password" required>
+            <input type="number" id="code" placeholder="驗證碼" required>
+            <br>
+            <button class="btn1" onclick="sendCode()">發送驗證碼</button>
+            <br>
+            <input type="submit" value="登入">
+        </form>
+    </div>
+  <script>
+    const codeInput = document.querySelector("#code");
+    const btn1 = document.querySelector(".btn1");
+    const emailInput = document.getElementById("email");
+    if (emailInput.value != "") {
+       codeInput.style.display = "block";
+       btn1.style.display = "block";
+    }
+    const sendCode = () => {
+        window.location.href=" {{ url_for('emailSms') }} ";
+    }
+  </script>
+</body>
+</html>
