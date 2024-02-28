@@ -69,7 +69,18 @@
        btn1.style.display = "block";
     }
     const sendCode = () => {
-        window.location.href=" {{ url_for('emailSms') }} ";
+        const url = `{{ url_for('EmailSms', email=${emailInput.value}) }}`;
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      const block = data['block'];
+      // 如果 block 為 'true'，則顯示 codeInput 和 btn1
+      if(block === 'true') {
+        document.getElementById('codeInput').style.display = 'block';
+        document.getElementById('btn1').style.display = 'block';
+      }
+    })
+    .catch(err => alert(err));
     }
   </script>
 </body>
