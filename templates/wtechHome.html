@@ -1,1 +1,70 @@
-
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.header {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: #e9ecef;
+}
+.header .logo {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+.header .login {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+}
+.main {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+}
+.business-box {
+    width: 300px;
+    height: 300px;
+    border: 1px solid #e9ecef;
+    margin: 0 10px;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+footer {
+    background-color: #343a40;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+</style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">W Tech</div>
+        <a href="{{ url_for('wtechLogin') }}" class="login">登入</a>
+    </div>
+    <div class="main">
+        <div class="business-box">
+            Web service
+        </div>
+      <div class="business-box">
+            WCoins
+        </div>
+      <div class="business-box">
+            FunGPT-turbo
+        </div>
+    </div>
+    <footer>© 2024 W Tech. 版權所有。</footer>
+</body>
+</html>
