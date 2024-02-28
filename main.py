@@ -152,8 +152,9 @@ def sk():
   return render_template("skdone.html")
 
 
-@app.route("/wtech/v2/sms/<email>",methods=["GET"])
-def emailSms(email):
+@app.route("/wtech/v2/sms",methods=["GET"])
+def emailSms():
+  email = request.args.get("email")
   code = random.randint(1001,9999)
   subject = "Don't reply this mail"
   content = f"""
