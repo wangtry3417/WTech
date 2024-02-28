@@ -203,6 +203,38 @@ def emailSms():
   s.sendmail("1245server@gmail.com",email,send_data)
   return jsonify({"block":"true","code":code,"status":"Email sent!"})
 
+@app.route("/wtech/v2/mailservice",methods=["GET"])
+def wtechEmail():
+  email = request.args.get("email")
+  subject = "Enhancing Your Business Scale and Efficiency - Advanced Solutions by WTech Inc."
+  content = """
+  Dear valued customer,
+
+I hope this letter finds you well on your beautiful day! I am auto-mail, writing on behalf of WTech Inc. to share with you our array of advanced services.
+
+WTech Inc. is a leading technology company offering a diversified range of services and products including:
+
+1. WCoins: Our unique virtual currency applicable for various online transactions.
+2. Computer game sales: We provide a wide selection of electronic games to accommodate demands from all sorts of players.
+3. Fungpt-turbo: Your AI companion at all times, offering on-the-spot precise responses and solutions, applicable in diverse scenarios.
+4. Web services: Offering website hosting activities.
+
+In today's digital world, we believe that these services can elevate your business to new heights. We are confident that with the services of WTech Inc., you can sharpen business efficiency and reach out to more potential customers.
+
+We look forward to the opportunity to further discuss with you and explore how our precise services can fuel your business. If you have any questions, or need more information about our services, please feel free to respond to this letter or get in touch with us.
+
+Wish you all the best and look forward to hearing from you,
+
+Sincerely,
+W Tech Inc. technical department
+  """
+  s = smtplib.SMTP("smtp.gmail.com",587)
+  s.starttls()
+  s.login("1245server@gmail.com","jvbswpfesugcqazw")
+  send_data = f"Subject: {subject} \n\n {content}"
+  s.sendmail("1245server@gmail.com",email,send_data)
+  return jsonify({"block":"true","code":code,"status":"Email sent!"})
+
 @app.route("/wtech/stock/chi")
 def stock():
   return render_template("stock.html")
