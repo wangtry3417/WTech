@@ -234,6 +234,10 @@ def paypal_coins():
     return jsonify({
       "msg" : "Invaild payment method!"
     })
+#ssksk
+@app.route("/wtech/v2/login")
+def wtechLogin():
+  return render_template("wtechLogin.html")
 
 @app.route("/wcoin/pay/success")
 def paySuccess():
