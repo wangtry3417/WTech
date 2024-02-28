@@ -80,6 +80,11 @@ def wtechCheckUser():
     "user" : email
   })
 
+@app.route("/wtech/v2/discordUser",methods=["GET","POST"])
+def wtechDCUser():
+  code = request.args.get("code")
+  
+
 @app.route("/chat",methods=["POST"])
 def chat():
   username = request.form.get("user")
