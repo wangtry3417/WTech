@@ -83,7 +83,27 @@ def wtechCheckUser():
 @app.route("/wtech/v2/discordUser",methods=["GET","POST"])
 def wtechDCUser():
   code = request.args.get("code")
-  
+  data = {
+        'client_id': 1188619676671037530,
+        'client_secret': 'SNnZshi6sgXkTfoNyGAswV_KfGCIdB0h',
+        'grant_type': 'authorization_code',
+        'code': code,
+        'redirect_uri': 'https://wtech-5o6t.onrender.com/wtech/v2/checkuser',
+    }
+    headers = {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+    response = requests.post('https://discord.com/api/oauth2/token', data=data, headers=headers)
+    response_json = response.json()
+    access_token = response_json.get('access_token')
+    user_info = requests.get(
+    'https://discord.com/api/users/@me', 
+    headers={'Authorization': f'Bearer {access_token}'}
+).json()
+    email = user_info.get('email')
+    return jsonify({
+    "user" : email
+  })
 
 @app.route("/chat",methods=["POST"])
 def chat():
