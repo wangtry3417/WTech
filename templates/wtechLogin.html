@@ -68,7 +68,8 @@
         <br>
         <button type="button" class="discord-btn" onclick="discord()">Login with discord</button>
     </div>
-  <script>
+    <script async src="https://telegram.org/js/telegram-widget.js?22" data-telegram-login="fungpt_turbo_bot" data-size="medium" data-onauth="onTelegramAuth(user)" data-request-access="write"></script>
+    <script>
     const codeInput = document.querySelector("#code");
     const btn1 = document.querySelector(".btn1");
     const emailInput = document.getElementById("email");
@@ -95,6 +96,9 @@
     const discord = () => {
       window.location.href="https://discord.com/oauth2/authorize?client_id=1188619676671037530&response_type=code&redirect_uri=https%3A%2F%2Fwtech-5o6t.onrender.com%2Fwtech%2Fv2%2FdiscordUser&scope=identify+email";
     };
+        function onTelegramAuth(user) {
+    alert('Logged in as ' + user.first_name + ' ' + user.last_name + ' (' + user.id + (user.username ? ', @' + user.username : '') + ')');
+  }
   </script>
 </body>
 </html>
