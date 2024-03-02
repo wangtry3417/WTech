@@ -76,9 +76,24 @@ def data():
 @app.route("/wtech/v2/checkuser",methods=["GET","POST"])
 def wtechCheckUser():
   email = request.form.get("email")
-  return jsonify({
-    "user" : email
-  })
+  return render_template("wtechUploads.html",email=email)
+
+@app.route('/wtech/upload', methods=['POST'])
+def upload_file():
+    # 從表單資料中獲取用戶名與文件
+    username = request.form.get('username')
+    file = request.files.get('file')
+    # 確認 username 和 file 是否存在
+    if not username or not file:
+        abort(400, "Username and file are required.")
+    # 建立檔案儲存路徑
+    save_path = os.path.join('static', username)
+    # 如果路徑不存在則創建新的資料夾
+    if not os.path.exists(save_path):
+        os.makedirs(save_path)
+    # 儲存檔案到指定路徑
+    file.save(os.path.join(save_path, file.filename))
+    return jsonify({"status":"Success to upload file!"})
 
 @app.route("/wtech/v2/discordUser",methods=["GET","POST"])
 def wtechDCUser():
