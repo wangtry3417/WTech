@@ -1,7 +1,7 @@
 from requests import *
 
-def get_web_text(url,form_data=None,json_type_data=None):
-  res = get(url=url,json=json_type_data,data=form_data)
+def get_web_text(url,headers=None,form_data=None,json_type_data=None):
+  res = get(url=url,headers=headers,json=json_type_data,data=form_data)
   return res.text
 
 def get_web_for_json(url,form_data=None,json_type_data=None):
