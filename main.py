@@ -73,6 +73,10 @@ def data():
     
     return jsonify(data)
 
+@app.route("/wtech/staff")
+def wtechStaff():
+  return render_template("wtechStaff.html")
+
 @app.route("/wtech/v2/checkuser",methods=["GET","POST"])
 def wtechCheckUser():
   email = request.form.get("email")
