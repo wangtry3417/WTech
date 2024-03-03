@@ -1,0 +1,29 @@
+<html>
+  <body>
+    <center>
+      <br>
+      <br>
+      <br>
+      <h2>Staff choose:</h2>
+      <input type="text" id="choice" value="staff">
+      <button onclick="sub()">Done</button>
+      <br>
+      <p>------</p>
+      <br>
+      <div id="demo"></div>
+    </center>
+    <script src="https://cdn.socket.io/4.7.4/socket.io.min.js"></script>
+    <script>
+      const socket = io();
+         socket.on("connect",() => {
+              console.log("connected");
+         });
+      socket.on("work",(detail) => {
+          document.getElmentById("demo").innerHTML = detail;
+      });
+      function sub() {
+        socket.emit("joinStaff");
+      }
+    </script>
+  </body>
+</html>
