@@ -396,7 +396,7 @@ def worker():
 def checkUser():
   clientID = str(request.args.get("clientID"))
   user = request.form.get("user")
-  pe = request.form.get("pw")
+  pw = request.form.get("pw")
   if clientID == "00001":
     if user == "wangtry" and pw == "003417":
       return "success"
