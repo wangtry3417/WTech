@@ -243,7 +243,7 @@ def wtechEmail():
   s.starttls()
   s.login("1245server@gmail.com","jvbswpfesugcqazw")
   #send_data = f"Subject: {subject} \n\n {content}"
-  s.sendmail("1245server@gmail.com",email,msg.encode()
+  s.sendmail("1245server@gmail.com",email,msg.encode())
   return jsonify({"block":"true","status":"Email sent!"})
 
 @app.route("/wtech/stock/chi")
