@@ -219,27 +219,24 @@ def emailSms():
 @app.route("/wtech/v2/mailservice",methods=["GET"])
 def wtechEmail():
   email = request.args.get("email")
-  subject = "Enhancing Your Business Scale and Efficiency - Advanced Solutions by WTech Inc."
+  subject = "泓技科技-引領您的企業自動化轉型之旅"
   content = """
-  Dear valued customer,
+  主旨：
+尊敬的企業用戶，
+您好！我是 自動電郵程式，我們泓技科技的代表，非常榮幸能與您聯繫。我們的目標是幫助您的企業實現自我創新和自動化，以提高服務質量並最大化業務效益。
+我們的專業團隊已經開發了一系列服務，包括泓幣(WCoins)、電腦遊戲販售、Fungpt-turbo智能AI服務等。
+我們的自動化服務 FunGPT 是我們的首款聊天AI，儘管由於託管問題已經停止服務，但我們的Fungpt-turbo已經準備就緒，期待為您的業務創造價值。只要註冊用戶，您即可體驗到我們的智能服務。
+透過我們的電郵服務，我們更確保能即時與您聯絡，為您在面對任何問題或需求時提供所需要的即時支援。
+我們認為，透過我們的產品和服務，我們能夠協助您的企業實現更高的生產率和效率。我們相信自動化和創新是未來的方向，並將堅持不懈地為我們的客戶提供最前沿的科技服務。
+如果您希望進一步了解我們的產品和服務，或者需要任何協助，請隨時透過回復此電郵與我們聯繫，我們將非常樂意為您提供幫助。
+謝謝您的時間。期待迎接挑戰，與您共同建立自動化的未來！
 
-I hope this letter finds you well on your beautiful day! I am auto-mail, writing on behalf of WTech Inc. to share with you our array of advanced services.
+官方網站：https://wtech-5o6t.onrender.com/wtech/home
 
-WTech Inc. is a leading technology company offering a diversified range of services and products including:
-
-1. WCoins: Our unique virtual currency applicable for various online transactions.
-2. Computer game sales: We provide a wide selection of electronic games to accommodate demands from all sorts of players.
-3. Fungpt-turbo: Your AI companion at all times, offering on-the-spot precise responses and solutions, applicable in diverse scenarios.
-4. Web services: Offering website hosting activities.
-
-In today's digital world, we believe that these services can elevate your business to new heights. We are confident that with the services of WTech Inc., you can sharpen business efficiency and reach out to more potential customers.
-
-We look forward to the opportunity to further discuss with you and explore how our precise services can fuel your business. If you have any questions, or need more information about our services, please feel free to respond to this letter or get in touch with us.
-
-Wish you all the best and look forward to hearing from you,
-
-Sincerely,
-W Tech Inc. technical department
+順祝商祺
+Fungpt-turbo
+泓技科技代表
+  泓技技術團隊敬上
   """
   s = smtplib.SMTP("smtp.gmail.com",587)
   s.starttls()
