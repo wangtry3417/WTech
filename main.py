@@ -197,6 +197,10 @@ def sk():
 
   return render_template("skdone.html")
 
+@app.route("/wtech/product")
+def wtechProduct():
+  return render_template("wtechProduct.html")
+
 
 @app.route("/wtech/v2/sms",methods=["GET"])
 def emailSms():
