@@ -11,6 +11,7 @@ import smtplib
 import stripe
 import datetime
 import requests
+from email.message import EmailMessage
 #from nltk.stem import WordNetLemmatizer
 #from nltk.book import *
 
@@ -235,11 +236,14 @@ def wtechEmail():
 順祝商祺
 泓技技術團隊敬上
   """
+  msg = EmailMessage()
+  msg['Subject'] = subject.encode('utf-8')
+  msg.set_content(content.encode('utf-8'))
   s = smtplib.SMTP("smtp.gmail.com",587)
   s.starttls()
   s.login("1245server@gmail.com","jvbswpfesugcqazw")
-  send_data = f"Subject: {subject} \n\n {content}"
-  s.sendmail("1245server@gmail.com",email,send_data)
+  #send_data = f"Subject: {subject} \n\n {content}"
+  s.sendmail("1245server@gmail.com",email,msg)
   return jsonify({"block":"true","status":"Email sent!"})
 
 @app.route("/wtech/stock/chi")
