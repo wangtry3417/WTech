@@ -117,7 +117,8 @@
         var r = confirm("你選擇的 Wcoins 是 " + selectedValue + "HKD，確認購買嗎？");
         if (r == true) {
           // 用戶確認購買的代碼在這裡執行
-          alert("購買成功！");
+          // alert("購買成功！");
+            window.location.href="/wcoin/pay";
         } else {
           // 用戶取消購買的代碼在這裡執行
           alert("購買取消！");
