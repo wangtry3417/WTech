@@ -8,7 +8,7 @@ setup(
     author_email='wangtry3417@gmail.com',
     packages=find_packages(),
     license='MLT',
-    license_files=('LICENSE')
+    license_files=('LICENSE'),
     install_requires=[
         'cryptography',
         'flask',
