@@ -1,69 +1,62 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Product Page</title>
-  <style>
+    <title>Product Page</title>
+    <style>
     body {
-    font-family: Arial, sans-serif;
-}
-h1 {
-    font-size: 2em;
-}
-h2 {
-    color: white;
-    background-color: deepblue;
-}
-#productArea {
-    margin-top: 30px;
-}
-button {
-    margin: 10px 0;
-}
-#copyrightArea {
-    margin-top: 30px;
-    font-size: 0.8em;
-    color: grey;
-}
-  </style>
+        font-family: Arial, sans-serif;
+    }
+    h1 {
+        font-size: 2em;
+    }
+    h2 {
+        color: white;
+        background-color: deepblue;
+    }
+    #productArea {
+        margin-top: 30px;
+    }
+    .productAreaItem {
+        margin: 15px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border: 1px solid gray;
+        padding: 10px;
+        display: none;
+    }
+    .productAreaButton { margin-right: 10px; }
+    </style>
 </head>
 <body>
     <h1>W Tech</h1>
     <div id="productArea">
         <h2>產品區</h2>
-        <button id="wcoins" onclick="displayWcoins()">Wcoins</button>
-        <div id="wcoinsArea" style="display: none;">HK$150</div>
-        <div id="wcoinsArea" style="display: none;">HK$350</div>
-        <div id="wcoinsArea" style="display: none;">HK$500</div>
-        <div id="wcoinsArea" style="display: none;">HK$890</div>
-        <div id="wcoinsArea" style="display: none;">HK$1000</div>
-        <button id="webService" onclick="displayWebService()">Web Service</button>
-        <div id="webServiceArea" style="display: none;">Flask.py後端架設</div>
-        <button id="game">Uncle Run Game</button>
+        <button onclick="displayProduct('wcoins')">Wcoins</button>
+        <div id="wcoins" class="productAreaItem">
+            <span>Wcoins</span>
+            <button class="productAreaButton">Buy</button>
+        </div>
+        <button onclick="displayProduct('webService')">Web Service</button>
+        <div id="webService" class="productAreaItem">
+            <span>Web Service</span>
+            <button class="productAreaButton">Buy</button>
+        </div>
+        <button onclick="displayProduct('game')">Uncle Run Game</button>
+        <div id="game" class="productAreaItem">
+            <span>Uncle Run Game</span>
+            <button class="productAreaButton">Buy</button>
+        </div>
     </div>
-    <div id="copyrightArea">
-       © 2024 W Tech. 版權所有。
-       <br>
-       Email : wangtry3417@gmail.com -- CTO wangtry <br>
-       Phone : +852 55362770 --  The owner phone <br>
-       Discord foever link : <a href="https://discord.gg/5DagVQ5MwV"> click here</a>
-    </div>
-  <script>
-    function displayWcoins(){
-    var x = document.getElementById("wcoinsArea");
-    if (x.style.display === "none") {
-        x.style.display = "block";
-    } else {
-        x.style.display = "none";
+    <script>
+    function displayProduct(id){
+        var x = document.getElementById(id);
+        if (x.style.display === "none") {
+            x.style.display = "flex";
+        } else {
+            x.style.display = "none";
+        }
     }
-}
-function displayWebService(){
-    var x = document.getElementById("webServiceArea");
-    if (x.style.display === "none") {
-        x.style.display = "block";
-    } else {
-        x.style.display = "none";
-    }
-}
-  </script>
+    </script>
 </body>
 </html>
