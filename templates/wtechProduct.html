@@ -62,6 +62,15 @@
             <div id="wcoinsPrice"></div>
             <button class="productAreaButton" onclick="confirmChoice()">Buy</button>
         </div>
+        <div id="web" class="productAreaItem">
+            <span>Web 託管</span>
+            <select id="serSelect" class="dropdown" onchange="displayWeb('Service', this.value)">
+              <option value="flask">Flask py庫</option>
+              <option value="wtech">WTech.app庫</option>
+            </select>
+            <div id="Service"></div>
+            <button class="productAreaButton" onclick="confirmChoice()">Buy</button>
+        </div>
     </div>
     <script>
     function displayProduct(id){
@@ -73,10 +82,26 @@
             dropdown.style.display = "none";
         }
     }
+    function displayWeb(id,value) {
+        var priceDiv = document.getElementById(id);
+        priceDiv.innerHTML = value;
+    }
     function displayPrice(id, value){
         var priceDiv = document.getElementById(id);
         priceDiv.innerHTML = 'HK$' + value;
     } 
+    function conWeb() {
+        var Select = document.getElementById('Service');
+        var selectedValue = wcoinsSelect.options[Select.selectedIndex].value;
+        var r = confirm("你選擇的使用 " + selectedValue + " 建立web server，確認購買嗎？");
+        if (r == true) {
+          // 用戶確認購買的代碼在這裡執行
+          alert("購買成功！");
+        } else {
+          // 用戶取消購買的代碼在這裡執行
+          alert("購買取消！");
+        }
+    }
     function confirmChoice(){
         var wcoinsSelect = document.getElementById('wcoinsSelect');
         var selectedValue = wcoinsSelect.options[wcoinsSelect.selectedIndex].value;
