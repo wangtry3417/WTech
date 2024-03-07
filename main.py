@@ -175,7 +175,7 @@ def sk():
   count = int(request.args.get("price"))
   try:
     session = stripe.checkout.Session.create(
-        #payment_method_types=['card','wechat_pay', 'alipay'],
+        #payment_method_types=['card'],
         line_items=[
             {
                 'price_data': {
