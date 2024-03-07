@@ -50,7 +50,7 @@
         <h2>產品區</h2>
       </div>
         </center>
-        <button class="productAreaButton" onclick="displayProduct('wcoins')">Wcoins</button>
+        <button class="productAreaButton" onclick="displayProduct('wcoins')">選擇</button>
         <div id="wcoins" class="productAreaItem">
             <span>Wcoins</span>
             <select id="wcoinsSelect" class="dropdown" onchange="displayPrice('wcoinsPrice', this.value)">
@@ -62,14 +62,15 @@
             <div id="wcoinsPrice"></div>
             <button class="productAreaButton" onclick="confirmChoice()">Buy</button>
         </div>
+        <button class="productAreaButton" onclick="displayProduct('web')">選擇</button>
         <div id="web" class="productAreaItem">
             <span>Web 託管</span>
-            <select id="serSelect" class="dropdown" onchange="displayWeb('Service', this.value)">
+            <select id="webSelect" class="dropdown" onchange="displayWeb('Service', this.value)">
               <option value="flask">Flask py庫</option>
               <option value="wtech">WTech.app庫</option>
             </select>
             <div id="Service"></div>
-            <button class="productAreaButton" onclick="confirmChoice()">Buy</button>
+            <button class="productAreaButton" onclick="conWeb()">Buy</button>
         </div>
     </div>
     <script>
