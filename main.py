@@ -312,8 +312,8 @@ def paypal_coins():
           "payment_method": "paypal"
       },
       "redirect_urls": {
-          "return_url": url_for('paySuccess'),
-          "cancel_url": url_for('lo')
+          "return_url": "/wcoin/pay/success",
+          "cancel_url": "wtech/v2/login"
       },
       "transactions": [{
           "amount": {
