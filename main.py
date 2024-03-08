@@ -92,7 +92,10 @@ def upload_file():
      return res.content
    except:
      return "Upload error"
-   
+
+@app.route("/wtech/about")
+def wtechAbout():
+  return render_template("wtechAbout.html")
 
 @app.route("/wtech/v2/discordUser",methods=["GET","POST"])
 def wtechDCUser():
