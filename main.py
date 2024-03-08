@@ -47,7 +47,7 @@ def hash_value(user):
 
 @app.route("/")
 def index():
-  return url_for("wtechHome")
+  return render_template("wtechHome.html")
 
 def generate_data():
     data = []
