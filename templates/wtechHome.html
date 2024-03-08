@@ -33,6 +33,13 @@ background-color: rgb(255,255,255);
     text-decoration: none;
     border-radius: 5px;
 }
+.header .about {
+  background-color: rgb(255,255,255);
+    color: #000000;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+}
 .main {
     padding: 20px;
     display: flex;
@@ -66,6 +73,8 @@ padding: 20px;
 display: flex;
 justify-content: center;
 }
+
+
 </style>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6288057733972420"
      crossorigin="anonymous"></script>
@@ -74,6 +83,7 @@ justify-content: center;
     <div class="header">
         <div class="logo">W Tech</div>
         <a href="{{ url_for('wtechProduct') }}" class="product">產品</a>
+        <a href="{{ url_for('wtechAbout') }}" class="about">關於</a>
         <a href="{{ url_for('wtechLogin') }}" class="login">登入</a>
     </div>
     <div class="main">
