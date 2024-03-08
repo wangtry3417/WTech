@@ -119,7 +119,7 @@
         if (r == true) {
           // 用戶確認購買的代碼在這裡執行
           // alert("購買成功！");
-            var url = "wcoin/pay/paypal?country=HKD&price="+parseInt(selectedValue);
+            var url = "/wcoin/pay/paypal?country=HKD&price="+parseInt(selectedValue);
             window.location.href=url;
         } else {
           // 用戶取消購買的代碼在這裡執行
