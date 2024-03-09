@@ -32,7 +32,7 @@
 var consoleElement = document.getElementById('console');
 // 使用innerHTML或innerText將文字添加到控制台
 consoleElement.innerHTML += "<p>wtech run -p index.js</p>";
-      const socket = io.connect("https://wserver-wtech.onrender.com");
+      const socket = io("https://wserver-wtech.onrender.com");
       socket.on("connect",() => {
           socket.emit("RoadOne");
       });
