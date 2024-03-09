@@ -17,7 +17,7 @@
       var selectedValue = Select.options[Select.selectedIndex].value;
       const socket = io("https://wserver-wtech.onrender.com");
       const check = () => {
-           
+           socket.emit("roadOne");
       };
     </script>
   </body>
