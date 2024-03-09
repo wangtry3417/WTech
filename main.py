@@ -81,7 +81,7 @@ def wtechStaff():
 @app.route("/wtech/v2/checkuser",methods=["GET","POST"])
 def wtechCheckUser():
   email = request.form.get("email")
-  return render_template("wtechUploads.html",email=email)
+  return render_template("wtechDash.html",email=email)
 
 @app.route('/wtech/upload', methods=['POST'])
 def upload_file():
