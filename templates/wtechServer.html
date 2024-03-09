@@ -20,7 +20,7 @@
       const socket = io("https://wserver-wtech.onrender.com");
       const check = () => {
            socket.emit("roadOne");
-           socket.on("Hello",(msg) => {
+           socket.on("welcome",(msg) => {
                 document.getElementById("demo").innerHTML=msg;
            });
       };
