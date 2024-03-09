@@ -1,1 +1,54 @@
-
+<!DOCTYPE html>
+<html>
+<head>
+  <title>WTech Server Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    #console {
+      background-color: black;
+      color: white;
+      padding: 10px;
+      display: none;
+      margin-top: 20px;
+    }
+    .top-nav {
+      background-color: #f8f8f8;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .top-nav h1, .top-nav nav {
+      margin: 0;
+    }
+  </style>
+  <script>
+    function showConsole() {
+      document.getElementById('console').style.display = 'block';
+      // 獲取"console"元素的參考
+var consoleElement = document.getElementById('console');
+// 使用innerHTML或innerText將文字添加到控制台
+consoleElement.innerHTML += "<p>wtech run -p index.js</p>";
+    }
+  </script>
+</head>
+<body>
+  <div class="top-nav">
+    <h1>WTech</h1>
+    <nav>
+      <a href="#">Menu</a>
+    </nav>
+  </div>
+  <h2>Welcome, User</h2>
+  <p>Select a server line:</p>
+  <select>
+    <option value="wtech-001">wtech-001</option>
+  </select>
+  <button onclick="showConsole()">Continue</button>
+  <div id="console">
+    <p>Console Output</p>
+  </div>
+</body>
+</html>
