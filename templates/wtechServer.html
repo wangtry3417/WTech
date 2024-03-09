@@ -5,11 +5,15 @@
       <br>
       <br>
       <label>Server route:</label>
-      <select>
+      <select id="choice">
         <option value="wtech-001">wtech-001</option>
       </select>
       <br>
       <button onclick="check()">connect</button>
     </center>
+    <script>
+      var Select = document.getElementById('choice');
+      var selectedValue = Select.options[Select.selectedIndex].value;
+    </script>
   </body>
 </html>
