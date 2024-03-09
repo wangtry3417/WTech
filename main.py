@@ -165,6 +165,10 @@ def chatCode(code : str):
 def wtechHome():
   return render_template("wtechHome.html")
 
+@app.route("/wtech/server")
+def wtechSer():
+  return render_template("wtechServer.html")
+
 @app.route("/wcoin/login")
 def lo():
   return render_template("wcoin.html")
