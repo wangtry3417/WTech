@@ -23,6 +23,9 @@
     .top-nav h1, .top-nav nav {
       margin: 0;
     }
+    #cmd {
+      padding: 18px 20px;
+    }
   </style>
   <script src="https://cdn.socket.io/4.7.4/socket.io.min.js" integrity="sha384-Gr6Lu2Ajx28mzwyVR8CFkULdCU7kMlZ9UthllibdOSo6qAiN+yXNHqtgdTvFXMT4" crossorigin="anonymous"></script>
   <script>
@@ -58,5 +61,7 @@ consoleElement.innerHTML += "<p>wtech run -p index.js</p>";
   <div id="console">
     <p>Console Output</p>
   </div>
+  <input type="text" id="cmd">
+  <button onclick="sendSms()">send</button>
 </body>
 </html>
