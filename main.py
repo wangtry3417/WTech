@@ -161,7 +161,7 @@ def chatCode(code : str):
   else:
     return jsonify({"Invaild code" : "Message not found"})
 
-@app.route("/wtech/home")
+@app.route("/wtech/home",methods=["GET","POST","PATCH","DELETE","PUT"])
 def wtechHome():
   return render_template("wtechHome.html")
 
