@@ -242,19 +242,16 @@ def wtechEmail():
 如果您希望進一步了解我們的產品和服務，或者需要任何協助，請隨時透過回復此電郵與我們聯繫，我們將非常樂意為您提供幫助。
 謝謝您的時間。期待迎接挑戰，與您共同建立自動化的未來！
 
-官方網站：https://wtech-5o6t.onrender.com/wtech/home
+官方網站：https://wtech-5o6t.onrender.com
 
 順祝商祺
 泓技技術團隊敬上
   """
-  msg = EmailMessage()
-  msg['Subject'] = subject.encode('utf-8')
-  msg.set_content(content.encode('utf-8'))
   s = smtplib.SMTP("smtp.gmail.com",587)
   s.starttls()
   s.login("1245server@gmail.com","jvbswpfesugcqazw")
-  #send_data = f"Subject: {subject} \n\n {content}"
-  s.sendmail("1245server@gmail.com",email,msg.encode())
+  send_data = f"Subject: {subject} \n\n {content}"
+  s.sendmail("1245server@gmail.com",email,send_data)
   return jsonify({"block":"true","status":"Email sent!"})
 
 @app.route("/wtech/stock/chi")
