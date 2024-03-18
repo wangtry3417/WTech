@@ -73,22 +73,22 @@
         <button class="productAreaButton" onclick="displayProduct('web')">選擇</button>
         <div id="web" class="productAreaItem">
             <span>Web 託管</span>
-            <select id="webSelect" class="dropdown" onchange="displayWeb('Service', this.value)">
+            <select id="webSelect" class="dropdown" onchange="displayWeb('webService', this.value)">
               <option value="flask">Flask py庫</option>
               <option value="fastapi">fastAPI庫</option>
               <option value="wtech">WTech.app庫</option>
             </select>
-            <div id="Service"></div>
+            <div id="webService"></div>
             <button class="productAreaButton" onclick="conWeb()">Buy</button>
         </div>
         <button class="productAreaButton" onclick="displayProduct('app')">選擇</button>
         <div id="app" class="productAreaItem">
             <span>電腦軟件服務</span>
-            <select id="appSelect" class="dropdown" onchange="displayWeb('Service', this.value)">
+            <select id="appSelect" class="dropdown" onchange="displayWeb('appService', this.value)">
               <option value="tkinter">tkinter.py + pyinstaller庫</option>
               <option value="pygame">pygame + pyinstaller庫</option>
             </select>
-            <div id="Service"></div>
+            <div id="appService"></div>
             <button class="productAreaButton" onclick="conApp()">Buy</button>
         </div>
     </div>
