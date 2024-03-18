@@ -89,7 +89,7 @@
               <option value="pygame">pygame + pyinstaller庫</option>
             </select>
             <div id="Service"></div>
-            <button class="productAreaButton" onclick="conWeb()">Buy</button>
+            <button class="productAreaButton" onclick="conApp()">Buy</button>
         </div>
     </div>
     <script>
@@ -113,11 +113,10 @@
     function conWeb() {
         var Select = document.getElementById('webSelect');
         var selectedValue = Select.options[Select.selectedIndex].value;
-        var r = confirm("你選擇的使用 " + selectedValue + " 建立軟件UI，確認購買嗎？");
+        var r = confirm("你選擇的使用 " + selectedValue + " 建立web server，確認購買嗎？");
         if (r == true) {
           // 用戶確認購買的代碼在這裡執行
-          var email = prompt("輸入電郵地址： 我們系統會發送電郵給你。");
-          window.location.href="/wtech/v2/automail?subject=客戶選擇服務-電腦軟件服務&content=你好，請輸入軟件需求，如OS等&email=" + email;
+          window.location.href="https://book.stripe.com/dR69Ede4R8I14xOaEJ";
         } else {
           // 用戶取消購買的代碼在這裡執行
         alert("購買取消！");
@@ -126,10 +125,11 @@
    function conApp() {
        var Select = document.getElementById('appSelect');
         var selectedValue = Select.options[Select.selectedIndex].value;
-        var r = confirm("你選擇的使用 " + selectedValue + " 建立web server，確認購買嗎？");
+        var r = confirm("你選擇的使用 " + selectedValue + " 建立建立軟件UI，確認購買嗎？");
         if (r == true) {
           // 用戶確認購買的代碼在這裡執行
-          window.location.href="https://book.stripe.com/dR69Ede4R8I14xOaEJ";
+          var email = prompt("輸入電郵地址： 我們系統會發送電郵給你。");
+          window.location.href="/wtech/v2/automail?subject=客戶選擇服務-電腦軟件服務&content=你好，請輸入軟件需求，如OS等&email=" + email;
         } else {
           // 用戶取消購買的代碼在這裡執行
         alert("購買取消！");
