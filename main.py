@@ -46,7 +46,7 @@ def hash_value(user):
   return sha
 
 @app.errorhandler(500)
-def error_server():
+def error_server(e):
   return jsonify({
     "status" : "server error",
     "status_code(https)" : 500,
