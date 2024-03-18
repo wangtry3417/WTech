@@ -83,6 +83,22 @@ def wtechCheckUser():
   email = request.form.get("email")
   return render_template("wtechDash.html",email=email)
 
+@app.route("/wtech/v2/automail",methods=["GET"])
+def send_auto_mail():
+  email = str(request.args.get("email"))
+  subject = str(request.args.get("subject"))
+  content = str(request.args.get("content"))
+  msg = MIMEText(content,"plain","utf-8")
+  msg["To"] = email
+  msg["From"] = "1245server@gmail.com"
+  msg["Subject"] = subject
+  s = smtplib.SMTP("smtp.gmail.com",587)
+  s.starttls()
+  s.login("1245server@gmail.com","jvbswpfesugcqazw")
+  #send_data = f"Subject: {subject} \n\n {content}"
+  s.sendmail("1245server@gmail.com",[email],msg.as_string())
+  return jsonify({"status" : "Sent!","status_code" : 200})
+
 @app.route('/wtech/upload', methods=['POST'])
 def upload_file():
    username = request.form.get("username")
@@ -249,11 +265,7 @@ def wtechEmail():
   msg["Subject"] = "泓技科技-引領您的企業自動化轉型之旅"
   msg["From"] = "1245server@gmail.com"
   msg["To"] = email
-  s = smtplib.SMTP("smtp.gmail.com",587)
-  s.starttls()
-  s.login("1245server@gmail.com","jvbswpfesugcqazw")
-  #send_data = f"Subject: {subject} \n\n {content}"
-  s.sendmail("1245server@gmail.com",[email],msg.as_string())
+  l
   return jsonify({"block":"true","status":"Email sent!"})
 
 @app.route("/wtech/stock/chi")
