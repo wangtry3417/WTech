@@ -265,7 +265,11 @@ def wtechEmail():
   msg["Subject"] = "泓技科技-引領您的企業自動化轉型之旅"
   msg["From"] = "1245server@gmail.com"
   msg["To"] = email
-  l
+  s = smtplib.SMTP("smtp.gmail.com",587)
+  s.starttls()
+  s.login("1245server@gmail.com","jvbswpfesugcqazw")
+  #send_data = f"Subject: {subject} \n\n {content}"
+  s.sendmail("1245server@gmail.com",[email],msg.as_string())
   return jsonify({"block":"true","status":"Email sent!"})
 
 @app.route("/wtech/stock/chi")
