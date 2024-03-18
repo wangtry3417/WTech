@@ -45,6 +45,15 @@ def hash_value(user):
   sha = hashlib.sha256(u).hexdigest()
   return sha
 
+@app.errorhandler(500)
+def error_server():
+  return jsonify({
+    "status" : "server error",
+    "status_code(https)" : 500,
+    "status_code(wtps)" : 407,
+    "server hint" : "carefully and try again!"
+  })
+
 @app.route("/")
 def index():
   return render_template("wtechHome.html")
