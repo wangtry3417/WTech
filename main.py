@@ -11,7 +11,7 @@ import smtplib
 import stripe
 import datetime
 import requests
-from email.message import EmailMessage
+from email.mime.text import MIMEText
 #from nltk.stem import WordNetLemmatizer
 #from nltk.book import *
 
@@ -231,8 +231,7 @@ def emailSms():
 @app.route("/wtech/v2/mailservice",methods=["GET"])
 def wtechEmail():
   email = request.args.get("email")
-  subject = u"泓技科技-引領您的企業自動化轉型之旅"
-  content = u"""
+  msg = MIMEText("""
 尊敬的企業用戶，
 您好！我是 自動電郵程式，我們泓技科技的代表，非常榮幸能與您聯繫。我們的目標是幫助您的企業實現自我創新和自動化，以提高服務質量並最大化業務效益。
 我們的專業團隊已經開發了一系列服務，包括泓幣(WCoins)、電腦遊戲販售、Fungpt-turbo智能AI服務等。
@@ -246,12 +245,15 @@ def wtechEmail():
 
 順祝商祺
 泓技技術團隊敬上
-  """
+  ""","plain","utf-8")
+  msg["Subject"] = "泓技科技-引領您的企業自動化轉型之旅"
+  msg["From"] = "1245server@gmail.com"
+  msg["To"] = email
   s = smtplib.SMTP("smtp.gmail.com",587)
   s.starttls()
   s.login("1245server@gmail.com","jvbswpfesugcqazw")
-  send_data = f"Subject: {subject} \n\n {content}"
-  s.sendmail("1245server@gmail.com",email,send_data)
+  #send_data = f"Subject: {subject} \n\n {content}"
+  s.sendmail("1245server@gmail.com",[email],msg.as_string())
   return jsonify({"block":"true","status":"Email sent!"})
 
 @app.route("/wtech/stock/chi")
