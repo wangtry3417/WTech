@@ -77,7 +77,26 @@ padding: 20px;
 display: flex;
 justify-content: center;
 }
-
+.custom-window {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 200px;
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.5);
+    display: none; /* 先設定為 none */
+}
+.blue-button {
+    width: 100%;
+    height: 50px;
+    background-color: deepskyblue;
+    border: none;
+    color: white;
+    font-size: 20px;
+}
 
 </style>
   <title>泓技WTech -- 主頁</title>
@@ -125,6 +144,17 @@ justify-content: center;
     <h3>--------------</h3>
     <br>
     <center>
+      <div id="popup" class="custom-window">
+        <center>
+          <h2>W Tech hint:</h2>
+          <br>
+          在此網站，泓技W Tech禁止在人類網站使用第三方工具（如 requests.py等）。 <br>
+          按下以下按鈕代表已知悉相關規定。
+          <br>
+          In this web page, WTech is strictly prohibited to use web-crawler tools,like requests.py on human website(s).
+        </center>
+        <button class="blue-button">Agree!</button>
+      </div>
       <div class="main">
         <h1>要聞 news:</h1>
         <div class="business-box">
@@ -140,6 +170,13 @@ justify-content: center;
         document.getElementById("wcoins").addEventListener("click",() => {
             alert("Hello");
         });
+      window.addEventListener("load", function() {
+    var popup = document.getElementById('popup');
+    popup.style.display = 'block'; /* 當頁面加載完後，將 display 設定為 block */
+    popup.querySelector('button').addEventListener('click', function() {
+        popup.style.display = 'none'; /* 點擊按鈕後，將 display 設回為 none */
+    });
+});
     </script>
     <footer>© 2024 W Tech. 版權所有。
        <br>
