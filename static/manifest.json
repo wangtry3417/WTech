@@ -7,7 +7,7 @@
   "theme_color": "#fafafa",
   "description": "Hey,this is wtech moblie app.",
   "icons": [{
-    "src": "/static/IMG_8859.jpeg",
+    "src": "./IMG_8859.jpeg",
     "sizes": "192x192",
     "type": "image/jpeg"
   }]
