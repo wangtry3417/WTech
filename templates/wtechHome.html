@@ -97,7 +97,13 @@ justify-content: center;
     color: white;
     font-size: 20px;
 }
-
+@keyframes dots {
+  0% { content: ""; }
+  25% { content: "."; }
+  50% { content: ".."; }
+  75% { content: "..."; }
+  100% { content: "..."; }
+}
 </style>
   <title>泓技WTech -- 主頁</title>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6288057733972420"
@@ -153,7 +159,7 @@ justify-content: center;
           <br>
           In this web page, WTech is strictly prohibited to use web-crawler tools,like requests.py on human website(s).
         </center>
-        <button class="blue-button">Agree!</button>
+        <button id="myButton" class="blue-button">Agree!</button>
       </div>
       <div class="main">
         <h1>要聞 news:</h1>
@@ -174,6 +180,10 @@ justify-content: center;
     var popup = document.getElementById('popup');
     popup.style.display = 'block'; /* 當頁面加載完後，將 display 設定為 block */
     popup.querySelector('button').addEventListener('click', function() {
+      var button = document.getElementById("myButton");
+        button.innerHTML = "...";
+    button.style.animationDuration = "1s";
+    button.style.animationName = "dots";
         popup.style.display = 'none'; /* 點擊按鈕後，將 display 設回為 none */
     });
 });
