@@ -1,1 +1,14 @@
-
+{
+  "name": "wcoins",
+  "short_name": "wcoins trade",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fafafa",
+  "theme_color": "#fafafa",
+  "description": "Hey,this is wtech moblie app.",
+  "icons": [{
+    "src": "./IMG_8859.jpeg",
+    "sizes": "192x192",
+    "type": "image/jpeg"
+  }]
+}
