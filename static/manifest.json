@@ -1,7 +1,7 @@
 {
   "name": "wtech",
   "short_name": "wtech.app",
-  "start_url": ".",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#fafafa",
   "theme_color": "#fafafa",
