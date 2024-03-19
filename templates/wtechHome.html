@@ -124,18 +124,18 @@ justify-content: center;
     <br>
     <h3>--------------</h3>
     <br>
-    <h2>下載區：</h2>
-    <br>
+    <center>
+      <div class="main">
+        <h1>要聞 news:</h1>
         <div class="business-box">
-            <h2>W Tech app.exe</h2>
-            <br>
-            <a href="{{ url_for('static',filename='wtech-v1.0.zip') }}" download="{{ url_for('static',filename='wtech-v1.0.zip') }}">Download for windows</a>
+           <h2>提醒用戶:</h2>
+             <br>
+             有一個商城叫 π商城，他們回覆慢，服務差，員工腦子不正常，以及待客無禮。
+            以上為事實，因我們的人曾體驗過。
+           官網：<a href="https://pishop.xyz">Click to pishop</a>
         </div>
-       <div class="business-box">
-            <h2>《移動板塊》-- 為小遊戲</h2>
-            <br>
-            <a href="{{ url_for('static',filename='game.exe') }}" download="{{ url_for('static',filename='game.exe') }}">Download for windows</a>
-        </div>
+      </div>
+    </center>
     <script>
         document.getElementById("wcoins").addEventListener("click",() => {
             alert("Hello");
