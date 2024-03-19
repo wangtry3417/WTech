@@ -1,7 +1,7 @@
 {
   "name": "wcoins",
   "short_name": "wcoins trade",
-  "start_url": "/",
+  "start_url": "/wcoin/login",
   "display": "standalone",
   "background_color": "#fafafa",
   "theme_color": "#fafafa",
