@@ -189,8 +189,8 @@ justify-content: center;
         document.getElementById("wcoins").addEventListener("click",() => {
             alert("Hello");
         });
-      window.addEventListener("load", function() {
-        $.getJSON('https://freegeoip.app/json/', function(data) {
+      $(document).ready(function(){
+         $.getJSON('https://freegeoip.app/json/', function(data) {
   if (data.country_code === 'TW') {
     window.location.href = "/wtech/bockweb?place=tw"; // 導向到拒絕訪問的頁面
   }
@@ -198,6 +198,8 @@ justify-content: center;
    window.location.href = "/wtech/bockweb?place=hk";
   }
 });
+      }
+      window.addEventListener("load", function() {
     var popup = document.getElementById('popup');
     popup.style.display = 'block'; /* 當頁面加載完後，將 display 設定為 block */
     popup.querySelector('button').addEventListener('click', function() {
