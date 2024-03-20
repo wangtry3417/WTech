@@ -58,14 +58,14 @@ def error_server(e):
 def index():
   user_ip = request.remote_addr
   response = requests.get(f"https://ipinfo.io/{user_ip}/json")
-    geo_info = response.json()
-    # 基於地理位置信息處理用戶請求
-    if geo_info['country'] == 'TW':
-        return redirect("/wtech/bockweb?place=tw")
-    elif geo_info['country'] == 'HK':
-        return redirect("/wtech/bockweb?place=hk")
-    else:
-        return render_template("wtechHome.html")
+  geo_info = response.json()
+  # 基於地理位置信息處理用戶請求
+  if geo_info['country'] == 'TW':
+    return redirect("/wtech/bockweb?place=tw")
+  elif geo_info['country'] == 'HK':
+    return redirect("/wtech/bockweb?place=hk")
+  else:
+    return render_template("wtechHome.html")
 
   
 def generate_data():
