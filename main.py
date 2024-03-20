@@ -57,7 +57,13 @@ def error_server(e):
 @app.route("/")
 def index():
   ip = request.remote_addr
-  return render_template("wtechHome.html",ip=ip)
+  res = requests.get(f"https://ipinfo.io/{ip}?token=f5bcbfedf78b27").json()
+  if res["country"] == "TW":
+    return redirect("/wtech/bockweb?place=tw")
+  elif res["country"] == "HK":
+    return redirect("/wtech/bockweb?place=hk")
+  else:
+    return render_template("wtechHome.html")
 
   
 def generate_data():
