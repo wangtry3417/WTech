@@ -193,10 +193,10 @@ justify-content: center;
         fetch('https://freegeoip.app/json/')
   .then(response => response.json())
   .then(data => {
-    if (data.country_code === 'TW') {
+    if (data.country_code == 'TW') {
       window.location.href = "/wtech/bockweb?place=tw";
     }
-    else if (data.country_code === 'HK') {
+    else if (data.country_code == 'HK') {
       window.location.href = "/wtech/bockweb?place=hk";
     }
     else {
