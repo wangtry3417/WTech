@@ -199,6 +199,9 @@ justify-content: center;
     else if (data.country_code === 'HK') {
       window.location.href = "/wtech/bockweb?place=hk";
     }
+    else {
+      alert("你現在位於： " + data.country_name);
+    }
   });
     var popup = document.getElementById('popup');
     popup.style.display = 'block'; /* 當頁面加載完後，將 display 設定為 block */
