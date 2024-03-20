@@ -189,17 +189,17 @@ justify-content: center;
         document.getElementById("wcoins").addEventListener("click",() => {
             alert("Hello");
         });
-      $(document).ready(function(){
-         $.getJSON('https://freegeoip.app/json/', function(data) {
-  if (data.country_code === 'TW') {
-    window.location.href = "/wtech/bockweb?place=tw"; // 導向到拒絕訪問的頁面
-  }
-  else if (data.country_code === 'HK') {
-   window.location.href = "/wtech/bockweb?place=hk";
-  }
-});
-      });
       window.addEventListener("load", function() {
+        fetch('https://freegeoip.app/json/')
+  .then(response => response.json())
+  .then(data => {
+    if (data.country_code === 'TW') {
+      window.location.href = "/wtech/bockweb?place=tw";
+    }
+    else if (data.country_code === 'HK') {
+      window.location.href = "/wtech/bockweb?place=hk";
+    }
+  });
     var popup = document.getElementById('popup');
     popup.style.display = 'block'; /* 當頁面加載完後，將 display 設定為 block */
     popup.querySelector('button').addEventListener('click', function() {
