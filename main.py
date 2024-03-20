@@ -86,7 +86,7 @@ def data():
 @app.route("/wtech/bockweb",methods=["GET"])
 def webCheckIsBlock():
   place = str(request.args.get("place"))
-  if place == "tw":
+  if place == "TW":
     country = "中華民國（台灣)"
     return render_template("wtechBlock.html",country=country)
     
