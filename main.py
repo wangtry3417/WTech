@@ -58,12 +58,15 @@ def error_server(e):
 def index():
   ip = request.remote_addr
   res = requests.get(f"https://ipinfo.io/{ip}?token=f5bcbfedf78b27").json()
-  if res["country"] == "TW":
-    return redirect("/wtech/bockweb?place=tw")
-  elif res["country"] == "HK":
-    return redirect("/wtech/bockweb?place=hk")
+  if "bogon" not in res:
+    if res["country"] == "TW":
+      return redirect("/wtech/bockweb?place=tw")
+    elif res["country"] == "HK":
+      return redirect("/wtech/bockweb?place=hk")
+    else:
+      return render_template("wtechHome.html")
   else:
-    return render_template("wtechHome.html")
+    return "抱歉，閣下的網絡IP 暫不接受。
 
   
 def generate_data():
