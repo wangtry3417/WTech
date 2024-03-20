@@ -83,6 +83,14 @@ def data():
     
     return jsonify(data)
 
+@app.route("/wtech/bockweb",methods=["GET"])
+def webCheckIsBlock():
+  place = str(request.args.get("place"))
+  if place == "tw":
+    country = "中華民國（台灣)"
+    return render_template("wtechBlock.html",country=country)
+    
+
 @app.route("/wtech/staff")
 def wtechStaff():
   return render_template("wtechStaff.html")
