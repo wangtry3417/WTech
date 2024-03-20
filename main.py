@@ -56,7 +56,17 @@ def error_server(e):
 
 @app.route("/")
 def index():
-  return render_template("wtechHome.html")
+  try:
+    response = requests.get('https://freegeoip.app/json/')
+    data = response.json()
+    if data['country_code'] == 'TW':
+      return redirect("/wtech/bockweb?place=tw")
+    elif data['country_code'] == 'HK':
+      return redirect("/wtech/bockweb?place=hk")
+    else:
+      return render_template("wtechHome.html")
+  except Exception as e:
+    return str(e)
 
 def generate_data():
     data = []
