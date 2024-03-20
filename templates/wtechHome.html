@@ -199,6 +199,11 @@ justify-content: center;
     popup.style.animationName = "dots";
         popup.style.display = 'none'; /* 點擊按鈕後，將 display 設回為 none */
     });
+    $.getJSON('https://freegeoip.app/json/', function(data) {
+  if (data.country_code === 'TW') {
+    window.location.href = "/wtech/bockweb?place=tw"; // 導向到拒絕訪問的頁面
+  }
+});
 });
     </script>
     <footer>© 2024 W Tech. 版權所有。
