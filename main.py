@@ -66,7 +66,7 @@ def index():
     else:
       return render_template("wtechHome.html")
   else:
-    return "抱歉，閣下的網絡IP 暫不接受。" , ip
+    return "抱歉，閣下的網絡IP 暫不接受。" 
 
   
 def generate_data():
