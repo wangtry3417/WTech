@@ -66,6 +66,8 @@ def index():
   if "bogon" not in res:
     if res["country"] == "TW":
       return redirect("/wtech/bockweb?place=tw")
+    elif res["country"] == "US":
+      return redirect("/wtech/bockweb?place=us")
     else:
       return render_template("wtechHome.html")
   else:
