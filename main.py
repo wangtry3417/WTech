@@ -147,7 +147,22 @@ def upload_file():
 
 @app.route("/wtech/about")
 def wtechAbout():
-  return render_template("wtechAbout.html")
+  x_forwarded_for = request.headers.get('X-Forwarded-For')
+  if x_forwarded_for:
+    user_ip = x_forwarded_for.split(',')[0]
+  else:
+    user_ip = request.remote_addr
+    
+  res = requests.get(f"https://ipinfo.io/{user_ip}?token=f5bcbfedf78b27").json()
+  if "bogon" not in res:
+    if res["country"] == "TW":
+      return redirect("/wtech/bockweb?place=tw")
+    elif res["country"] == "US":
+      return redirect("/wtech/bockweb?place=us")
+    else:
+      return render_template("wtechAbout.html")
+  else:
+    return abort(502)
 
 @app.route("/wtech/v2/discordUser",methods=["GET","POST"])
 def wtechDCUser():
@@ -258,7 +273,22 @@ def sk():
 
 @app.route("/wtech/product")
 def wtechProduct():
-  return render_template("wtechProduct.html")
+  x_forwarded_for = request.headers.get('X-Forwarded-For')
+  if x_forwarded_for:
+    user_ip = x_forwarded_for.split(',')[0]
+  else:
+    user_ip = request.remote_addr
+    
+  res = requests.get(f"https://ipinfo.io/{user_ip}?token=f5bcbfedf78b27").json()
+  if "bogon" not in res:
+    if res["country"] == "TW":
+      return redirect("/wtech/bockweb?place=tw")
+    elif res["country"] == "US":
+      return redirect("/wtech/bockweb?place=us")
+    else:
+      return render_template("wtechProduct.html")
+  else:
+    return abort(502)
 
 
 @app.route("/wtech/v2/sms",methods=["GET"])
