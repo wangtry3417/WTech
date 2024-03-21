@@ -56,8 +56,13 @@ def error_server(e):
 
 @app.route("/")
 def index():
-  ip = request.remote_addr
-  res = requests.get(f"https://ipinfo.io/{ip}?token=f5bcbfedf78b27").json()
+  x_forwarded_for = request.headers.get('X-Forwarded-For')
+  if x_forwarded_for:
+    user_ip = x_forwarded_for.split(',')[0]
+  else:
+    user_ip = request.remote_addr
+    
+  res = requests.get(f"https://ipinfo.io/{user_ip}?token=f5bcbfedf78b27").json()
   if "bogon" not in res:
     if res["country"] == "TW":
       return redirect("/wtech/bockweb?place=tw")
@@ -66,7 +71,7 @@ def index():
     else:
       return render_template("wtechHome.html")
   else:
-    return "抱歉，閣下的網絡IP 暫不接受。" + ip
+    return abort(502)
 
   
 def generate_data():
