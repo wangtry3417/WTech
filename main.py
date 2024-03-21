@@ -66,8 +66,6 @@ def index():
   if "bogon" not in res:
     if res["country"] == "TW":
       return redirect("/wtech/bockweb?place=tw")
-    elif res["country"] == "HK":
-      return redirect("/wtech/bockweb?place=hk")
     else:
       return render_template("wtechHome.html")
   else:
@@ -104,9 +102,6 @@ def webCheckIsBlock():
   place = str(request.args.get("place"))
   if place == "tw":
     country = "中華民國（台灣)"
-    return render_template("wtechBlock.html",country=country)
-  elif place == "hk":
-    country = "香港"
     return render_template("wtechBlock.html",country=country)
     
 
