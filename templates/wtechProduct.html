@@ -139,11 +139,13 @@
     function confirmChoice(){
         var wcoinsSelect = document.getElementById('wcoinsSelect');
         var selectedValue = wcoinsSelect.options[wcoinsSelect.selectedIndex].value;
+        var intValue = parseInt(selectedValue);
+        var reallyValue = intValue*10;
         var r = confirm("你選擇的 Wcoins 是 " + selectedValue + "HKD，確認購買嗎？");
         if (r == true) {
           // 用戶確認購買的代碼在這裡執行
           // alert("購買成功！");
-            var url = "/wcoin/pay/paypal?country=HKD&price="+parseInt(selectedValue);
+            var url = "/wcoin/pay/paypal?country=HKD&price="+reallyValue;
             window.location.href=url;
         } else {
           // 用戶取消購買的代碼在這裡執行
