@@ -81,6 +81,9 @@ def index():
   else:
     return abort(502)
 
+@app.route("/wtech/chat")
+def wtechChat():
+  return render_template("wtechChat.html")
   
 def generate_data():
     data = []
