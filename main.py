@@ -35,6 +35,10 @@ class AIModules:
 
 app = Flask("WTech")
 
+conn = psycopg2.connect(database="wcloud_itrt", user="root", 
+password="Gk6Dp2pPrM98jQFGfXK1arNsrOWmcChX", host="dpg-co1nt35a73kc73cfcnlg-a.singapore-postgres.render.com", 
+port=5432)
+
 """
 paypalrestsdk.configure({
   'mode': 'sandbox', 
@@ -128,6 +132,27 @@ def wtechVStaff():
 @app.route("/wtech/staff")
 def wtechStaff():
   return render_template("wtechStaff.html")
+
+@app.route("/wtech/v2/staffDashboard",methods=["POST"])
+def wtechStaffDB():
+  user = request.form.get("user")
+  pw = reqeust.form.get("pw")
+  ## 允許python執行postgresql語法
+  with conn.cursor() as cur:
+    
+    ## SQL語法
+    sql = "SELECT * From Staff;"
+
+    ## 執行sql語法
+    cur.execute(sql)
+    rows = cur.fetchall()
+    for row in rows:
+      if user == row[0] and pw == row[1]:
+        position = row[2]
+        return render_template("staffDB.html",user=user,position=position)
+      else:
+        return jsonify({"Invaild input" : "Cannot find this user in WTech staff database"})
+
 
 @app.route("/wtech/v2/checkuser",methods=["GET","POST"])
 def wtechCheckUser():
