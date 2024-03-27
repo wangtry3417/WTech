@@ -114,7 +114,7 @@ justify-content: center;
         <div class="logo">W Tech</div>
         <a href="{{ url_for('wtechProduct') }}" class="product">產品</a>
         <a href="{{ url_for('wtechAbout') }}" class="about">關於</a>
-        <a href="{{ url_for('wtechLogin') }}" class="login">登入</a>
+        <a onclick="returnAlert()" class="login">登入</a>
     </div>
     <div class="main">
         <div class="business-box">
@@ -150,6 +150,15 @@ justify-content: center;
     <h3>--------------</h3>
     <br>
     <center>
+      <div id="warn" class="custom-window">
+        <center>
+          <h2>W Tech hint:</h2>
+          <br>
+          泓技W Tech官網 的登入導向出現一些問題，我們為此感到抱歉。
+          <br>
+        </center>
+        <button id="myButton" class="blue-button">Okay!</button>
+      </div>
       <div id="popup" class="custom-window">
         <center>
           <h2>W Tech hint:</h2>
@@ -200,6 +209,17 @@ justify-content: center;
         popup.style.display = 'none'; /* 點擊按鈕後，將 display 設回為 none */
     });
 });
+      const returnAlert = () => {
+        var popup = document.getElementById('warn');
+         popup.style.display = 'block'; 
+    popup.querySelector('button').addEventListener('click', function() {
+      var button = document.getElementById("myButton");
+        button.innerHTML = "...";
+    popup.style.animationDuration = "1s";
+    popup.style.animationName = "dots";
+        popup.style.display = 'none'; /* 點擊按鈕後，將 display 設回為 none */
+    });
+      };
     </script>
     <footer>© 2024 W Tech. 版權所有。
        <br>
