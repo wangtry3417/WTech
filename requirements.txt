@@ -6,3 +6,4 @@ nltk
 random2
 stripe
 requests
+psycopg2-binary
