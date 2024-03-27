@@ -12,6 +12,7 @@ import stripe
 import datetime
 import requests
 from email.mime.text import MIMEText
+import psycopg2
 #from nltk.stem import WordNetLemmatizer
 #from nltk.book import *
 
@@ -120,6 +121,9 @@ def webCheckIsBlock():
     country = "United Status"
     return render_template("wtechBlockEn.html",country=country)
     
+@app.route("/wtech/v2/staff")
+def wtechVStaff():
+  return render_template("StaffLogin.html")
 
 @app.route("/wtech/staff")
 def wtechStaff():
