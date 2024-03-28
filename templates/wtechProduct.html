@@ -51,6 +51,19 @@
 </head>
 <body>
     <h1>W Tech</h1>
+    <div id="menu" class="menu">
+        <button class="close-btn" onclick="closeMenu()">X</button>
+        <ul>
+        <li><a href="{{ url_for('wtechHome') }}" class="product">主頁</a></li>
+        <br>
+        <li><a href="{{ url_for('wtechProduct') }}" class="product">產品</a></li>
+        <br>
+        <li><a href="{{ url_for('wtechAbout') }}" class="about">關於</a></li>
+        <br>
+        <li><a onclick="returnAlert()" class="login">登入</a></li>
+        </ul>
+    </div>
+    <button class="open-btn" onclick="openMenu()">選單</button>
     <div id="productArea">
         <center>
         <div id="two">
