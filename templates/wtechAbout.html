@@ -28,6 +28,19 @@
 </style>
 </head>
 <body>
+    <div id="menu" class="menu">
+        <button class="close-btn" onclick="closeMenu()">X</button>
+        <ul>
+        <li><a href="{{ url_for('wtechHome') }}" class="product">主頁</a></li>
+        <br>
+        <li><a href="{{ url_for('wtechProduct') }}" class="product">產品</a></li>
+        <br>
+        <li><a href="{{ url_for('wtechAbout') }}" class="about">關於</a></li>
+        <br>
+        <li><a onclick="returnAlert()" class="login">登入</a></li>
+        </ul>
+    </div>
+    <button class="open-btn" onclick="openMenu()">選單</button>
 <div class="container">
     <h1>關於WTech</h1>
     <img src="https://p16-flow-sign-sg.ciciai.com/ocean-cloud-tos-sg/3b92014b68154aa190adba2446532448.png~tplv-0es2k971ck-image.png?rk3s=18ea6f23&x-expires=1741429703&x-signature=GVRwu4aWuGhP0fngRWV5FCPDjvs%3D" alt="About wtech picture">
