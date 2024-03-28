@@ -47,6 +47,33 @@
     padding: 20px;
     text-align: center;
 }
+          .menu {
+    position: fixed;
+    top: 0;
+    right: -200px; /* 隱藏在頁面右側 */
+    width: 200px;
+    height: 100%;
+    background: #333;
+    color: #fff;
+    transition: right 0.3s ease-in-out;
+}
+.menu ul {
+    padding: 20px;
+    list-style-type: none;
+}
+.menu a {
+    color: #fff;
+}
+.open-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+}
+.close-btn {
+    float: right;
+    margin: 10px;
+    cursor: pointer;
+}
     </style>
 </head>
 <body>
