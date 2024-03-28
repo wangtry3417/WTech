@@ -104,6 +104,33 @@ justify-content: center;
   75% { content: "..."; }
   100% { content: "..."; }
 }
+  .menu {
+    position: fixed;
+    top: 0;
+    right: -200px; /* 隱藏在頁面右側 */
+    width: 200px;
+    height: 100%;
+    background: #333;
+    color: #fff;
+    transition: right 0.3s ease-in-out;
+}
+.menu ul {
+    padding: 20px;
+    list-style-type: none;
+}
+.menu a {
+    color: #fff;
+}
+.open-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+}
+.close-btn {
+    float: right;
+    margin: 10px;
+    cursor: pointer;
+}
 </style>
   <title>泓技WTech -- 主頁</title>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6288057733972420"
@@ -112,9 +139,15 @@ justify-content: center;
 <body>
     <div class="header">
         <div class="logo">W Tech</div>
-        <a href="{{ url_for('wtechProduct') }}" class="product">產品</a>
-        <a href="{{ url_for('wtechAbout') }}" class="about">關於</a>
-        <a onclick="returnAlert()" class="login">登入</a>
+        <div id="menu" class="menu">
+        <button class="close-btn" onclick="closeMenu()">X</button>
+        <ul>
+        <li><a href="{{ url_for('wtechProduct') }}" class="product">產品</a></li>
+        <li><a href="{{ url_for('wtechAbout') }}" class="about">關於</a></li>
+        <li><a onclick="returnAlert()" class="login">登入</a></li>
+        </ul>
+    </div>
+    <button class="open-btn" onclick="openMenu()">選單</button>
     </div>
     <div class="main">
         <div class="business-box">
@@ -220,6 +253,12 @@ justify-content: center;
         popup.style.display = 'none'; /* 點擊按鈕後，將 display 設回為 none */
     });
       };
+      function openMenu() {
+    document.getElementById('menu').style.right = '0';
+}
+function closeMenu() {
+    document.getElementById('menu').style.right = '-200px';
+}
     </script>
     <footer>© 2024 W Tech. 版權所有。
        <br>
