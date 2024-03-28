@@ -254,9 +254,13 @@ justify-content: center;
     });
       };
       function openMenu() {
+        var openBtn = document.getElementsByClassName("open-btn");
+        openBtn.style.display = "none";
     document.getElementById('menu').style.right = '0';
 }
 function closeMenu() {
+    var openBtn = document.getElementsByClassName("open-btn");
+    openBtn.style.display = "block";
     document.getElementById('menu').style.right = '-200px';
 }
     </script>
