@@ -135,8 +135,8 @@ def wtechStaff():
 
 @app.route("/wtech/v2/staffDashboard",methods=["POST"])
 def wtechStaffDB():
-  user = request.form.get("user")
-  pw = request.form.get("pw")
+  user = str(request.form.get("user"))
+  pw = int(request.form.get("pw"))
   ## 允許python執行postgresql語法
   with conn.cursor() as cur:
     
