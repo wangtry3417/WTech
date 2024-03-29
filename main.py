@@ -147,7 +147,7 @@ def wtechStaffDB():
     cur.execute(sql)
     rows = cur.fetchall()
     for row in rows:
-      if user == row[0] and pw == row[1]:
+      if row[0] == user and row[1] == pw :
         position = row[2]
         return render_template("staffDB.html",user=user,position=position)
       else:
