@@ -452,10 +452,12 @@ def paypal_coins():
       }]
     })
   if paym.create():
-    for link in paym.links:
-      if link.method == "REDIRECT":
-        redirect_url = link.href
-        return redirect(redirect_url)
+    for link in payment.links:
+        if link.rel == "approval_url":
+            # Convert to str to avoid google appengine unicode issue
+            # https://github.com/paypal/rest-api-sdk-python/pull/58
+            approval_url = str(link.href)
+            print("Redirect for approval: %s" % (approval_url))
   else:
     return jsonify({
       "msg" : "Invaild payment method!"
