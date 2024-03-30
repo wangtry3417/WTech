@@ -206,6 +206,12 @@ def wtechMiningWcoins():
     while run_times <= 10:
       run_times += 1
       return f"Mining value : {fmat}"
+      res = requests.get(url="https://wtech-5o6t.onrender.com/data").json()
+      pr = []
+      for item in res:
+        pr.append(item["price"])
+        np_prices = numpy.array(pr)
+        fmat = ((adrs[1]*np_prices.mean())/np_prices.min())*2
   return "Um... seem like error"
 
 @app.route("/wtech/about")
