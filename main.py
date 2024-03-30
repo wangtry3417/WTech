@@ -196,7 +196,7 @@ def wtechMiningWcoins():
 
   # 将解密后的字符串转换为列表
   adrs = eval(decrypted_data.decode())
-  res = requests.get(url="/data").json()
+  res = requests.get(url="https://wtech-5o6t.onrender.com/data").json()
   pr = []
   for item in res:
     pr.append(item["price"])
