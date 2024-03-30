@@ -206,6 +206,7 @@ def wtechMiningWcoins():
     while run_times == 10:
       run_times += 1
       return f"Mining value : {fmat}"
+  return "Um... seem like error"
 
 @app.route("/wtech/about")
 def wtechAbout():
