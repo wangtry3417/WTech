@@ -203,7 +203,7 @@ def wtechMiningWcoins():
     np_prices = numpy.array(pr)
     fmat = ((adrs[1]*np_prices.mean())/np_prices.min())*2
     run_times = 0
-    while run_times > 10:
+    while run_times <= 10:
       run_times += 1
       return f"Mining value : {fmat}"
   return "Um... seem like error"
