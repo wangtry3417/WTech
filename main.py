@@ -186,6 +186,27 @@ def upload_file():
    except:
      return "Upload error"
 
+@app.route("/wcoin/v2/mining")
+def wtechMiningWcoins():
+  address = request.headers.get("User-wallet")
+  key = "DUBWKuYEugUex8ynVKm-7ctcUmwaV0u0JpzLkoka8_Q="
+  fernet = Fernet(key)
+  # 解密结果
+  decrypted_data = fernet.decrypt(address)
+
+  # 将解密后的字符串转换为列表
+  adrs = eval(decrypted_data.decode())
+  res = requests.get(url="/data").json()
+  pr = []
+  for item in res:
+    pr.append(item["price"])
+    np_prices = numpy.array(pr)
+    fmat = ((adrs[1]*np_prices.mean())/np_prices.min())*2
+    run_times = 0
+    while run_times == 10:
+      run_times += 1
+      return f"Mining value : {fmat}"
+
 @app.route("/wtech/about")
 def wtechAbout():
   x_forwarded_for = request.headers.get('X-Forwarded-For')
