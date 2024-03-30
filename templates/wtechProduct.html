@@ -192,7 +192,7 @@
    function conGameOne() {
        var Select = document.getElementById('appSelect');
         var selectedValue = Select.options[Select.selectedIndex].value;
-        var r = confirm("你選擇的使用 " + selectedValue + " 建立建立軟件UI，確認購買嗎？");
+        var r = confirm("你選擇的購買 " + selectedValue + " 版本的uncle run game，確認購買嗎？");
         if (r == true) {
           // 用戶確認購買的代碼在這裡執行
           var url = "/wcoin/pay/paypal?country=HKD&price=55";
