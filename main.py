@@ -13,6 +13,7 @@ import datetime
 import requests
 from email.mime.text import MIMEText
 import psycopg2
+import numpy
 #from nltk.stem import WordNetLemmatizer
 #from nltk.book import *
 
