@@ -202,10 +202,20 @@ def wtechMiningWcoins():
     pr.append(item["price"])
     np_prices = numpy.array(pr)
     fmat = ((adrs[1]*np_prices.mean())/np_prices.min())*2
+    data = ["wtps://wcoins.wtech.net:3305/mining",fmat]
+    # 将列表转换为字符串
+      list_string = str(data)
+
+    # 创建 Fernet 加密器
+      fernet = Fernet(key)
+
+    # 加密字符串
+      encrypted_data =  fernet.encrypt(list_string.encode())
+      token = encrypted_data.decode()
     run_times = 0
     while run_times <= 10:
       run_times += 1
-      return f"Mining value : {fmat}"
+      return f"Mining value : {fmat} \n Ready address : {token}"
       res = requests.get(url="https://wtech-5o6t.onrender.com/data").json()
       pr = []
       for item in res:
