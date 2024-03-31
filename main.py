@@ -192,7 +192,7 @@ def wtechCryptoListDe():
   key = "DUBWKuYEugUex8ynVKm-7ctcUmwaV0u0JpzLkoka8_Q="
   fernet = Fernet(key)
   # 解密结果
-  decrypted_data = fernet.decrypt(address)
+  decrypted_data = fernet.decrypt(phase)
 
   # 将解密后的字符串转换为列表
   adrs = eval(decrypted_data.decode())
