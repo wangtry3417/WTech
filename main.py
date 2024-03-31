@@ -186,6 +186,21 @@ def upload_file():
    except:
      return "Upload error"
 
+@app.route("/wtech/v2/cryptoList")
+def wtechCryptoListDe():
+  phase = request.headers.get("crypto-List")
+  key = "DUBWKuYEugUex8ynVKm-7ctcUmwaV0u0JpzLkoka8_Q="
+  fernet = Fernet(key)
+  # 解密结果
+  decrypted_data = fernet.decrypt(address)
+
+  # 将解密后的字符串转换为列表
+  adrs = eval(decrypted_data.decode())
+  return jsonify({
+   "Crypto-text" : phase,
+   "Decrypted-result" : adrs
+  })
+
 @app.route("/wcoin/v2/mining")
 def wtechMiningWcoins():
   address = request.headers.get("User-wallet")
