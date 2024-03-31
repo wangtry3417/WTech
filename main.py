@@ -202,7 +202,7 @@ def wtechCryptoListDe():
    "Decrypted-result" : adrs
   })
 
-@app.route("wtech/v2/wtps")
+@app.route("/wtech/v2/wtps")
 def wtechWtps():
   url = str(request.args.get("url"))
   urll = re.split(":// | : | /")
