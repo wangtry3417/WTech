@@ -205,7 +205,7 @@ def wtechCryptoListDe():
 @app.route("/wtech/v2/wtps")
 def wtechWtps():
   url = str(request.args.get("url"))
-  urll = re.split(":// | : | /",url)
+  urll = re.split("://|:|/",url)
   domains = [
     "wcoins.wtech.net",
     "wtech.net"
