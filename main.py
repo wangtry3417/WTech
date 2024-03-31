@@ -217,8 +217,11 @@ def wtechWtps():
           if urll[2] == 3301:
             pass
           elif urll[2] == 3305:
-            points = int(request.args.get("value"))
-            return "Done!"
+            if urll[3] == "mining":
+              points = int(request.args.get("value"))
+              return "Done!"
+            else:
+              abort(503)
           else:
             return "Wtech network has not found this port of it."
         elif domain == "wtech.net":
