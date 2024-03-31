@@ -14,6 +14,7 @@ import requests
 from email.mime.text import MIMEText
 import psycopg2
 import numpy
+import re
 #from nltk.stem import WordNetLemmatizer
 #from nltk.book import *
 
@@ -200,6 +201,34 @@ def wtechCryptoListDe():
    "Crypto-text" : phase,
    "Decrypted-result" : adrs
   })
+
+@app.route("wtech/v2/wtps")
+def wtechWtps():
+  url = str(request.args.get("url"))
+  urll = re.split(":// | : | /")
+  domains = [
+    "wcoins.wtech.net",
+    "wtech.net"
+  ]
+  if urll[0] == "wtps":
+    for domain in domains:
+      if urll[1] == domain:
+        if domain == "wcoins.wtech.net":
+          if urll[2] == 3301:
+            pass
+          elif urll[2] == 3305:
+            points = int(request.args.get("value"))
+            return "Done!"
+          else:
+            return "Wtech network has not found this port of it."
+        elif domain == "wtech.net":
+          return redirect("/")
+        else:
+          return jsonify({"Wtech error" : "Cannot read this domain"})
+      else:
+        return jsonify({"Wtech error" : "Cannot read this domain"})
+  else:
+    return "Cannot load wtps://"
 
 @app.route("/wcoin/v2/mining")
 def wtechMiningWcoins():
