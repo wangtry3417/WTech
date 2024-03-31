@@ -538,7 +538,7 @@ def paypal_coins():
       }]
     })
   if paym.create():
-    for link in payment.links:
+    for link in paym.links:
         if link.rel == "approval_url":
             # Convert to str to avoid google appengine unicode issue
             # https://github.com/paypal/rest-api-sdk-python/pull/58
