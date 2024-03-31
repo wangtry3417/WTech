@@ -543,6 +543,7 @@ def paypal_coins():
             # Convert to str to avoid google appengine unicode issue
             # https://github.com/paypal/rest-api-sdk-python/pull/58
             approval_url = str(link.href)
+            return redirect(approval_url)
             print("Redirect for approval: %s" % (approval_url))
   else:
     return jsonify({
