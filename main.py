@@ -214,9 +214,9 @@ def wtechWtps():
     for domain in domains:
       if urll[1] == domain:
         if domain == "wcoins.wtech.net":
-          if urll[2] == 3301:
+          if urll[2] == "3301":
             pass
-          elif urll[2] == 3305:
+          elif urll[2] == "3305":
             if urll[3] == "mining":
               points = int(request.args.get("value"))
               return "Done!"
