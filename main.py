@@ -170,9 +170,9 @@ def send_auto_mail():
   msg["To"] = email
   msg["From"] = "1245server@gmail.com"
   msg["Subject"] = subject
-  s = smtplib.SMTP("smtp.gmail.com",587)
+  s = smtplib.SMTP("smtpout.secureserver.net",465)
   s.starttls()
-  s.login("1245server@gmail.com","jvbswpfesugcqazw")
+  s.login("tech-support@wtechhk.xyz","WTech1234#")
   #send_data = f"Subject: {subject} \n\n {content}"
   s.sendmail("1245server@gmail.com",[email],msg.as_string())
   return jsonify({"status" : "Sent!","status_code" : 200})
