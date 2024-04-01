@@ -174,7 +174,7 @@ def send_auto_mail():
   s.starttls()
   s.login("tech-support@wtechhk.xyz","WTech1234#")
   #send_data = f"Subject: {subject} \n\n {content}"
-  s.sendmail("1245server@gmail.com",[email],msg.as_string())
+  s.sendmail("tech-support@wtechhk.xyz",[email],msg.as_string())
   return jsonify({"status" : "Sent!","status_code" : 200})
 
 @app.route('/wtech/upload', methods=['POST'])
