@@ -1,11 +1,15 @@
 // ==UserScript==
-// @name         My First User Script
-// @namespace    http://yourwebsite.com/
+// @name         BlackUI
+// @namespace    https://wtech-5o6t.onrender.com
 // @version      0.1
 // @description  This is my first user script!
 // @include      *
 // ==/UserScript==
 (function() {
     'use strict';
-    alert("Hello, World!");
+    const body = document.body;
+    Object.assign(body.style, {
+        backgroundColor: 'black';
+        color: 'white';
+  });
 })();
