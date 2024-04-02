@@ -9,7 +9,7 @@
     'use strict';
     const body = document.body;
     Object.assign(body.style, {
-        backgroundColor: 'black';
-        color: 'white';
+        backgroundColor: 'black',
+        color: 'white'
   });
 })();
