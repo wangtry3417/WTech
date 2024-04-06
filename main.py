@@ -219,7 +219,7 @@ def wtechWtps():
           elif urll[2] == "3305":
             if urll[3] == "mining":
               points = int(request.args.get("value"))
-              return "Done!"
+              return redirect("https://wtechhk.xyz/cw1023/startMining.html")
             else:
               abort(503)
           else:
