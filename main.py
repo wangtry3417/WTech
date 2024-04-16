@@ -350,7 +350,7 @@ def wtech_create_order():
   #redirect_url = request.args.get("redirectURL")
   code = [user,reviewer,count]
   key = "DUBWKuYEugUex8ynVKm-7ctcUmwaV0u0JpzLkoka8_Q="
-  list_string = str(data)
+  list_string = str(code)
 
   # 创建 Fernet 加密器
   fernet = Fernet(key)
