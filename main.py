@@ -315,13 +315,41 @@ def wtechDCUser():
     "user" : email
   })
 
+@app.route("/wtech/v2/transfer")
+def wtech_transfer():
+  code = request.args.get("code")
+  key = "DUBWKuYEugUex8ynVKm-7ctcUmwaV0u0JpzLkoka8_Q="
+  fernet = Fernet(key)
+  # 解密结果
+  decrypted_data = fernet.decrypt(code)
+
+  # 将解密后的字符串转换为列表
+  data = eval(decrypted_data.decode())
+  cur = conn.cursor()
+  cur.execute(f"select * from whakwallet where Username={data[0]}")
+  rows = cur.fetch()
+  for row in rows:
+    cur.execute(f"""UPDATE wbankwallet
+SET balance={row[1]-data[2]}
+WHERE username={data[0]}""")
+    conn.commit()
+    cur.execute(f"select * from whakwallet where Username={data[1]}")
+    cols = cur.fetch()
+    for col in cols:
+      cur.execute(f"""UPDATE wbankwallet
+SET balance={col[1]+data[2]}
+WHERE username={col[0]}""")
+    conn.commit()
+    return jsonify({"Good news":"Success to transfer"})
+
 @app.route("/wtech/v2/createOrder")
 def wtech_create_order():
   user = request.headers.get("Username")
   reviewer = request.headers.get("reviewer")
   count = request.headers.get("Value")
-  redirect_url = request.args.get("redirectURL")
-  code = [user,count]
+  #redirect_url = request.args.get("redirectURL")
+  code = [user,reviewer,count]
+  key = "DUBWKuYEugUex8ynVKm-7ctcUmwaV0u0JpzLkoka8_Q="
   list_string = str(data)
 
   # 创建 Fernet 加密器
@@ -335,7 +363,7 @@ def wtech_create_order():
 @app.route("/wtech/v2/checkBalance")
 def user_balance():
   user = request.args.get("username")
-  if user !== "":
+  if user != "":
     cur = conn.cursor()
     cur.execute("select * from whakwallet")
     rows = cur.fetch()
