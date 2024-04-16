@@ -315,6 +315,22 @@ def wtechDCUser():
     "user" : email
   })
 
+@app.route("/wtech/v2/createOrder")
+def wtech_create_order():
+  user = request.headers.get("Username")
+  count = request.headers.get("Value")
+  redirect_url = request.args.get("redirectURL")
+  code = [user,count]
+  list_string = str(data)
+
+  # 创建 Fernet 加密器
+  fernet = Fernet(key)
+
+  # 加密字符串
+  encrypted_data =  fernet.encrypt(list_string.encode())
+  token = encrypted_data.decode()
+  return jsonify({"code" : token})
+
 @app.route("/chat",methods=["POST"])
 def chat():
   username = request.form.get("user")
