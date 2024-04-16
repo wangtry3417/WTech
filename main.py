@@ -346,7 +346,7 @@ WHERE username={col[0]}""")
 def wtech_create_order():
   user = request.headers.get("Username")
   reviewer = request.headers.get("reviewer")
-  count = request.headers.get("Value")
+  count = int(request.headers.get("Value"))
   #redirect_url = request.args.get("redirectURL")
   code = [user,reviewer,count]
   key = "DUBWKuYEugUex8ynVKm-7ctcUmwaV0u0JpzLkoka8_Q="
