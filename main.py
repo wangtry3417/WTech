@@ -318,6 +318,7 @@ def wtechDCUser():
 @app.route("/wtech/v2/createOrder")
 def wtech_create_order():
   user = request.headers.get("Username")
+  reviewer = request.headers.get("reviewer")
   count = request.headers.get("Value")
   redirect_url = request.args.get("redirectURL")
   code = [user,count]
@@ -330,6 +331,24 @@ def wtech_create_order():
   encrypted_data =  fernet.encrypt(list_string.encode())
   token = encrypted_data.decode()
   return jsonify({"code" : token})
+
+@app.route("/wtech/v2/checkBalance")
+def user_balance():
+  user = request.args.get("username")
+  if user !== "":
+    cur = conn.cursor()
+    cur.execute("select * from whakwallet")
+    rows = cur.fetch()
+    for row in rows:
+      if user == row[0]:
+        return jsonify({
+         "Username" : user,
+         "Balance" : row[1]
+        })
+      else:
+        return "Cannot find the user!."
+  else:
+    return jsonify({"Error":"Cannot provided null username"})
 
 @app.route("/chat",methods=["POST"])
 def chat():
