@@ -1,4 +1,4 @@
-from flask import Flask,render_template,jsonify,request,abort,url_for,redirect
+from flask import Flask,render_template,jsonify,request,abort,url_for,redirect,make_response
 from cryptography.fernet import Fernet
 import hashlib
 import os
@@ -328,7 +328,11 @@ def wtech_bank_db():
       if pw == row[2]:
         username = row[0]
         balance = row[1]
-        return redirect(url)
+        redirect_res = redirect(url,code=302)
+        res = make_response(redirect_res)
+        res.set_cookie("username",username)
+        res.set.cookie("balance","balance")
+        return res
       else:
         return abort(503)
   else:
