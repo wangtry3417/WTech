@@ -326,14 +326,14 @@ def wtech_transfer():
   # 将解密后的字符串转换为列表
   data = eval(decrypted_data.decode())
   cur = conn.cursor()
-  cur.execute(f"select * from wbankwallet where Username={data[0]}")
+  cur.execute(f"select * from wbankwallet where Username='{data[0]}'")
   rows = cur.fetch()
   for row in rows:
     cur.execute(f"""UPDATE wbankwallet
 SET balance={row[1]-data[2]}
 WHERE username={data[0]}""")
     conn.commit()
-    cur.execute(f"select * from wbankwallet where Username={data[1]}")
+    cur.execute(f"select * from wbankwallet where Username='{data[1]}'")
     cols = cur.fetch()
     for col in cols:
       cur.execute(f"""UPDATE wbankwallet
