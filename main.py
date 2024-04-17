@@ -317,7 +317,7 @@ def wtechDCUser():
 
 @app.route("/wtech/v2/bankDB",methods=["POST"])
 def wtech_bank_db():
-  url = request.arga.get("redirectURL")
+  url = request.args.get("redirectURL")
   if url != "":
     user = request.form.get("user")
     pw = request.form.get("pw")
