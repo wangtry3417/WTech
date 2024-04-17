@@ -338,7 +338,7 @@ WHERE username={data[0]}""")
     for col in cols:
       cur.execute(f"""UPDATE wbankwallet
 SET balance={col[1]+data[2]}
-WHERE username={col[0]}""")
+WHERE username='{col[0]}'""")
     conn.commit()
     return jsonify({"Good news":"Success to transfer"})
 
