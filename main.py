@@ -331,7 +331,7 @@ def wtech_bank_db():
         redirect_res = redirect(url,code=302)
         res = make_response(redirect_res)
         res.set_cookie("username",username)
-        res.set.cookie("balance","balance")
+        res.set_cookie("balance","balance")
         return res
       else:
         return abort(503)
