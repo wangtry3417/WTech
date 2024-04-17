@@ -327,14 +327,14 @@ def wtech_transfer():
   data = eval(decrypted_data.decode())
   cur = conn.cursor()
   cur.execute(f"select * from wbankwallet where Username='{data[0]}'")
-  rows = cur.fetch()
+  rows = cur.fetchall()
   for row in rows:
     cur.execute(f"""UPDATE wbankwallet
 SET balance={row[1]-data[2]}
 WHERE username={data[0]}""")
     conn.commit()
     cur.execute(f"select * from wbankwallet where Username='{data[1]}'")
-    cols = cur.fetch()
+    cols = cur.fetchall()
     for col in cols:
       cur.execute(f"""UPDATE wbankwallet
 SET balance={col[1]+data[2]}
@@ -366,7 +366,7 @@ def user_balance():
   if user != "":
     cur = conn.cursor()
     cur.execute("select * from wbankwallet")
-    rows = cur.fetch()
+    rows = cur.fetchall()
     for row in rows:
       if user == row[0]:
         return jsonify({
