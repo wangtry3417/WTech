@@ -365,7 +365,7 @@ def user_balance():
   user = request.args.get("username")
   if user != "":
     cur = conn.cursor()
-    cur.execute("select * from whakwallet")
+    cur.execute("select * from wbankwallet")
     rows = cur.fetch()
     for row in rows:
       if user == row[0]:
