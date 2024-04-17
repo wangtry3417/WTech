@@ -331,7 +331,7 @@ def wtech_transfer():
   for row in rows:
     cur.execute(f"""UPDATE wbankwallet
 SET balance={row[1]-data[2]}
-WHERE username={data[0]}""")
+WHERE username='{data[0]}'""")
     conn.commit()
     cur.execute(f"select * from wbankwallet where Username='{data[1]}'")
     cols = cur.fetchall()
