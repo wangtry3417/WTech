@@ -315,6 +315,25 @@ def wtechDCUser():
     "user" : email
   })
 
+@app.route("/wtech/v2/bankDB",methods=["POST"])
+def wtech_bank_db():
+  url = request.arga.get("redirectURL")
+  if url != "":
+    user = request.form.get("user")
+    pw = request.form.get("pw")
+    cur = conn.cursor()
+    cur.execute(f"select * from wbankwallet where Username='{user}'")
+    rows = cur.fetchall()
+    for row in rows:
+      if pw == row[2]:
+        username = row[0]
+        balance = row[1]
+        return redirect(url)
+      else:
+        return abort(503)
+  else:
+    return "None"
+
 @app.route("/wtech/v2/transfer")
 def wtech_transfer():
   code = request.args.get("code")
