@@ -396,8 +396,7 @@ def user_balance():
          "Username" : user,
          "Balance" : row[1]
         })
-      else:
-        return "Cannot find the user!."
+    return "Cannot find the user!."
   else:
     return jsonify({"Error":"Cannot provided null username"})
 
