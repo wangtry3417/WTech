@@ -383,6 +383,23 @@ def wtech_create_order():
   token = encrypted_data.decode()
   return jsonify({"code" : token})
 
+@app.route("/wtech/v2/wbank/auth",methods=["GET","POST"])
+def wbank_login():
+  user = request.form.get("user")
+  pw = request.form.get("pw")
+  if user != "":
+    cur = conn.cursor()
+    cur.execute("select * from wbankwallet")
+    rows = cur.fetchall()
+    for row in rows:
+      if user == row[0]:
+        if pw == row[3]:
+          return redirect("http://bank.wtechhk.xyz/db.html")
+        return "Password is invaild"
+    return "Cannot find the user!."
+  else:
+    return jsonify({"Error":"Cannot provided null username"})
+
 @app.route("/wtech/v2/checkBalance")
 def user_balance():
   user = request.args.get("username")
