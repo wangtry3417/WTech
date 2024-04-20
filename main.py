@@ -152,8 +152,7 @@ def wtechStaffDB():
       if row[0] == user and row[1] == pw :
         position = row[2]
         return render_template("staffDB.html",user=user,position=position)
-      else:
-        return jsonify({"Invaild input" : "Cannot find this user in WTech staff database","Your enter user" : user,"Your enter pw" : pw})
+      return jsonify({"Invaild input" : "Cannot find this user in WTech staff database","Your enter user" : user,"Your enter pw" : pw})
 
 
 @app.route("/wtech/v2/checkuser",methods=["GET","POST"])
