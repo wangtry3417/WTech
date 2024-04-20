@@ -315,7 +315,7 @@ def wtechDCUser():
     "user" : email
   })
 
-@app.route("/wtech/v2/bankDB",methods=["POST"])
+@app.route("/wtech/v2/bankDB",methods=["GET","POST"])
 def wtech_bank_db():
   url = request.args.get("redirectURL")
   if url != "":
@@ -331,12 +331,12 @@ def wtech_bank_db():
         redirect_res = redirect(url,code=302)
         res = make_response(redirect_res)
         res.set_cookie("username",username)
-        res.set_cookie("balance","balance")
+        res.set_cookie("balance",balance)
         return res
-      else:
-        return abort(503)
+        return redirect(url)
+      return abort(503)
   else:
-    return "None"
+    return "Cannot find redirect URL!."
 
 @app.route("/wtech/v2/transfer")
 def wtech_transfer():
