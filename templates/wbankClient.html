@@ -54,15 +54,20 @@
        <p>Your balance: WTC${{balance}}</p>
       <br>
       <br>
-      <button class="btn1" onclick="buy()">Transfer</button>
+      <button class="btn1" onclick="transfer()">Transfer</button>
+      <br>
+      <button class="btn1" onclick="buy()">By with paypal</button>
       <br>
     </div>
   </center>
     <br>
     <br>
     <script>
-      const buy = () => {
+      const transfer = () => {
         window.location.href="/wbank/transfer";
+      };
+      const buy = () => {
+        window.location.href="/wbank/v1/paypal";
       };
     </script>
   </body>
