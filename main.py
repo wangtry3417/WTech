@@ -382,6 +382,21 @@ def wtech_create_order():
   token = encrypted_data.decode()
   return jsonify({"code" : token})
 
+@app.route("/wbank/client",methods=["POST"])
+def wbank_client():
+  user = request.form.get("user")
+  pw = request.form.get("pw")
+  cur = conn.cursor()
+  cur.execute("select * from wbankwallet")
+  rows = cur.fetchall()
+  for row in rows:
+    if user == row[0]:
+      if pw == row[2]:
+        balance = row[1]
+        return render_template("wbankClient.html",user=user,balance=balance)
+      return "Password is invaild"
+  return "Cannot find user"
+
 @app.route("/wtech/v2/wbank/auth",methods=["GET","POST"])
 def wbank_login():
   user = request.form.get("user")
