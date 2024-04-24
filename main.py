@@ -382,6 +382,23 @@ def wtech_create_order():
   token = encrypted_data.decode()
   return jsonify({"code" : token})
 
+@app.route("/wbank")
+def wbank():
+  return render_template("wbank.html")
+
+@app.route("/wbank/new_client")
+def wbank_new_client():
+  return render_template("newWbank.html")
+
+@app.route("/wbank/v1/createUser",methods=["POST"])
+def wbank_into_user():
+  user = request.form.get("user")
+  pw = request.form.get("pw")
+  cur = conn.cursor()
+  cur.execute(f"INSERT INTO wbankwallet (username, balance, password) VALUES ('{user}', '0', '{pw}')")
+  cur.commit()
+  return redirect("http://bank.wtechhk.xyz")
+
 @app.route("/wbank/client",methods=["POST"])
 def wbank_client():
   user = request.form.get("user")
