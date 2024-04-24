@@ -1,0 +1,59 @@
+<html>
+  <head>
+    <title>W Bank</title>
+    <link rel="icon" href="{{ url_for('static',filename='IMG_7428.ico') }}" />
+    <link rel="apple-touch-icon" href="{{ url_for('static',filename='IMG_7428.ico') }}" />
+    <link rel="manifest" href="{{ url_for('static', filename='wcoins.json') }}">
+    <style>
+      #top {
+       width: 300px;
+       margin: auto;
+       background-color: #fff;
+       padding: 20px;
+       border-radius: 5px;
+       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      }
+      #btn1 {
+        background-color: #2e3c4d;
+        color: rgb(255,255,255);
+        padding: 12px 14px;
+        font-size: 13px;
+        border_radius: 30%
+      }
+      a {
+        color: #0000FF;
+      }
+      a:hover {
+        color: #00FF00;
+      }
+      body {
+        overflow: hidden;
+      }
+      body::-webkit-scrollbar {
+         display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="top">
+       <h2>W Bank secure login</h2>
+       <form action="/wbank/client" method="post">
+           <input type="text" name="user" placeholder="username">
+           <input type="password" name="pw" placeholder="password">
+           <br>
+           <button class="btn1" id="btn1">Login!</button>
+           <br>
+           <a href="/wbank/new_client">Create Account</a>
+      </form>
+    </div>
+    <br>
+    <br>
+  </body>
+</html>
