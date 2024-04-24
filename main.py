@@ -386,6 +386,10 @@ def wtech_create_order():
 def wbank():
   return render_template("wbank.html")
 
+@app.route("/wbank/transfer")
+def wbank_transfer():
+  return render_template("wbankTransfer.html")
+
 @app.route("/wbank/new_client")
 def wbank_new_client():
   return render_template("newWbank.html")
