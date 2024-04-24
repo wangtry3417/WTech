@@ -1,1 +1,44 @@
-
+<html>
+  <head>
+    <title>W Bank -- register page</title>
+    <style>
+      #top {
+       width: 300px;
+       margin: auto;
+       background-color: #fff;
+       padding: 20px;
+       border-radius: 5px;
+       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      }
+      #btn1 {
+        background-color: #2e3c4d;
+        color: rgb(255,255,255);
+        padding: 12px 14px;
+        font-size: 13px;
+        border_radius: 30%
+      }
+    </style>
+  </head>
+  <body>
+    <div id="top">
+       <h2>W Bank User Register</h2>
+       <form action="/wbank/v1/createUser" method="post">
+           <input type="text" name="fname" placeholder="Fullname" required>
+           <input type="text" name="id" placeholder="Your id" required>
+           <input type="text" name="user" placeholder="username" required>
+           <input type="password" name="pw" placeholder="password" required>
+           <br>
+           <button class="btn1" id="btn1">Register!</button>
+      </form>
+    </div>
+    <br>
+    <br>
+  </body>
+</html>
