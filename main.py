@@ -400,7 +400,7 @@ def wbank_into_user():
   pw = request.form.get("pw")
   cur = conn.cursor()
   cur.execute(f"INSERT INTO wbankwallet (username, balance, password) VALUES ('{user}', '0', '{pw}')")
-  cur.commit()
+  conn.commit()
   return redirect("http://bank.wtechhk.xyz")
 
 @app.route("/wbank/client",methods=["POST"])
