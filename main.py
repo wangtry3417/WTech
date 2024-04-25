@@ -394,34 +394,6 @@ def wbank_transfer():
 def wbank_new_client():
   return render_template("newWbank.html")
 
-@app.route("/wbank/v1/stripe")
-def wbank_stripe():
-  user = request.args.get("user")
-  count = int(request.args.get("amount"))
-  try:
-    session = stripe.checkout.Session.create(
-        payment_method_types=['card'],
-        line_items=[
-            {
-                'price_data': {
-                    'currency': 'HKD',
-                    'unit_amount': count,
-                    'product_data': {
-                        'name': 'W Coins'
-                    },
-                },
-                'quantity': 1,
-            },
-        ],
-        mode='payment',
-        success_url=f'https://wtech-5o6t.onrender.com/wbank/v1/done?user={user}&amount={count}',
-        cancel_url='https://wtech-5o6t.onrender.com/wbank',
-    )
-  except Exception as e:
-    return str(e)
-
-  return render_template("wbankDone.html",user=user,count=count)
-
 @app.route("/wbank/v1/paypal")
 def wbank_paypal():
   user = request.args.get("user")
