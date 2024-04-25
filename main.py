@@ -431,7 +431,8 @@ def wbank_paypal():
 @app.route("/wbank/v1/mining")
 def wbank_done():
   user = request.args.get("user")
-  return render_template("wbankMining.html",user=user)
+  url = request.args.get("poolURL")
+  return render_template("wbankMining.html",user=user,url=url)
 
 @app.route("/wbank/v1/done")
 def wbank_done():
