@@ -363,6 +363,7 @@ SET balance={col[1]+data[2]}
 WHERE username='{col[0]}'""")
       conn.commit()
       return jsonify({"Good news":"Success to transfer"})
+  return "Cannot transfer it! check your code arg."
 
 @app.route("/wtech/v2/createOrder")
 def wtech_create_order():
