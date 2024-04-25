@@ -397,7 +397,7 @@ def wbank_new_client():
 @app.route("/wbank/v1/paypal")
 def wbank_paypal():
   user = request.args.get("user")
-  count = request.args.get("amount")
+  count = int(request.args.get("amount"))
   paym = paypalrestsdk.Payment({
       "intent": "sale",
       "payer": {
