@@ -394,6 +394,46 @@ def wbank_transfer():
 def wbank_new_client():
   return render_template("newWbank.html")
 
+@app.route("/wbank/v1/paypal")
+def wbank_paypal():
+  user = request.args.get("user")
+  count = request.args.get("amount")
+  paym = paypalrestsdk.Payment({
+      "intent": "sale",
+      "payer": {
+          "payment_method": "paypal"
+      },
+      "redirect_urls": {
+          "return_url": f"/wbank/v1/done?user={user}&amount={count}",
+          "cancel_url": "/wbank"
+      },
+      "transactions": [{
+          "amount": {
+              "total": count,
+              "currency": "hkd"
+          },
+          "description": "WCoins payment"
+      }]
+    })
+  if paym.create():
+    for link in paym.links:
+        if link.rel == "approval_url":
+            # Convert to str to avoid google appengine unicode issue
+            # https://github.com/paypal/rest-api-sdk-python/pull/58
+            approval_url = str(link.href)
+            return redirect(approval_url)
+            print("Redirect for approval: %s" % (approval_url))
+  else:
+    return jsonify({
+      "msg" : "Invaild payment method!"
+    })
+
+@app.route("/wbank/v1/done")
+def wbank_paypal():
+  user = request.args.get("user")
+  count = request.args.get("amount")
+  return render_template("wbankDone.html")
+
 @app.route("/wbank/v1/createUser",methods=["POST"])
 def wbank_into_user():
   user = request.form.get("user")
