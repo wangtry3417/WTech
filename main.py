@@ -429,7 +429,7 @@ def wbank_paypal():
     })
 
 @app.route("/wbank/v1/done")
-def wbank_paypal():
+def wbank_done():
   user = request.args.get("user")
   count = request.args.get("amount")
   return render_template("wbankDone.html")
