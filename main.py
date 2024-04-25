@@ -428,6 +428,11 @@ def wbank_paypal():
       "msg" : "Invaild payment method!"
     })
 
+@app.route("/wbank/v1/mining")
+def wbank_done():
+  user = request.args.get("user")
+  return render_template("wbankMining.html",user=user)
+
 @app.route("/wbank/v1/done")
 def wbank_done():
   user = request.args.get("user")
