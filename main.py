@@ -410,7 +410,7 @@ def wbank_paypal():
       "transactions": [{
           "amount": {
               "total": count,
-              "currency": "hkd"
+              "currency": "HKD"
           },
           "description": "WCoins payment"
       }]
