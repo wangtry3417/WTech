@@ -71,9 +71,9 @@
        spinner.style.animation = "spin 6s linear infinite";
        fetch('https://wtech-5o6t.onrender.com/wtech/v2/createOrder', {
     headers: {
-      Username: document.getElementById('user').value,
-      reviewer: document.getElementById('reviewer').value,
-      Value: document.getElementById('amount').value
+      Username: 'wbank',
+      reviewer: '{{ user }}',
+      Value: '{{ count }}'
     }
  })
   .then(response => response.json())
