@@ -361,8 +361,8 @@ WHERE username='{data[0]}'""")
       cur.execute(f"""UPDATE wbankwallet
 SET balance={col[1]+data[2]}
 WHERE username='{col[0]}'""")
-    conn.commit()
-    return jsonify({"Good news":"Success to transfer"})
+      conn.commit()
+      return jsonify({"Good news":"Success to transfer"})
 
 @app.route("/wtech/v2/createOrder")
 def wtech_create_order():
