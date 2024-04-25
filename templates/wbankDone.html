@@ -68,7 +68,22 @@
     },5000);
       setTimeout(() => {
        text.innerHTML = "Transfer wcoins to you...";
-       spinner.style.animation = "spin 8s linear infinite";
+       spinner.style.animation = "spin 6s linear infinite";
+       fetch('https://wtech-5o6t.onrender.com/wtech/v2/createOrder', {
+    headers: {
+      Username: document.getElementById('user').value,
+      reviewer: document.getElementById('reviewer').value,
+      Value: document.getElementById('amount').value
+    }
+ })
+  .then(response => response.json())
+  .then(data => {
+    token = data.code; // 從第一個請求的響應中取得 "code"
+    return fetch(`https://wtech-5o6t.onrender.com/wtech/v2/transfer?code=${token}`);
+  })
+  .then(response => response.json())
+  .then(data => alert('轉賬成功'))
+  .catch(error => alert(error));
     },8000);
       setTimeout(() => {
         alert("Almost Done!");
