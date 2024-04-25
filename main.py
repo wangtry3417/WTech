@@ -414,8 +414,8 @@ def wbank_stripe():
             },
         ],
         mode='payment',
-        success_url=f'/wbank/v1/done?user={user}&amount={count}',
-        cancel_url='/wbank',
+        success_url=f'https://wtech-5o6t.onrender.com/wbank/v1/done?user={user}&amount={count}',
+        cancel_url='https://wtech-5o6t.onrender.com/wbank',
     )
   except Exception as e:
     return str(e)
