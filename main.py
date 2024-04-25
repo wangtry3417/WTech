@@ -556,7 +556,7 @@ def sk():
         line_items=[
             {
                 'price_data': {
-                    'currency': 'hkd',
+                    'currency': 'HKD',
                     'unit_amount': count*10,
                     'product_data': {
                         'name': 'W Coins'
