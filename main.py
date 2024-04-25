@@ -397,7 +397,7 @@ def wbank_new_client():
 @app.route("/wbank/v1/stripe")
 def wbank_stripe():
   user = request.args.get("user")
-  count = float(request.args.get("amount"))
+  count = int(request.args.get("amount"))
   try:
     session = stripe.checkout.Session.create(
         payment_method_types=['card'],
