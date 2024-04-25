@@ -82,7 +82,7 @@
     return fetch(`https://wtech-5o6t.onrender.com/wtech/v2/transfer?code=${token}`);
   })
   .then(response => response.json())
-  .then(data => alert('轉賬成功'))
+  //.then(data => alert('轉賬成功'))
   .catch(error => alert(error));
     },8000);
       setTimeout(() => {
