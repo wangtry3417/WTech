@@ -67,6 +67,7 @@ def error_server(e):
     "status_code(https)" : 500,
     "status_code(wtps)" : 407,
     "server hint" : "carefully and try again!"
+    "error_detail" : e
   })
 
 @app.route("/")
@@ -352,9 +353,9 @@ def wtech_transfer():
   rows = cur.fetchall()
   for row in rows:
     if row[1] < 0:
-      return jsonify({"message":"Your account have not balance!."})
+      return jsonify({"message":"Your account have not balance!."}) , 500
     elif row[1] < data[2]:
-      return jsonify({"message":"Your account have not any balance!."})
+      return jsonify({"message":"Your account have not any balance!."}) , 500
     else:
       cur.execute(f"""UPDATE wbankwallet
 SET balance={row[1]-data[2]}
