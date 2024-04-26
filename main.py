@@ -356,17 +356,17 @@ def wtech_transfer():
     elif row[1] < data[2]:
       return jsonify({"message":"Your account have not any balance!."})
     else:
-    cur.execute(f"""UPDATE wbankwallet
+      cur.execute(f"""UPDATE wbankwallet
 SET balance={row[1]-data[2]}
 WHERE username='{data[0]}'""")
-    conn.commit()
-    cur.execute(f"select * from wbankwallet where Username='{data[1]}'")
-    cols = cur.fetchall()
-    for col in cols:
-      cur.execute(f"""UPDATE wbankwallet
+      conn.commit()
+      cur.execute(f"select * from wbankwallet where Username='{data[1]}'")
+      cols = cur.fetchall()
+      for col in cols:
+        cur.execute(f"""UPDATE wbankwallet
 SET balance={col[1]+data[2]}
 WHERE username='{col[0]}'""")
-      conn.commit()
+        conn.commit()
       return jsonify({"Good news":"Success to transfer"})
   return "Cannot transfer it! check your code arg."
 
