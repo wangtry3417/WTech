@@ -351,6 +351,11 @@ def wtech_transfer():
   cur.execute(f"select * from wbankwallet where Username='{data[0]}'")
   rows = cur.fetchall()
   for row in rows:
+    if row[1] < 0:
+      return jsonify({"message":"Your account have not balance!."})
+    elif row[1] < data[2]:
+      return jsonify({"message":"Your account have not any balance!."})
+    else:
     cur.execute(f"""UPDATE wbankwallet
 SET balance={row[1]-data[2]}
 WHERE username='{data[0]}'""")
