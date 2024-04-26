@@ -338,6 +338,10 @@ def wtech_bank_db():
   else:
     return "Cannot find redirect URL!."
 
+@app.route("/wtech/wcoins/card")
+def wtech_wcoins_card():
+  return render_template("wcoins_card.html")
+
 @app.route("/wtech/v2/transfer")
 def wtech_transfer():
   code = request.args.get("code")
