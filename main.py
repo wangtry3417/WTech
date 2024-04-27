@@ -233,6 +233,16 @@ def wtechWtps():
   else:
     return "Cannot load wtps://"
 
+@app.route("/wcoins/v3/miner",methods=["POST"])
+def wtechWcoinsMining():
+  user = request.form.get("miner_place")
+  cur = conn.cursor()
+  cur.execute(f"SELECT * FROM wcoins_mining_place where {user}")
+  rows = cur.fetchall()
+  for row in rows:
+    return render_template("wbankMiner.html",user=user)
+  return "找不到wcoins礦池"
+    
 @app.route("/wcoin/v2/mining")
 def wtechMiningWcoins():
   address = request.headers.get("User-wallet")
