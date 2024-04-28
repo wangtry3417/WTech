@@ -469,7 +469,8 @@ def wbank_sellCoins():
       # 使用 BytesIO 創建一個在記憶體中的臨時檔案
       temp = BytesIO()
       # 保存 QR 碼圖像到臨時檔案
-      qr_bytes = qr.svg(temp,scale=8)
+      qr.svg(temp,scale=8)
+      qr_bytes = temp.getvalue()
       qr_b64 = base64.b64encode(qr_bytes).decode('ascii')
       # 使用 send_file 將 QR 碼圖像傳輸到前端
       return render_template("wbankSell.html", img=qr_b64)
