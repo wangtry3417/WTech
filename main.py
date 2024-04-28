@@ -465,7 +465,7 @@ def wbank_sell_payCode():
     t1 = ",".join(text1)
     hash1 = hashlib.sha256(t1.encode()).hexdigest()
     if code == hash1:
-      return jsonify({"Your username":user,"Your balance":balance})
+      return render_template("wbankPayment.html",user=user,balance=balance)
   return "Cannot assign the user detail!."
   
 @app.route("/wbank/sellCoins")
