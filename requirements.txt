@@ -8,3 +8,4 @@ stripe
 requests
 psycopg2-binary
 numpy
+PyQRCode
