@@ -1,4 +1,4 @@
-from flask import Flask,render_template,jsonify,request,abort,url_for,redirect,make_response
+from flask import Flask,render_template,jsonify,request,abort,url_for,redirect,make_response,send_file
 from cryptography.fernet import Fernet
 import hashlib
 import os
@@ -15,6 +15,7 @@ from email.mime.text import MIMEText
 import psycopg2
 import numpy
 import re
+import pyqrcode
 #from nltk.stem import WordNetLemmatizer
 #from nltk.book import *
 
@@ -448,6 +449,29 @@ def wbank_paypal():
     return jsonify({
       "msg" : "Invaild payment method!"
     })
+
+@app.route("/wbank/sellCoins")
+def wbank_sellCoins():
+  user = request.args.get("user")
+  cur = conn.cursor()
+  cur.execute(f"select username,balance from wbankwallet where username={user}")
+  rows = cur.fetchall()
+  for row in rows:
+    if user == row[0]:
+      text1 = [row[0],row[1]]
+      t1 = ",".join(text1)
+      hash1 = hashlib.sha256(t1.encode()).hexdigest()
+      wallet_address = f"https://wtech-5o6t.onrender.com/wbank/v1/paycode?code={hash1}"
+      # 生成 QR 碼
+      qr = pyqrcode.create(wallet_address)
+      # 使用 BytesIO 創建一個在記憶體中的臨時檔案
+      temp = BytesIO()
+      # 保存 QR 碼圖像到臨時檔案
+      qr.svg(temp, scale=8)
+      temp.seek(0)
+      # 使用 send_file 將 QR 碼圖像傳輸到前端
+      return render_template("wbankSell.html", img=temp)
+  return "Cannot assign the user detail!."
 
 @app.route("/wbank/v1/mining")
 def wbank_mining():
