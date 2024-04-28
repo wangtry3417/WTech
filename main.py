@@ -17,6 +17,7 @@ import numpy
 import re
 import pyqrcode
 from io import BytesIO
+import base64
 #from nltk.stem import WordNetLemmatizer
 #from nltk.book import *
 
@@ -455,7 +456,7 @@ def wbank_paypal():
 def wbank_sellCoins():
   user = request.args.get("user")
   cur = conn.cursor()
-  cur.execute(f"select username,balance from wbankwallet where username={user}")
+  cur.execute(f"select username,balance from wbankwallet where username='{user}'")
   rows = cur.fetchall()
   for row in rows:
     if user == row[0]:
