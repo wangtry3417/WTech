@@ -459,7 +459,7 @@ def wbank_sell_payCode():
   cur.execute("select username,balance from wbankwallet")
   rows = cur.fetchall()
   for row in rows:
-    return row[0]
+    return row
 
 @app.route("/wbank/sellCoins")
 def wbank_sellCoins():
