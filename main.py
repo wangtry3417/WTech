@@ -452,6 +452,15 @@ def wbank_paypal():
       "msg" : "Invaild payment method!"
     })
 
+@app.route("/wbank/v1/paycode")
+def wbank_sell_payCode():
+  code = request.args.get("code")
+  cur = conn.cursor()
+  cur.execute("select username,balance from wbankwallet")
+  rows = cur.fetchall()
+  for row in rows:
+    return row[0]
+
 @app.route("/wbank/sellCoins")
 def wbank_sellCoins():
   user = request.args.get("user")
