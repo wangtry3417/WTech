@@ -16,6 +16,7 @@ import psycopg2
 import numpy
 import re
 import pyqrcode
+from io import BytesIO
 #from nltk.stem import WordNetLemmatizer
 #from nltk.book import *
 
