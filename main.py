@@ -459,16 +459,15 @@ def wbank_sell_payCode():
   cur.execute("select username,balance from wbankwallet")
   rows = cur.fetchall()
   for row in rows:
-    for user in row[0]:
-      for balance in row[1]:
-        text1 = [user,str(balance)]
-        t1 = ",".join(text1)
-        hash1 = hashlib.sha256(t1.encode()).hexdigest()
-        if code == hash1:
-          return jsonify({"Your username":user,"Your balance":balance})
-      return "Cannot assign the user detail!."
-    return "Cannot assign the user detail!."
-
+    user = row[0]
+    balance = row[1]
+    text1 = [user,str(balance)]
+    t1 = ",".join(text1)
+    hash1 = hashlib.sha256(t1.encode()).hexdigest()
+    if code == hash1:
+      return jsonify({"Your username":user,"Your balance":balance})
+  return "Cannot assign the user detail!."
+  
 @app.route("/wbank/sellCoins")
 def wbank_sellCoins():
   user = request.args.get("user")
