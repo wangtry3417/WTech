@@ -1,1 +1,100 @@
+<html>
+  <head>
+    <title>WBank -- payment page</title>
+    <style>
+      #top {
+       width: 300px;
+       margin: auto;
+       background-color: #fff;
+       padding: 20px;
+       border-radius: 5px;
+       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      }
+      .btn1 {
+        background-color: #2e3c4d;
+        color: rgb(255,255,255);
+        padding: 12px 14px;
+        font-size: 13px;
+      }
+      #warn {
+       width: 298px;
+       margin: auto;
+       background-color: #fff;
+       padding: 20px;
+       border: 3px solid black;
+       animation: wn 5s linear 2s infinite alternate;
+      }
+      @keyframes wn {
+        0% {
+          border: 3px solid #FF0000;
+        }
+        100% {
+          border: 3px solid black;
+        }
+      }
+      #lineChart {
+         width: 100%;
+         height:100%;
+      }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <center>
+    <div id="top">
+       <h2>Store payment page</h2>
+      <br>
+       <label>你的名字：</label>
+       <input type="text" id="user" value="{{ user }}" required>
+       <br>
+       <label>收款方：</label>
+       <input type="text" id="reviewer" required>
+       <br>
+       <label>金額(WTC$)：</label>
+       <input type="number" id="amount" required>
+      <br>
+      <button class="btn1" onclick="pay()">Click to pay</button>
+      <br>
+    </div>
+  </center>
+    <br>
+    <br>
+    <script>
+      const pay = () => {
+      if (document.getElementById('user').value == "" && document.getElementById('reviewer').value == "" && document.getElementById('amount').value == "") {
+         alert('輸入欄位不能留空');
+      } else if (document.getElementById('user').value == "" || document.getElementById('reviewer').value == "" || document.getElementById('amount').value == "") {
+          alert('請輸入所需資料');
+      }
+      else {
 
+      }
+      alert('付款進行中，請稍後');
+      let storedCode;
+fetch('https://wtech-5o6t.onrender.com/wtech/v2/createOrder', {
+    headers: {
+      Username: document.getElementById('user').value,
+      reviewer: document.getElementById('reviewer').value,
+      Value: document.getElementById('amount').value
+    }
+ })
+  .then(response => response.json())
+  .then(data => {
+    token = data.code; // 從第一個請求的響應中取得 "code"
+    return fetch(`https://wtech-5o6t.onrender.com/wtech/v2/transfer?code=${token}`);
+  })
+  .then(response => response.json())
+  .then(data => alert('轉賬成功'))
+  .catch(error => alert(error));
+      };
+
+    </script>
+  </body>
+</html>
