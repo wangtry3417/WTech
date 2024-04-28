@@ -460,7 +460,7 @@ def wbank_sellCoins():
   rows = cur.fetchall()
   for row in rows:
     if user == row[0]:
-      text1 = [row[0],row[1]]
+      text1 = [row[0],str(row[1])]
       t1 = ",".join(text1)
       hash1 = hashlib.sha256(t1.encode()).hexdigest()
       wallet_address = f"https://wtech-5o6t.onrender.com/wbank/v1/paycode?code={hash1}"
