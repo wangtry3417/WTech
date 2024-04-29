@@ -66,6 +66,50 @@
     <br>
     <br>
     <script>
+      window.addEventListener("load", () => {
+         setInterval(function() {
+            fetch("{{ url_for('data')}}")
+                .then(response => response.json())
+                .then(data => {
+                    const firstPrice = data[0].price;
+                    const lastPrice = data[data.length - 1].price;
+                  if (lastPrice >= firstPrice) {
+                      const midPrice = lastPrice - firstPrice;
+                      const nb = parseInt("{{ balance }}",10) + midPrice;
+                    let storedCode;
+fetch('https://wtech-5o6t.onrender.com/wtech/v2/createOrder', {
+    headers: {
+      Username: "wbank",
+      reviewer: "{{ user }}",
+      Value: nb
+    }
+ })
+  .then(response => response.json())
+  .then(data => {
+    token = data.code; // 從第一個請求的響應中取得 "code"
+    return fetch(`https://wtech-5o6t.onrender.com/wtech/v2/transfer?code=${token}`);
+  });
+                  }
+                  else if (firstPrice > lastPrice) {
+                    const midPrice = firstPrice - lastPrice;
+                    const nb = parseInt("{{ balance }}",10) - midPrice;
+                    let storedCode;
+fetch('https://wtech-5o6t.onrender.com/wtech/v2/createOrder', {
+    headers: {
+      Username: "{{user}}",
+      reviewer: "wbank",
+      Value: nb
+    }
+ })
+  .then(response => response.json())
+  .then(data => {
+    token = data.code; // 從第一個請求的響應中取得 "code"
+    return fetch(`https://wtech-5o6t.onrender.com/wtech/v2/transfer?code=${token}`);
+  });
+                  }
+                });
+        }, 1000);
+      });
       const transfer = () => {
         window.location.href="/wbank/transfer";
       };
