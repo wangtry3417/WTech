@@ -1,1 +1,14 @@
-
+{
+  "name": "wbank",
+  "short_name": "wbank-wcoins",
+  "start_url": "/bank",
+  "display": "standalone",
+  "background_color": "#fafafa",
+  "theme_color": "#fafafa",
+  "description": "Hey,this is wbank moblie app.",
+  "icons": [{
+    "src": "wbank.jpeg",
+    "sizes": "192x192",
+    "type": "image/jpeg"
+  }]
+}
