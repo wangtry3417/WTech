@@ -452,6 +452,22 @@ def wbank_paypal():
       "msg" : "Invaild payment method!"
     })
 
+@app.route("/wbank/hash/createOrder")
+def wbank_hash_order():
+  user = request.headers.get("Username")
+  reviewer = request.headers.get("reviewer")
+  count = int(request.headers.get("Value"))
+  cur = conn.cursor()
+  cur.execute(f"select username,balance from wbankwallet where username='{user}'")
+  rows = cur.fetchall()
+  for row in rows:
+    if row[1] >= count:
+      text1 = [row[0],reviewer,str(row[1])]
+      t1 = ",".join(text1)
+      hash1 = hashlib.sha256(t1.encode()).hexdigest()
+      return jsonify({"Your order hash-value":hash1})
+  return "Somethings input data is wrong!."
+
 @app.route("/wbank/v1/paycode")
 def wbank_sell_payCode():
   code = request.args.get("code")
