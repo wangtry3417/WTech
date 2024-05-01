@@ -525,7 +525,7 @@ def wbank_into_user():
   user = request.form.get("user")
   pw = request.form.get("pw")
   cur = conn.cursor()
-  cur.execute(f"INSERT INTO wbankwallet (username, balance, password) VALUES ('{user}', '0', '{pw}')")
+  cur.execute(f"INSERT INTO wbankwallet (username, balance, password, verify) VALUES ('{user}', '0', '{pw}','no')")
   conn.commit()
   return redirect("http://bank.wtechhk.xyz")
 
@@ -537,11 +537,13 @@ def wbank_client():
   cur.execute("select * from wbankwallet")
   rows = cur.fetchall()
   for row in rows:
-    if user == row[0]:
-      if pw == row[2]:
-        balance = row[1]
-        return render_template("wbankClient.html",user=user,balance=balance)
-      return "Password is invaild"
+    if row[3] == "yes":
+      if user == row[0]:
+        if pw == row[2]:
+          balance = row[1]
+          return render_template("wbankClient.html",user=user,balance=balance)
+        return "Password is invaild"
+      return "Your account is not verified"
   return "Cannot find user"
 
 @app.route("/wtech/v2/wbank/auth",methods=["GET","POST"])
