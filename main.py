@@ -564,11 +564,11 @@ def wbank_verify():
     text1 = [user,"true"]
     t1 = ",".join(text1)
     hash1 = hashlib.sha256(t1.encode()).hexdigest()
-    if code == hash1:
-      cur = conn.cursor()
-      cur.execute(f"UPDATE wbankwallet set vetify='yes' where username='user'")
-      conn.commit()
-      return "Success to verify!."
+  if code == hash1:
+    cur = conn.cursor()
+    cur.execute(f"UPDATE wbankwallet set vetify='yes' where username='user'")
+    conn.commit()
+    return "Success to verify!."
   return "Cannot assign the user detail!."
 
 @app.route("/wbank/client",methods=["POST"])
