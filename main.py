@@ -533,7 +533,7 @@ def wbank_into_user():
   rows = cur.fetchall()
   for row in rows:
     if user == row[0]:
-      text1 = [rows[0],"true"]
+      text1 = [str(rows[0]),"true"]
       t1 = ",".join(text1)
       hash1 = hashlib.sha256(t1.encode()).hexdigest()
       msg["To"] = email
