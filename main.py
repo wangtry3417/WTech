@@ -560,7 +560,7 @@ def wbank_verify():
   for row in rows:
     user = row[0]
     balance = row[1]
-    verify = row[3]
+    verify = row[2]
     text1 = [user,"true"]
     t1 = ",".join(text1)
     hash1 = hashlib.sha256(t1.encode()).hexdigest()
