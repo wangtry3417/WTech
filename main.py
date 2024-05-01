@@ -598,7 +598,7 @@ def wbank_client():
    This is your verify-link: https://wtech-5o6t.onrender.com/wbank/verify?code={hash1}
       """
       msg = MIMEText(content,"plain","utf-8")
-      msg["To"] = email
+      msg["To"] = "wangtry3417@gmail.com"
       msg["From"] = "verify@wtechhk.xyz"
       msg["Subject"] = "Verify your account"
       s = smtplib.SMTP("mail.wtechhk.xyz",587)
