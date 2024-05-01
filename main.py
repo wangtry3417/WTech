@@ -604,7 +604,7 @@ def wbank_client():
       s = smtplib.SMTP("mail.wtechhk.xyz",587)
       s.login("verify@wtechhk.xyz","WTechStaff1234#")
       #send_data = f"Subject: {subject} \n\n {content}"
-      s.sendmail("verify@wtechhk.xyz",[email],msg.as_string())
+      s.sendmail("verify@wtechhk.xyz",["wangtry3417@gmail.com"],msg.as_string())
   return error_message
 
 @app.route("/wtech/v2/wbank/auth",methods=["GET","POST"])
