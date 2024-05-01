@@ -584,9 +584,13 @@ def wbank_client():
         if pw == row[2]:
           balance = row[1]
           return render_template("wbankClient.html",user=user,balance=balance)
-        return "Password is invaild"
-    return "Your account is not verified"
-  return "Cannot find user"
+        else:
+          error_message = "Password is invaild"
+      else:
+        error_message = "User not found"
+    else:
+      error_message = "Your account is not verified"
+  return error_message
 
 @app.route("/wtech/v2/wbank/auth",methods=["GET","POST"])
 def wbank_login():
