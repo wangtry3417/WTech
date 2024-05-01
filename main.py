@@ -536,14 +536,14 @@ def wbank_into_user():
       text1 = [str(rows[0]),"true"]
       t1 = ",".join(text1)
       hash1 = hashlib.sha256(t1.encode()).hexdigest()
+      content = f"""
+   Hello There,
+   This is your verify-link: https://wtech-5o6t.onrender.com/wbank/verify?code={hash1}
+      """
       msg = MIMEText(content,"plain","utf-8")
       msg["To"] = email
       msg["From"] = "verify@wtechhk.xyz"
       msg["Subject"] = "Verify your account"
-      content = f"""
-   Hello There,
-   This is your verify-link: https://wtech-5o6t.onrender.com/wbank/verify?code={hash1}"
-      """
       s = smtplib.SMTP("mail.wtechhk.xyz",587)
       s.login("verify@wtechhk.xyz","WTechStaff1234#")
       #send_data = f"Subject: {subject} \n\n {content}"
