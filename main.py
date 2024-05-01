@@ -524,10 +524,51 @@ def wbank_done():
 def wbank_into_user():
   user = request.form.get("user")
   pw = request.form.get("pw")
+  email = request.form.get("email")
   cur = conn.cursor()
   cur.execute(f"INSERT INTO wbankwallet (username, balance, password, verify) VALUES ('{user}', '0', '{pw}','no')")
   conn.commit()
-  return redirect("http://bank.wtechhk.xyz")
+  cur = conn.cursor()
+  cur.execute(f"select username,balance,verify from wbankwallet where username='{user}'")
+  rows = cur.fetchall()
+  for row in rows:
+    if user == row[0]:
+      text1 = [rows[0],"true"]
+      t1 = ",".join(text1)
+      hash1 = hashlib.sha256(t1.encode()).hexdigest()
+      msg["To"] = email
+      msg["From"] = "verify@wtechhk.xyz"
+      msg["Subject"] = "Verify your account"
+      content = f"""
+   Hello There,
+   This is your verify-link: https://wtech-5o6t.onrender.com/wbank/verify?code={hash1}"
+      """
+      msg = MIMEText(content,"plain","utf-8")
+      s = smtplib.SMTP("mail.wtechhk.xyz",587)
+      s.login("verify@wtechhk.xyz","WTechStaff1234#")
+      #send_data = f"Subject: {subject} \n\n {content}"
+      s.sendmail("verify@wtechhk.xyz",[email],msg.as_string())
+      return redirect("http://bank.wtechhk.xyz")
+  return "Cannot do that!."
+
+@app.route("/wbank/verify")
+def wbank_verify():
+  code = request.args.get("code")
+  cur = conn.cursor()
+  cur.execute("select username,balance,verify from wbankwallet")
+  rows = cur.fetchall()
+  for row in rows:
+    user = row[0]
+    balance = row[1]
+    verify = row[3]
+    text1 = [user,"true"]
+    t1 = ",".join(text1)
+    hash1 = hashlib.sha256(t1.encode()).hexdigest()
+    if code == hash1:
+      cur = conn.cursor()
+      cur.execute(f"UPDATE wbankwallet set vetify='true' where username='user'")
+      conn.commit()
+  return "Cannot assign the user detail!."
 
 @app.route("/wbank/client",methods=["POST"])
 def wbank_client():
