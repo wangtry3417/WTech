@@ -585,7 +585,7 @@ def wbank_client():
           balance = row[1]
           return render_template("wbankClient.html",user=user,balance=balance)
         return "Password is invaild"
-      return "Your account is not verified"
+    return "Your account is not verified"
   return "Cannot find user"
 
 @app.route("/wtech/v2/wbank/auth",methods=["GET","POST"])
