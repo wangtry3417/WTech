@@ -97,7 +97,27 @@ fetch('https://wtech-5o6t.onrender.com/wtech/v2/createOrder', {
   .then(data => alert('轉賬成功'))
   .catch(error => alert(error));
       };
-
+  function openMenu()  {
+    document.getElementById('menu').style.right = '0';
+      var openBtn = document.getElementsByClassName("open-btn");
+      openBtn.style.display = "none";
+}
+function closeMenu() {
+    document.getElementById('menu').style.right = '-200px';
+   var openBtn = document.getElementsByClassName("open-btn");
+    openBtn.style.display = "block";
+}
+const returnAlert = () => {
+        var popup = document.getElementById('warn');
+         popup.style.display = 'block'; 
+    popup.querySelector('button').addEventListener('click', function() {
+      var button = document.getElementById("myButton");
+        button.innerHTML = "...";
+    popup.style.animationDuration = "1s";
+    popup.style.animationName = "dots";
+        popup.style.display = 'none'; /* 點擊按鈕後，將 display 設回為 none */
+    });
+      };
     </script>
   </body>
 </html>
