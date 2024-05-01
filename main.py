@@ -40,8 +40,8 @@ class AIModules:
 
 app = Flask("WTech")
 
-conn = psycopg2.connect(database="wcloud_itrt", user="root", 
-password="Gk6Dp2pPrM98jQFGfXK1arNsrOWmcChX", host="dpg-co1nt35a73kc73cfcnlg-a.singapore-postgres.render.com", 
+conn = psycopg2.connect(database="wbank", user="root", 
+password="r7wPtW1z6ltgw4oW8hW6qeIzJacfgwCM", host="dpg-cop0h6779t8c73fimlm0-a.singapore-postgres.render.com", 
 port=5432)
 
 """
