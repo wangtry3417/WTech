@@ -566,7 +566,7 @@ def wbank_verify():
     hash1 = hashlib.sha256(t1.encode()).hexdigest()
   if code == hash1:
     cur = conn.cursor()
-    cur.execute(f"UPDATE wbankwallet set vetify='yes' where username='{user}'")
+    cur.execute(f"UPDATE wbankwallet set verify='yes' where username='{user}'")
     conn.commit()
     return "Success to verify!."
   return "Cannot assign the user detail!."
