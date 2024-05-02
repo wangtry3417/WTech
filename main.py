@@ -55,7 +55,8 @@ def verify_password(username, password):
     if username in users and \
             check_password_hash(users.get(username), password):
         return username
-
+    else:
+      return "非授權人士，不得訪問。
 
 
 conn = psycopg2.connect(database="wbank", user="root", 
@@ -425,7 +426,6 @@ def wtech_create_order():
   return jsonify({"code" : token})
 
 @app.route("/wbank")
-@auth.login_required
 def wbank():
   return render_template("wbank.html")
 
