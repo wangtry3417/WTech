@@ -56,7 +56,7 @@ def verify_password(username, password):
             check_password_hash(users.get(username), password):
         return username
     else:
-      return "非授權人士，不得訪問。
+      return "非授權人士，不得訪問。"
 
 
 conn = psycopg2.connect(database="wbank", user="root", 
