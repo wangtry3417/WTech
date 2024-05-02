@@ -25,19 +25,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 stripe.api_key = 'sk_test_51L2HC2J0QjqOTdOCHZxTbi3deVcbYNQhuvExH1thqeLvB7pbMiCHtapDTP5S64TKAkJpqsOkAm2uBNVBmhMpO9Jl00vFoU1QNJ'
 
-auth = HTTPBasicAuth()
-
-users = {
-    "wangtry": generate_password_hash("Chan1234#"),
-    "wtech": generate_password_hash("wtechStaff1234#")
-}
-
-@auth.verify_password
-def verify_password(username, password):
-    if username in users:
-        return check_password_hash(users.get(username), password)
-    return "Cannot access this user"
-
 class AIModules:
   def __init__(self,text):
     self.text = text
@@ -54,6 +41,20 @@ class AIModules:
     return response
 
 app = Flask("WTech")
+
+auth = HTTPBasicAuth()
+
+users = {
+    "wangtry": generate_password_hash("Chan1234#"),
+    "wtech": generate_password_hash("wtechStaff1234#")
+}
+
+@auth.verify_password
+def verify_password(username, password):
+    if username in users:
+        return check_password_hash(users.get(username), password)
+    return "Cannot access this user"
+
 
 conn = psycopg2.connect(database="wbank", user="root", 
 password="r7wPtW1z6ltgw4oW8hW6qeIzJacfgwCM", host="dpg-cop0h6779t8c73fimlm0-a.singapore-postgres.render.com", 
