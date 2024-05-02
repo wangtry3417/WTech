@@ -18,10 +18,25 @@ import re
 import pyqrcode
 from io import BytesIO
 import base64
+from flask_httpauth import HTTPBasicAuth
+from werkzeug.security import generate_password_hash, check_password_hash
 #from nltk.stem import WordNetLemmatizer
 #from nltk.book import *
 
 stripe.api_key = 'sk_test_51L2HC2J0QjqOTdOCHZxTbi3deVcbYNQhuvExH1thqeLvB7pbMiCHtapDTP5S64TKAkJpqsOkAm2uBNVBmhMpO9Jl00vFoU1QNJ'
+
+auth = HTTPBasicAuth()
+
+users = {
+    "wangtry": generate_password_hash("Chan1234#"),
+    "wtech": generate_password_hash("wtechStaff1234#")
+}
+
+@auth.verify_password
+def verify_password(username, password):
+    if username in users:
+        return check_password_hash(users.get(username), password)
+    return "Cannot access this user"
 
 class AIModules:
   def __init__(self,text):
@@ -515,6 +530,7 @@ def wbank_mining():
   return render_template("wbankMining.html",user=user,url=url)
 
 @app.route("/wbank/v1/done")
+@auth.login_required
 def wbank_done():
   user = request.args.get("user")
   count = request.args.get("amount")
