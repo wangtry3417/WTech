@@ -423,6 +423,7 @@ def wtech_create_order():
   return jsonify({"code" : token})
 
 @app.route("/wbank")
+@auth.login_required
 def wbank():
   return render_template("wbank.html")
 
