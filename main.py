@@ -49,11 +49,13 @@ users = {
     "wtech": generate_password_hash("wtechStaff1234#")
 }
 
+
 @auth.verify_password
 def verify_password(username, password):
-    if username in users:
-        return check_password_hash(users.get(username), password)
-    return "Cannot access this user"
+    if username in users and \
+            check_password_hash(users.get(username), password):
+        return username
+
 
 
 conn = psycopg2.connect(database="wbank", user="root", 
