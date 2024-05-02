@@ -584,10 +584,8 @@ def wbank_client():
         if pw == row[2]:
           balance = row[1]
           return render_template("wbankClient.html",user=user,balance=balance)
-        else:
-          error_message = "Password is invaild"
-      else:
-        error_message = "User not found"
+        error_message = "Password is invaild"
+      error_message = "User not found"
     else:
       error_message = "Your account is not verified"
       text1 = [str(user),"true"]
