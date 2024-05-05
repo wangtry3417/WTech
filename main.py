@@ -525,7 +525,7 @@ def wbank_buyCoind():
       return render_template("wbankSell.html", img=qr_b64)
   return "Cannot assign the user detail!."
 
-@app.route("wbank/v1/rece")
+@app.route("/wbank/v1/rece")
 def wbank_receCoins():
   code = request.args.get("code")
   cur = conn.cursor()
