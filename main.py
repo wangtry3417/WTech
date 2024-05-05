@@ -539,7 +539,7 @@ def wbank_receCoins():
     t1 = ",".join(text1)
     hash1 = hashlib.sha256(t1.encode()).hexdigest()
     if code == hash1:
-      return render_template("wbankGet.html",user=user,balance=balance,former=former)
+      return render_template("wbankGet.html",user=user,balance=balance,fromer=fromer)
   return "Cannot assign the user detail!."
 
 @app.route("/wbank/sellCoins")
