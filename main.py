@@ -1,4 +1,5 @@
 from flask import Flask,render_template,jsonify,request,abort,url_for,redirect,make_response,send_file
+from flask_cors import CORS
 from cryptography.fernet import Fernet
 import hashlib
 import os
@@ -41,6 +42,8 @@ class AIModules:
     return response
 
 app = Flask("WTech")
+
+CORS(app)
 
 auth = HTTPBasicAuth()
 
