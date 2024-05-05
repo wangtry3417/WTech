@@ -468,9 +468,8 @@ def wbank_paypal():
             print("Redirect for approval: %s" % (approval_url))
   else:
     return jsonify({
-      "msg" : "Invaild payment method!"
-    })
-
+      "msg" : "Invaild payment method!."})
+    
 @app.route("/wtech/orderFood")
 def wtech_orderFood():
   cur = conn.cursor()
@@ -484,6 +483,21 @@ def wtech_orderFood():
             "stock" : row[2]
     })
   return jsonify(results)
+
+@app.route("/wtech/chef")
+def wtech_chef():
+  cur = conn.cursor()
+  cur.execute("select * from cheflist")
+  rows = cur.fetchall()
+  results = []
+  for row in rows:
+    results.append({
+            "chef-name" : row[0],
+            "chef-position" : row[1],
+            "status" : row[2]
+    })
+  return jsonify(results)
+
 
 @app.route("/wbank/hash/createOrder")
 def wbank_hash_order():
