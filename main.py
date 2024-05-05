@@ -499,7 +499,49 @@ def wbank_sell_payCode():
     if code == hash1:
       return render_template("wbankPayment.html",user=user,balance=balance)
   return "Cannot assign the user detail!."
-  
+
+@app.route("/wbank/buyCoins")
+def wbank_buyCoind():
+  user = request.args.get("user")
+  fromer = "wtech-wcoins-m1"
+  cur = conn.cursor()
+  cur.execute(f"select username,balance from wbankwallet where username='{user}'")
+  rows = cur.fetchall()
+  for row in rows:
+    if user == row[0]:
+      text1 = [row[0],str(row[1]),former]
+      t1 = ",".join(text1)
+      hash1 = hashlib.sha256(t1.encode()).hexdigest()
+      wallet_address = f"https://wtech-5o6t.onrender.com/wbank/v1/rece?code={hash1}"
+      # 生成 QR 碼
+      qr = pyqrcode.create(wallet_address)
+      # 使用 BytesIO 創建一個在記憶體中的臨時檔案
+      temp = BytesIO()
+      # 保存 QR 碼圖像到臨時檔案
+      qr.svg(temp,scale=8)
+      qr_bytes = temp.getvalue()
+      qr_b64 = base64.b64encode(qr_bytes).decode('ascii')
+      # 使用 send_file 將 QR 碼圖像傳輸到前端
+      return render_template("wbankSell.html", img=qr_b64)
+  return "Cannot assign the user detail!."
+
+@app.route("wbank/v1/rece")
+def wbank_receCoins():
+  code = request.args.get("code")
+  cur = conn.cursor()
+  cur.execute("select username,balance from wbankwallet")
+  rows = cur.fetchall()
+  for row in rows:
+    user = row[0]
+    balance = row[1]
+    fromer = row[2]
+    text1 = [user,str(balance),row[2]]
+    t1 = ",".join(text1)
+    hash1 = hashlib.sha256(t1.encode()).hexdigest()
+    if code == hash1:
+      return render_template("wbankGet.html",user=user,balance=balance,former=former)
+  return "Cannot assign the user detail!."
+
 @app.route("/wbank/sellCoins")
 def wbank_sellCoins():
   user = request.args.get("user")
