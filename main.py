@@ -499,7 +499,7 @@ def wtech_chef():
   return jsonify(results)
 
 @app.route("/wtech/chef/status")
-def wtech_chef():
+def wtech_chef_status():
   user = request.args.get("chef")
   s = request.args.get("status")
   cur = conn.cursor()
