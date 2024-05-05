@@ -523,7 +523,7 @@ def wtech_check_server_status():
     "authorization": "Bearer rnd_2eC5ILwF6FNYRugb9D3vOITXAqXK"
   }
 
-  response = requests.get(url, headers=headers)
+  response = requests.get(url, headers=headers).json()
   res = response[0]
   update_server_date = res["commit"]["createdAt"]
   server_now_status = res["status"]
