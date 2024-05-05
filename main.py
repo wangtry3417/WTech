@@ -470,6 +470,7 @@ def wbank_paypal():
 
 @app.route("/wtech/orderFood")
 def wtech_orderFood():
+  cur = conn.cursor()
   cur.execute("select * from foodList")
   rows = cur.fetchall()
   for row in rows:
