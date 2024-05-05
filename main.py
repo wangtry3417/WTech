@@ -470,7 +470,7 @@ def wbank_paypal():
 
 @app.route("/wtech/orderFood")
 def wtech_orderFood():
-  cur.execute("select username,balance from foodList")
+  cur.execute("select * from foodList")
   rows = cur.fetchall()
   for row in rows:
      return jsonify({
