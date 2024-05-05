@@ -498,6 +498,21 @@ def wtech_chef():
     })
   return jsonify(results)
 
+@app.route("/wtech/chef/status")
+def wtech_chef():
+  user = request.args.get("chef")
+  s = request.args.get("status")
+  cur = conn.cursor()
+  cur.execute("select * from cheflist")
+  rows = cur.fetchall()
+  results = []
+  for row in rows:
+    if user == row[0]:
+      cur = conn.cursor()
+      cur.execute(f"update cheflist set prepare_dish='{s}' where name='{user}'")
+      conn.commit()
+      return "Done"
+  return "No"
 
 @app.route("/wbank/hash/createOrder")
 def wbank_hash_order():
