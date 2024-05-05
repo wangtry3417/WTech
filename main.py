@@ -514,6 +514,24 @@ def wtech_chef_status():
       return "Done"
   return "No"
 
+@app.route("/wtech/v1/checkServer")
+def wtech_check_server_status():
+  url = "https://api.render.com/v1/services/srv-cnepnida73kc73ctk59g/deploys?limit=20"
+
+  headers = {
+    "accept": "application/json",
+    "authorization": "Bearer rnd_2eC5ILwF6FNYRugb9D3vOITXAqXK"
+  }
+
+  response = requests.get(url, headers=headers)
+  res = response[0]
+  update_server_date = res["commit"]["createdAt"]
+  server_now_status = res["status"]
+  return jsonify({
+    "update_date" : update_server_date,
+    "status" : server_now_status
+  })
+
 @app.route("/wbank/hash/createOrder")
 def wbank_hash_order():
   user = request.headers.get("Username")
