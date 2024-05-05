@@ -534,7 +534,7 @@ def wbank_receCoins():
   for row in rows:
     user = row[0]
     balance = row[1]
-    fromer = row[2]
+    fromer = "wtech-wcoins-m1"
     text1 = [user,str(balance),row[2]]
     t1 = ",".join(text1)
     hash1 = hashlib.sha256(t1.encode()).hexdigest()
