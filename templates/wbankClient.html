@@ -70,6 +70,8 @@
       <br>
       <button class="btn1" onclick="buy()">Buy in (with paypal)</button>
       <br>
+      <button class="btn1" onclick="bm()">Buy in(For the machine)</button>
+      <br>
       <button class="btn1" onclick="sell()">Sell out (spend it)</button>
       <br>
     </div>
@@ -85,6 +87,10 @@
         let amount = prompt("How much do you wanna buy in?");
         let value = amount*3.5;
         window.location.href="/wbank/v1/paypal?user="+user+"&amount="+value;
+      };
+      const bm = () => {
+        let user = '{{ user }}';
+        window.location.href="/wbank/buyCoins?user="+user;
       };
       const sell = () => {
         let user = '{{ user }}';
