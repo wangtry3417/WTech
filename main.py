@@ -474,13 +474,13 @@ def wtech_orderFood():
   cur.execute("select * from foodList")
   rows = cur.fetchall()
   results = []
-    for row in rows:
-        results.append({
+  for row in rows:
+    results.append({
             "food-name" : row[0],
             "food-price" : row[1],
             "stock" : row[2]
-        })
-    return jsonify(results)
+    })
+  return jsonify(results)
 
 @app.route("/wbank/hash/createOrder")
 def wbank_hash_order():
