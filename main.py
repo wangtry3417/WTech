@@ -468,6 +468,17 @@ def wbank_paypal():
       "msg" : "Invaild payment method!"
     })
 
+@app.route("/wtech/orderFood")
+def wtech_orderFood():
+  cur.execute("select username,balance from foodList")
+  rows = cur.fetchall()
+  for row in rows:
+     return jsonify({
+       "food-name" : row[0],
+       "food-price" : row[1],
+       "stock" : row[2]
+     })
+
 @app.route("/wbank/hash/createOrder")
 def wbank_hash_order():
   user = request.headers.get("Username")
