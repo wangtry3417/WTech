@@ -514,6 +514,28 @@ def wtech_chef_status():
       return "Done"
   return "No"
 
+@app.route("/wtech/v1/discordBuyin")
+def discord_buy_in():
+  user = request.args.get("user")
+  count = request.args.get("amount")
+  m = request.args.get("m")
+  prompt = f"""
+     用戶： {user}
+     金額: {amount}
+     使用ATM機的名稱: {m}
+    """
+    data = {
+        "embeds": [
+        {
+            "title": "Wcoins ATM 買入通知",
+            "description": prompt,
+            "color": 65280,  # You can use hex color codes, this one is for blue
+        }
+    ]
+    }
+    r = requests.post(url="https://discord.com/api/webhooks/1236986178792853544/CuqsxhTUbZW6QgVAuyg23fU1FpkavEcEwsvpaMqA4jbdaYjQyUEFiFzV85jQhXNWNTzA",json=data)
+    return "Done"
+
 @app.route("/wtech/v1/checkServer")
 def wtech_check_server_status():
   url = "https://api.render.com/v1/services/srv-cnepnida73kc73ctk59g/deploys?limit=20"
