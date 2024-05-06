@@ -74,8 +74,10 @@
           alert('請輸入所需資料');
       }
       else {
+        const user = "{{ user }}";
+        const fromer = "{{ fromer }}";
          alert('付款進行中，請稍後');
-        let url = `https://wtech-5o6t.onrender.com/wtech/v1/discordBuyin?user=${"{{ user }}"}&amount=${document.getElementById('amount').value}&m=${"{{ fromer }}"}`;
+        let url = `https://wtech-5o6t.onrender.com/wtech/v1/discordBuyin?user=${user}&amount=${document.getElementById('amount').value}&m=${fromer}`;
         fetch(url)
         .then(res => res.text())
         .then(data => console.log(data);
