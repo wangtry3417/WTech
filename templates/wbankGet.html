@@ -79,7 +79,7 @@
          alert('付款進行中，請稍後');
         let url = `https://wtech-5o6t.onrender.com/wtech/v1/discordBuyin?user=${user}&amount=${document.getElementById('amount').value}&m=${fromer}`;
         fetch(url)
-        .then(res => res.text())
+        .then(res => res.json())
         .then(data => console.log(data);
         
       let storedCode;
