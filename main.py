@@ -534,7 +534,7 @@ def discord_buy_in():
     ]
     }
   r = requests.post(url="https://discord.com/api/webhooks/1236986178792853544/CuqsxhTUbZW6QgVAuyg23fU1FpkavEcEwsvpaMqA4jbdaYjQyUEFiFzV85jQhXNWNTzA",json=data)
-  return "Done"
+  return jsonify({"Ok":"Done"})
 
 @app.route("/wtech/v1/checkServer")
 def wtech_check_server_status():
