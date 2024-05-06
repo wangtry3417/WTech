@@ -521,7 +521,7 @@ def discord_buy_in():
   m = request.args.get("m")
   prompt = f"""
      用戶： {user}
-     金額: {amount}
+     金額: {count}
      使用ATM機的名稱: {m}
     """
   data = {
