@@ -527,10 +527,42 @@ def wtech_check_server_status():
   res = response[0]
   update_server_date = res["deploy"]["commit"]["createdAt"]
   server_now_status = res["deploy"]["status"]
-  return jsonify({
+  if server_now_status == "live":
+    prompt = """
+     主機目前的狀態：上線運行中 🟢
+    """
+    data = {
+        "embeds": [
+        {
+            "title": "主機狀況",
+            "description": prompt,
+            "color": 65280,  # You can use hex color codes, this one is for blue
+        }
+    ]
+    }
+    r = requests.post(url="https://discord.com/api/webhooks/1229314452189347910/GTqIUYZLHSywjU27PC-1FTthxVJcRvzT5BsD2iLAGTipwQ-lipMZXxxH936M0JhTm5JF",json=data)
+    return jsonify({
     "update_date" : update_server_date,
     "status" : server_now_status
-  })
+    })
+  else:
+    prompt = """
+     主機目前的狀態：發生錯誤或已為關閉狀態 🔴
+    """
+    data = {
+        "embeds": [
+        {
+            "title": "主機狀況",
+            "description": prompt,
+            "color": 16711680,  # You can use hex color codes, this one is for blue
+        }
+    ]
+    }
+    r = requests.post(url="https://discord.com/api/webhooks/1229314452189347910/GTqIUYZLHSywjU27PC-1FTthxVJcRvzT5BsD2iLAGTipwQ-lipMZXxxH936M0JhTm5JF",json=data)
+    return jsonify({
+    "update_date" : update_server_date,
+    "status" : server_now_status
+    })
 
 @app.route("/wbank/hash/createOrder")
 def wbank_hash_order():
