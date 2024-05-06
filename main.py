@@ -524,7 +524,7 @@ def discord_buy_in():
      金額: {amount}
      使用ATM機的名稱: {m}
     """
-    data = {
+  data = {
         "embeds": [
         {
             "title": "Wcoins ATM 買入通知",
@@ -533,8 +533,8 @@ def discord_buy_in():
         }
     ]
     }
-    r = requests.post(url="https://discord.com/api/webhooks/1236986178792853544/CuqsxhTUbZW6QgVAuyg23fU1FpkavEcEwsvpaMqA4jbdaYjQyUEFiFzV85jQhXNWNTzA",json=data)
-    return "Done"
+  r = requests.post(url="https://discord.com/api/webhooks/1236986178792853544/CuqsxhTUbZW6QgVAuyg23fU1FpkavEcEwsvpaMqA4jbdaYjQyUEFiFzV85jQhXNWNTzA",json=data)
+  return "Done"
 
 @app.route("/wtech/v1/checkServer")
 def wtech_check_server_status():
