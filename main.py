@@ -526,7 +526,7 @@ def wtech_check_server_status():
   response = requests.get(url, headers=headers).json()
   res = response[0]
   update_server_date = res["deploy"]["commit"]["createdAt"]
-  server_now_status = res["status"]
+  server_now_status = res["deploy"]["status"]
   return jsonify({
     "update_date" : update_server_date,
     "status" : server_now_status
