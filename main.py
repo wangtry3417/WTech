@@ -468,51 +468,24 @@ def wbank_paypal():
             print("Redirect for approval: %s" % (approval_url))
   else:
     return jsonify({
-      "msg" : "Invaild payment method!."})
+      "msg" : "Invaild payment method!."
+    })
     
-@app.route("/wtech/orderFood")
-def wtech_orderFood():
+@app.route("/wtech/stock/lookUp")
+def wtech_stock_lookUp():
   cur = conn.cursor()
-  cur.execute("select * from foodList")
+  cur.execute(f"select * from goods")
   rows = cur.fetchall()
-  results = []
+  goods_list = []
   for row in rows:
-    results.append({
-            "food-name" : row[0],
-            "food-price" : row[1],
-            "stock" : row[2]
-    })
-  return jsonify(results)
-
-@app.route("/wtech/chef")
-def wtech_chef():
-  cur = conn.cursor()
-  cur.execute("select * from cheflist")
-  rows = cur.fetchall()
-  results = []
-  for row in rows:
-    results.append({
-            "chef-name" : row[0],
-            "chef-position" : row[1],
-            "status" : row[2]
-    })
-  return jsonify(results)
-
-@app.route("/wtech/chef/status")
-def wtech_chef_status():
-  user = request.args.get("chef")
-  s = request.args.get("status")
-  cur = conn.cursor()
-  cur.execute("select * from cheflist")
-  rows = cur.fetchall()
-  results = []
-  for row in rows:
-    if user == row[0]:
-      cur = conn.cursor()
-      cur.execute(f"update cheflist set prepare_dish='{s}' where name='{user}'")
-      conn.commit()
-      return "Done"
-  return "No"
+    data = {
+      "name" : row[0],
+      "number" : row[1],
+      "stock" : row[2],
+      "status" : row[3]
+    }
+    goods_list.append(data)
+  return jsonify(goods_list)
 
 @app.route("/wtech/v1/discordBuyin")
 def discord_buy_in():
