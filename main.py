@@ -21,6 +21,7 @@ from io import BytesIO
 import base64
 from flask_httpauth import HTTPBasicAuth
 from werkzeug.security import generate_password_hash, check_password_hash
+import pytz
 #from nltk.stem import WordNetLemmatizer
 #from nltk.book import *
 
@@ -420,10 +421,13 @@ def wtech_transfer():
 SET balance={row[1]-data[2]}
 WHERE username='{data[0]}'""")
       conn.commit()
-      bl = f"轉帳 {row[1]} 給 {data[1]}"
-      now = datetime.datetime.now()
-      current_time = now.strftime("%H:%M:%S")
-      cur.execute(f"INSERT INTO wbankrecord (username, action, time) VALUES ('{data[1]}', '{bl}', '{current_time}');")
+      bl = f"由 {data[0]} 轉帳 {row[1]} 給 {data[1]}"
+      tz = pytz.timezone('Asia/Taipei')
+      # 取得當前的 UTC 時間
+      utc_time = datetime.datetime.now(pytz.timezone('UTC'))
+      # 轉換 UTC 時間到 UTC+8 時區
+      local_time = utc_time.astimezone(tz)
+      cur.execute(f"INSERT INTO wbankrecord (username, action, time) VALUES ('{data[1]}', '{bl}', '{local_time}');")
       conn.commit()
       cur.execute(f"select * from wbankwallet where Username='{data[1]}'")
       cols = cur.fetchall()
