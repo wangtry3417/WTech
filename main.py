@@ -419,7 +419,7 @@ WHERE username='{col[0]}'""")
         }
     ]
     }
-      r = requests.post(url="https://discord.com/api/webhooks/1236986178792853544/CuqsxhTUbZW6QgVAuyg23fU1FpkavEcEwsvpaMqA4jbdaYjQyUEFiFzV85jQhXNWNTzA",json=data)
+      r = requests.post(url="https://discord.com/api/webhooks/1236986187793829930/OBBvTByDyP-fvcVKI40D51UpaN5wU5HOjeHtxdiwh40-b09-gVj-jmoLcdPwlLs0-M2x",json=data)
       return jsonify({"Good news":"Success to transfer"})
   return "Cannot transfer it! check your code arg."
 
