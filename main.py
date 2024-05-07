@@ -497,6 +497,16 @@ def wtech_stock_add():
   conn.commit()
   return redirect("http://wtranfer.wtechhk.xyz")
 
+@app.route("/wtech/stock/changeStatus",methods=["GET","POST"])
+def wtech_stock_add():
+  good_number = request.form.get("good_number")
+  status = request.form.get("status")
+  cur = conn.cursor()
+  cur.execute(f"UPDATE goods set status='{status}' where good_number='{good_number}'")
+  conn.commit()
+  return redirect("http://wtranfer.wtechhk.xyz")
+
+
 @app.route("/wtech/v1/discordBuyin")
 def discord_buy_in():
   user = request.args.get("user")
