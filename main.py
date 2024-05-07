@@ -491,7 +491,7 @@ def wtech_stock_lookUp():
 def wtech_stock_add():
   good_name = request.form.get("good_name")
   amount = int(request.form.get("amount"))
-  good_number = "WT-" + random.randint(10199,901829)
+  good_number = "WT-" + str(random.randint(10199,901829))
   cur = conn.cursor()
   cur.execute(f"INSERT INTO goods (good_name,good_number,stock,status) VALUES ('{good_name}','{good_number}',{amount},'入貨中')")
   conn.commit()
