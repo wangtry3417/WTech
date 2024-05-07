@@ -381,6 +381,19 @@ def wtech_bank_db():
 def wtech_wcoins_card():
   return render_template("wcoins_card.html")
 
+@app.route("/wbank/v1/record")
+def wbank_read_record():
+  user = request.headers.get("user")
+  cur = conn.cursor()
+  cur.execute(f"select * from wbankrecord where username='{user}'")
+  rows = cur.fetchall()
+  for row in rows:
+    return jsonify({
+      "user" : row[0],
+      "action" : row[1],
+      "time" : row[2]
+    })
+
 @app.route("/wtech/v2/transfer")
 def wtech_transfer():
   code = request.args.get("code")
@@ -403,6 +416,11 @@ def wtech_transfer():
       cur.execute(f"""UPDATE wbankwallet
 SET balance={row[1]-data[2]}
 WHERE username='{data[0]}'""")
+      conn.commit()
+      bl = f"轉帳 {row[1]} 給 {data[1]}"
+      now = datetime.now()
+      current_time = now.strftime("%H:%M:%S")
+      cur.execute(f"INSERT INTO wbankrecord (username, action, time) VALUES ('{data[1]}', '{bl}', '{current_time}');")
       conn.commit()
       cur.execute(f"select * from wbankwallet where Username='{data[1]}'")
       cols = cur.fetchall()
