@@ -90,7 +90,12 @@
     <br>
     <br>
     <script>
-      fetch('https://wtech-5o6t.onrender.com/wbank/v1/record')
+      fetch('https://wtech-5o6t.onrender.com/wbank/v1/record', {
+        method: "GET",
+        headers: {
+          "user" : {user}
+        }
+      })
   .then(response => response.json())
   .then(data => {
     const goodsTable = document.getElementById('recordTable').querySelector('tbody');
