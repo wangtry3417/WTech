@@ -11,3 +11,4 @@ numpy
 PyQRCode
 flask_httpauth
 flask_cors
+pytz
