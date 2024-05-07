@@ -547,7 +547,7 @@ def wtech_stock_change_status():
 
 @app.route("/wtech/stock/change",methods=["GET","POST","DELETE"])
 def wtech_stock_change():
-  if request.method == "DELETE":
+  if request.method == "GET":
     good_number = request.args.get("good_number")
     cur = conn.cursor()
     cur.execute(f"DELETE from goods where good_number='{good_number}'")
