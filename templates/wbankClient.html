@@ -93,7 +93,7 @@
       fetch('https://wtech-5o6t.onrender.com/wbank/v1/record', {
         method: "GET",
         headers: {
-          "user" : `${user}`
+          "user" : "{{user}}"
         }
       })
   .then(response => response.json())
