@@ -487,6 +487,15 @@ def wtech_stock_lookUp():
     goods_list.append(data)
   return jsonify(goods_list)
 
+@app.route("/wtech/stock/add",methods=["GET","POST"])
+def wtech_stock_add():
+  good_name = request.form.get("good_name")
+  amount = int(request.form.get("amount"))
+  cur = conn.cursor()
+  cur.execute(f"INSERT INTO goods (good_name,good_number,stock,status VALUES ('{good_name}',{amount})")
+  conn.commit()
+  return redirect("http://wtranfer.wtechhk.xyz")
+
 @app.route("/wtech/v1/discordBuyin")
 def discord_buy_in():
   user = request.args.get("user")
