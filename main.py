@@ -547,7 +547,7 @@ def wtech_stock_change_status():
 
 @app.route("/wtech/stock/change",methods=["GET","POST","DELETE"])
 def wtech_stock_change():
-  if request.method == "GET":
+  if request.method == "DELETE":
     good_number = request.args.get("good_number")
     cur = conn.cursor()
     cur.execute(f"DELETE from goods where good_number='{good_number}'")
@@ -559,7 +559,7 @@ def wtech_stock_change():
     cur = conn.cursor()
     cur.execute(f"UPDATE goods set stock={good_count} where good_number='{good_number}'")
     conn.commit()
-    return redirect("http://wtranfer.wtechhk.xyz"
+    return redirect("http://wtranfer.wtechhk.xyz")
   else:
     return abort(405)
   
