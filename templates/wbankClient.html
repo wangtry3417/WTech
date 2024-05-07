@@ -98,14 +98,16 @@
       })
   .then(response => response.json())
   .then(data => {
+    for(let item of data) {
     const goodsTable = document.getElementById('recordTable').querySelector('tbody');
     const newRow = goodsTable.insertRow();
       const userCell = newRow.insertCell();
       const actionCell = newRow.insertCell();
       const timeCell = newRow.insertCell();
-      userCell.textContent = data["user"];
-      actionCell.textContent = data["action"];
-      timeCell.textContent = data["time"];
+      userCell.textContent = item.user;
+      actionCell.textContent = item.action;
+      timeCell.textContent = item.time;
+   }
   })
   .catch(error => console.error('錯誤:', error));
       const transfer = () => {
