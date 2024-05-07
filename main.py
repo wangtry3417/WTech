@@ -418,7 +418,7 @@ SET balance={row[1]-data[2]}
 WHERE username='{data[0]}'""")
       conn.commit()
       bl = f"轉帳 {row[1]} 給 {data[1]}"
-      now = datetime.now()
+      now = datatime.datetime.now()
       current_time = now.strftime("%H:%M:%S")
       cur.execute(f"INSERT INTO wbankrecord (username, action, time) VALUES ('{data[1]}', '{bl}', '{current_time}');")
       conn.commit()
