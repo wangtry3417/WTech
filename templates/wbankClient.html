@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>WBank -- {{user}} page</title>
+    <title>泓財WBank -- {{user}} 頁面</title>
     <link rel="manifest" href="{{ url_for('static',filename='wbank.json') }}">
     <link rel="stylesheet" href="{{ url_for('static',filename='menu.css') }}">
     <style>
@@ -61,18 +61,18 @@
     <button class="open-btn" onclick="openMenu()">選單</button>
     <center>
     <div id="top">
-       <h2>Welocme {{user}}</h2>
+       <h2>歡迎 {{user}}</h2>
       <br>
        <p>Your balance: WTC${{balance}}</p>
       <br>
       <br>
-      <button class="btn1" onclick="transfer()">Transfer</button>
+      <button class="btn1" onclick="transfer()">轉帳</button>
       <br>
-      <button class="btn1" onclick="buy()">Buy in (with paypal)</button>
+      <button class="btn1" onclick="buy()">用Paypal買入</button>
       <br>
-      <button class="btn1" onclick="bm()">Buy in(For the machine)</button>
+      <button class="btn1" onclick="bm()">以Wcoins ATM存入</button>
       <br>
-      <button class="btn1" onclick="sell()">Sell out (spend it)</button>
+      <button class="btn1" onclick="sell()">賣出或消費</button>
       <br>
       <br>
       <table id="recordTable">
