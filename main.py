@@ -404,6 +404,22 @@ WHERE username='{data[0]}'""")
 SET balance={col[1]+data[2]}
 WHERE username='{col[0]}'""")
         conn.commit()
+        prompt = f"""
+     轉帳方： {data[0]}
+     收款方： {col[0]}
+     金額: {data[2]}
+     狀態：成功✅
+    """
+        data = {
+        "embeds": [
+        {
+            "title": "Wcoins 轉帳通知",
+            "description": prompt,
+            "color": 65280,  # You can use hex color codes, this one is for blue
+        }
+    ]
+    }
+      r = requests.post(url="https://discord.com/api/webhooks/1236986178792853544/CuqsxhTUbZW6QgVAuyg23fU1FpkavEcEwsvpaMqA4jbdaYjQyUEFiFzV85jQhXNWNTzA",json=data)
       return jsonify({"Good news":"Success to transfer"})
   return "Cannot transfer it! check your code arg."
 
