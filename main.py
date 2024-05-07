@@ -498,7 +498,7 @@ def wtech_stock_add():
   return redirect("http://wtranfer.wtechhk.xyz")
 
 @app.route("/wtech/stock/changeStatus",methods=["GET","POST"])
-def wtech_stock_add():
+def wtech_stock_change_status():
   good_number = request.form.get("good_number")
   status = request.form.get("status")
   cur = conn.cursor()
