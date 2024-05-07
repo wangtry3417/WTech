@@ -383,16 +383,19 @@ def wtech_wcoins_card():
 
 @app.route("/wbank/v1/record")
 def wbank_read_record():
-  user = request.headers.get("user")
-  cur = conn.cursor()
-  cur.execute(f"select * from wbankrecord where username='{user}'")
-  rows = cur.fetchall()
-  for row in rows:
-    return jsonify({
-      "user" : row[0],
-      "action" : row[1],
-      "time" : row[2]
-    })
+    user = request.headers.get("user")
+    cur = conn.cursor()
+    cur.execute(f"select * from wbankrecord where username='{user}'")
+    rows = cur.fetchall()
+    result = []
+    for row in rows:
+        record = {
+            "user" : row[0],
+            "action" : row[1],
+            "time" : row[2]
+        }
+        result.append(record)
+    return jsonify(result)
 
 @app.route("/wtech/v2/transfer")
 def wtech_transfer():
