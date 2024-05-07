@@ -504,19 +504,19 @@ def wtech_stock_change_status():
   if status == "inside":
     statement = "入貨中"
     cur = conn.cursor()
-    cur.execute(f"UPDATE goods set status='{status}' where good_number='{good_number}'")
+    cur.execute(f"UPDATE goods set status='{statement}' where good_number='{good_number}'")
     conn.commit()
     return redirect("http://wtranfer.wtechhk.xyz")
   elif status == "in-here":
     statement = "存倉中"
     cur = conn.cursor()
-    cur.execute(f"UPDATE goods set status='{status}' where good_number='{good_number}'")
+    cur.execute(f"UPDATE goods set status='{statement}' where good_number='{good_number}'")
     conn.commit()
     return redirect("http://wtranfer.wtechhk.xyz")
   elif status == "outside":
     statement = "出貨中"
     cur = conn.cursor()
-    cur.execute(f"UPDATE goods set status='{status}' where good_number='{good_number}'")
+    cur.execute(f"UPDATE goods set status='{statement}' where good_number='{good_number}'")
     conn.commit()
     return redirect("http://wtranfer.wtechhk.xyz")
   else:
