@@ -170,7 +170,7 @@ def wtechStaff():
 
 @app.route("/wtech/v2/discord/bot")
 def wtech_discord_bot():
-  token = request.args.get("token")
+  token = request.headers.get("token")
   bot = discord.Bot()
   @bot.event
   async def on_ready():
