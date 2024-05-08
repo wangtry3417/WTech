@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>W Bank -- register page</title>
+    <title>W Bank -- 注册帳號頁面</title>
     <style>
       #top {
        width: 300px;
@@ -28,15 +28,27 @@
   </head>
   <body>
     <div id="top">
-       <h2>W Bank User Register</h2>
+       <h2>W Bank 用戶登記</h2>
        <form action="/wbank/v1/createUser" method="post">
+           <label>你的名字：</label>
            <input type="text" name="fname" placeholder="Fullname" required>
+           <br>
+           <label>你的身份證或證件號碼：</label>
            <input type="text" name="id" placeholder="Your id" required>
+           <br>
+           <label>用戶名稱：</label>
            <input type="text" name="user" placeholder="username" required>
+           <br>
+           <label>電郵地址：【只用於驗證帳號】</label>
            <input type="email" name="email" placeholder="email" required>
+           <br>
+           <label>密碼：</label>
            <input type="password" name="pw" placeholder="password" required>
            <br>
-           <button class="btn1" id="btn1">Register!</button>
+           <input type="checkbox" required>
+           <label>本人已知悉泓財銀行WBank 的相關條款。</label>
+           <br>
+           <button class="btn1" id="btn1">按此注册!</button>
       </form>
     </div>
     <br>
