@@ -12,3 +12,4 @@ PyQRCode
 flask_httpauth
 flask_cors
 pytz
+py-cord
