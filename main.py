@@ -188,16 +188,16 @@ def wtech_discord_bot():
     await ctx.respond(res)
     if not token:
         return jsonify({"Error": "Please enter a token!"})
-     else:
-        if len(token) > 20:
-          while True:
-            try:
-              bot.run(token)
-            except Exception as e:
-               return jsonify({"Error":e})
+    else:
+      if len(token) > 20:
+        while True:
+          try:
+            bot.run(token)
+          except Exception as e:
+            return jsonify({"Error":e})
           return "ok"
-        else:
-           return jsonify({"Token Error" : "Bot token invaild!"})
+      else:
+          return jsonify({"Token Error" : "Bot token invaild!"})
   
 
 @app.route("/wtech/v2/staffDashboard",methods=["POST"])
