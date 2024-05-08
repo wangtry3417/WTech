@@ -22,6 +22,8 @@ import base64
 from flask_httpauth import HTTPBasicAuth
 from werkzeug.security import generate_password_hash, check_password_hash
 import pytz
+from discord import Bot,Embed,Option
+import discord
 #from nltk.stem import WordNetLemmatizer
 #from nltk.book import *
 
@@ -165,6 +167,38 @@ def wtechVStaff():
 @app.route("/wtech/staff")
 def wtechStaff():
   return render_template("wtechStaff.html")
+
+@app.route("/wtech/v2/discord/bot")
+def wtech_discord_bot():
+  token = request.args.get("token")
+  bot = discord.Bot()
+  @bot.event
+  async def on_ready():
+     print("ok")
+  @bot.slash_command()
+  async def about(ctx):
+    e = Embed(title="about me",description="""Hello, I am made by wtech inc.
+              The link: http://wtechhk.xyz"
+              """)
+    await ctx.respond(embed=e)
+
+  @bot.slash_command(description="To google search",options=[Option(str,description="query",name="query")])
+  async def ggogle_search(ctx,query):
+    res = req.get(url=f"https://google.com/search?q={query}").content
+    await ctx.respond(res)
+    if not token:
+        return jsonify({"Error": "Please enter a token!"})
+     else:
+        if len(token) > 20:
+          while True:
+            try:
+              bot.run(token)
+            except Exception as e:
+               return jsonify({"Error":e})
+          return "ok"
+        else:
+           return jsonify({"Token Error" : "Bot token invaild!"})
+  
 
 @app.route("/wtech/v2/staffDashboard",methods=["POST"])
 def wtechStaffDB():
