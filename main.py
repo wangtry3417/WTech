@@ -421,7 +421,7 @@ def wtech_transfer():
 SET balance={row[1]-data[2]}
 WHERE username='{data[0]}'""")
       conn.commit()
-      bl = f"由 {data[0]} 轉帳 {row[1]} 給 {data[1]}"
+      bl = f"由 {data[0]} 轉帳 {data[2]} 給 {data[1]}"
       tz = pytz.timezone('Asia/Taipei')
       # 取得當前的 UTC 時間
       utc_time = datetime.datetime.now(pytz.timezone('UTC'))
