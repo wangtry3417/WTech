@@ -853,8 +853,8 @@ def wbank_verify():
     cur = conn.cursor()
     cur.execute(f"UPDATE wbankwallet set verify='yes' where username='{user}'")
     conn.commit()
-    return "Success to verify!."
-  return "Cannot assign the user detail!."
+    return "你的帳號已成功驗證"
+  return "無法驗證用戶信息，或者可能哈希值(hash-value)有誤，請聯繫我們。再一次致歉令您受到困擾🙏🥹！。"
 
 @app.route("/wbank/client",methods=["POST"])
 def wbank_client():
