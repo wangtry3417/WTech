@@ -74,7 +74,7 @@ def verify_password(username, password):
 @auth.error_handler
 def unauthorized():
     # return make_response(jsonify({'error': 'Unauthorized access'}), 401)
-    return make_response("沒有授權訪問", 403)
+    return make_response("沒有授權訪問")
 
 conn = psycopg2.connect(database="wbank", user="root", 
 password="r7wPtW1z6ltgw4oW8hW6qeIzJacfgwCM", host="dpg-cop0h6779t8c73fimlm0-a.singapore-postgres.render.com", 
