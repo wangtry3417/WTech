@@ -872,8 +872,7 @@ def wbank_client():
       else: 
         balance = row[1]
         return render_template("wbankClient.html",user=user,balance=balance)
-    else:
-      error_message = "找不到該用戶"
+    error_message = "找不到該用戶"
   return error_message
 
 @app.route("/wtech/v2/wbank/auth",methods=["GET","POST"])
