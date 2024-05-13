@@ -897,6 +897,7 @@ def wbank_login():
     return jsonify({"Error":"Cannot provided null username"})
 
 @app.route("/wtech/v2/checkBalance")
+@auth.login_required
 def user_balance():
   user = request.args.get("username")
   if user != "":
