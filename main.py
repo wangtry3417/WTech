@@ -863,16 +863,18 @@ def wbank_client():
   cur = conn.cursor()
   cur.execute("select * from wbankwallet")
   rows = cur.fetchall()
+  error_message = "找不到該用戶"
   for row in rows:
     if user == row[0]:
       if row[3] == "no":
         error_message = "你的帳號尚末驗證，請先查看你的電郵。"
+        break
       elif pw != row[2]:
         error_message = "密碼不正確"
+        break
       else: 
         balance = row[1]
         return render_template("wbankClient.html",user=user,balance=balance)
-    error_message = "找不到該用戶"
   return error_message
 
 @app.route("/wtech/v2/wbank/auth",methods=["GET","POST"])
