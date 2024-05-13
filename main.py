@@ -60,8 +60,8 @@ auth = HTTPBasicAuth()
 users = {
     "wangtry": generate_password_hash("Chan1234#"),
     "wtech": generate_password_hash("wtechStaff1234#"),
-    "wtechpass001": generate_password_hash("Asswfcx241;66456#"),
-    "wtechpass002": generate_password_hash("Assxct;:(6(56654#")
+    "wtechpass001": generate_password_hash("Asswfcx24166456#"),
+    "wtechpass002": generate_password_hash("Assxct656654#")
 }
 
 
