@@ -601,7 +601,7 @@ def wp_game_start():
         # 發牌
         player_hand = [game.deal_card(), game.deal_card()]
         dealer_hand = [game.deal_card(), game.deal_card()]
-        return render_template("twoOne.html",player_hand=player_hand,dealer_hand=dealer_hand,balance=balance)
+        return render_template("twoOne.html",player_hand=player_hand,dealer_hand=dealer_hand,balance=balance,user=user)
       return "Somethings is wrong!."
   except psycopg2.Error as e:
     conn.rollback()
@@ -619,14 +619,24 @@ def stand():
 # 對玩家下注
 @app.route('/bet', methods=['POST'])
 def bet():
-    bet_amount = request.form['bet_amount']
-    game.place_bet(int(bet_amount))  # 調用下注方法
-    return jsonify({'bet': game.bet, 'balance': game.player_chips})
+    user = request.headers.get("user")
+    cur = conn.cursor()
+    cur.execute(f"select * from worldplay where username='{user}'")
+    rows = cur.fetchall()
+    for row in rows:
+      bet_amount = request.form['bet_amount']
+      game.bet(int(bet_amount))  # 調用下注方法
+      return jsonify({'bet': game.bet, 'balance': row[1] - int(bet_amount)})
 # 玩家全下
 @app.route('/bet_all', methods=['POST'])
 def bet_all():
-    game.place_bet(game.player_chips)  # 將所有籌碼下注
-    return jsonify({'bet': game.bet, 'balance': game.player_chips})
+    user = request.headers.get("user")
+    cur = conn.cursor()
+    cur.execute(f"select * from worldplay where username='{user}'")
+    rows = cur.fetchall()
+    for row in rows:
+      game.bet(game.player_chips)  # 將所有籌碼下注
+      return jsonify({'bet': game.bet, 'balance': row[1] - row[1]})
 
 @app.route("/wbank")
 def wbank():
