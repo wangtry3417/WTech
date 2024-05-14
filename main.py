@@ -624,6 +624,9 @@ def bet():
     cur.execute(f"select * from worldplay where username='{user}'")
     rows = cur.fetchall()
     for row in rows:
+      cur = conn.cursor()
+      cur.execute(f"UPDATE worldplay set balance='{int(row[1]) - int(bet_amount)} where username='{user}'")
+      conn.commit()
       game.bet(int(bet_amount))  # 調用下注方法
       return jsonify({'bet': game.bet, 'balance': int(row[1]) - int(bet_amount)})
       
@@ -635,6 +638,9 @@ def bet_all():
     cur.execute(f"select * from worldplay where username='{user}'")
     rows = cur.fetchall()
     for row in rows:
+      cur = conn.cursor()
+      cur.execute(f"UPDATE worldplay set balance='{int(row[1]) - int(row[1])} where username='{user}'")
+      conn.commit()
       game.bet(game.player_chips)  # 將所有籌碼下注
       return jsonify({'bet': game.bet, 'balance': int(row[1]) - int(row[1])})
 
