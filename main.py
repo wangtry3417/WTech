@@ -536,7 +536,7 @@ def wp_buyIn():
   user = request.headers.get("name")
   balance = int(request.headers.get("balance"))
   cur = conn.cursor()
-  cur.execute(f"UPDATE worldplay set balance={balance} where username={user}")
+  cur.execute(f"UPDATE worldplay set balance={balance} where username='{user}'")
   conn.commit()
   return jsonify({"Done":"Almost Done!."})
 
