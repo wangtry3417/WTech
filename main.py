@@ -565,12 +565,16 @@ class Game:
         player_won = dealer_won = False
         if player_score > 21:
             dealer_won = True
+            self.reset()
         elif dealer_score > 21:
             player_won = True
+            self.reset()
         elif player_score > dealer_score:
             player_won = True
+            self.reset()
         elif dealer_score > player_score:
             dealer_won = True
+            self.reset()
         return player_won, dealer_won
 # 創建遊戲實例
 game = Game()
