@@ -526,7 +526,7 @@ def wp_user_db():
       if user == row[0]:
         balance = row[1]
         return render_template("worldPlay.html",user=user,balance=balance)
-      return "Somethings is wrong!."
+    return "Somethings is wrong!."
   except psycopg2.Error as e:
     conn.rollback()
     return f"Error: {e}"
