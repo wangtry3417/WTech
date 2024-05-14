@@ -514,6 +514,19 @@ def wtech_create_order():
   token = encrypted_data.decode()
   return jsonify({"code" : token})
 
+@app.route("/wp",methods=["GET","POST"])
+def wp_user_db():
+  user = request.form.get("username")
+  pw = request.form.get("password")
+  cur = conn.cursor()
+  cur.execute(f"select * from worldplay")
+  rows = cur.fetchall()
+  for row in rows:
+    if user == row[0]:
+      balance = row[1]
+      return render_template("worldPlay.html",user=user,balance=balance)
+    return "Somethings is wrong!." , 503
+
 @app.route("/wbank")
 def wbank():
   return render_template("wbank.html")
