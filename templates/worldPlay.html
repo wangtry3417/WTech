@@ -75,6 +75,7 @@
       var amount = document.getElementById("amount").value;
       var bl = parseInt('{{ balance }}',10);
       var ab = bl - parseInt(amount,10);
+      var bal = bl + parseInt(amount,10);
       var action = document.getElementById("action");
       if (action.value == "in") {
         alert("處理交易中");
@@ -94,7 +95,7 @@
         fetch('https://wtech-5o6t.onrender.com/wp/buyIn', {
     headers: {
       name: name,
-      balance: amount
+      balance: bal
     }
  });
         alert("您已成功操作 $" + amount);
