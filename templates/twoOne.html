@@ -32,6 +32,11 @@
         <h2 id="balance">你的餘額: {{balance}}</h2>
         <button id="hit-btn">抽牌</button>
         <button id="stand-btn">停牌</button>
+         <br>
+         <button onclick="placeBet(50)">$50 下注</button>
+    <button onclick="placeBet(500)">$500 下注</button>
+        <button onclick="placeBet(1000)">$1000 下注</button>
+    <button onclick="placeBetAll()">全部下注</button>
     </div>
     <script>
 document.getElementById('hit-btn').addEventListener('click', () => {
@@ -60,6 +65,26 @@ document.getElementById('stand-btn').addEventListener('click', () => {
         checkWinCondition(data);
     });
 });
+    function placeBet(amount) {
+            fetch('/bet', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ bet_amount: amount }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(`下注：${data.bet}，餘額：${data.balance}`);
+            });
+        }
+        function placeBetAll() {
+            fetch('/bet_all', { method: 'POST' })
+            .then(response => response.json())
+            .then(data => {
+                alert(`下注：${data.bet}，餘額：${data.balance}`);
+            });
+        }
 function checkWinCondition(data) {
     if (data.player_won) alert('你贏了！')
     else if (data.dealer_won) alert('莊家贏了！')
