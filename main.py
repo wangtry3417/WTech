@@ -519,13 +519,22 @@ def wp_user_db():
   user = request.form.get("username")
   pw = request.form.get("password")
   cur = conn.cursor()
-  cur.execute(f"select * from worldplay")
+  cur.execute("select * from worldplay")
   rows = cur.fetchall()
   for row in rows:
     if user == row[0]:
       balance = row[1]
       return render_template("worldPlay.html",user=user,balance=balance)
     return "Somethings is wrong!." , 503
+
+@app.route("wp/buyIn")
+def wp_buyIn():
+  user = request.headers.get("name")
+  balance = int(request.headers.get("balance"))
+  cur = conn.cursor()
+  cur.execute(f"UPDATE worldplay set balance={balance} where username={user}")
+  conn.commit()
+  return jsonify({"Done":"Almost Done!."})
 
 @app.route("/wbank")
 def wbank():
