@@ -636,7 +636,7 @@ def bet_all():
     rows = cur.fetchall()
     for row in rows:
       game.bet(game.player_chips)  # 將所有籌碼下注
-      return jsonify({'bet': game.bet, 'balance': int(row[1] - int(row[1])})
+      return jsonify({'bet': game.bet, 'balance': int(row[1]) - int(row[1])})
 
 @app.route("/wbank")
 def wbank():
