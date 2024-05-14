@@ -620,11 +620,11 @@ def stand():
 @app.route('/bet', methods=['POST'])
 def bet():
     user = request.headers.get("user")
+    bet_amount = request.form['bet_amount']
     cur = conn.cursor()
     cur.execute(f"select * from worldplay where username='{user}'")
     rows = cur.fetchall()
     for row in rows:
-      bet_amount = request.form['bet_amount']
       game.bet(int(bet_amount))  # 調用下注方法
       return jsonify({'bet': game.bet, 'balance': int(row[1]) - int(bet_amount)})
 # 玩家全下
