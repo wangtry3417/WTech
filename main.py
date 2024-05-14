@@ -540,6 +540,37 @@ def wp_buyIn():
   conn.commit()
   return jsonify({"Done":"Almost Done!."})
 
+class Game:
+    def __init__(self):
+        self.reset()
+    def reset(self):
+        self.deck = [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11] * 4
+        random.shuffle(self.deck)
+    def deal_card(self):
+        return self.deck.pop() if self.deck else self.reset()
+# 創建遊戲實例
+game = Game()
+
+@app.route("/wp/twoOne/start")
+def wp_game_start():
+  user = request.args.get("user")
+  try:
+    cur.execute("select * from worldplay")
+    rows = cur.fetchall()
+    for row in rows:
+      if user == row[0]:
+        balance = row[1]
+        # 初始化遊戲
+        game.reset()
+        # 發牌
+        player_hand = [game.deal_card(), game.deal_card()]
+        dealer_hand = [game.deal_card(), game.deal_card()]
+        return render_template("twoOne.html",player_hand=player_hand,dealer_hand=dealer_hand,balance=balance)
+      return "Somethings is wrong!."
+  except psycopg2.Error as e:
+    conn.rollback()
+    return f"Error: {e}"
+
 @app.route("/wbank")
 def wbank():
   return render_template("wbank.html")
