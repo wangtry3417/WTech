@@ -22,6 +22,19 @@
       #userinfo {
         margin-bottom: 50px;
       }
+        #depoWithdrawWin {
+      display: none;
+      position: fixed;
+      width: 300px;
+      height: 200px;
+      top: 50%;
+      left: 50%;
+      margin-top: -100px;
+      margin-left: -150px;
+      background-color: #f1f1f1;
+      border: 1px solid #888;
+      padding: 20px;
+    }
     </style>
     <script>
       // 你可以在這裡加入JavaScript代碼來實現21點遊戲的邏輯
@@ -29,23 +42,33 @@
   </head>
   <body>
     <div id="userinfo">
-      <h2 id="username">{{ user }}</h2>
-      <h3 id="balance">{{ balance }}</h3>
+      <h2 id="username"></h2>
+      <h3 id="balance"></h3>
     </div>
     <div id="game">
       <!-- 21點遊戲的html部分 -->
     </div>
-    <button class="btn" onclick="deposit()">存款</button>
-    <button class="btn" onclick="withdraw()">取款</button>
+    <div id="depoWithdrawWin">
+    <label for="amount">金額:</label><br>
+    <input type="number" id="amount" name="amount"><br>
+    <button class="btn" onclick="confirmDepoWithdraw()">確認</button>
+    <button class="btn" onclick="closeDepoWithdrawWin()">關閉</button>
+  </div>
+    <button class="btn" onclick="openDepoWithdrawWin()">存款 / 取款</button>
     <script>
-      document.getElementById("username").innerHTML = "用戶名: " + user;
-      document.getElementById("balance").innerHTML = "餘額: " + balance + " wcoins";
-      function deposit() {
-        // 存款的邏輯
-      }
-      function withdraw() {
-        // 取款的邏輯
-      }
+      document.getElementById("username").innerHTML = "用戶名: " + '{{ user }}';
+      document.getElementById("balance").innerHTML = "餘額: " + '{{ balance }}'+ " 籌碼";
+      function openDepoWithdrawWin() {
+      document.getElementById("depoWithdrawWin").style.display = "block";
+    }
+    function closeDepoWithdrawWin() {
+      document.getElementById("depoWithdrawWin").style.display = "none";
+    }
+    function confirmDepoWithdraw() {
+      var amount = document.getElementById("amount").value;
+      alert("您已成功操作 $" + amount);
+      closeDepoWithdrawWin();
+    }
     </script>
   </body>
 </html>
