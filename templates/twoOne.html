@@ -65,6 +65,7 @@ document.getElementById('stand-btn').addEventListener('click', () => {
         checkWinCondition(data);
     });
 });
+    var user = "{{ user }}"
     function placeBet(amount) {
             fetch('/bet', {
                 method: 'POST',
