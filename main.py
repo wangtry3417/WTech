@@ -641,7 +641,7 @@ def bet_all():
       cur = conn.cursor()
       cur.execute(f"UPDATE worldplay set balance='{int(row[1]) - int(row[1])} where username='{user}'")
       conn.commit()
-      game.bet(game.player_chips)  # 將所有籌碼下注
+      #game.bet(game.player_chips)  # 將所有籌碼下注
       return jsonify({'bet': game.bet, 'balance': int(row[1]) - int(row[1])})
 
 @app.route("/wbank")
