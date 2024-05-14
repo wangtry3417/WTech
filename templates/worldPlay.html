@@ -62,6 +62,15 @@
   </div>
     <button class="btn" onclick="openDepoWithdrawWin()">存款 / 取款</button>
     <script>
+      function sleep(time){
+ var timeStamp = new Date().getTime();
+ var endTime = timeStamp + time;
+ while(true){
+ if (new Date().getTime() > endTime){
+  return;
+ } 
+ }
+}
       document.getElementById("username").innerHTML = "用戶名: " + '{{ user }}';
       document.getElementById("balance").innerHTML = "餘額: " + '{{ balance }}'+ " 籌碼";
       function openDepoWithdrawWin() {
@@ -98,6 +107,7 @@
       balance: bal
     }
  });
+        sleep(3000);
         alert("您已成功操作 $" + amount);
         closeDepoWithdrawWin();
       } else {
@@ -121,6 +131,7 @@
       balance: ab
     }
  });
+        sleep(3000);
         alert("您已成功操作 $" + amount);
         closeDepoWithdrawWin();
       }
