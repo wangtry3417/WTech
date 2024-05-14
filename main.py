@@ -546,8 +546,32 @@ class Game:
     def reset(self):
         self.deck = [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11] * 4
         random.shuffle(self.deck)
+        self.player_hand = [self.deal_card(), self.deal_card()]
+        self.dealer_hand = [self.deal_card(), self.deal_card()]
     def deal_card(self):
         return self.deck.pop() if self.deck else self.reset()
+    def hit(self):
+        self.player_hand.append(self.deal_card())
+    def stand(self):
+        while sum(self.dealer_hand) < 17:
+            self.dealer_hand.append(self.deal_card())
+    def get_player_hand(self):
+        return self.player_hand
+    def get_dealer_hand(self):
+        return self.dealer_hand
+    def check_win(self):
+        player_score = sum(self.get_player_hand())
+        dealer_score = sum(self.get_dealer_hand())
+        player_won = dealer_won = False
+        if player_score > 21:
+            dealer_won = True
+        elif dealer_score > 21:
+            player_won = True
+        elif player_score > dealer_score:
+            player_won = True
+        elif dealer_score > player_score:
+            dealer_won = True
+        return player_won, dealer_won
 # 創建遊戲實例
 game = Game()
 
