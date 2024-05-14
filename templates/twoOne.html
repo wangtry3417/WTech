@@ -80,7 +80,7 @@ document.getElementById('stand-btn').addEventListener('click', () => {
             });
         }
         function placeBetAll() {
-            fetch('/bet_all', { method: 'POST' ,headers: {'user' : '{{ user }}'})
+            fetch('/bet_all', { method: 'POST' ,headers: {'user' : `${user}`})
             .then(response => response.json())
             .then(data => {
                 alert(`下注：${data.bet}，餘額：${data.balance}`);
