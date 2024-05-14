@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>21點遊戲</title>
+    <style>
+        body {
+            background-color: green;
+            text-align: center;
+        }
+        #game {
+            display: inline-block;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        h2 {
+            border: 1px solid black;
+            padding: 10px;
+            display: inline-block;
+            margin: 10px;
+        }
+        button {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="game">
+        <h1>21點遊戲</h1>
+        <h2 id="player-hand">你的牌: {{player_hand}}</h2>
+        <h2 id="dealer-hand">莊家的牌: {{dealer_hand[0]}}</h2>
+        <h2 id="balance">你的餘額: {{balance}}</h2>
+        <button id="hit-btn">抽牌</button>
+        <button id="stand-btn">停牌</button>
+    </div>
+    <script>
+document.getElementById('hit-btn').addEventListener('click', () => {
+    fetch('/hit', {
+      method: 'POST', 
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({action: 'hit'}) 
+    }).then(response => response.json())
+    .then(data => {
+        document.getElementById('player-hand').textContent = `你的牌: ${data.player_hand}`;
+        checkWinCondition(data);
+    });
+});
+document.getElementById('stand-btn').addEventListener('click', () => {
+    fetch('/stand', {
+      method: 'POST', 
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({action: 'stand'}) 
+    }).then(response => response.json())
+    .then(data => {
+        document.getElementById('dealer-hand').textContent = `莊家的牌: ${data.dealer_hand.join(', ')}`;
+        checkWinCondition(data);
+    });
+});
+function checkWinCondition(data) {
+    if (data.player_won) alert('你贏了！')
+    else if (data.dealer_won) alert('莊家贏了！')
+}
+</script>
+</body>
+</html>
