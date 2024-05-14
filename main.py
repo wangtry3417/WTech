@@ -571,6 +571,15 @@ def wp_game_start():
     conn.rollback()
     return f"Error: {e}"
 
+@app.route('/hit', methods=['POST'])
+def hit():
+    game.hit()
+    return jsonify({'player_hand': game.get_player_hand(), 'player_won': game.check_win()})
+@app.route('/stand', methods=['POST'])
+def stand():
+    game.stand()
+    return jsonify({'dealer_hand': game.get_dealer_hand(), 'dealer_won': game.check_win()})
+
 @app.route("/wbank")
 def wbank():
   return render_template("wbank.html")
