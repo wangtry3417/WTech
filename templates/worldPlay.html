@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>世遊娛樂城</title>
+    <style>
+      body {
+        background-color: white;
+        color: black;
+        font-family: Arial, sans-serif;
+      }
+      .btn {
+        background-color: blue;
+        color: white;
+        border: none;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        margin: 10px 2px;
+        cursor: pointer;
+      }
+      #userinfo {
+        margin-bottom: 50px;
+      }
+    </style>
+    <script>
+      // 你可以在這裡加入JavaScript代碼來實現21點遊戲的邏輯
+    </script>
+  </head>
+  <body>
+    <div id="userinfo">
+      <h2 id="username">{{ user }}</h2>
+      <h3 id="balance">{{ balance }}</h3>
+    </div>
+    <div id="game">
+      <!-- 21點遊戲的html部分 -->
+    </div>
+    <button class="btn" onclick="deposit()">存款</button>
+    <button class="btn" onclick="withdraw()">取款</button>
+    <script>
+      document.getElementById("username").innerHTML = "用戶名: " + user;
+      document.getElementById("balance").innerHTML = "餘額: " + balance + " wcoins";
+      function deposit() {
+        // 存款的邏輯
+      }
+      function withdraw() {
+        // 取款的邏輯
+      }
+    </script>
+  </body>
+</html>
