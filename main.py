@@ -600,7 +600,7 @@ def wp_game_start():
         # 發牌
         player_hand = [game.deal_card(), game.deal_card()]
         dealer_hand = [game.deal_card(), game.deal_card()]
-      return render_template("twoOne.html",player_hand=player_hand,dealer_hand=dealer_hand,balance=balance,user=user)
+        return render_template("twoOne.html",player_hand=player_hand,dealer_hand=dealer_hand,balance=balance,user=user)
     return "Somethings is wrong!."
   except psycopg2.Error as e:
     conn.rollback()
