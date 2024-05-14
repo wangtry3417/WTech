@@ -626,7 +626,7 @@ def bet():
     for row in rows:
       bet_amount = request.form['bet_amount']
       game.bet(int(bet_amount))  # 調用下注方法
-      return jsonify({'bet': game.bet, 'balance': row[1] - int(bet_amount)})
+      return jsonify({'bet': game.bet, 'balance': int(row[1]) - int(bet_amount)})
 # 玩家全下
 @app.route('/bet_all', methods=['POST'])
 def bet_all():
@@ -636,7 +636,7 @@ def bet_all():
     rows = cur.fetchall()
     for row in rows:
       game.bet(game.player_chips)  # 將所有籌碼下注
-      return jsonify({'bet': game.bet, 'balance': row[1] - row[1]})
+      return jsonify({'bet': game.bet, 'balance': int(row[1] - int(row[1])})
 
 @app.route("/wbank")
 def wbank():
