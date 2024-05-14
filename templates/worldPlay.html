@@ -96,8 +96,7 @@
       name: name,
       balance: amount
     }
- })
-  .then(response => response.json())
+ });
         alert("您已成功操作 $" + amount);
         closeDepoWithdrawWin();
       } else {
@@ -120,8 +119,7 @@
       name: name,
       balance: ab
     }
- })
-  .then(response => response.json())
+ });
         alert("您已成功操作 $" + amount);
         closeDepoWithdrawWin();
       }
