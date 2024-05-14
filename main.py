@@ -616,6 +616,18 @@ def stand():
     game.stand()
     return jsonify({'dealer_hand': game.get_dealer_hand(), 'dealer_won': game.check_win()})
 
+# 對玩家下注
+@app.route('/bet', methods=['POST'])
+def bet():
+    bet_amount = request.form['bet_amount']
+    game.place_bet(int(bet_amount))  # 調用下注方法
+    return jsonify({'bet': game.bet, 'balance': game.player_chips})
+# 玩家全下
+@app.route('/bet_all', methods=['POST'])
+def bet_all():
+    game.place_bet(game.player_chips)  # 將所有籌碼下注
+    return jsonify({'bet': game.bet, 'balance': game.player_chips})
+
 @app.route("/wbank")
 def wbank():
   return render_template("wbank.html")
