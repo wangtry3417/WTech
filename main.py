@@ -545,16 +545,24 @@ class Game:
         self.reset()
     def reset(self):
         self.deck = [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11] * 4
-        random.shuffle(self.deck)
         self.player_hand = [self.deal_card(), self.deal_card()]
         self.dealer_hand = [self.deal_card(), self.deal_card()]
+        self.player_chips = 100  # 讓玩家在開始時有100個籌碼
+        self.bet = 10  # 預設的下注籌碼為10
     def deal_card(self):
         return self.deck.pop() if self.deck else self.reset()
+    def bet(self, amount):
+        self.bet = amount
+        self.player_chips -= self.bet
     def hit(self):
         self.player_hand.append(self.deal_card())
     def stand(self):
         while sum(self.dealer_hand) < 17:
             self.dealer_hand.append(self.deal_card())
+        player_won, dealer_won = self.check_win()
+        # 如果玩家贏了，他會贏得一定比例的賭金
+        if player_won:
+            self.player_chips += self.bet * 2
     def get_player_hand(self):
         return self.player_hand
     def get_dealer_hand(self):
@@ -565,17 +573,16 @@ class Game:
         player_won = dealer_won = False
         if player_score > 21:
             dealer_won = True
-            self.reset()
         elif dealer_score > 21:
             player_won = True
-            self.reset()
         elif player_score > dealer_score:
             player_won = True
-            self.reset()
         elif dealer_score > player_score:
             dealer_won = True
-            self.reset()
         return player_won, dealer_won
+    def all_in(self):
+        self.bet(self.player_chips)
+      
 # 創建遊戲實例
 game = Game()
 
