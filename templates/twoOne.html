@@ -22,6 +22,42 @@
         button {
             margin-top: 20px;
         }
+        #hit-btn {
+           background-color: rgb(0,255,0);
+           color: rgb(255,255,255);
+           padding: 23px 24px;
+           font-size: 26px;
+        }
+        #stand-btn {
+           background-color: rgb(255,0,0);
+           color: rgb(255,255,255);
+           padding: 23px 24px;
+           font-size: 26px;
+        }
+        #fif {
+           background-color: rgb(149,150,188);
+           color: rgb(255,255,255);
+           padding: 25px 24px;
+           font-size: 26px;
+        }
+        #five {
+           background-color: rgb(189,183,107);
+           color: rgb(255,255,255);
+           padding: 23px 24px;
+           font-size: 26px;
+        }
+        #tt {
+           background-color: rgb(53,43,43);
+           color: rgb(255,255,255);
+           padding: 23px 24px;
+           font-size: 26px;
+        }
+        #all-in {
+           background-color: rgb(0,0,0);
+           color: rgb(255,255,255);
+           padding: 23px 24px;
+           font-size: 26px;
+        }
     </style>
 </head>
 <body>
@@ -33,10 +69,10 @@
         <button id="hit-btn">抽牌</button>
         <button id="stand-btn">停牌</button>
          <br>
-        <button onclick="placeBet(50)">$50 下注</button>
-    <button onclick="placeBet(500)">$500 下注</button>
-        <button onclick="placeBet(1000)">$1000 下注</button>
-    <button onclick="placeBetAll()">全部下注</button>
+        <button id="fif" onclick="placeBet(50)">$50 下注</button>
+    <button id="five" onclick="placeBet(500)">$500 下注</button>
+        <button id="tt" onclick="placeBet(1000)">$1000 下注</button>
+    <button id="all-in" onclick="placeBetAll()">全部下注</button>
     </div>
     <script>
 document.getElementById('hit-btn').addEventListener('click', () => {
