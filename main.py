@@ -555,6 +555,7 @@ game = Game()
 def wp_game_start():
   user = request.args.get("user")
   try:
+    cur = conn.cursor()
     cur.execute("select * from worldplay")
     rows = cur.fetchall()
     for row in rows:
