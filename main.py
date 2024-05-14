@@ -519,13 +519,17 @@ def wp_user_db():
   user = request.form.get("username")
   pw = request.form.get("password")
   cur = conn.cursor()
-  cur.execute("select * from worldplay")
-  rows = cur.fetchall()
-  for row in rows:
-    if user == row[0]:
-      balance = row[1]
-      return render_template("worldPlay.html",user=user,balance=balance)
-    return "Somethings is wrong!." , 503
+  try:
+    cur.execute("select * from worldplay")
+    rows = cur.fetchall()
+    for row in rows:
+      if user == row[0]:
+        balance = row[1]
+        return render_template("worldPlay.html",user=user,balance=balance)
+      return "Somethings is wrong!." , 503
+  except psycopg2.Error as e:
+    conn.rollback()
+    return f"Error: {e}"
 
 @app.route("/wp/buyIn")
 def wp_buyIn():
