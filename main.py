@@ -527,7 +527,7 @@ def wp_user_db():
       return render_template("worldPlay.html",user=user,balance=balance)
     return "Somethings is wrong!." , 503
 
-@app.route("wp/buyIn")
+@app.route("/wp/buyIn")
 def wp_buyIn():
   user = request.headers.get("name")
   balance = int(request.headers.get("balance"))
