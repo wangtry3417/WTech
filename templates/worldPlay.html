@@ -72,6 +72,8 @@
     function confirmDepoWithdraw() {
       var name = document.getElementById("name").value;
       var amount = document.getElementById("amount").value;
+      var bl = parseInt('{{ balance }}',10);
+      var ab = bl - parseInt(amount,10);
       var action = document.getElementById("action");
       if (action.value == "in") {
           fetch('https://wtech-5o6t.onrender.com/wtech/v2/createOrder', {
@@ -91,6 +93,29 @@
     headers: {
       name: name,
       balance: amount
+    }
+ })
+  .then(response => response.json())
+        alert("您已成功操作 $" + amount);
+        closeDepoWithdrawWin();
+      } else {
+        fetch('https://wtech-5o6t.onrender.com/wtech/v2/createOrder', {
+    headers: {
+      Username: 'wbank',
+      reviewer: name,
+      Value: amount
+    }
+ })
+  .then(response => response.json())
+  .then(data => {
+    token = data.code; // 從第一個請求的響應中取得 "code"
+    return fetch(`https://wtech-5o6t.onrender.com/wtech/v2/transfer?code=${token}`);
+  })
+  .then(response => response.json());
+        fetch('https://wtech-5o6t.onrender.com/wp/buyIn', {
+    headers: {
+      name: name,
+      balance: ab
     }
  })
   .then(response => response.json())
