@@ -75,10 +75,12 @@
     <button id="all-in" onclick="placeBetAll()">全部下注</button>
     </div>
     <script>
+        var user = "{{ user }}";
 document.getElementById('hit-btn').addEventListener('click', () => {
     fetch('/hit', {
       method: 'POST', 
       headers: {
+          'user' : `${user}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({action: 'hit'}) 
@@ -92,6 +94,7 @@ document.getElementById('stand-btn').addEventListener('click', () => {
     fetch('/stand', {
       method: 'POST', 
       headers: {
+          'user' : `${user}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({action: 'stand'}) 
@@ -101,7 +104,6 @@ document.getElementById('stand-btn').addEventListener('click', () => {
         checkWinCondition(data);
     });
 });
-    var user = "{{ user }}";
     function placeBet(amount) {
             fetch('/bet', {
                 method: 'POST',
