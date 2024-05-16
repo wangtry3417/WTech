@@ -1,1 +1,82 @@
-
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>世遊娛樂城</title>
+    <style>
+      body {
+        background-color: white;
+        color: black;
+        font-family: Arial, sans-serif;
+      }
+      .btn {
+        background-color: blue;
+        color: white;
+        border: none;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        margin: 10px 2px;
+        cursor: pointer;
+      }
+      #userinfo {
+        margin-bottom: 50px;
+      }
+        #depoWithdrawWin {
+      display: none;
+      position: fixed;
+      width: 300px;
+      height: 200px;
+      top: 50%;
+      left: 50%;
+      margin-top: -100px;
+      margin-left: -150px;
+      background-color: #f1f1f1;
+      border: 1px solid #888;
+      padding: 20px;
+    }
+     #btn {
+        background-color: rgb(0,0,255);
+        color: rgb(355,255,255),
+        padding: 21px 25px;
+        font-size: 25px;
+     }
+    </style>
+    <script>
+      // 你可以在這裡加入JavaScript代碼來實現21點遊戲的邏輯
+    </script>
+  </head>
+  <body>
+    <div id="userinfo">
+      <h3 id="balance"></h3>
+    </div>
+   <br>
+    <div id="game">
+      <!-- 遊戲的html部分 -->
+      <button id="btn" onclick="start()">開始猜</button>
+    </div>
+    <script>
+      function sleep(time){
+ var timeStamp = new Date().getTime();
+ var endTime = timeStamp + time;
+ while(true){
+ if (new Date().getTime() > endTime){
+  return;
+ } 
+ }
+}
+   document.getElementById("balance").innerHTML = "你的餘額: " + "{{ balance }}";
+    function start() {
+        fetch("/wp/luck", {
+          headers: {
+            "user" : "{{ user }}"
+          }
+        })
+        .then(res => res.json())
+        .then(data => {
+            alert(data.result);
+        });
+    }
+    </script>
+  </body>
+</html>
