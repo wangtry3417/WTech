@@ -587,7 +587,27 @@ game = Game()
 
 @app.route("/wp/luck")
 def wp_game_start():
-  user = request.args.get("user")
+  user = request.headers.get("user")
+  try:
+    cur = conn.cursor()
+    cur.execute("select * from worldplay")
+    rows = cur.fetchall()
+    for row in rows:
+      if user == row[0]:
+        balance = row[1]
+        s1 = random.randint(101,13690876)
+        cur = conn.cursor()
+        cur.execute(f"UPDATE worldplay set balance='{s1}' where username='{user}'")
+        conn.commit()
+        return jsonify({"result":s1})
+    return "Somethings is wrong!."
+  except psycopg2.Error as e:
+    conn.rollback()
+    return f"Error: {e}"
+
+@app.route("/wp/luck/start")
+def wp_game_start():
+  user = request.headers.get("user")
   try:
     cur = conn.cursor()
     cur.execute("select * from worldplay")
