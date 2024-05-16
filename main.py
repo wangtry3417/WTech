@@ -608,11 +608,27 @@ def wp_game_start():
 
 @app.route('/hit', methods=['POST'])
 def hit():
+    user = request.headers.get("user")
     game.hit()
+    cur = conn.cursor()
+    cur.execute(f"select * from worldplay where username='{user}'")
+    rows = cur.fetchall()
+    for row in rows:
+      cur = conn.cursor()
+      cur.execute(f"UPDATE worldplay set balance='{int(row[1]) + 200}' where username='{user}'")
+      conn.commit()
     return jsonify({'player_hand': game.get_player_hand(), 'player_won': game.check_win()})
 @app.route('/stand', methods=['POST'])
 def stand():
+    user = request.headers.get("user")
     game.stand()
+    cur = conn.cursor()
+    cur.execute(f"select * from worldplay where username='{user}'")
+    rows = cur.fetchall()
+    for row in rows:
+      cur = conn.cursor()
+      cur.execute(f"UPDATE worldplay set balance='{int(row[1]) - 200}' where username='{user}'")
+      conn.commit()
     return jsonify({'dealer_hand': game.get_dealer_hand(), 'dealer_won': game.check_win()})
 
 # 對玩家下注
