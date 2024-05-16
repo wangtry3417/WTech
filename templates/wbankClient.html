@@ -101,7 +101,7 @@
   </center>
     <center>
     <div class="footer">
-  <p id="toHome"> <img src="{{ url_for('static',filename='IMG_9730.jpeg') }}" alt="home-page" width="10" height="15"/> <br>主頁</p>
+  <p id="toHome"> <img src="{{ url_for('static',filename='IMG_9730.jpeg') }}" alt="home-page" width="20" height="30"/> <br>主頁</p>
   <p id="toP2P">  P2P轉帳</p> 
   <p id="toAtm">  ATM存入</p>
   <p id="toPay">  消費或支付</p>
@@ -168,6 +168,20 @@ const returnAlert = () => {
         popup.style.display = 'none'; /* 點擊按鈕後，將 display 設回為 none */
     });
       };
+      document.getElementById("toHome").addEventListener("click",() => {
+          window.reload();
+      });
+      document.getElementById("toP2P").addEventListener("click",() => {
+          window.location.href="/wbank/transfer";
+      });
+      document.getElementById("toAtm").addEventListener("click",() => {
+          let user = '{{ user }}';
+        window.location.href="/wbank/buyCoins?user="+user;
+      });
+      document.getElementById("toPay").addEventListener("click",() => {
+          let user = '{{ user }}';
+        window.location.href="/wbank/sellCoins?user="+user;
+      });
     </script>
   </body>
 </html>
