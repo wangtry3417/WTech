@@ -607,7 +607,7 @@ def wp_luck():
 
 @app.route("/wp/luck/start")
 def wp_luck_start():
-  user = request.headers.get("user")
+  user = request.args.get("user")
   try:
     cur = conn.cursor()
     cur.execute("select * from worldplay")
