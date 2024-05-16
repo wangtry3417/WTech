@@ -586,7 +586,7 @@ class Game:
 game = Game()
 
 @app.route("/wp/luck")
-def wp_game_start():
+def wp_luck():
   user = request.headers.get("user")
   try:
     cur = conn.cursor()
@@ -606,7 +606,7 @@ def wp_game_start():
     return f"Error: {e}"
 
 @app.route("/wp/luck/start")
-def wp_game_start():
+def wp_luck_start():
   user = request.headers.get("user")
   try:
     cur = conn.cursor()
