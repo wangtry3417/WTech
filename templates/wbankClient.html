@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="{{ url_for('static',filename='menu.css') }}">
     <style>
       #top {
-       width: 300px;
+       width: 2000px;
        margin: auto;
        background-color: #fff;
        padding: 20px;
@@ -108,10 +108,10 @@
       <br>
       <br>
     <div id="fuc1">
-      <p class="p2p"><img src="{{ url_for('static',filename='IMG_9741.jpeg') }}" alt="p2p" width="20" height="25"><br>P2P轉帳</button>
-      <p class="paypal">用Paypal買入</button>
-      <p class="atm">以Wcoins ATM存入</button>
-      <p class="spend-out">賣出或消費</button>
+      <p id ="p2p" class="p2p"><img src="{{ url_for('static',filename='IMG_9741.jpeg') }}" alt="p2p" width="30" height="35"><br>P2P轉帳</button>
+      <p id="pp" class="paypal"><img src="{{ url_for('static',filename='IMG_9742.jpeg') }}" alt="paypal" width="30" height="35"><br>用Paypal買入</button>
+      <p id="atm" class="atm"><img src="{{ url_for('static',filename='IMG_9743.png') }}" alt="atm" width="30" height="35"><br>以Wcoins ATM存入</button>
+      <p id="so" class="spend-out"><img src="{{ url_for('static',filename='IMG_9744.png') }}" alt="spend-out" width="30" height="35"><br>賣出或消費</button>
     </div>
       <br>
       <table id="recordTable">
@@ -208,6 +208,18 @@ const returnAlert = () => {
       document.getElementById("toPay").addEventListener("click",() => {
           let user = '{{ user }}';
         window.location.href="/wbank/sellCoins?user="+user;
+      });
+      document.getElementById("p2p").addEventListener("click",() => {
+        return transfer();
+      });
+      document.getElementById("pp").addEventListener("click",() => {
+        return buy();
+      });
+      document.getElementById("p2p").addEventListener("click",() => {
+        return bm();
+      });
+      document.getElementById("p2p").addEventListener("click",() => {
+        return sell();
       });
     </script>
   </body>
