@@ -106,7 +106,7 @@ def error_server(e):
     "status_code(https)" : 500,
     "status_code(wtps)" : 407,
     "server hint" : "carefully and try again!",
-    "error_detail" : e
+    "error_detail" : str(e)
   })
 
 @app.route("/")
