@@ -66,7 +66,7 @@
         <br>
         <li><a href="{{ url_for('wtechAbout') }}" class="about">關於</a></li>
         <br>
-        <li><a onclick="returnAlert()" class="login">登入</a></li>
+        <li><a onclick="returnAlert()" class="wbank">泓財銀行WBank</a></li>
         </ul>
     </div>
     <button class="open-btn" onclick="openMenu()">選單</button>
@@ -93,15 +93,7 @@ function closeMenu() {
     openBtn.style.display = "block";
 }
 const returnAlert = () => {
-        var popup = document.getElementById('warn');
-         popup.style.display = 'block'; 
-    popup.querySelector('button').addEventListener('click', function() {
-      var button = document.getElementById("myButton");
-        button.innerHTML = "...";
-    popup.style.animationDuration = "1s";
-    popup.style.animationName = "dots";
-        popup.style.display = 'none'; /* 點擊按鈕後，將 display 設回為 none */
-    });
+        window.location.href="http://bank.wtechhk.xyz";
       };
     </script>
     <br>
