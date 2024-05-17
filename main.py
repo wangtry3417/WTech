@@ -123,7 +123,7 @@ def index():
       return redirect("/wtech/bockweb?place=tw")
       return render_template("wtechHome.html")
   else:
-    return abort(502)
+    return render_template("wtechHome.html")
 
 @app.route("/wtech/chat")
 def wtechChat():
