@@ -20,8 +20,8 @@
       border-radius: 5px;
       }
       .btn1 {
-        background-color: #2e3c4d;
-        color: rgb(255,255,255);
+        background-color: rgb(255,255,255);
+        color: rgb(0,0,0);
         padding: 12px 14px;
         font-size: 13px;
       }
@@ -55,6 +55,33 @@
    text-align: center;
    display: flex;
 }
+  #fuc1 {
+    display: flex;
+  }
+  .p2p {
+    background-color: rgb(255,255,255);
+        color: rgb(0,0,0);
+        padding: 12px 14px;
+        font-size: 13px;
+  }
+  .paypal {
+   background-color: rgb(255,255,255);
+        color: rgb(0,0,0);
+        padding: 12px 14px;
+        font-size: 13px;
+  }
+  .atm {
+   background-color: rgb(255,255,255);
+        color: rgb(0,0,0);
+        padding: 12px 14px;
+        font-size: 13px;
+  }
+  .spend-out {
+   background-color: rgb(255,255,255);
+        color: rgb(0,0,0);
+        padding: 12px 14px;
+        font-size: 13px;
+  }
     .demo {
          text-align: center;
          font-family: Arial, sans-serif;
@@ -75,19 +102,17 @@
     <button class="open-btn" onclick="openMenu()">選單</button>
     <center>
     <div id="top">
-       <h2>歡迎 {{user}}</h2>
+       <h2>你好 {{user}}</h2>
       <br>
-       <p>你的餘額: WTC${{balance}}</p>
+       <p>你的總資產: WTC${{balance}}</p>
       <br>
       <br>
-      <button class="btn1" onclick="transfer()">P2P轉帳</button>
-      <br>
-      <button class="btn1" onclick="buy()">用Paypal買入</button>
-      <br>
-      <button class="btn1" onclick="bm()">以Wcoins ATM存入</button>
-      <br>
-      <button class="btn1" onclick="sell()">賣出或消費</button>
-      <br>
+    <div id="fuc1">
+      <p class="p2p"><img src="{{ url_for('static',filename='IMG_9741.jpeg') }}" alt="p2p" width="20" height="25"><br>P2P轉帳</button>
+      <p class="paypal">用Paypal買入</button>
+      <p class="atm">以Wcoins ATM存入</button>
+      <p class="spend-out">賣出或消費</button>
+    </div>
       <br>
       <table id="recordTable">
   <thead>
