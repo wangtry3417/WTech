@@ -121,9 +121,6 @@ def index():
   if "bogon" not in res:
     if res["country"] == "TW":
       return redirect("/wtech/bockweb?place=tw")
-    elif res["country"] == "US":
-      return redirect("/wtech/bockweb?place=us")
-    else:
       return render_template("wtechHome.html")
   else:
     return abort(502)
@@ -364,8 +361,6 @@ def wtechAbout():
   if "bogon" not in res:
     if res["country"] == "TW":
       return redirect("/wtech/bockweb?place=tw")
-    elif res["country"] == "US":
-      return redirect("/wtech/bockweb?place=us")
     else:
       return render_template("wtechAbout.html")
   else:
@@ -1195,8 +1190,6 @@ def wtechProduct():
   if "bogon" not in res:
     if res["country"] == "TW":
       return redirect("/wtech/bockweb?place=tw")
-    elif res["country"] == "US":
-      return redirect("/wtech/bockweb?place=us")
     else:
       return render_template("wtechProduct.html")
   else:
