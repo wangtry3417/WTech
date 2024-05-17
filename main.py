@@ -121,9 +121,10 @@ def index():
   if "bogon" not in res:
     if res["country"] == "TW":
       return redirect("/wtech/bockweb?place=tw")
+    else:
       return render_template("wtechHome.html")
   else:
-    return render_template("wtechHome.html")
+    return abort(502)
 
 @app.route("/wtech/chat")
 def wtechChat():
@@ -1150,7 +1151,8 @@ def lo():
 @app.route("/wcoin/sk/transfer")
 def skLoad():
   return render_template("sk.html")
-
+  
+"""
 @app.route("/wcoin/sk/buy/info",methods=["GET"])
 def sk():
   count = int(request.args.get("price"))
@@ -1177,6 +1179,7 @@ def sk():
     return str(e)
 
   return render_template("skdone.html")
+"""
 
 @app.route("/wtech/product")
 def wtechProduct():
