@@ -92,6 +92,9 @@ const returnAlert = () => {
         popup.style.display = 'none'; /* 點擊按鈕後，將 display 設回為 none */
     });
       };
+      document.getElementById("b").addEventListener("click",() => {
+         window.history.go(-1);
+      });
     </script>
   </body>
 </html>
