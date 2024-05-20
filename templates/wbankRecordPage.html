@@ -1,1 +1,184 @@
-
+<html>
+  <head>
+    <title>泓財WBank -- {{user}} 頁面</title>
+    <link rel="manifest" href="{{ url_for('static',filename='wbank.json') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='menu.css') }}">
+    <style>
+      #top {
+       width: 2000px;
+       margin: auto;
+       background-color: #fff;
+       padding: 20px;
+       border-radius: 5px;
+       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      }
+      .btn1 {
+        background-color: rgb(255,255,255);
+        color: rgb(0,0,0);
+        padding: 12px 14px;
+        font-size: 13px;
+      }
+      #warn {
+       width: 298px;
+       margin: auto;
+       background-color: #fff;
+       padding: 20px;
+       border: 3px solid black;
+       animation: wn 5s linear 2s infinite alternate;
+      }
+      @keyframes wn {
+        0% {
+          border: 3px solid #FF0000;
+        }
+        100% {
+          border: 3px solid black;
+        }
+      }
+      #lineChart {
+         width: 100%;
+         height:100%;
+      }
+      .footer {
+   position: fixed;
+   left: 0;
+   bottom: 0;
+   width: 100%;
+   background-color: #d3d3d3;
+   color: black;
+   text-align: center;
+   display: flex;
+}
+  #fuc1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .p2p {
+        background-color: rgb(255,255,255);
+        color: rgb(0,0,0);
+        padding: 12px 14px;
+        font-size: 13px;
+        text-align: center;
+  }
+  .paypal {
+        background-color: rgb(255,255,255);
+        color: rgb(0,0,0);
+        padding: 12px 14px;
+        font-size: 13px;
+        text-align: center;
+  }
+  .atm {
+        background-color: rgb(255,255,255);
+        color: rgb(0,0,0);
+        padding: 12px 14px;
+        font-size: 13px;
+        text-align: center;
+  }
+  .spend-out {
+        background-color: rgb(255,255,255);
+        color: rgb(0,0,0);
+        padding: 12px 14px;
+        font-size: 13px;
+        text-align: center;
+  }
+  .record {
+     background-color: rgb(255,255,255);
+        color: rgb(0,0,0);
+        padding: 12px 14px;
+        font-size: 13px;
+        text-align: center;
+  }
+    .demo {
+         text-align: center;
+         font-family: Arial, sans-serif;
+    }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+     <div id="menu" class="menu">
+        <button class="close-btn" onclick="closeMenu()">X</button>
+        <ul>
+        <li><a href="/wbank" class="home">登出 log-out</a></li>
+        <br>
+        </ul>
+    </div>
+    <button class="open-btn" onclick="openMenu()">選單</button>
+    <center>
+    <div id="top">
+      <br>
+      <table id="recordTable">
+  <thead>
+    <tr>
+      <th>用戶名稱</th>
+      <th>動作</th>
+      <th>時間</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+    </div>
+  </center>
+    <br>
+    <br>
+    <script>
+      fetch('https://wtech-5o6t.onrender.com/wbank/v1/record', {
+        method: "GET",
+        headers: {
+          "user" : "{{user}}"
+        }
+      })
+  .then(response => response.json())
+  .then(data => {
+    for(let item of data) {
+    const goodsTable = document.getElementById('recordTable').querySelector('tbody');
+    const newRow = goodsTable.insertRow();
+      const userCell = newRow.insertCell();
+      const actionCell = newRow.insertCell();
+      const timeCell = newRow.insertCell();
+      userCell.textContent = item.user;
+      actionCell.textContent = item.action;
+      timeCell.textContent = item.time;
+   }
+  })
+  .catch(error => console.error('錯誤:', error));
+      const transfer = () => {
+        window.location.href="/wbank/transfer";
+      };
+      const buy = () => {
+        let user = '{{ user }}';
+        let amount = prompt("How much do you wanna buy in?");
+        let value = amount*3.5;
+        window.location.href="/wbank/v1/paypal?user="+user+"&amount="+value;
+      };
+      const bm = () => {
+        let user = '{{ user }}';
+        window.location.href="/wbank/buyCoins?user="+user;
+      };
+      const sell = () => {
+        let user = '{{ user }}';
+        window.location.href="/wbank/sellCoins?user="+user;
+      };
+      function openMenu()  {
+    document.getElementById('menu').style.right = '0';
+      var openBtn = document.getElementsByClassName("open-btn");
+      openBtn.style.display = "none";
+}
+function closeMenu() {
+    document.getElementById('menu').style.right = '-200px';
+   var openBtn = document.getElementsByClassName("open-btn");
+    openBtn.style.display = "block";
+}
+      document.getElementById("record").addEventListener("click",() => {
+        window.location.href="/wbank/recordPage?user=" + "{{ user }}";
+      });
+    </script>
+  </body>
+</html>
