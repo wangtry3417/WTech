@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>泓財WBank -- {{user}} 頁面</title>
+    <title>泓財WBank -- {{user}} 的消費記錄</title>
     <link rel="manifest" href="{{ url_for('static',filename='wbank.json') }}">
     <link rel="stylesheet" href="{{ url_for('static',filename='menu.css') }}">
     <style>
@@ -149,23 +149,6 @@
    }
   })
   .catch(error => console.error('錯誤:', error));
-      const transfer = () => {
-        window.location.href="/wbank/transfer";
-      };
-      const buy = () => {
-        let user = '{{ user }}';
-        let amount = prompt("How much do you wanna buy in?");
-        let value = amount*3.5;
-        window.location.href="/wbank/v1/paypal?user="+user+"&amount="+value;
-      };
-      const bm = () => {
-        let user = '{{ user }}';
-        window.location.href="/wbank/buyCoins?user="+user;
-      };
-      const sell = () => {
-        let user = '{{ user }}';
-        window.location.href="/wbank/sellCoins?user="+user;
-      };
       function openMenu()  {
     document.getElementById('menu').style.right = '0';
       var openBtn = document.getElementsByClassName("open-btn");
