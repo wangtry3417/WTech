@@ -1074,7 +1074,7 @@ def wbank_record_page_v2():
   return render_template("wbankRecordPage.html",user=user)
 
 @app.route("/wbank/fps")
-def wbank_record_page_v2():
+def wbank_fps():
   user = request.args.get("user")
   return render_template("wbankFPS.html",user=user)
 
