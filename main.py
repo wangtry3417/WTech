@@ -1073,6 +1073,11 @@ def wbank_record_page_v2():
   user = request.args.get("user")
   return render_template("wbankRecordPage.html",user=user)
 
+@app.route("/wbank/fps")
+def wbank_record_page_v2():
+  user = request.args.get("user")
+  return render_template("wbankFPS.html",user=user)
+
 @app.route("/wtech/v2/wbank/auth",methods=["GET","POST"])
 def wbank_login():
   user = request.form.get("user")
