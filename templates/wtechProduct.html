@@ -1,53 +1,108 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Product Page</title>
-    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
-    <style>
-    body {
-        font-family: Arial, sans-serif;
-    }
-    h1 {
-        font-size: 2em;
-    }
-    h2 {
-        color: white;
-    }
-    #two {
-      background-color: #3366CC;
-      color: rgb(255,255,255);
-    }
-    #productArea {
-        margin-top: 30px;
-    }
-    .productAreaItem {
-        margin: 15px 0;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border: 1px solid gray;
-        padding: 10px;
-    }
-    .productAreaButton { 
-     margin-right: 10px; 
-    text-decoration: none;
-  transition: all 0.3s ease-in-out;  /* 添加過渡效果 */
-  margin: 5px;
-  background-color: #00FF00;
-    }
-    .productAreaButton:hover {
-  color: #008CBA;
-  background-color: white; /* 滑鼠指向時的背景顏色 */
-  border: 2px solid #008CBA;
+  <meta charset="utf-8" />
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
-    .dropdown {display: none;}
-        footer {
+.header {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: #e9ecef;
+}
+.header .logo {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+.header .login {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+}
+.header .product {
+background-color: rgb(255,255,255);
+    color: #000000;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+}
+.header .about {
+  background-color: rgb(255,255,255);
+    color: #000000;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+}
+.main {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /*每行顯示5個項目*/
+}
+.business-box {
+    width: 300px;
+    height: 300px;
+    border: 1px solid #e9ecef;
+    margin: 0 10px;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+footer {
     background-color: #343a40;
     color: white;
     padding: 20px;
     text-align: center;
 }
-          .menu {
+a {
+    color: #0000FF;
+}
+a:hover {
+    color: #00FF00;
+}
+.second {
+padding: 20px;
+display: flex;
+justify-content: center;
+}
+.custom-window {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 800px;
+    height: 380px;
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.5);
+    display: none; /* 先設定為 none */
+}
+.blue-button {
+    width: 100%;
+    height: 50px;
+    background-color: deepskyblue;
+    border: none;
+    color: white;
+    font-size: 20px;
+}
+@keyframes dots {
+  0% { content: ""; }
+  25% { content: "."; }
+  50% { content: ".."; }
+  75% { content: "..."; }
+  100% { content: "..."; }
+}
+  .menu {
     position: fixed;
     top: 0;
     right: -200px; /* 隱藏在頁面右側 */
@@ -76,174 +131,142 @@
     margin: 10px;
     cursor: pointer;
 }
-    </style>
+.btnn {
+    width: 100%;
+    height: 50px;
+    background-color: #2371c4;
+    border: none;
+    color: white;
+    font-size: 20px;
+}
+#one {
+    background-color: rgb(66, 200, 245);
+    width: 670px;
+    height: 350px;
+    margin: 0 10px;
+    display: center;
+}
+</style>
+  <title>產品專頁</title>
 </head>
 <body>
-    <h1>W Tech</h1>
-    <div id="menu" class="menu">
+    <div class="header">
+        <div class="logo">W Bank</div>
+        <div id="menu" class="menu">
         <button class="close-btn" onclick="closeMenu()">X</button>
         <ul>
-        <li><a href="{{ url_for('wtechHome') }}" class="product">主頁</a></li>
+        <li><a href="/" class="home">主頁</a></li>
         <br>
-        <li><a href="{{ url_for('wtechProduct') }}" class="product">產品</a></li>
-        <br>
-        <li><a href="{{ url_for('wtechAbout') }}" class="about">關於</a></li>
-        <br>
-        <li><a onclick="returnAlert()" class="wbank">泓財銀行WBank</a></li>
         </ul>
     </div>
     <button class="open-btn" onclick="openMenu()">選單</button>
-    <div id="productArea">
-        <center>
-        <div id="two">
-        <h2>產品區</h2>
-      </div>
-        </center>
-        <button class="productAreaButton" onclick="displayProduct('wcoins')">選擇</button>
-        <div id="wcoins" class="productAreaItem">
-            <span>Wcoins</span>
-            <select id="wcoinsSelect" class="dropdown" onchange="displayPrice('wcoinsPrice', this.value)">
-              <option value="300">HK$300</option>
-              <option value="500">HK$500</option>
-              <option value="780">HK$780</option>
-              <option value="1000">HK$1000</option>
-              <option value="1500">HK$1500</option>
-              <option value="3000">HK$3000</option>
-            </select>
-            <div id="wcoinsPrice"></div>
-            <button class="productAreaButton" onclick="confirmChoice()">Buy</button>
-        </div>
-        <button class="productAreaButton" onclick="displayProduct('web')">選擇</button>
-        <div id="web" class="productAreaItem">
-            <span>Web 託管</span>
-            <select id="webSelect" class="dropdown" onchange="displayWeb('webService', this.value)">
-              <option value="flask">Flask py庫</option>
-              <option value="fastapi">fastAPI庫</option>
-              <option value="wtech">WTech.app庫</option>
-            </select>
-            <div id="webService"></div>
-            <button class="productAreaButton" onclick="conWeb()">Buy</button>
-        </div>
-        <button class="productAreaButton" onclick="displayProduct('app')">選擇</button>
-        <div id="app" class="productAreaItem">
-            <span>電腦軟件服務</span>
-            <select id="appSelect" class="dropdown" onchange="displayWeb('appService', this.value)">
-              <option value="tkinter">tkinter.py + pyinstaller庫</option>
-              <option value="pygame">pygame + pyinstaller庫</option>
-            </select>
-            <div id="appService"></div>
-            <button class="productAreaButton" onclick="conApp()">Buy</button>
-        </div>
-        <button class="productAreaButton" onclick="displayProduct('game1')">選擇</button>
-        <div id="game1" class="productAreaItem">
-            <span>Uncle Run</span>
-            <select id="game1Select" class="dropdown" onchange="displayWeb('appService', this.value)">
-              <option value="exe">版本 : windows(x64) exe</option>
-              <option value="elf">版本 : linux(x86-64) ELF</option>
-            </select>
-            <div id="game1Service"></div>
-            <button class="productAreaButton" onclick="conGameOne()">Buy</button>
-        </div>
-        <button class="productAreaButton" onclick="displayProduct('ftp')">選擇</button>
-        <div id="ftp" class="productAreaItem">
-            <span>FTP服務/span>
-            <select id="ftpSelect" class="dropdown" onchange="displayWeb('ftpService', this.value)">
-              <option value="save1-nt$90">套餐1 : 純儲存&1個帳號&96GB</option>
-              <option value="save2-nt$200">套餐2 : 連網頁&1個帳號&256GB</option>
-              <option value="save2-nt$600">套餐3 : 連網頁&2個帳號&700GB</option>
-            </select>
-            <div id="ftpService"></div>
-            <button class="productAreaButton" onclick="ftp()">Buy</button>
-        </div>
     </div>
-    <br>
-    <p>*注：當付款後，可能會出現導向問題，請聯繫我們。不便之處，敬請原諒。🙏🥹</p>
+    <div class="main">
+      <center>
+       <div id="one">
+         <h2> Uncle Run Game </h2>
+                 <br>
+                 <img src="static/IMG_8859.jpeg" alt="uncle-run-game" width="170px" height="145px">
+                 <button class="btnn" onclick="onWin()">選購</button>
+        <div id="oneup" class="custom-window">
+        <center>
+          <h2>請複製好以下格式:</h2>
+          <br>
+          我想要 Uncle run PC遊戲，Windows-OS的。
+          <br>
+          價格為港幣55元。
+        </center>
+        <button id="myButton" class="blue-button">我已了解！</button>
+      </div>
+      </div>
+     <div id="one">
+         <h2> 其他服務 </h2>
+                 <br>
+                 <img src="static/399b0bfa64ac474ba928fb409d657c98.png~tplv-0es2k971ck-image.png" alt="WTech-service" width="170px" height="145px">
+                 <button class="btnn" onclick="gta()">GTA代刷</button>
+                 <br>
+                 <button class="btnn" onclick="sys()">自動化系統服務</button>
+        <div id="gta-ui" class="custom-window">
+        <center>
+          <h2>請複製好以下格式:</h2>
+          <br>
+          我想要GTA Online代刷服務。
+          <br>
+          我已經預備好風險了。
+        </center>
+
+        <button id="myButton" class="blue-button">我已了解！</button>
+      </div>
+         <div id="sys" class="custom-window">
+        <center>
+          <h2>請複製好以下格式:</h2>
+          <br>
+          我想要自動化系統服務。
+        </center>
+
+        <button id="myButton" class="blue-button">我已了解！</button>
+      </div>
+     </div>
+      </div>
+     </center>
+    </div>
     <script>
-    function displayProduct(id){
-        var x = document.getElementById(id);
-        var dropdown = document.getElementById(id + 'Select');
-        if (dropdown.style.display === "none") {
-            dropdown.style.display = "inline-block";
-        } else {
-            dropdown.style.display = "none";
-        }
+    function onWin() {
+       var popup = document.getElementById('oneup');
+    popup.style.display = 'block'; /* 當頁面加載完後，將 display 設定為 block */
+    popup.querySelector('button').addEventListener('click', function() {
+      var button = document.getElementById("myButton");
+    popup.style.animationDuration = "1s";
+    popup.style.animationName = "dots";
+        popup.style.display = 'none'; /* 點擊按鈕後，將 display 設回為 none */
+    });
     }
-    function displayWeb(id,value) {
-        var priceDiv = document.getElementById(id);
-        priceDiv.innerHTML = value;
-    }
-    function displayPrice(id, value){
-        var priceDiv = document.getElementById(id);
-        priceDiv.innerHTML = 'HK$' + value;
-    } 
-    function conWeb() {
-        var Select = document.getElementById('webSelect');
-        var selectedValue = Select.options[Select.selectedIndex].value;
-        var r = confirm("你選擇的使用 " + selectedValue + " 建立web server，確認購買嗎？");
-        if (r == true) {
-          // 用戶確認購買的代碼在這裡執行
-          window.location.href="https://book.stripe.com/dR69Ede4R8I14xOaEJ";
-        } else {
-          // 用戶取消購買的代碼在這裡執行
-        alert("購買取消！");
-        }
-    }
-   function conApp() {
-       var Select = document.getElementById('appSelect');
-        var selectedValue = Select.options[Select.selectedIndex].value;
-        var r = confirm("你選擇的使用 " + selectedValue + " 建立建立軟件UI，確認購買嗎？");
-        if (r == true) {
-          // 用戶確認購買的代碼在這裡執行
-          var email = prompt("輸入電郵地址： 我們系統會發送電郵給你。");
-          window.location.href="/wtech/v2/automail?subject=客戶選擇服務-電腦軟件服務&content=你好，請輸入軟件需求，如OS等&email=" + email;
-        } else {
-          // 用戶取消購買的代碼在這裡執行
-        alert("購買取消！");
-        }
-   }
-   function conGameOne() {
-       var Select = document.getElementById('game1Select');
-        var selectedValue = Select.options[Select.selectedIndex].value;
-        var r = confirm("你選擇的購買 " + selectedValue + " 版本的uncle run game，確認購買嗎？");
-        if (r == true) {
-          // 用戶確認購買的代碼在這裡執行
-          var url = "/wcoin/pay/paypal?country=HKD&price=55";
-            window.location.href=url;
-        } else {
-          // 用戶取消購買的代碼在這裡執行
-        alert("購買取消！");
-        }
-   }
-    const ftp = () => {
-       var Select = document.getElementById('ftpSelect');
-        var selectedValue = Select.options[Select.selectedIndex].value;
-        var r = confirm("你選擇的購買 FTP儲存服務，套餐如下： \n "+ selectedValue + " \n，確認購買嗎？");
-        if (r == true) {
-          // 用戶確認購買的代碼在這裡執行
-          var url = "/wcoin/pay/paypal?country=HKD&price=300";
-            window.location.href=url;
-        } else {
-          // 用戶取消購買的代碼在這裡執行
-        alert("購買取消！");
-        }
-    };
-    function confirmChoice(){
-        var wcoinsSelect = document.getElementById('wcoinsSelect');
-        var selectedValue = wcoinsSelect.options[wcoinsSelect.selectedIndex].value;
-        var intValue = parseInt(selectedValue);
-        var reallyValue = intValue*10;
-        var r = confirm("你選擇的 Wcoins 是 " + selectedValue + "HKD，確認購買嗎？");
-        if (r == true) {
-          // 用戶確認購買的代碼在這裡執行
-          // alert("購買成功！");
-            var url = "/wcoin/pay/paypal?country=HKD&price="+reallyValue;
-            window.location.href=url;
-        } else {
-          // 用戶取消購買的代碼在這裡執行
-          alert("購買取消！");
-        }
-      }
-        function openMenu()  {
+function gta() {
+   var popup = document.getElementById('gta-online');
+    popup.style.display = 'block'; /* 當頁面加載完後，將 display 設定為 block */
+    popup.querySelector('button').addEventListener('click', function() {
+      var button = document.getElementById("myButton");
+    popup.style.animationDuration = "1s";
+    popup.style.animationName = "dots";
+        popup.style.display = 'none'; /* 點擊按鈕後，將 display 設回為 none */
+    });
+}
+function sys() {
+   var popup = document.getElementById('sys');
+    popup.style.display = 'block'; /* 當頁面加載完後，將 display 設定為 block */
+    popup.querySelector('button').addEventListener('click', function() {
+      var button = document.getElementById("myButton");
+    popup.style.animationDuration = "1s";
+    popup.style.animationName = "dots";
+        popup.style.display = 'none'; /* 點擊按鈕後，將 display 設回為 none */
+    });
+}
+        document.getElementById("wcoins").addEventListener("click",() => {
+            alert("Hello");
+        });
+      window.addEventListener("load", function() {
+    var popup = document.getElementById('popup');
+    popup.style.display = 'block'; /* 當頁面加載完後，將 display 設定為 block */
+    popup.querySelector('button').addEventListener('click', function() {
+      var button = document.getElementById("myButton");
+        button.innerHTML = "...";
+    popup.style.animationDuration = "1s";
+    popup.style.animationName = "dots";
+        popup.style.display = 'none'; /* 點擊按鈕後，將 display 設回為 none */
+    });
+});
+      const returnAlert = () => {
+        var popup = document.getElementById('warn');
+         popup.style.display = 'block'; 
+    popup.querySelector('button').addEventListener('click', function() {
+      var button = document.getElementById("myButton");
+        button.innerHTML = "...";
+    popup.style.animationDuration = "1s";
+    popup.style.animationName = "dots";
+        popup.style.display = 'none'; /* 點擊按鈕後，將 display 設回為 none */
+    });
+      };
+      function openMenu()  {
     document.getElementById('menu').style.right = '0';
       var openBtn = document.getElementsByClassName("open-btn");
       openBtn.style.display = "none";
@@ -253,15 +276,13 @@ function closeMenu() {
    var openBtn = document.getElementsByClassName("open-btn");
     openBtn.style.display = "block";
 }
-const returnAlert = () => {
-        window.location.href="http://bank.wtechhk.xyz";
-      };
     </script>
     <footer>© 2024 W Tech. 版權所有。
        <br>
        Email : tech-support@wtechhk.xyz -- CTO wangtry <br>
        Phone : +852 55362770 --  The owner phone <br>
        Discord forever link : <a href="https://discord.gg/5DagVQ5MwV"> click here</a>
+       Instragram(IG) : <a href="https://www.instagram.com/w_tech_inc?igsh=dmN2bDk5dzk5OWxz"> click here</a>
     </footer>
 </body>
 </html>
