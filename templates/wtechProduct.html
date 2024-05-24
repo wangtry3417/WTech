@@ -186,6 +186,7 @@ justify-content: center;
                  <button class="btnn" onclick="gta()">GTA代刷</button>
                  <br>
                  <button class="btnn" onclick="sys()">自動化系統服務</button>
+                 <button class="btnn" onclick="web()">網站設計服務</button>
         <div id="gta-ui" class="custom-window">
         <center>
           <h2>請複製好以下格式:</h2>
@@ -202,6 +203,15 @@ justify-content: center;
           <h2>請複製好以下格式:</h2>
           <br>
           我想要自動化系統服務。
+        </center>
+
+        <button id="myButton" class="blue-button">我已了解！</button>
+      </div>
+       <div id="web" class="custom-window">
+        <center>
+          <h2>請複製好以下格式:</h2>
+          <br>
+          我想要網站設計服務。
         </center>
 
         <button id="myButton" class="blue-button">我已了解！</button>
@@ -233,6 +243,16 @@ function gta() {
 }
 function sys() {
    var popup = document.getElementById('sys');
+    popup.style.display = 'block'; /* 當頁面加載完後，將 display 設定為 block */
+    popup.querySelector('button').addEventListener('click', function() {
+      var button = document.getElementById("myButton");
+    popup.style.animationDuration = "1s";
+    popup.style.animationName = "dots";
+        popup.style.display = 'none'; /* 點擊按鈕後，將 display 設回為 none */
+    });
+}
+  function web() {
+   var popup = document.getElementById('web');
     popup.style.display = 'block'; /* 當頁面加載完後，將 display 設定為 block */
     popup.querySelector('button').addEventListener('click', function() {
       var button = document.getElementById("myButton");
