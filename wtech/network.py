@@ -1,17 +1,23 @@
 from .http import *
-from flask import *
+import socket
 
-class network(app):
-  def __init__(self):
-    super().__init__(import_name="wtech.001")
-  def index(self):
-    return jsonify({"Hello" : "There"})
-  def netOne(self):
-    return jsonify({"Network1" : "wtps://wtech.net:51"})
-
-def connect():
-  net = network()
-  net.route("/")(net.index)
-  net.route("/wtech/network")(net.netOne)
-
-  net.run(host="0.0.0.0",port=5162)
+class network(object):
+  def __init__(self,hostname,port):
+    self.socketOnj = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+    self.hostname = "0.0.0.0"
+    self.port = port
+    self.username = None
+    self.password = None
+  def run(self,host=self.hostname,port : int):
+    self.socketOnj.bind((self.hostname,port))
+    self.socketOnj.listen(5)
+    while True:
+      cs,address = self.socketOnj.accept()
+      with open("userIP.txt","a+") as fp:
+        fp.write(f"New client IP : {address}")
+        print("Connected")
+  def send_data(self,things : str):
+    self.socketOnj.send(things.encode())
+    print("Sent!")
+  def disconnect(self):
+    self.socketOnj.close()
