@@ -909,7 +909,7 @@ def wbank_sell_payCode():
     hash1 = hashlib.sha256(t1.encode()).hexdigest()
     if code == hash1:
       return render_template("wbankPayment.html",user=user,balance=balance)
-  return "Cannot assign the user detail!."
+  return "無法驗證用戶信息，或者可能哈希值(hash-value)有誤。請刷新此QR code。"
 
 @app.route("/wbank/buyCoins")
 def wbank_buyCoind():
@@ -951,7 +951,7 @@ def wbank_receCoins():
     hash1 = hashlib.sha256(t1.encode()).hexdigest()
     if code == hash1:
       return render_template("wbankGet.html",user=user,balance=balance,fromer=fromer)
-  return "Cannot assign the user detail!."
+  return "無法驗證用戶信息，或者可能哈希值(hash-value)有誤。請刷新此QR code。"
 
 @app.route("/wbank/sellCoins")
 def wbank_sellCoins():
