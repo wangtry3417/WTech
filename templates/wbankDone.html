@@ -66,7 +66,7 @@
     setTimeout(() => {
        text.innerHTML = "載入中...";
        spinner.style.animation = "spin 4s linear infinite";
-    },5000);
+    },1000);
       setTimeout(() => {
        text.innerHTML = "轉帳泓幣(wcoins)給你中...";
        spinner.style.animation = "spin 6s linear infinite";
@@ -85,13 +85,13 @@
   .then(response => response.json())
   //.then(data => alert('轉賬成功'))
   .catch(error => alert(error));
-    },8000);
+    },3000);
       setTimeout(() => {
         alert("完成！");
        text.innerHTML = "你現在可以關閉此頁了!";
         window.location.href="/wbank";
        spinner.style.animation = "spin 2s linear infinite";
-    },18000);
+    },8000);
   </script>
 </body>
 </html>
