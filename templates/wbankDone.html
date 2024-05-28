@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>WCoins system -- transfer page</title>
+  <title>泓幣系統 -- 轉帳頁面</title>
   <link rel="manifest" href="{{ url_for('static',filename='wbank.json') }}">
   <style>
     body {
@@ -64,11 +64,11 @@
     const text = document.getElementById("text");
     const spinner = document.querySelector(".spinner");
     setTimeout(() => {
-       text.innerHTML = "Loading...";
+       text.innerHTML = "載入中...";
        spinner.style.animation = "spin 4s linear infinite";
     },5000);
       setTimeout(() => {
-       text.innerHTML = "Transfer wcoins to you...";
+       text.innerHTML = "轉帳泓幣(wcoins)給你中...";
        spinner.style.animation = "spin 6s linear infinite";
        fetch('https://wtech-5o6t.onrender.com/wtech/v2/createOrder', {
     headers: {
@@ -87,8 +87,8 @@
   .catch(error => alert(error));
     },8000);
       setTimeout(() => {
-        alert("Almost Done!");
-       text.innerHTML = "You can close this window!";
+        alert("完成！");
+       text.innerHTML = "你現在可以關閉此頁了!";
         window.location.href="/wbank";
        spinner.style.animation = "spin 2s linear infinite";
     },18000);
