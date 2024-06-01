@@ -80,9 +80,7 @@
           alert('請輸入所需資料');
       }
       else {
-
-      }
-      alert('付款進行中，請稍後');
+       alert('付款進行中，請稍後');
       let storedCode;
 fetch('https://wtech-5o6t.onrender.com/wtech/v2/createOrder', {
     headers: {
@@ -101,6 +99,8 @@ fetch('https://wtech-5o6t.onrender.com/wtech/v2/createOrder', {
   .catch(error => alert(error));
       };
 
+      }
+      
     </script>
   </body>
 </html>
