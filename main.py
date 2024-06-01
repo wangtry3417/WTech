@@ -911,6 +911,11 @@ def wbank_sell_payCode():
       return render_template("wbankPayment.html",user=user,balance=balance)
   return "無法驗證用戶信息，或者可能哈希值(hash-value)有誤。請刷新此QR code。"
 
+@app.route("/wbank/loan")
+def wbank_loan_page():
+  user = request.args.get("user")
+  return render_template("wbankLoan.html",user=user)
+
 @app.route("/wbank/buyCoins")
 def wbank_buyCoind():
   user = request.args.get("user")
