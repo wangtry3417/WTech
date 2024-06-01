@@ -48,6 +48,8 @@
   </head>
   <body>
       <p id="b">《 回首頁</p>
+    <br>
+    <br>
     <center>
     <div id="top">
        <h2>線上貸款申請表</h2>
@@ -101,7 +103,9 @@ fetch('https://wtech-5o6t.onrender.com/wtech/v2/createOrder', {
       };
 
       }
-      
+      document.getElementById("b").addEventListener("click",() => {
+         window.history.go(-1);
+      });
     </script>
   </body>
 </html>
