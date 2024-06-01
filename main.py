@@ -1068,9 +1068,6 @@ def wbank_client():
       elif pw != row[2]:
         error_message = "密碼不正確"
         break
-      elif row[0] == "BenChan609":
-        error_message = "該帳戶因洗錢而被停用"
-        break
       else: 
         balance = row[1]
         return render_template("wbankClient.html",user=user,balance=balance)
