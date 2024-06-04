@@ -163,7 +163,7 @@ def webCheckIsBlock():
     return render_template("wtechBlock.html",country=country)
   elif place == "cn":
     country = "中國大陸"
-    return render_template("wtechBlockEn.html",country=country)
+    return render_template("wtechBlock.html",country=country)
     
 @app.route("/wtech/v2/staff")
 def wtechVStaff():
