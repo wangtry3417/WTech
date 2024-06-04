@@ -161,8 +161,8 @@ def webCheckIsBlock():
   if place == "tw":
     country = "中華民國（台灣)"
     return render_template("wtechBlock.html",country=country)
-  elif place == "us":
-    country = "United Status"
+  elif place == "cn":
+    country = "中國大陸"
     return render_template("wtechBlockEn.html",country=country)
     
 @app.route("/wtech/v2/staff")
@@ -703,7 +703,7 @@ def wbank():
   res = requests.get(f"https://ipinfo.io/{user_ip}?token=f5bcbfedf78b27").json()
   if "bogon" not in res:
     if res["country"] == "CN":
-      return redirect("/wtech/bockweb?place=tw")
+      return redirect("/wtech/bockweb?place=cn")
     else:
       return render_template("wbank.html")
   else:
