@@ -694,7 +694,20 @@ def bet_all():
 
 @app.route("/wbank")
 def wbank():
-  return render_template("wbank.html")
+  x_forwarded_for = request.headers.get('X-Forwarded-For')
+  if x_forwarded_for:
+    user_ip = x_forwarded_for.split(',')[0]
+  else:
+    user_ip = request.remote_addr
+    
+  res = requests.get(f"https://ipinfo.io/{user_ip}?token=f5bcbfedf78b27").json()
+  if "bogon" not in res:
+    if res["country"] == "CN":
+      return redirect("/wtech/bockweb?place=tw")
+    else:
+      return render_template("wbank.html")
+  else:
+    return abort(502)
 
 @app.route("/wbank/transfer")
 def wbank_transfer():
