@@ -123,7 +123,7 @@ def index():
     if res["country"] == "TW":
       return redirect("/wtech/bockweb?place=tw")
     else:
-      if proxy_ip not None:
+      if proxy_ip is not None:
         return "很抱歉，泓技WTech網絡禁止使用代理伺服器。"
       else:
         return render_template("wtechHome.html")
@@ -710,7 +710,7 @@ def wbank():
     if res["country"] == "CN":
       return redirect("/wtech/bockweb?place=cn")
     else:
-      if proxy_ip not None:
+      if proxy_ip is not None:
         return "很抱歉，泓技WTech網絡禁止使用代理伺服器。"
       else:
         return render_template("wbank.html")
