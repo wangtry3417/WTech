@@ -114,6 +114,7 @@ def index():
   x_forwarded_for = request.headers.get('X-Forwarded-For')
   if x_forwarded_for:
     user_ip = x_forwarded_for.split(',')[0]
+    proxy_ip = x_forwarded_for.split(',')[1]
   else:
     user_ip = request.remote_addr
     
@@ -122,7 +123,10 @@ def index():
     if res["country"] == "TW":
       return redirect("/wtech/bockweb?place=tw")
     else:
-      return render_template("wtechHome.html")
+      if proxy_ip not None:
+        return "很抱歉，泓技WTech網絡禁止使用代理伺服器。"
+      else:
+        return render_template("wtechHome.html")
   else:
     return abort(502)
 
@@ -697,6 +701,7 @@ def wbank():
   x_forwarded_for = request.headers.get('X-Forwarded-For')
   if x_forwarded_for:
     user_ip = x_forwarded_for.split(',')[0]
+    proxy_ip = x_forwarded_for.split(',')[1]
   else:
     user_ip = request.remote_addr
     
@@ -705,7 +710,10 @@ def wbank():
     if res["country"] == "CN":
       return redirect("/wtech/bockweb?place=cn")
     else:
-      return render_template("wbank.html")
+      if proxy_ip not None:
+        return "很抱歉，泓技WTech網絡禁止使用代理伺服器。"
+      else:
+        return render_template("wbank.html")
   else:
     return abort(502)
 
