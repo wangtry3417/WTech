@@ -112,26 +112,37 @@ def error_server(e):
 @app.route("/")
 def index():
   x_forwarded_for = request.headers.get('X-Forwarded-For')
+  proxy_ip = None
+    
   if x_forwarded_for:
-    user_ip = x_forwarded_for.split(',')[0]
-    proxy_ip = x_forwarded_for.split(',')[1]
+    ip_list = x_forwarded_for.split(',')
+    user_ip = ip_list[0].strip()
+    if len(ip_list) > 1:
+      proxy_ip = ip_list[1].strip()
   else:
     user_ip = request.remote_addr
     
-  res = requests.get(f"https://ipinfo.io/{user_ip}?token=f5bcbfedf78b27").json()
-  if "bogon" not in res:
-    if res["country"] == "TW":
-      return redirect("/wtech/bockweb?place=tw")
-    else:
-      if proxy_ip is not None:
-        ipOne = proxy_ip.split('.')
-        if proxy_ip == "0.0.0.0" or "127.0.0.1":
-          return "很抱歉，泓技WTech網絡禁止使用代理伺服器。 原因：非安全或本地機器"
-        else:
-          return render_template("wtechHome.html")
-        return "很抱歉，泓技WTech網絡禁止使用代理伺服器。"
-  else:
+  try:
+    res = requests.get(f"https://ipinfo.io/{user_ip}?token=f5bcbfedf78b27").json()
+  except requests.RequestException:
     return abort(502)
+    
+  if "bogon" not in res:
+    if res.get("country") == "CN":
+      return redirect("/wtech/bockweb?place=cn")
+    else:
+      if proxy_ip:
+        try:
+          ip_parts = [int(part) for part in proxy_ip.split('.')]
+          if all(0 <= part <= 255 for part in ip_parts):
+            return "很抱歉，泓技WTech網絡禁止使用代理伺服器。"
+          else:
+            return "你的代理伺服器IP格式有誤"
+        except ValueError:
+            return "你的代理伺服器IP格式有誤"
+      return render_template("wbank.html")
+    else:
+        return abort(502)
 
 @app.route("/wtech/chat")
 def wtechChat():
@@ -702,28 +713,37 @@ def bet_all():
 @app.route("/wbank")
 def wbank():
   x_forwarded_for = request.headers.get('X-Forwarded-For')
+  proxy_ip = None
+    
   if x_forwarded_for:
-    user_ip = x_forwarded_for.split(',')[0]
-    proxy_ip = x_forwarded_for.split(',')[1]
+    ip_list = x_forwarded_for.split(',')
+    user_ip = ip_list[0].strip()
+    if len(ip_list) > 1:
+      proxy_ip = ip_list[1].strip()
   else:
     user_ip = request.remote_addr
     
-  res = requests.get(f"https://ipinfo.io/{user_ip}?token=f5bcbfedf78b27").json()
+  try:
+    res = requests.get(f"https://ipinfo.io/{user_ip}?token=f5bcbfedf78b27").json()
+  except requests.RequestException:
+    return abort(502)
+    
   if "bogon" not in res:
-    if res["country"] == "CN":
+    if res.get("country") == "CN":
       return redirect("/wtech/bockweb?place=cn")
     else:
-      if proxy_ip is not None:
-        ipOne = proxy_ip.split('.')
-        if ipOne[0] <= 255 and ipOne[1] <= 255 and ipOne[2] <= 255 and ipOne[3] <= 255:
-          return "很抱歉，泓技WTech網絡禁止使用代理伺服器。"
-        elif ipOne[0] <= 255 or ipOne[1] <= 255 or ipOne[2] <= 255 or ipOne[3] <= 255:
-          return "你的代理伺服器IP格式有誤"
-        else:
-          return render_template("wtechHome.html")
-        return "很抱歉，泓技WTech網絡禁止使用代理伺服器。"
-  else:
-    return abort(502)
+      if proxy_ip:
+        try:
+          ip_parts = [int(part) for part in proxy_ip.split('.')]
+          if all(0 <= part <= 255 for part in ip_parts):
+            return "很抱歉，泓技WTech網絡禁止使用代理伺服器。"
+          else:
+            return "你的代理伺服器IP格式有誤"
+        except ValueError:
+            return "你的代理伺服器IP格式有誤"
+      return render_template("wbank.html")
+    else:
+        return abort(502)
 
 @app.route("/wbank/transfer")
 def wbank_transfer():
