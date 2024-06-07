@@ -130,6 +130,8 @@ def index():
   if "bogon" not in res:
     if res.get("country") == "CN":
       return redirect("/wtech/bockweb?place=cn")
+    elif res.get("country") == "TW":
+      return redirect("/wtech/bockweb?place=tw")
     else:
       if proxy_ip:
         try:
