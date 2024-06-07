@@ -124,9 +124,14 @@ def index():
       return redirect("/wtech/bockweb?place=tw")
     else:
       if proxy_ip is not None:
+        ipOne = proxy_ip.split('.')
+        if ipOne[0] <= 255 and ipOne[1] <= 255 and ipOne[2] <= 255 and ipOne[3] <= 255:
+          return "很抱歉，泓技WTech網絡禁止使用代理伺服器。"
+        elif ipOne[0] <= 255 or ipOne[1] <= 255 or ipOne[2] <= 255 or ipOne[3] <= 255:
+          return "你的代理伺服器IP格式有誤"
+        else:
+          return render_template("wtechHome.html")
         return "很抱歉，泓技WTech網絡禁止使用代理伺服器。"
-      else:
-        return render_template("wtechHome.html")
   else:
     return abort(502)
 
@@ -711,9 +716,14 @@ def wbank():
       return redirect("/wtech/bockweb?place=cn")
     else:
       if proxy_ip is not None:
+        ipOne = proxy_ip.split('.')
+        if ipOne[0] <= 255 and ipOne[1] <= 255 and ipOne[2] <= 255 and ipOne[3] <= 255:
+          return "很抱歉，泓技WTech網絡禁止使用代理伺服器。"
+        elif ipOne[0] <= 255 or ipOne[1] <= 255 or ipOne[2] <= 255 or ipOne[3] <= 255:
+          return "你的代理伺服器IP格式有誤"
+        else:
+          return render_template("wtechHome.html")
         return "很抱歉，泓技WTech網絡禁止使用代理伺服器。"
-      else:
-        return render_template("wbank.html")
   else:
     return abort(502)
 
