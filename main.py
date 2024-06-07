@@ -139,10 +139,9 @@ def index():
           if all(0 <= part <= 255 for part in ip_parts):
             return "很抱歉，泓技WTech網絡禁止使用代理伺服器。"
           else:
-            return "你的代理伺服器IP格式有誤"
+            return render_template("wtechHome.html")
         except ValueError:
             return "你的代理伺服器IP格式有誤"
-      return render_template("wtechHome.html")
   else:
     return abort(502)
 
@@ -740,10 +739,9 @@ def wbank():
           if all(0 <= part <= 255 for part in ip_parts):
             return "很抱歉，泓技WTech網絡禁止使用代理伺服器。"
           else:
-            return "你的代理伺服器IP格式有誤"
+            return render_template("wbank.html")
         except ValueError:
             return "你的代理伺服器IP格式有誤"
-      return render_template("wbank.html")
   else:
     return abort(502)
 
