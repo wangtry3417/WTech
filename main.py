@@ -140,9 +140,9 @@ def index():
             return "你的代理伺服器IP格式有誤"
         except ValueError:
             return "你的代理伺服器IP格式有誤"
-      return render_template("wbank.html")
-    else:
-        return abort(502)
+      return render_template("wtechHome.html")
+else:
+  return abort(502)
 
 @app.route("/wtech/chat")
 def wtechChat():
@@ -742,8 +742,8 @@ def wbank():
         except ValueError:
             return "你的代理伺服器IP格式有誤"
       return render_template("wbank.html")
-    else:
-        return abort(502)
+  else:
+    return abort(502)
 
 @app.route("/wbank/transfer")
 def wbank_transfer():
