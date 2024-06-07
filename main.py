@@ -141,8 +141,8 @@ def index():
         except ValueError:
             return "你的代理伺服器IP格式有誤"
       return render_template("wtechHome.html")
-else:
-  return abort(502)
+  else:
+    return abort(502)
 
 @app.route("/wtech/chat")
 def wtechChat():
