@@ -971,7 +971,7 @@ def wbank_buyCoind():
       qr_bytes = temp.getvalue()
       qr_b64 = base64.b64encode(qr_bytes).decode('ascii')
       # 使用 send_file 將 QR 碼圖像傳輸到前端
-      return render_template("wbankSell.html", img=qr_b64)
+      return render_template("wbankSell.html", hash1=hash1,img=qr_b64)
   return "Cannot assign the user detail!."
 
 @app.route("/wbank/v1/rece")
