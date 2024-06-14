@@ -15,9 +15,34 @@
     <p id="payment-result"></p>
    </center>
     <script>
-        route = prompt("請選擇金流閘道： \n 1:泓財（本行）")
+        route = prompt("請選擇金流閘道： \n 1:泓財（本行）\n 2:Ben行")
         if (route == 1) {
         var socket = io();
+
+        socket.on('connect', function() {
+            console.log('Connected to server');
+        });
+
+        socket.on('user_info', function(data) {
+            document.getElementById('user-info').textContent = '用戶: ' + data.username;
+        });
+
+        socket.on('payment_result', function(data) {
+            if (data.success) {
+                document.getElementById('payment-result').textContent = '支付成功!';
+            } else {
+                document.getElementById('payment-result').textContent = '支付失敗,請重試。';
+            }
+        });
+
+        // 當NFC裝置感應到卡片時,發送 'nfc_detected' 事件
+        // 並傳遞收款帳戶、金額和用戶名
+        socket.emit('nfc_detected', {
+            username: '{{ user }}'
+        });
+        } 
+        else if (route == 2) {
+          var socket = io("https://owo.freeserver.tw:20161");
 
         socket.on('connect', function() {
             console.log('Connected to server');
