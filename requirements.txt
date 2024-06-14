@@ -13,3 +13,5 @@ flask_httpauth
 flask_cors
 pytz
 py-cord
+nfcpy
+Flask-SocketIO
