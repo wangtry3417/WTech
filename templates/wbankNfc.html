@@ -16,6 +16,7 @@
    </center>
     <script>
         route = prompt("請選擇金流閘道： \n 1:泓財（本行)");
+        amount = prompt("請輸入應付金額：")
         if (route == 1) {
         var socket = io();
 
@@ -38,7 +39,8 @@
         // 當NFC裝置感應到卡片時,發送 'nfc_detected' 事件
         // 並傳遞收款帳戶、金額和用戶名
         socket.emit('nfc_detected', {
-            username: '{{ user }}'
+            username: '{{ user }}',
+            amount: amount
         });
         } else {
             alert("輸入有誤");
