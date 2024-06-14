@@ -116,7 +116,7 @@ def error_server(e):
 def handle_connect():
   print("nfc ok")
 
-@socket.on('nfc_detected')
+@socketio.on('nfc_detected')
 def handle_nfc_detected(data):
   user = data['username']
   reviewer = "wbank"
