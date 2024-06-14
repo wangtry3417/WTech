@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>WBank -- 遠端NFC無感支付</title>
+    <title>泓之付 -- 遠端NFC無感支付</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js"></script>
 </head>
 <body>
@@ -15,7 +15,7 @@
     <p id="payment-result"></p>
    </center>
     <script>
-        route = prompt("請選擇金流閘道： \n 1:泓財（本行)");
+        route = prompt("請選擇金流閘道： \n 1:泓財內部系統（本行) \n 2:泓財（本行)");
         amount = prompt("請輸入應付金額：");
         if (route == 1) {
         var socket = io();
@@ -41,6 +41,33 @@
         socket.emit('nfc_detected', {
             username: '{{ user }}',
             reviewer: 'wbank',
+            amount: amount
+        });
+        } else if (route == 2) {
+            re = prompt("請輸入收款人：);
+           var socket = io();
+
+        socket.on('connect', function() {
+            console.log('Connected to server');
+        });
+
+        socket.on('user_info', function(data) {
+            document.getElementById('user-info').textContent = '用戶: ' + data.username;
+        });
+
+        socket.on('payment_result', function(data) {
+            if (data.success) {
+                document.getElementById('payment-result').textContent = '支付成功!';
+            } else {
+                document.getElementById('payment-result').textContent = '支付失敗,請重試。';
+            }
+        });
+
+        // 當NFC裝置感應到卡片時,發送 'nfc_detected' 事件
+        // 並傳遞收款帳戶、金額和用戶名
+        socket.emit('nfc_detected', {
+            username: '{{ user }}',
+            reviewer: re,
             amount: amount
         });
         } else {
