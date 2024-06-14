@@ -120,8 +120,7 @@ def handle_connect():
 def handle_nfc_detected(data):
   user = data['username']
   amount = data['amount']
-  reviewer = "wbank"
-  amount = "1000"
+  reviewer = data['reviewer']
   headers = {
    "Username":user,
     "reviewer":reviewer,
