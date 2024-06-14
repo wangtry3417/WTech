@@ -31,7 +31,6 @@
         // 當NFC裝置感應到卡片時,發送 'nfc_detected' 事件
         // 並傳遞收款帳戶、金額和用戶名
         socket.emit('nfc_detected', {
-            amount: 100.00,
             username: '{{ user }}'
         });
     </script>
