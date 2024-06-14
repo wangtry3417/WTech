@@ -24,6 +24,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import pytz
 from discord import Bot,Embed,Option
 import discord
+from flask_socketio import SocketIO,emit
 #from nltk.stem import WordNetLemmatizer
 #from nltk.book import *
 
@@ -45,6 +46,8 @@ class AIModules:
     return response
 
 app = Flask("WTech")
+
+socketio = SocketIO(app)
 
 CORS(app)
 
@@ -108,6 +111,10 @@ def error_server(e):
     "server hint" : "carefully and try again!",
     "error_detail" : str(e)
   })
+
+@socketio.on('connect')
+def handle_connect():
+  print("nfc ok")
 
 @app.route("/")
 def index():
@@ -944,6 +951,11 @@ def wbank_sell_payCode():
       return render_template("wbankPayment.html",user=user,balance=balance)
   return "無法驗證用戶信息，或者可能哈希值(hash-value)有誤。請刷新此QR code。"
 
+@app.route("/wbank/nfc")
+def wbank_loan_page():
+  user = request.args.get("user")
+  return render_template("wbankNfc.html",user=user)
+
 @app.route("/wbank/loan")
 def wbank_loan_page():
   user = request.args.get("user")
@@ -1534,4 +1546,4 @@ def transferCrypto():
 def style():
   return render_template("style.css")
 
-app.run(host="0.0.0.0",port=5000)
+socketio.run(app,host="0.0.0.0",port=5000)
