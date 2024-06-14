@@ -15,8 +15,8 @@
     <p id="payment-result"></p>
    </center>
     <script>
-        var route = prompt("請選擇金流閘道： \n 1:泓財內部系統（本行) \n 2:泓財（本行)");
-        var amount = prompt("請輸入應付金額：");
+        route = prompt("請選擇金流閘道： \n 1:泓財內部系統（本行) \n 2:泓財（本行)");
+        amount = prompt("請輸入應付金額：");
         if (route == 1) {
         var socket = io();
 
@@ -44,7 +44,7 @@
             amount: amount
         });
         } else if (route == 2) {
-            var re = prompt("請輸入收款人：);
+            re = prompt("請輸入收款人：");
            var socket = io();
 
         socket.on('connect', function() {
