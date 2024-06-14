@@ -109,6 +109,13 @@
         font-size: 13px;
         text-align: center;
   }
+  .nfc {
+   background-color: rgb(255,255,255);
+        color: rgb(0,0,0);
+        padding: 12px 14px;
+        font-size: 13px;
+        text-align: center;
+  }
     .demo {
          text-align: center;
          font-family: Arial, sans-serif;
@@ -144,6 +151,7 @@
       <p id ="record" class="record"><img src="{{ url_for('static',filename='IMG_2975.png') }}" alt="record" width="30" height="35"><br>收款明細</button>
       <p id ="fps" class="fps"><img src="{{ url_for('static',filename='IMG_9823.jpeg') }}" alt="fps" width="30" height="35"><br>轉數快(FPS-hk)</button>
       <p id ="loan" class="loan"><img src="{{ url_for('static',filename='IMG_9992.jpeg') }}" alt="get-loan" width="30" height="35"><br>泓財信貸（貸款）</button>
+      <p id ="nfc" class="nfc"><img src="{{ url_for('static',filename='IMG_0152.png') }}" alt="nfc-pay" width="30" height="35"><br>感應支付</button>
     </div>
       </center>
       <br>
@@ -232,6 +240,9 @@ const returnAlert = () => {
       });
       document.getElementById("loan").addEventListener("click",() => {
         window.location.href="/wbank/loan?user=" + "{{ user }}";
+      });
+      document.getElementById("nfc").addEventListener("click",() => {
+        window.location.href="/wbank/nfc?user=" + "{{ user }}";
       });
     </script>
   </body>
