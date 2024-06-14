@@ -116,6 +116,20 @@ def error_server(e):
 def handle_connect():
   print("nfc ok")
 
+@socket.on('nfc_detected')
+def handle_nfc_detected(data):
+  user = data['username']
+  reviewer = "wbank"
+  amount = "1000"
+  headers = {
+   "Username":user,
+    "reviewer":reviewer,
+    "Value":amount
+  }
+  res = requests.get(url="https://wtech-5o6t.onrender.com/wtech/v2/createOrder",headers=headers).json()
+  result = requests.get(url=f"https://wtech-5o6t.onrender.com/wtech/v2/transfer?code={res['code']}")
+  emit('payment_result',{'success':'Done'})
+
 @app.route("/")
 def index():
   x_forwarded_for = request.headers.get('X-Forwarded-For')
