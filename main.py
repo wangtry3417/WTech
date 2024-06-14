@@ -119,6 +119,7 @@ def handle_connect():
 @socketio.on('nfc_detected')
 def handle_nfc_detected(data):
   user = data['username']
+  amount = data['amount']
   reviewer = "wbank"
   amount = "1000"
   headers = {
