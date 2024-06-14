@@ -966,7 +966,7 @@ def wbank_sell_payCode():
   return "無法驗證用戶信息，或者可能哈希值(hash-value)有誤。請刷新此QR code。"
 
 @app.route("/wbank/nfc")
-def wbank_loan_page():
+def wbank_nfc_page():
   user = request.args.get("user")
   return render_template("wbankNfc.html",user=user)
 
