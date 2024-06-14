@@ -15,6 +15,8 @@
     <p id="payment-result"></p>
    </center>
     <script>
+        route = prompt("請選擇金流閘道： \n 1:泓財（本行）")
+        if (route == 1) {
         var socket = io();
 
         socket.on('connect', function() {
@@ -38,6 +40,10 @@
         socket.emit('nfc_detected', {
             username: '{{ user }}'
         });
+        } else {
+            alert("輸入有誤");
+            window.back();
+        }
     </script>
 </body>
 </html>
