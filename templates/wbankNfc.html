@@ -32,7 +32,7 @@
         // 並傳遞收款帳戶、金額和用戶名
         socket.emit('nfc_detected', {
             amount: 100.00,
-            username: 'John Doe'
+            username: '{{ user }}'
         });
     </script>
 </body>
