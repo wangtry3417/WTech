@@ -229,7 +229,7 @@ function closeDepoWithdrawWin(id) {
     }
     function confirmDepoWithdraw(id) {
       var d = document.getElementById(id);
-      if (d == "create") {
+      if (id == "create") {
         var socket = io();
 
         socket.on('connect', function() {
@@ -242,7 +242,7 @@ function closeDepoWithdrawWin(id) {
         socket.on('success',(msg) => {
            alert(msg.success);
         });
-      } else if (d == "verify") {
+      } else if (id == "verify") {
         var socket = io();
 
         socket.on('connect', function() {
@@ -254,7 +254,7 @@ function closeDepoWithdrawWin(id) {
         socket.on('success',(msg) => {
            alert(msg.success);
         });
-      } else if (d == "de") {
+      } else if (id == "de") {
         var socket = io();
 
         socket.on('connect', function() {
@@ -270,11 +270,11 @@ function closeDepoWithdrawWin(id) {
     }
     function openScreen(id) {
      var d = document.getElementById(id);
-      if (d == "create") {
+      if (id == "create") {
         document.getElementById('create').style.display = "block";
-      } else if (d == "verify") {
+      } else if (id == "verify") {
         document.getElementById('verify').style.display = "block";
-      } else if (d == "de") {
+      } else if (id == "de") {
         document.getElementById('de').style.display = "block";
       }
     }
