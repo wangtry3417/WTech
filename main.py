@@ -559,6 +559,11 @@ def wp_user_db():
     conn.rollback()
     return f"Error: {e}"
 
+@app.route("/wbank/admin")
+@auth.login_required
+def wb_admin():
+  return render_template("wbankAdmin.html")
+
 @app.route("/wp/buyIn")
 def wp_buyIn():
   user = request.headers.get("name")
