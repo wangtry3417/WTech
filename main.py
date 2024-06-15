@@ -130,6 +130,31 @@ def handle_nfc_detected(data):
   result = requests.get(url=f"https://wtech-5o6t.onrender.com/wtech/v2/transfer?code={res['code']}")
   emit('payment_result',{'success':'Done'})
 
+@socketio.on('createAcc')
+def handle_create_account(data):
+  user = data['username']
+  pw = data['pw']
+  cur = conn.cursor()
+  cur.execute(f"INSERT INTO wbankwallet (username, balance, password, verify) VALUES ('{user}', '0', '{pw}','yes')")
+  conn.commit()
+  emit('success',{'success':'成功操作'})
+
+@socketio.on('verifyAcc')
+def handle_verify_account(data):
+  user = data['username']
+  cur = conn.cursor()
+  cur.execute(f"UPDATE wbankwallet set verify='yes' where username='{user}'")
+  conn.commit()
+  emit('success',{'success':'成功操作'})
+
+@socketio.on('deAcc')
+def handle_delete_account(data):
+  user = data['username']
+  cur = conn.cursor()
+  cur.execute(f"DELETE FROM wbankwallet where username='{user}'")
+  conn.commit()
+  emit('success',{'success':'成功操作'})
+
 @app.route("/")
 def index():
   x_forwarded_for = request.headers.get('X-Forwarded-For')
