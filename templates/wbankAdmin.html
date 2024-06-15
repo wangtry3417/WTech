@@ -130,7 +130,33 @@
         font-size: 13px;
         text-align: center;
     }
-        #depoWithdrawWin {
+        #create {
+      display: none;
+      position: fixed;
+      width: 300px;
+      height: 200px;
+      top: 50%;
+      left: 50%;
+      margin-top: -100px;
+      margin-left: -150px;
+      background-color: #f1f1f1;
+      border: 1px solid #888;
+      padding: 20px;
+    }
+    #verify {
+      display: none;
+      position: fixed;
+      width: 300px;
+      height: 200px;
+      top: 50%;
+      left: 50%;
+      margin-top: -100px;
+      margin-left: -150px;
+      background-color: #f1f1f1;
+      border: 1px solid #888;
+      padding: 20px;
+    }
+      #de {
       display: none;
       position: fixed;
       width: 300px;
@@ -144,7 +170,7 @@
       padding: 20px;
     }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js"></script>
   </head>
   <body>
      <div id="menu" class="menu">
@@ -159,15 +185,34 @@
     <div id="top">
        <h2>你好 這位員工</h2>
       <br>
-       <button class="createAcc">創建帳號</button>
-       <button class="passVerify">人工驗證</button>
-       <button class="deleteAccount">刪除帳號</button>
+       <button class="createAcc" onclick="openScreen('create')">創建帳號</button>
+       <button class="passVerify" onclick="openScreen('verify')">人工驗證</button>
+       <button class="deleteAccount" onclick="openScreen('de')">刪除帳號</button>
       </center>
       <br>
   </center>
 </div>
     <br>
-    <br>
+    <div id="create">
+    <label for="name">Wbank用戶名:</label><br>
+    <input type="text" id="name" name="username"><br>
+    <label for="amount">密碼:</label><br>
+    <input type="password" id="pw" name="pw"><br>
+    <button class="btn" onclick="confirmDepoWithdraw('create')">確認</button>
+    <button class="btn" onclick="closeDepoWithdrawWin('create')">關閉</button>
+  </div>
+    <div id="verify">
+    <label for="name">Wbank用戶名:</label><br>
+    <input type="text" id="name" name="username"><br>
+    <button class="btn" onclick="confirmDepoWithdraw('verify')">確認</button>
+    <button class="btn" onclick="closeDepoWithdrawWin('verify')">關閉</button>
+  </div>
+    <div id="de">
+    <label for="name">Wbank用戶名:</label><br>
+    <input type="text" id="name" name="username"><br>
+    <button class="btn" onclick="confirmDepoWithdraw('de')">確認</button>
+    <button class="btn" onclick="closeDepoWithdrawWin('de')">關閉</button>
+  </div>
     <script>
       function openMenu()  {
     document.getElementById('menu').style.right = '0';
@@ -179,6 +224,60 @@ function closeMenu() {
    var openBtn = document.getElementsByClassName("open-btn");
     openBtn.style.display = "block";
 }
+function closeDepoWithdrawWin(id) {
+      document.getElementById(id).style.display = "none";
+    }
+    function confirmDepoWithdraw(id) {
+      var d = document.getElementById(id);
+      if (d == "create") {
+        var socket = io();
+
+        socket.on('connect', function() {
+            console.log('Connected to server');
+        });
+        socket.emit('createAcc',{
+         'username': document.getElementById('name'),
+          'pw': document.getElementById('pw')
+        });
+        socket.on('success',(msg) => {
+           alert(msg.success);
+        });
+      } else if (d == "verify") {
+        var socket = io();
+
+        socket.on('connect', function() {
+            console.log('Connected to server');
+        });
+        socket.emit('verifyAcc',{
+         'username': document.getElementById('name'),
+        });
+        socket.on('success',(msg) => {
+           alert(msg.success);
+        });
+      } else if (d == "de") {
+        var socket = io();
+
+        socket.on('connect', function() {
+            console.log('Connected to server');
+        });
+        socket.emit('deAcc',{
+         'username': document.getElementById('name'),
+        });
+        socket.on('success',(msg) => {
+           alert(msg.success);
+        });
+      }
+    }
+    function openScreen(id) {
+     var d = document.getElementById(id);
+      if (d == "create") {
+        d.style.display = "block";
+      } else if (d == "verify") {
+        d.style.display = "block";
+      } else if (d == "de") {
+        d.style.display = "block";
+      }
+    }
     </script>
   </body>
 </html>
