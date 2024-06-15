@@ -200,16 +200,9 @@ const returnAlert = () => {
       document.getElementById("toHome").addEventListener("click",() => {
           window.reload();
       });
-      document.getElementById("toP2P").addEventListener("click",() => {
-          window.location.href="/wbank/transfer";
-      });
       document.getElementById("toAtm").addEventListener("click",() => {
           let user = '{{ user }}';
         window.location.href="/wbank/buyCoins?user="+user;
-      });
-      document.getElementById("toPay").addEventListener("click",() => {
-          let user = '{{ user }}';
-        window.location.href="/wbank/sellCoins?user="+user;
       });
       document.getElementById("pp").addEventListener("click",() => {
         return buy();
