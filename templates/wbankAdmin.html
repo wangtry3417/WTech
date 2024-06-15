@@ -1,1 +1,171 @@
-
+<html>
+  <head>
+    <title>泓財WBank -- 後台管理系統</title>
+    <link rel="manifest" href="{{ url_for('static',filename='wbank.json') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='menu.css') }}">
+    <style>
+      #top {
+       width: 2000px;
+       margin: auto;
+       background-color: #fff;
+       padding: 20px;
+       border-radius: 5px;
+       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      }
+      .btn1 {
+        background-color: rgb(255,255,255);
+        color: rgb(0,0,0);
+        padding: 12px 14px;
+        font-size: 13px;
+      }
+      #warn {
+       width: 298px;
+       margin: auto;
+       background-color: #fff;
+       padding: 20px;
+       border: 3px solid black;
+       animation: wn 5s linear 2s infinite alternate;
+      }
+      @keyframes wn {
+        0% {
+          border: 3px solid #FF0000;
+        }
+        100% {
+          border: 3px solid black;
+        }
+      }
+      #lineChart {
+         width: 100%;
+         height:100%;
+      }
+      .footer {
+   position: fixed;
+   left: 0;
+   bottom: 0;
+   width: 100%;
+   background-color: #d3d3d3;
+   color: black;
+   text-align: center;
+   display: flex;
+}
+  #fuc1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .paypal {
+        background-color: rgb(255,255,255);
+        color: rgb(0,0,0);
+        padding: 12px 14px;
+        font-size: 13px;
+        text-align: center;
+  }
+  .atm {
+        background-color: rgb(255,255,255);
+        color: rgb(0,0,0);
+        padding: 12px 14px;
+        font-size: 13px;
+        text-align: center;
+  }
+  .spend-out {
+        background-color: rgb(255,255,255);
+        color: rgb(0,0,0);
+        padding: 12px 14px;
+        font-size: 13px;
+        text-align: center;
+  }
+  .record {
+     background-color: rgb(255,255,255);
+        color: rgb(0,0,0);
+        padding: 12px 14px;
+        font-size: 13px;
+        text-align: center;
+  }
+  .fps {
+    background-color: rgb(255,255,255);
+        color: rgb(0,0,0);
+        padding: 12px 14px;
+        font-size: 13px;
+        text-align: center;
+  }
+  .loan {
+    background-color: rgb(255,255,255);
+        color: rgb(0,0,0);
+        padding: 12px 14px;
+        font-size: 13px;
+        text-align: center;
+  }
+  .nfc {
+   background-color: rgb(255,255,255);
+        color: rgb(0,0,0);
+        padding: 12px 14px;
+        font-size: 13px;
+        text-align: center;
+  }
+    .createAcc {
+    background-color: rgb(255,0,0);
+        color: rgb(255,255,255);
+        padding: 12px 14px;
+        font-size: 13px;
+        text-align: center;
+    }
+    .passVerify {
+    background-color: rgb(0,255,0);
+        color: rgb(0,0,0);
+        padding: 12px 14px;
+        font-size: 13px;
+        text-align: center;
+    }
+    .deleteAccount {
+   background-color: rgb(0,0,255);
+        color: rgb(255,255,255);
+        padding: 12px 14px;
+        font-size: 13px;
+        text-align: center;
+    }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+     <div id="menu" class="menu">
+        <button class="close-btn" onclick="closeMenu()">X</button>
+        <ul>
+        <li><a href="/wbank" class="home">登出 log-out</a></li>
+        <br>
+        </ul>
+    </div>
+    <button class="open-btn" onclick="openMenu()">選單</button>
+    <center>
+    <div id="top">
+       <h2>你好 這位員工</h2>
+      <br>
+       <button class="createAcc">創建帳號</button>
+       <button class="passVerify">人工驗證</button>
+       <button class="deleteAccount">刪除帳號</button>
+      </center>
+      <br>
+  </center>
+</div>
+    <br>
+    <br>
+    <script>
+      function openMenu()  {
+    document.getElementById('menu').style.right = '0';
+      var openBtn = document.getElementsByClassName("open-btn");
+      openBtn.style.display = "none";
+}
+function closeMenu() {
+    document.getElementById('menu').style.right = '-200px';
+   var openBtn = document.getElementsByClassName("open-btn");
+    openBtn.style.display = "block";
+}
+    </script>
+  </body>
+</html>
