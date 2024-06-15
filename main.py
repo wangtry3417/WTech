@@ -49,7 +49,7 @@ app = Flask("WTech")
 
 socketio = SocketIO(app)
 
-CORS(app)
+CORS(app,resources={r"/*": {"origins": "*"}})
 
 @app.after_request
 def after_request(response):
