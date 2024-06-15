@@ -114,7 +114,7 @@ def error_server(e):
 
 @socketio.on('connect')
 def handle_connect():
-  print("nfc ok")
+  print("connected websocket!.")
 
 @socketio.on('nfc_detected')
 def handle_nfc_detected(data):
