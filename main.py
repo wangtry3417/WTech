@@ -127,7 +127,7 @@ def handle_nfc_detected(data):
     "Value":amount
   }
   res = requests.get(url="https://wtech-5o6t.onrender.com/wtech/v2/createOrder",headers=headers).json()
-  result = requests.get(url=f"https://wtech-5o6t.onrender.com/wtech/v2/transfer?code={res['code']}")
+  result = requests.get(url=f"https://wtech-5o6t.onrender.com/wtech/v2/transfer?code={res['code']}").json()
   emit('payment_result',{'success':'Done'})
 
 @socketio.on('createAcc')
