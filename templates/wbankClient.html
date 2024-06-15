@@ -218,9 +218,6 @@ const returnAlert = () => {
           let user = '{{ user }}';
         window.location.href="/wbank/sellCoins?user="+user;
       });
-      document.getElementById("p2p").addEventListener("click",() => {
-        return transfer();
-      });
       document.getElementById("pp").addEventListener("click",() => {
         return buy();
       });
