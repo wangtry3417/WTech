@@ -150,7 +150,12 @@
     </div>
       </center>
       <br>
-    </div>
+      </div>
+      <b><h4>其他服務：</h4></b>
+      <br>
+      <div id="top">
+        <p id="sun" class="sun"><img src="{{ url_for('static',filename='IMG_0188.png') }}" alt="sun" width="45" height="40"><br>太陽開發商:提供各種插件服務</p>
+      </div>
   </center>
     <center>
     <div class="footer">
@@ -227,6 +232,9 @@ const returnAlert = () => {
       });
       document.getElementById("nfc").addEventListener("click",() => {
         window.location.href="/wbank/nfc?user=" + "{{ user }}";
+      });
+      document.getElementById("sun").addEventListener("click",() => {
+        window.location.href="https://www.sunscript.dev/";
       });
     </script>
   </body>
