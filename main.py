@@ -1159,7 +1159,8 @@ def wbank_client():
         break
       else: 
         balance = row[1]
-        return render_template("wbankClient.html",user=user,balance=balance)
+        HK_Value = int(balance)/10
+        return render_template("wbankClient.html",user=user,balance=balance,HK_Value=HK_Value)
   return error_message
 
 @app.route("/wbank/recordPage")
