@@ -772,7 +772,7 @@ def wbank():
   except requests.RequestException:
     return abort(502)
     
-  if res["status"] != "success":
+  if res["status"] != "fail":
     if res.get("countryCode") == "CN":
       return redirect("/wtech/bockweb?place=cn")
     else:
