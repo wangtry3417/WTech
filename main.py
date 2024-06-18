@@ -169,14 +169,14 @@ def index():
     user_ip = request.remote_addr
     
   try:
-    res = requests.get(f"https://ipinfo.io/{user_ip}?token=f5bcbfedf78b27").json()
+    res = requests.get(f"http://ip-api.com/json/{user_ip}").json()
   except requests.RequestException:
     return abort(502)
     
-  if "bogon" not in res:
-    if res.get("country") == "CN":
+  if res["status"] !== "fail":
+    if res.get("countryCode") == "CN":
       return redirect("/wtech/bockweb?place=cn")
-    elif res.get("country") == "TW":
+    elif res.get("countryCode") == "TW":
       return redirect("/wtech/bockweb?place=tw")
     else:
       return render_template("wtechHome.html")
@@ -768,12 +768,12 @@ def wbank():
     user_ip = request.remote_addr
     
   try:
-    res = requests.get(f"https://ipinfo.io/{user_ip}?token=f5bcbfedf78b27").json()
+    res = requests.get(f"http://ip-api.com/json/{user_ip}").json()
   except requests.RequestException:
     return abort(502)
     
-  if "bogon" not in res:
-    if res.get("country") == "CN":
+  if res["status"] !== "success":
+    if res.get("countryCode") == "CN":
       return redirect("/wtech/bockweb?place=cn")
     else:
       return render_template("wbank.html")
