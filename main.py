@@ -173,7 +173,7 @@ def index():
   except requests.RequestException:
     return abort(502)
     
-  if res["status"] !== "fail":
+  if res["status"] != "fail":
     if res.get("countryCode") == "CN":
       return redirect("/wtech/bockweb?place=cn")
     elif res.get("countryCode") == "TW":
@@ -772,7 +772,7 @@ def wbank():
   except requests.RequestException:
     return abort(502)
     
-  if res["status"] !== "success":
+  if res["status"] != "success":
     if res.get("countryCode") == "CN":
       return redirect("/wtech/bockweb?place=cn")
     else:
