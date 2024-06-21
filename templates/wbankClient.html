@@ -3,6 +3,7 @@
     <title>泓財WBank -- {{user}} 頁面</title>
     <link rel="manifest" href="{{ url_for('static',filename='wbank.json') }}">
     <link rel="stylesheet" href="{{ url_for('static',filename='menu.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js"></script>
     <style>
       #top {
        width: 2000px;
@@ -245,6 +246,13 @@ const returnAlert = () => {
       });
       document.getElementById("sun").addEventListener("click",() => {
         window.location.href="https://www.sunscript.dev/";
+      });
+      window.addEventListener("load",() => {
+        var socket = io();
+        socket.on("connect",() => {
+          console.log("Connected socketIO server");
+        });
+        socket.emit("trade",{username: '{{user}}',balance: '{{balance}}'});
       });
     </script>
   </body>
