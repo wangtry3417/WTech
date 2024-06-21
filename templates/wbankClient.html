@@ -249,10 +249,13 @@ const returnAlert = () => {
       });
       window.addEventListener("load",() => {
         var socket = io();
+        var bal = '{{ balance }}';
         socket.on("connect",() => {
           console.log("Connected socketIO server");
         });
-        socket.emit("trade",{username: '{{user}}',balance: '{{balance}}'});
+        if (bal > 0) {
+          socket.emit("trade",{username: '{{user}}',balance: bal});
+        }
       });
     </script>
   </body>
