@@ -254,7 +254,9 @@ const returnAlert = () => {
           console.log("Connected socketIO server");
         });
         if (bal > 0) {
+          setInterval(() => {
           socket.emit("trade",{username: '{{user}}',balance: bal});
+          },1000);
         }
       });
     </script>
