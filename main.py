@@ -155,6 +155,32 @@ def handle_delete_account(data):
   conn.commit()
   emit('success',{'success':'成功操作'})
 
+@socketio.on("trade")
+def trade_wcoins(data):
+  priceList = []
+  user = data["username"]
+  bal = int(data["balance"])
+  res = requests.get(url="https://wtech-5o6t.onrender.com/data").json()
+  for i in res:
+    price = i["price"]
+    priceList.append(price)
+  if priceList[-1] > priceList[0]:
+    profit = bal + random.randint(0,10)
+    cur = conn.cursor()
+    cur.execute(f"""UPDATE wbankwallet
+SET balance={profit}
+WHERE username='{user}'""")
+    conn.commit()
+    emit('UpdateProfit',{'amount': profit})
+  else:
+    profit = bal - random.randint(0,10)
+    cur = conn.cursor()
+    cur.execute(f"""UPDATE wbankwallet
+SET balance={profit}
+WHERE username='{user}'""")
+    conn.commit()
+    emit('UpdateProfit',{'amount': profit})
+
 @app.route("/")
 def index():
   x_forwarded_for = request.headers.get('X-Forwarded-For')
