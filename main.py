@@ -60,16 +60,16 @@ CORS(app,resources={r"/*": {"origins": "*"}})
 db = SQLAlchemy(app)
 
 # 定義 SQLAlchemy 模型
-class User(db.Model):
-    name = db.Column(db.String(64))
+class wbankwallet(db.Model):
+    username = db.Column(db.String(64))
     balance = db.Column(db.String(120), unique=True)
-    pw = db.Column(db.String(120), unique=True)
+    password = db.Column(db.String(120), unique=True)
 
 # 創建 Flask-Admin 管理界面
 admin = Admin(app, name='WBank Admin', template_mode='bootstrap3')
 
 # 添加 SQLAlchemy 模型管理視圖
-admin.add_view(ModelView(User, db.session))
+admin.add_view(ModelView(wbankwallet, db.session))
 
 @app.after_request
 def after_request(response):
