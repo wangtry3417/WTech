@@ -73,11 +73,19 @@ class wbankwallet(db.Model):
         db.PrimaryKeyConstraint('verify'),
     )
 
+class CustomModelView(ModelView):
+    column_display_all_fields = True
+
+    def __init__(self, model, session, **kwargs):
+        super(CustomModelView, self).__init__(model, session, **kwargs)
+
 # 創建 Flask-Admin 管理界面
 admin = Admin(app, name='泓財銀行--管理介面', template_mode='bootstrap4')
 
+admin.add_view(CustomModelView(wbankwallet, db.session))
+
 # 添加 SQLAlchemy 模型管理視圖
-admin.add_view(ModelView(wbankwallet, db.session, column_display_all_fields = True))
+#admin.add_view(ModelView(wbankwallet, db.session))
 
 @app.after_request
 def after_request(response):
