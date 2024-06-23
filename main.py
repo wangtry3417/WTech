@@ -1062,7 +1062,7 @@ def wbank_sell_payCode():
 @auth.login_required
 def wbank_new_code():
   provider = request.form.get("provider")
-  amount = str(request.form.get("amount"))
+  amount = request.form.get("amount")
   if provider == "" and amount == "":
     return jsonify({"Error":"Null things!."})
   elif provider == "" or amount == "":
@@ -1071,7 +1071,7 @@ def wbank_new_code():
     text1 = [provider,amount]
     t1 = ",".join(text1)
     hash1 = hashlib.sha256(t1.encode()).hexdigest()
-    return jsonify({"Your code is":hash1})
+    return jsonify({"Your code is":hash1,"The text":t1})
 
 @app.route("/wbank/gift/code", methods=["POST"])
 def wbank_check_code():
@@ -1101,7 +1101,7 @@ def wbank_check_code():
             conn.commit()
             return "兌換成功"
 
-    return "此代碼無效"
+    return f"此代碼無效  {t1}"
 
 @app.route("/wbank/gift")
 def wbank_gift_code():
