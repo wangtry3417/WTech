@@ -53,10 +53,10 @@
       <br>
       <form action="/wbank/gift/code" method="post">
        <label>你的名字：</label>
-       <input type="text" id="user" value="{{ user }}" disabled>
+       <input type="text" name="user" value="{{ user }}" disabled>
        <br>
        <label>禮品卡代碼：</label>
-       <input type="text" id="code" required>
+       <input type="text" name="code" required>
       <br>
       <button class="btn1" type="submit">兌換</button>
       <br>
