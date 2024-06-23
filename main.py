@@ -63,9 +63,6 @@ db = SQLAlchemy(app)
 
 babel = Babel(app)
 
-def get_locale():
-  return 'zh_CN'
-
 # 定義 SQLAlchemy 模型
 class wbankwallet(db.Model):
     username = db.Column(db.String(64), nullable=False)
@@ -77,7 +74,7 @@ class wbankwallet(db.Model):
     )
 
 # 創建 Flask-Admin 管理界面
-admin = Admin(app, name='泓財銀行--管理介面', template_mode='bootstrap3', locale_selector=get_locale)
+admin = Admin(app, name='泓財銀行--管理介面', template_mode='bootstrap3')
 
 # 添加 SQLAlchemy 模型管理視圖
 admin.add_view(ModelView(wbankwallet, db.session))
