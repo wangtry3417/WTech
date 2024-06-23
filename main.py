@@ -1073,28 +1073,35 @@ def wbank_new_code():
     hash1 = hashlib.sha256(t1.encode()).hexdigest()
     return jsonify({"Your code is":hash1})
 
-@app.route("/wbank/gift/code",methods=["POST"])
+@app.route("/wbank/gift/code", methods=["POST"])
 def wbank_check_code():
-  user = request.form.get("user")
-  code = request.form.get("code")
-  cur = conn.cursor()
-  cur.execute("select * from wbankcode")
-  rows = cur.fetchall()
-  for row in rows:
-    if row[0] == code:
-      return "此代碼已用過"
-    values = ["100","500","700","900","1200","1500","2000","2300","5000","8000","10000"]
+    user = request.form.get("user")
+    code = request.form.get("code")
+
+    # 檢查代碼是否已存在於數據庫
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM wbankcode WHERE code = %s", (code,))
+    if cur.fetchone():
+        return "此代碼已用過"
+
+    # 驗證代碼是否有效
+    values = ["100", "500", "700", "900", "1200", "1500", "2000", "2300", "5000", "8000", "10000"]
     for value in values:
-      text1 = ["wbank",value]
-      t1 = ",".join(text1)
-      hash1 = hashlib.sha256(t1.encode()).hexdigest()
-      if code == hash1:
-        cur = conn.cursor()
-        res = requests.get(url="https://wtech-5o6t.onrender.com/wtech/v2/createOrder",headers={"Username":"wbank","reviewer":user,"Value":value}).json()
-        requests.get(url=f"https://wtech-5o6t.onrender.com/wtech/v2/transfer?code={res['code']}")
-        cur.execute(f"INSERT * wbankcode (code) values ('code')")
-        return "兌換成功"
-      return "此代碼無效"
+        text1 = ["wbank", value]
+        t1 = ",".join(text1)
+        hash1 = hashlib.sha256(t1.encode()).hexdigest()
+        if code == hash1:
+            # 創建訂單
+            res = requests.get(url="https://wtech-5o6t.onrender.com/wtech/v2/createOrder",
+                              headers={"Username": "wbank", "reviewer": user, "Value": value}).json()
+            # 轉賬
+            requests.get(url=f"https://wtech-5o6t.onrender.com/wtech/v2/transfer?code={res['code']}")
+            # 將代碼插入數據庫
+            cur.execute("INSERT INTO wbankcode (code) VALUES (%s)", (code,))
+            conn.commit()
+            return "兌換成功"
+
+    return "此代碼無效"
 
 @app.route("/wbank/gift")
 def wbank_gift_code():
