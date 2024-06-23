@@ -52,6 +52,7 @@ app = Flask("WTech")
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://root:r7wPtW1z6ltgw4oW8hW6qeIzJacfgwCM@dpg-cop0h6779t8c73fimlm0-a.singapore-postgres.render.com/wbank'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
+app.config['SECRET_KEY'] = hashlib.sha256("WTech2225556".encode())
 
 socketio = SocketIO(app)
 
