@@ -1078,6 +1078,9 @@ def wbank_check_code():
     user = request.form.get("user")
     code = request.form.get("code")
 
+    if not code:
+        return "請輸入驗證碼"
+
     # 檢查代碼是否已存在於數據庫
     cur = conn.cursor()
     cur.execute("SELECT * FROM wbankcode WHERE code = %s", (code,))
@@ -1103,7 +1106,7 @@ def wbank_check_code():
         return "兌換成功"
 
     return "此代碼無效"
-
+                   
 @app.route("/wbank/gift")
 def wbank_gift_code():
   user = request.args.get("user")
