@@ -63,7 +63,6 @@ db = SQLAlchemy(app)
 
 babel = Babel(app)
 
-@babel.localeselector
 def get_locale():
   return 'zh_CN'
 
