@@ -1103,7 +1103,7 @@ def wbank_check_code():
               conn.commit()
               return "兌換成功"
 
-    return "此代碼無效"
+    return "此代碼無效 " + expected_code
                    
 @app.route("/wbank/gift")
 def wbank_gift_code():
