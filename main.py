@@ -73,7 +73,8 @@ class wbankwallet(db.Model):
 
 class CustomModelView(ModelView):
     column_display_all_fields = True
-
+    page_size = 30
+    can_set_page_size = True
     def __init__(self, model, session, **kwargs):
         super(CustomModelView, self).__init__(model, session, **kwargs)
     def get_query(self):
