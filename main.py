@@ -68,8 +68,8 @@ class wbankwallet(db.Model):
     username = db.Column(db.String(64), nullable=False)
     balance = db.Column(db.String(120), nullable=False)
     password = db.Column(db.String(120), nullable=False)
-    verify = db.Column(db.String(64), nullable=False)
-    sub = db.Column(db.String(64), primary_key=True, nullable=False)
+    verify = db.Column(db.String(64), primary_key=True,nullable=False)
+    sub = db.Column(db.String(64), nullable=True)
 
 class CustomModelView(ModelView):
     column_display_all_fields = True
