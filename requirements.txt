@@ -16,3 +16,4 @@ py-cord
 nfcpy
 Flask-SocketIO
 flask-admin
+Flask-Babel
