@@ -64,8 +64,9 @@ class wbankwallet(db.Model):
     username = db.Column(db.String(64), nullable=False)
     balance = db.Column(db.String(120), nullable=False)
     password = db.Column(db.String(120), nullable=False)
+    verify = dv.Column(db.String(64), nullable=False)
     __table_args__ = (
-        db.PrimaryKeyConstraint('username', 'password'),
+        db.PrimaryKeyConstraint('verify'),
     )
 
 # 創建 Flask-Admin 管理界面
