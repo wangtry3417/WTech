@@ -1062,7 +1062,7 @@ def wbank_sell_payCode():
 @auth.login_required
 def wbank_new_code():
   provider = request.form.get("provider")
-  amount = request.form.get("amount")
+  amount = str(request.form.get("amount"))
   if provider == "" and amount == "":
     return jsonify({"Error":"Null things!."})
   elif provider == "" or amount == "":
