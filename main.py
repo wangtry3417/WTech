@@ -61,9 +61,10 @@ db = SQLAlchemy(app)
 
 # 定義 SQLAlchemy 模型
 class wbankwallet(db.Model):
-    username = db.Column(db.String(64))
-    balance = db.Column(db.String(120), unique=True)
-    password = db.Column(db.String(120), unique=True)
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(64), nullable=False)
+    balance = db.Column(db.String(120), nullable=False)
+    password = db.Column(db.String(120), nullable=False)
 
 # 創建 Flask-Admin 管理界面
 admin = Admin(app, name='WBank Admin', template_mode='bootstrap3')
