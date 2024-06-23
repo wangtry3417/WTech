@@ -1058,6 +1058,49 @@ def wbank_sell_payCode():
       return render_template("wbankPayment.html",user=user,balance=balance)
   return "無法驗證用戶信息，或者可能哈希值(hash-value)有誤。請刷新此QR code。"
 
+@app.route("/wbank/gift/create",methods=["POST"])
+@auth.login_required
+def wbank_new_code():
+  provider = request.form.get("provider")
+  amount = request.form.get("amount")
+  if provider == "" and amount == "":
+    return jsonify({"Error":"Null things!."})
+  elif provider == "" or amount == "":
+    return jsonify({"Error":"Null things!."})
+  else:
+    text1 = [provider,amount]
+    t1 = ",".join(text1)
+    hash1 = hashlib.sha256(t1.encode()).hexdigest()
+    return jsonify({"Your code is":hash1})
+
+@app.route("/wbank/gift/code",methods=["POST"])
+def wbank_check_code():
+  user = request.form.get("user")
+  code = request.form.get("code")
+  cur = conn.cursor()
+  cur.execute("select * from wbankcode")
+  rows = cur.fetchall()
+  for row in rows:
+    if row[0] == code:
+      return "此代碼已用過"
+    values = ["100","500","700","900","1200","1500","2000","2300","5000","8000","10000"]
+    for value in values:
+      text1 = ["wbank",value]
+      t1 = ",".join(text1)
+      hash1 = hashlib.sha256(t1.encode()).hexdigest()
+      if code == hash1:
+        cur = conn.cursor()
+        res = requests.get(url="https://wtech-5o6t.onrender.com/wtech/v2/createOrder",headers={"Username":"wbank","reviewer":user,"Value":value}).json()
+        requests.get(url=f"https://wtech-5o6t.onrender.com/wtech/v2/transfer?code={res['code']")
+        cur.execute(f"INSERT * wbankcode (code) values ('code')")
+        return "兌換成功"
+      return "此代碼無效"
+
+@app.route("/wbank/gift")
+def wbank_gift_code():
+  user = request.args.get("user")
+  return render_template("wbankGiftCard.html",user=user)
+
 @app.route("/wbank/nfc")
 def wbank_nfc_page():
   user = request.args.get("user")
