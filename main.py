@@ -69,7 +69,7 @@ class wbankwallet(db.Model):
     )
 
 # 創建 Flask-Admin 管理界面
-admin = Admin(app, name='WBank Admin', template_mode='bootstrap3')
+admin = Admin(app, name='泓財銀行--管理介面', template_mode='bootstrap3')
 
 # 添加 SQLAlchemy 模型管理視圖
 admin.add_view(ModelView(wbankwallet, db.session))
