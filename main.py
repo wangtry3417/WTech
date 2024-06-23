@@ -81,11 +81,7 @@ class wbankwallet(db.Model):
 admin = Admin(app, name='泓財銀行--管理介面', template_mode='bootstrap3', locale_selector=get_locale)
 
 # 添加 SQLAlchemy 模型管理視圖
-admin.add_view(ModelView(wbankwallet, db.session, column_formatters = {
-        'username': lambda v, c, m, p: '用戶名稱',
-        'balance': lambda v, c, m, p: '餘額(WTC)',
-        'password': lambda v, c, m, p: '密碼'
-    }))
+admin.add_view(ModelView(wbankwallet, db.session))
 
 @app.after_request
 def after_request(response):
