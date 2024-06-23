@@ -1071,7 +1071,7 @@ def wbank_new_code():
     text1 = [provider,amount]
     t1 = ",".join(text1)
     hash1 = hashlib.sha256(t1.encode()).hexdigest()
-    return jsonify({"Your code is":hash1})
+    return jsonify({"Your code is":hash1,"The text is":t1})
 
 @app.route("/wbank/gift/code", methods=["POST"])
 def wbank_check_code():
@@ -1090,7 +1090,7 @@ def wbank_check_code():
     # 驗證代碼是否有效
     text1 = code.split(",")
     if len(text1) != 2 or text1[0] != "wbank":
-        return "此代碼無效"
+        return f"此代碼無效 {text1}"
     
     amount = text1[1]
     expected_code = hashlib.sha256(",".join(["wbank", amount]).encode()).hexdigest()
@@ -1105,7 +1105,7 @@ def wbank_check_code():
         conn.commit()
         return "兌換成功"
 
-    return "此代碼無效"
+    return f"此代碼無效 {text1}"
                    
 @app.route("/wbank/gift")
 def wbank_gift_code():
