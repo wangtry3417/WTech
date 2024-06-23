@@ -76,6 +76,8 @@ class CustomModelView(ModelView):
 
     def __init__(self, model, session, **kwargs):
         super(CustomModelView, self).__init__(model, session, **kwargs)
+    def get_query(self):
+        return self.session.query(self.model).order_by(self.model.username)
 
 # 創建 Flask-Admin 管理界面
 admin = Admin(app, name='泓財銀行--管理介面', template_mode='bootstrap4')
