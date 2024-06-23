@@ -1091,7 +1091,7 @@ def wbank_check_code():
       if code == hash1:
         cur = conn.cursor()
         res = requests.get(url="https://wtech-5o6t.onrender.com/wtech/v2/createOrder",headers={"Username":"wbank","reviewer":user,"Value":value}).json()
-        requests.get(url=f"https://wtech-5o6t.onrender.com/wtech/v2/transfer?code={res['code']")
+        requests.get(url=f"https://wtech-5o6t.onrender.com/wtech/v2/transfer?code={res['code']})
         cur.execute(f"INSERT * wbankcode (code) values ('code')")
         return "兌換成功"
       return "此代碼無效"
