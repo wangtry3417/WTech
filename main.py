@@ -49,10 +49,27 @@ class AIModules:
     return response
 
 app = Flask("WTech")
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://root:r7wPtW1z6ltgw4oW8hW6qeIzJacfgwCM@dpg-cop0h6779t8c73fimlm0-a.singapore-postgres.render.com/wbank'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
 
 socketio = SocketIO(app)
 
 CORS(app,resources={r"/*": {"origins": "*"}})
+
+db = SQLAlchemy(app)
+
+# 定義 SQLAlchemy 模型
+class User(db.Model):
+    name = db.Column(db.String(64))
+    balance = db.Column(db.String(120), unique=True)
+    pw = db.Column(db.String(120), unique=True)
+
+# 創建 Flask-Admin 管理界面
+admin = Admin(app, name='WBank Admin', template_mode='bootstrap3')
+
+# 添加 SQLAlchemy 模型管理視圖
+admin.add_view(ModelView(User, db.session))
 
 @app.after_request
 def after_request(response):
