@@ -25,6 +25,9 @@ import pytz
 from discord import Bot,Embed,Option
 import discord
 from flask_socketio import SocketIO,emit
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
+from flask_sqlalchemy import SQLAlchemy
 #from nltk.stem import WordNetLemmatizer
 #from nltk.book import *
 
