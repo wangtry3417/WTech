@@ -1071,7 +1071,7 @@ def wbank_new_code():
     text1 = [provider,amount]
     t1 = ",".join(text1)
     hash1 = hashlib.sha256(t1.encode()).hexdigest()
-    return jsonify({"Your code is":hash1,"The text":t1})
+    return jsonify({"Your code is":hash1})
 
 @app.route("/wbank/gift/code", methods=["POST"])
 def wbank_check_code():
@@ -1085,23 +1085,24 @@ def wbank_check_code():
         return "此代碼已用過"
 
     # 驗證代碼是否有效
-    values = ["100", "500", "700", "900", "1200", "1500", "2000", "2300", "5000", "8000", "10000"]
-    for value in values:
-        text1 = ["wbank", value]
-        t1 = ",".join(text1)
-        hash1 = hashlib.sha256(t1.encode()).hexdigest()
-        if code == hash1:
-            # 創建訂單
-            res = requests.get(url="https://wtech-5o6t.onrender.com/wtech/v2/createOrder",
-                              headers={"Username": "wbank", "reviewer": user, "Value": value}).json()
-            # 轉賬
-            requests.get(url=f"https://wtech-5o6t.onrender.com/wtech/v2/transfer?code={res['code']}")
-            # 將代碼插入數據庫
-            cur.execute("INSERT INTO wbankcode (code) VALUES (%s)", (code,))
-            conn.commit()
-            return "兌換成功"
+    text1 = code.split(",")
+    if len(text1) != 2 or text1[0] != "wbank":
+        return "此代碼無效"
+    
+    amount = text1[1]
+    expected_code = hashlib.sha256(",".join(["wbank", amount]).encode()).hexdigest()
+    if code == expected_code:
+        # 創建訂單
+        res = requests.get(url="https://wtech-5o6t.onrender.com/wtech/v2/createOrder",
+                          headers={"Username": "wbank", "reviewer": user, "Value": amount}).json()
+        # 轉賬
+        requests.get(url=f"https://wtech-5o6t.onrender.com/wtech/v2/transfer?code={res['code']}")
+        # 將代碼插入數據庫
+        cur.execute("INSERT INTO wbankcode (code) VALUES (%s)", (code,))
+        conn.commit()
+        return "兌換成功"
 
-    return f"此代碼無效  {t1}"
+    return "此代碼無效"
 
 @app.route("/wbank/gift")
 def wbank_gift_code():
