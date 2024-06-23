@@ -1075,10 +1075,11 @@ def wbank_new_code():
 def wbank_check_code():
     user = request.form.get("user")
     code = request.form.get("code")
+    cur = conn.cursor()
 
     if not code:
         return "請輸入驗證碼"
-
+  
     # 定義 amount 的可能值
     amount_list = ["100","500","800","1200","1500","2000","5000","7800","10000"]
 
@@ -1087,15 +1088,20 @@ def wbank_check_code():
     for amount in amount_list:
         expected_code = hashlib.sha256(f"{provider},{amount}".encode()).hexdigest()
         if code == expected_code:
-            # 創建訂單
-            res = requests.get(url="https://wtech-5o6t.onrender.com/wtech/v2/createOrder",
+            cur.execute(f"select * from wbankcode where code='{code}'")
+            rows = cur.fetchall()
+            for row in rows:
+              if code == row[0]:
+                return "此代碼已兌換過"
+              # 創建訂單
+              res = requests.get(url="https://wtech-5o6t.onrender.com/wtech/v2/createOrder",
                               headers={"Username": "wbank", "reviewer": user, "Value": amount}).json()
-            # 轉賬
-            requests.get(url=f"https://wtech-5o6t.onrender.com/wtech/v2/transfer?code={res['code']}")
-            # 將代碼插入數據庫
-            cur.execute("INSERT INTO wbankcode (code) VALUES (%s)", (code,))
-            conn.commit()
-            return "兌換成功"
+              # 轉賬
+              requests.get(url=f"https://wtech-5o6t.onrender.com/wtech/v2/transfer?code={res['code']}")
+              # 將代碼插入數據庫
+              cur.execute("INSERT INTO wbankcode (code) VALUES (%s)", (code,))
+              conn.commit()
+              return "兌換成功"
 
     return "此代碼無效"
                    
