@@ -1081,7 +1081,7 @@ def wbank_check_code():
         return "請輸入驗證碼"
   
     # 定義 amount 的可能值
-    amount_list = ["100","500","800","1200","1500","2000","5000","7800","10000"]
+    amount_list = [100,500,800,1200,1500,2000,5000,7800,10000]
 
     # 遍歷 amount_list,計算預期的 code
     provider = "wbank"
@@ -1095,7 +1095,7 @@ def wbank_check_code():
                 return "此代碼已兌換過"
               # 創建訂單
               res = requests.get(url="https://wtech-5o6t.onrender.com/wtech/v2/createOrder",
-                              headers={"Username": "wbank", "reviewer": user, "Value": amount}).json()
+                              headers={"Username": "wbank", "reviewer": user, "Value": str(amount)}).json()
               # 轉賬
               requests.get(url=f"https://wtech-5o6t.onrender.com/wtech/v2/transfer?code={res['code']}")
               # 將代碼插入數據庫
