@@ -90,6 +90,24 @@ class CustomModelView(ModelView):
         total_count = len(object_list)
 
         return total_count, object_list
+    def get_list_template(self):
+        return 'admin/wbankwallet/list.html'
+
+    def get_list(self, page, sort_field, sort_desc, search, filters, execute=True, page_size=None):
+        """
+        獲取分頁後的資料
+        """
+        if page_size is None:
+            page_size = self.page_size
+
+        total_count, object_list = self.get_query()
+
+        # 進行分頁
+        start = (page - 1) * page_size
+        end = start + page_size
+        page_data = object_list[start:end]
+
+        return total_count, page_data
 
 # 創建 Flask-Admin 管理界面
 admin = Admin(app, name='泓財銀行--管理介面', template_mode='bootstrap4')
