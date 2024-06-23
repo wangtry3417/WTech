@@ -68,9 +68,10 @@ class wbankwallet(db.Model):
     username = db.Column(db.String(64), nullable=False)
     balance = db.Column(db.String(120), nullable=False)
     password = db.Column(db.String(120), nullable=False)
-    __table_args__ = (
-        db.PrimaryKeyConstraint('verify'),
-    )
+    verify = db.Column(db.String(64), nullable=False)
+    #__table_args__ = (
+    #    db.PrimaryKeyConstraint('verify'),
+    # )
 
 class CustomModelView(ModelView):
     column_display_all_fields = True
