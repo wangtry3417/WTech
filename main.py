@@ -1068,7 +1068,16 @@ def wbank_new_code():
   elif provider == "" or amount == "":
     return jsonify({"Error":"Null things!."})
   else:
-    hash1 = hashlib.sha256(f"{provider},{amount}".encode()).hexdigest()
+    code = [provider,amount]
+    key = "DUBWKuYEugUex8ynVKm-7ctcUmwaV0u0JpzLkoka8_Q="
+    list_string = str(code)
+
+    # 创建 Fernet 加密器
+    fernet = Fernet(key)
+
+    # 加密字符串
+    encrypted_data =  fernet.encrypt(list_string.encode())
+    token = encrypted_data.decode()
     return jsonify({"Your code is":hash1})
 
 @app.route("/wbank/gift/code", methods=["POST"])
@@ -1079,29 +1088,37 @@ def wbank_check_code():
 
     if not code:
         return "請輸入驗證碼"
+
+    key = "DUBWKuYEugUex8ynVKm-7ctcUmwaV0u0JpzLkoka8_Q="
+    fernet = Fernet(key)
+    # 解密结果
+    decrypted_data = fernet.decrypt(code)
+
+    # 将解密后的字符串转换为列表
+    data = eval(decrypted_data.decode())
+
+    if len(data) != 2:
+      return "此代碼無效"
   
     # 遍歷 amount_list,計算預期的 code
     provider = "wbank"
-    amountList = ["100","500","800","1200","5000","8000","10000"]
-    for amount in amountList:
-      expected_code = hashlib.sha256(f"{provider},{amount}".encode()).hexdigest()
-      if code == expected_code:
-        cur.execute(f"select * from wbankcode where code='{code}'")
-        rows = cur.fetchall()
-        for row in rows:
-          if code == row[0]:
-            return "此代碼已兌換過"
-            # 創建訂單
-            res = requests.get(url="https://wtech-5o6t.onrender.com/wtech/v2/createOrder",
+    amount = data[1]
+    cur.execute(f"select * from wbankcode where code='{code}'")
+    rows = cur.fetchall()
+    for row in rows:
+      if code == row[0]:
+        return "此代碼已兌換過"
+      # 創建訂單
+      res = requests.get(url="https://wtech-5o6t.onrender.com/wtech/v2/createOrder",
                               headers={"Username": "wbank", "reviewer": user, "Value": str(amount)}).json()
-            # 轉賬
-            requests.get(url=f"https://wtech-5o6t.onrender.com/wtech/v2/transfer?code={res['code']}")
-            # 將代碼插入數據庫
-            cur.execute("INSERT INTO wbankcode (code) VALUES (%s)", (code,))
-            conn.commit()
-            return "兌換成功"
+      # 轉賬
+      requests.get(url=f"https://wtech-5o6t.onrender.com/wtech/v2/transfer?code={res['code']}")
+      # 將代碼插入數據庫
+      cur.execute("INSERT INTO wbankcode (code) VALUES (%s)", (code,))
+      conn.commit()
+      return "兌換成功"
 
-    return "此代碼無效 " + expected_code + " " + str(amount)
+    return "此代碼無效"
                    
 @app.route("/wbank/gift")
 def wbank_gift_code():
