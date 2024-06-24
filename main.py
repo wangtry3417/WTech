@@ -1098,7 +1098,7 @@ def wbank_check_code():
     data = eval(decrypted_data.decode())
 
     if len(data) != 2:
-      return "此代碼無效"
+      return "此代碼無效 " + data
   
     # 遍歷 amount_list,計算預期的 code
     provider = "wbank"
