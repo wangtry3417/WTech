@@ -1102,14 +1102,14 @@ def wbank_check_code():
         return "此代碼無效", 400
 
     if len(data) != 2:
-        return "此代碼無效", 400
+      return "此代碼無效", 400
 
     provider = data[0]
     amount = data[1]
     cur.execute(f"SELECT * FROM wbankcode WHERE code='{code}'")
     row = cur.fetchone()
     if row:
-        return "此代碼已兌換過", 400
+      return "此代碼已兌換過", 400
 """
     headers = {
    "Username":provider,
