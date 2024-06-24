@@ -1110,7 +1110,7 @@ def wbank_check_code():
     row = cur.fetchone()
     if row:
       return "此代碼已兌換過", 400
-"""
+    """
     headers = {
    "Username":provider,
     "reviewer":user,
