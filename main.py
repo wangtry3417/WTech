@@ -1081,7 +1081,7 @@ def wbank_check_code():
         return "請輸入驗證碼"
   
     if len(code.split(",")) != 2:
-      return "此代碼無效"
+      return "此代碼無效 " + code + " "
   
     # 遍歷 amount_list,計算預期的 code
     provider = code[0]
