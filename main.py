@@ -1104,7 +1104,8 @@ def wbank_check_code():
     if len(data) != 2:
         return "此代碼無效", 400
 
-    provider, amount = data
+    provider = data[0]
+    amount = data[1]
     cur.execute(f"SELECT * FROM wbankcode WHERE code='{code}'")
     row = cur.fetchone()
     if row:
