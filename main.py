@@ -1078,7 +1078,7 @@ def wbank_new_code():
     # 加密字符串
     encrypted_data =  fernet.encrypt(list_string.encode())
     token = encrypted_data.decode()
-    return jsonify({"Your code is":hash1})
+    return jsonify({"Your code is":token})
 
 @app.route("/wbank/gift/code", methods=["POST"])
 def wbank_check_code():
