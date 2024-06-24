@@ -1112,7 +1112,7 @@ def wbank_check_code():
 
     # 創建訂單
     res = requests.get(url="https://wtech-5o6t.onrender.com/wtech/v2/createOrder",
-                      headers={"Username": "wbank", "reviewer": user, "Value": amount}).json()
+                      headers={"Username": "provider", "reviewer": user, "Value": amount}).json()
     # 轉賬
     requests.get(url=f"https://wtech-5o6t.onrender.com/wtech/v2/transfer?code={res['code']}")
     # 將代碼插入數據庫
