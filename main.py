@@ -1098,10 +1098,10 @@ def wbank_check_code():
     data = eval(decrypted_data.decode())
 
     if len(data) != 2:
-      return "此代碼無效 " + data
+      return "此代碼無效"
   
     # 遍歷 amount_list,計算預期的 code
-    provider = "wbank"
+    provider = data[0]
     amount = data[1]
     cur.execute(f"select * from wbankcode where code='{code}'")
     rows = cur.fetchall()
@@ -1118,7 +1118,7 @@ def wbank_check_code():
       conn.commit()
       return "兌換成功"
 
-    return "此代碼無效 " + data
+    return "此代碼無效"
                    
 @app.route("/wbank/gift")
 def wbank_gift_code():
