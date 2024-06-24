@@ -1110,7 +1110,7 @@ def wbank_check_code():
     row = cur.fetchone()
     if row:
         return "此代碼已兌換過", 400
-
+"""
     headers = {
    "Username":provider,
     "reviewer":user,
@@ -1119,10 +1119,11 @@ def wbank_check_code():
     res = requests.get(url="https://wtech-5o6t.onrender.com/wtech/v2/createOrder",headers=headers).json()
     result = requests.get(url=f"https://wtech-5o6t.onrender.com/wtech/v2/transfer?code={res['code']}").json()
     #emit('payment_result',{'success':'Done'})
+    """
     # 將代碼插入數據庫
     cur.execute(f"INSERT INTO wbankcode (code) VALUES ('{code}')")
     conn.commit()
-    return jsonify(result)
+    return render_template("wbankDone.html",user=user,count=amount)
                    
 @app.route("/wbank/gift")
 def wbank_gift_code():
