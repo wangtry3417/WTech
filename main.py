@@ -1115,9 +1115,9 @@ def wbank_check_code():
     "reviewer":user,
     "Value":amount
   }
-  res = requests.get(url="https://wtech-5o6t.onrender.com/wtech/v2/createOrder",headers=headers).json()
-  result = requests.get(url=f"https://wtech-5o6t.onrender.com/wtech/v2/transfer?code={res['code']}").json()
-  emit('payment_result',{'success':'Done'})
+    res = requests.get(url="https://wtech-5o6t.onrender.com/wtech/v2/createOrder",headers=headers).json()
+    result = requests.get(url=f"https://wtech-5o6t.onrender.com/wtech/v2/transfer?code={res['code']}").json()
+    #emit('payment_result',{'success':'Done'})
     # 將代碼插入數據庫
     cur.execute(f"INSERT INTO wbankcode (code) VALUES ('{code}')")
     conn.commit()
