@@ -29,6 +29,7 @@ from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_sqlalchemy import SQLAlchemy
 from flask_babel import Babel
+import json
 #from nltk.stem import WordNetLemmatizer
 #from nltk.book import *
 
@@ -1062,7 +1063,7 @@ def wbank_sell_payCode():
 @auth.login_required
 def wbank_new_code():
   provider = request.form.get("provider")
-  amount = str(request.form.get("amount"))
+  amount = request.form.get("amount")
   if provider == "" and amount == "":
     return jsonify({"Error":"Null things!."})
   elif provider == "" or amount == "":
@@ -1070,7 +1071,7 @@ def wbank_new_code():
   else:
     code = [provider,amount]
     key = "DUBWKuYEugUex8ynVKm-7ctcUmwaV0u0JpzLkoka8_Q="
-    list_string = str(code)
+    list_string = json.dumps(code)
 
     # 创建 Fernet 加密器
     fernet = Fernet(key)
