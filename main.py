@@ -1122,7 +1122,7 @@ def wbank_check_code():
     # 將代碼插入數據庫
     cur.execute(f"INSERT INTO wbankcode (code) VALUES ('{code}')")
     conn.commit()
-    return "兌換成功"
+    return jsonify(result)
                    
 @app.route("/wbank/gift")
 def wbank_gift_code():
