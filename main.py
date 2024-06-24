@@ -1059,27 +1059,26 @@ def wbank_sell_payCode():
       return render_template("wbankPayment.html",user=user,balance=balance)
   return "無法驗證用戶信息，或者可能哈希值(hash-value)有誤。請刷新此QR code。"
 
-@app.route("/wbank/gift/create",methods=["POST"])
+@app.route("/wbank/gift/create", methods=["POST"])
 @auth.login_required
 def wbank_new_code():
-  provider = request.form.get("provider")
-  amount = request.form.get("amount")
-  if provider == "" and amount == "":
-    return jsonify({"Error":"Null things!."})
-  elif provider == "" or amount == "":
-    return jsonify({"Error":"Null things!."})
-  else:
-    code = [provider,amount]
+    provider = request.form.get("provider")
+    amount = request.form.get("amount")
+
+    if not provider or not amount:
+        return jsonify({"Error": "必須填寫所有項目!"}), 400
+
+    code = [provider, amount]
     key = "DUBWKuYEugUex8ynVKm-7ctcUmwaV0u0JpzLkoka8_Q="
     list_string = json.dumps(code)
 
-    # 创建 Fernet 加密器
+    # 創建 Fernet 加密器
     fernet = Fernet(key)
 
     # 加密字符串
-    encrypted_data =  fernet.encrypt(list_string.encode())
+    encrypted_data = fernet.encrypt(list_string.encode())
     token = encrypted_data.decode()
-    return jsonify({"Your code is":token})
+    return jsonify({"Your code is": token})
 
 @app.route("/wbank/gift/code", methods=["POST"])
 def wbank_check_code():
@@ -1088,38 +1087,38 @@ def wbank_check_code():
     cur = conn.cursor()
 
     if not code:
-        return "請輸入驗證碼"
+        return "請輸入驗證碼", 400
 
     key = "DUBWKuYEugUex8ynVKm-7ctcUmwaV0u0JpzLkoka8_Q="
     fernet = Fernet(key)
-    # 解密结果
-    decrypted_data = fernet.decrypt(code)
 
-    # 将解密后的字符串转换为列表
-    data = eval(decrypted_data.decode())
+    try:
+        # 解密結果
+        decrypted_data = fernet.decrypt(code.encode())
+
+        # 將解密後的字符串轉換為列表
+        data = json.loads(decrypted_data.decode())
+    except (ValueError, UnicodeDecodeError):
+        return "此代碼無效", 400
 
     if len(data) != 2:
-      return "此代碼無效"
-  
-    # 遍歷 amount_list,計算預期的 code
-    provider = data[0]
-    amount = data[1]
-    cur.execute(f"select * from wbankcode where code='{code}'")
-    rows = cur.fetchall()
-    for row in rows:
-      if code == row[0]:
-        return "此代碼已兌換過"
-      # 創建訂單
-      res = requests.get(url="https://wtech-5o6t.onrender.com/wtech/v2/createOrder",
-                              headers={"Username": "wbank", "reviewer": user, "Value": str(amount)}).json()
-      # 轉賬
-      requests.get(url=f"https://wtech-5o6t.onrender.com/wtech/v2/transfer?code={res['code']}")
-      # 將代碼插入數據庫
-      cur.execute(f"INSERT INTO wbankcode (code) VALUES ('{code}')")
-      conn.commit()
-      return "兌換成功"
+        return "此代碼無效", 400
 
-    return "此代碼無效"
+    provider, amount = data
+    cur.execute(f"SELECT * FROM wbankcode WHERE code='{code}'")
+    row = cur.fetchone()
+    if row:
+        return "此代碼已兌換過", 400
+
+    # 創建訂單
+    res = requests.get(url="https://wtech-5o6t.onrender.com/wtech/v2/createOrder",
+                      headers={"Username": "wbank", "reviewer": user, "Value": str(amount)}).json()
+    # 轉賬
+    requests.get(url=f"https://wtech-5o6t.onrender.com/wtech/v2/transfer?code={res['code']}")
+    # 將代碼插入數據庫
+    cur.execute(f"INSERT INTO wbankcode (code) VALUES ('{code}')")
+    conn.commit()
+    return "兌換成功"
                    
 @app.route("/wbank/gift")
 def wbank_gift_code():
