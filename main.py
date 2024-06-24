@@ -1114,7 +1114,7 @@ def wbank_check_code():
       # 轉賬
       requests.get(url=f"https://wtech-5o6t.onrender.com/wtech/v2/transfer?code={res['code']}")
       # 將代碼插入數據庫
-      cur.execute("INSERT INTO wbankcode (code) VALUES (%s)", (code,))
+      cur.execute(f"INSERT INTO wbankcode (code) VALUES ('{code}')")
       conn.commit()
       return "兌換成功"
 
