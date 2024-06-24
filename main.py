@@ -1080,28 +1080,26 @@ def wbank_check_code():
     if not code:
         return "請輸入驗證碼"
   
-    if len(code.split(",")) != 2:
-      return "此代碼無效 " + code + " "
-  
     # 遍歷 amount_list,計算預期的 code
-    provider = code[0]
-    amount = str(code[1])
-    expected_code = hashlib.sha256(f"{provider},{amount}".encode()).hexdigest()
-    if code == expected_code:
-      cur.execute(f"select * from wbankcode where code='{code}'")
-      rows = cur.fetchall()
-      for row in rows:
-        if code == row[0]:
-          return "此代碼已兌換過"
-          # 創建訂單
-          res = requests.get(url="https://wtech-5o6t.onrender.com/wtech/v2/createOrder",
+    provider = "wbank"
+    amountList = ["100","500","800","1200","5000","8000","10000"]
+    for amount in amountList:
+      expected_code = hashlib.sha256(f"{provider},{amount}".encode()).hexdigest()
+      if code == expected_code:
+        cur.execute(f"select * from wbankcode where code='{code}'")
+        rows = cur.fetchall()
+        for row in rows:
+          if code == row[0]:
+            return "此代碼已兌換過"
+            # 創建訂單
+            res = requests.get(url="https://wtech-5o6t.onrender.com/wtech/v2/createOrder",
                               headers={"Username": "wbank", "reviewer": user, "Value": str(amount)}).json()
-          # 轉賬
-          requests.get(url=f"https://wtech-5o6t.onrender.com/wtech/v2/transfer?code={res['code']}")
-          # 將代碼插入數據庫
-          cur.execute("INSERT INTO wbankcode (code) VALUES (%s)", (code,))
-          conn.commit()
-          return "兌換成功"
+            # 轉賬
+            requests.get(url=f"https://wtech-5o6t.onrender.com/wtech/v2/transfer?code={res['code']}")
+            # 將代碼插入數據庫
+            cur.execute("INSERT INTO wbankcode (code) VALUES (%s)", (code,))
+            conn.commit()
+            return "兌換成功"
 
     return "此代碼無效 " + expected_code + " " + str(amount)
                    
