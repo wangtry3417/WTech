@@ -1110,11 +1110,14 @@ def wbank_check_code():
     if row:
         return "此代碼已兌換過", 400
 
-    # 創建訂單
-    res = requests.get(url="https://wtech-5o6t.onrender.com/wtech/v2/createOrder",
-                      headers={"Username": "provider", "reviewer": user, "Value": amount}).json()
-    # 轉賬
-    requests.get(url=f"https://wtech-5o6t.onrender.com/wtech/v2/transfer?code={res['code']}")
+    headers = {
+   "Username":provider,
+    "reviewer":user,
+    "Value":amount
+  }
+  res = requests.get(url="https://wtech-5o6t.onrender.com/wtech/v2/createOrder",headers=headers).json()
+  result = requests.get(url=f"https://wtech-5o6t.onrender.com/wtech/v2/transfer?code={res['code']}").json()
+  emit('payment_result',{'success':'Done'})
     # 將代碼插入數據庫
     cur.execute(f"INSERT INTO wbankcode (code) VALUES ('{code}')")
     conn.commit()
