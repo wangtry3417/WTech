@@ -1098,7 +1098,7 @@ def wbank_check_code():
 
         # 將解密後的字符串轉換為列表
         data = json.loads(decrypted_data.decode())
-    except (ValueError, UnicodeDecodeError):
+    except:
         return "此代碼無效", 400
 
     if len(data) != 2:
