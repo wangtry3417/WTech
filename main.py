@@ -1057,7 +1057,7 @@ def wbank_sell_payCode():
     hash1 = hashlib.sha256(t1.encode()).hexdigest()
     if code == hash1:
       return render_template("wbankPayment.html",user=user,balance=balance)
-  return "無法驗證用戶信息，或者可能哈希值(hash-value)有誤。請刷新此QR code。"
+  return "無法驗證用戶信息，或者可能哈希值(hash-value)有誤。請刷新此QR code。" , 400
 
 @app.route("/wbank/gift/create", methods=["POST"])
 @auth.login_required
