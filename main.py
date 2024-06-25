@@ -1046,6 +1046,7 @@ def wbank_hash_order():
 @app.route("/wbank/v1/paycode")
 def wbank_sell_payCode():
   code = request.args.get("code")
+  reviewer = request.args.get("reviewer")
   cur = conn.cursor()
   cur.execute("select username,balance from wbankwallet")
   rows = cur.fetchall()
@@ -1056,7 +1057,7 @@ def wbank_sell_payCode():
     t1 = ",".join(text1)
     hash1 = hashlib.sha256(t1.encode()).hexdigest()
     if code == hash1:
-      return render_template("wbankPayment.html",user=user,balance=balance)
+      return render_template("wbankPayment.html",user=user,balance=balance,reviewer=reviewer)
   return "無法驗證用戶信息，或者可能哈希值(hash-value)有誤。請刷新此QR code。" , 400
 
 @app.route("/wbank/gift/create", methods=["POST"])
