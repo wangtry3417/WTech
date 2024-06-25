@@ -1085,7 +1085,6 @@ def wbank_check_code():
     user = request.form.get("user")
     code = request.form.get("code")
     cur = conn.cursor()
-    """
     if not code:
         return "請輸入驗證碼", 400
 
@@ -1122,9 +1121,8 @@ def wbank_check_code():
     """
     # 將代碼插入數據庫
     cur.execute(f"INSERT INTO wbankcode (code) VALUES ('{code}')")
-    conn.commit() """
-    return "Data error" , 400
-    #return render_template("wbankDone.html",user=user,count=amount)
+    conn.commit()
+    return render_template("wbankDone.html",user=user,count=amount)
                    
 @app.route("/wbank/gift")
 def wbank_gift_code():
