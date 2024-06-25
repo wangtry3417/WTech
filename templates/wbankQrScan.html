@@ -1,12 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>掃描QR-code</title>
+    <title>掃描 QR Code</title>
     <script src="https://unpkg.com/html5-qrcode/dist/html5-qrcode.min.js"></script>
+    <style>
+        #qr-reader {
+            width: 500px;
+            position: relative;
+        }
+
+        #qr-reader-dashboard {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+        }
+    </style>
 </head>
 <body>
-    <h1>賣幣頁面</h1>
-    <div id="qr-reader" style="width:500px"></div>
+    <h1>賣幣介面</h1>
+    <div id="qr-reader">
+        <div id="qr-reader-dashboard">
+            <div id="qr-reader-dashboard-msg" style="color: #fff">掃描中...</div>
+            <div id="qr-reader-dashboard-btn-container">
+                <button id="qr-reader-dashboard-btn" style="display: none;">暫停掃描</button>
+            </div>
+        </div>
+    </div>
     <canvas id="qr-canvas" width="500" height="500" style="display:none;"></canvas>
 
     <script>
@@ -21,19 +44,21 @@
             canvas.style.display = 'block';
 
             // 這里可以添加跳轉到另一個頁面的邏輯
-            window.location.href="https://wtech-5o6t.onrender.com/wbank/v1/paycode?reviewer=" + '{{user}}' + "&code=" + decodedText;
+            window.location.href="https://wtech-5o6t.onrender.com/wbank/paycode?user=" + "{{user}}" + "&code=" + decodedText;
         }
 
         function onScanError(errorMessage) {
             // 處理掃描錯誤
-            alert("掃描失敗");
             console.error(errorMessage);
         }
 
         const html5QrcodeScanner = new Html5QrcodeScanner(
             'qr-reader', {
                 fps: 10,
-                qrbox: 250
+                qrbox: {
+                    width: 250,
+                    height: 250
+                }
             },
             /* verbose= */ false);
         html5QrcodeScanner.render(onScanSuccess, onScanError);
