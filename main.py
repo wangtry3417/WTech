@@ -1198,7 +1198,7 @@ def wbank_sellCoins():
       text1 = [row[0],str(row[1])]
       t1 = ",".join(text1)
       hash1 = hashlib.sha256(t1.encode()).hexdigest()
-      wallet_address = f"https://wtech-5o6t.onrender.com/wbank/v1/paycode?code={hash1}"
+      wallet_address = hash1
       # 生成 QR 碼
       qr = pyqrcode.create(wallet_address)
       # 使用 BytesIO 創建一個在記憶體中的臨時檔案
