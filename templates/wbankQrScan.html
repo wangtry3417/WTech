@@ -47,16 +47,10 @@
             window.location.href="https://wtech-5o6t.onrender.com/wbank/paycode?user=" + "{{user}}" + "&code=" + decodedText;
         }
 
-        let lastErrorTime = 0;
-const ERROR_COOLDOWN_TIME = 10000; // 10 秒
-
-function onScanError(errorMessage) {
-    const currentTime = Date.now();
-    if (currentTime - lastErrorTime > ERROR_COOLDOWN_TIME) {
-        lastErrorTime = currentTime;
-        alert("掃描錯誤 : " + errorMessage);
-    }
+        function onScanError(errorMessage) {
+    // 提示用户准备二维码
     console.error(errorMessage);
+    alert('請將二維碼對準掃描框');
 }
 
         const html5QrcodeScanner = new Html5QrcodeScanner(
