@@ -1129,6 +1129,11 @@ def wbank_gift_code():
   user = request.args.get("user")
   return render_template("wbankGiftCard.html",user=user)
 
+@app.route("/wbank/scan")
+def wbank_scan_page():
+  user = request.args.get("user")
+  return render_template("wbankQrScan.html",user=user)
+
 @app.route("/wbank/nfc")
 def wbank_nfc_page():
   user = request.args.get("user")
