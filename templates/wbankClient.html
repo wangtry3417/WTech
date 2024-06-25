@@ -21,6 +21,14 @@
        border-radius: 5px;
        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       }
+      #scan {
+         width: 200px;
+       margin: auto;
+       background-color: #fff;
+       padding: 20px;
+       border-radius: 5px;
+       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
       input[type="text"] {
       width: 100%;
       padding: 10px;
@@ -162,6 +170,12 @@
       <center>
       <br>
       </div>
+    <center>
+      <div id="scan">
+        <button class="btn1" onclick="scan()">掃描QR-code（只限wcoins)</button>
+      </div>
+    </center>
+      <br>
       <b><h4>其他服務：</h4></b>
       <br>
       <div id="sun">
@@ -263,6 +277,9 @@ const returnAlert = () => {
       document.getElementById("gift-code").addEventListener("click",() => {
         window.location.href="/wbank/gift?user=" + "{{user}}";
       });
+      const scan = () => {
+        window.location.href="/wbank/scan?user=" + "{{user}}";
+      };
     </script>
   </body>
 </html>
