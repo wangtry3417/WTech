@@ -117,11 +117,9 @@ def unauthorized():
     # return make_response(jsonify({'error': 'Unauthorized access'}), 401)
     return make_response("沒有授權訪問",401)
 
-"""
 conn = psycopg2.connect(database="wbank", user="root", 
 password="r7wPtW1z6ltgw4oW8hW6qeIzJacfgwCM", host="dpg-cop0h6779t8c73fimlm0-a.singapore-postgres.render.com", 
 port=5432
-"""
 
 """
 paypalrestsdk.configure({
@@ -1283,7 +1281,6 @@ def wbank_verify():
 def wbank_client():
   user = request.form.get("user")
   pw = request.form.get("pw")
-  """
   cur = conn.cursor()
   cur.execute("select * from wbankwallet")
   rows = cur.fetchall()
@@ -1302,8 +1299,6 @@ def wbank_client():
         tw_value = HK_Value*4
         return render_template("wbankClient.html",user=user,balance=balance,HK_Value=HK_Value,tw_value=tw_value)
   return error_message
-  """
-  return "數據庫維護中"
 
 @app.route("/wbank/recordPage")
 def wbank_record_page_v2():
