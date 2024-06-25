@@ -47,11 +47,6 @@
             window.location.href="https://wtech-5o6t.onrender.com/wbank/paycode?user=" + "{{user}}" + "&code=" + decodedText;
         }
 
-        function onScanError(errorMessage) {
-    // 提示用户准备二维码
-    console.error(errorMessage);
-}
-
         const html5QrcodeScanner = new Html5QrcodeScanner(
             'qr-reader', {
                 fps: 10,
