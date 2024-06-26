@@ -268,7 +268,9 @@ const returnAlert = () => {
       });
       var ctx = document.getElementById('lineChart').getContext('2d');
 
-        // 初始化图表
+      
+      window.addEventListener("DOMContentLoaded",() => {
+          // 初始化图表
         var lineChart = new Chart(ctx, {
             type: 'line',
             data: {
@@ -300,17 +302,19 @@ const returnAlert = () => {
                 }
             }
         });
-      window.addEventListener("DOMContentLoaded",() => {
-        setInterval(function() {
-            fetch("{{ url_for('data')}}")
-                .then(response => response.json())
-                .then(data => {
-                    // 更新图表数据
-                    lineChart.data.labels = data.map(entry => entry.date);
-                    lineChart.data.datasets[0].data = data.map(entry => entry.price);
-                    lineChart.update();
-                });
-        }, 1000);
+        function updateChart() {
+    fetch("{{ url_for('data')}}")
+      .then(response => response.json())
+      .then(data => {
+        // 更新图表数据
+        lineChart.data.labels = data.map(entry => new Date(entry.date).toLocaleString());
+        lineChart.data.datasets[0].data = data.map(entry => entry.price);
+        lineChart.update();
+      });
+  }
+
+  updateChart();
+  setInterval(updateChart, 1000);
         var socket = io();
         var bal = '{{ balance }}';
         socket.on("connect",() => {
