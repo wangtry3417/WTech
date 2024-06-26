@@ -266,55 +266,62 @@ const returnAlert = () => {
       document.getElementById("sun").addEventListener("click",() => {
         window.location.href="https://www.sunscript.dev/";
       });
-      var ctx = document.getElementById('lineChart').getContext('2d');
 
       
       window.addEventListener("DOMContentLoaded",() => {
-          // 初始化图表
-        var lineChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: [],
-                datasets: [{
-                    label: '泓幣Wcoins',
-                    data: [],
-                    borderColor: 'blue',
-                    fill: false
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    x: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: 'Date'
-                        }
-                    },
-                    y: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: 'Price/Value'
-                        }
-                    }
-                }
-            }
-        });
-        function updateChart() {
-    fetch("{{ url_for('data')}}")
-      .then(response => response.json())
-      .then(data => {
-        // 更新图表数据
-        lineChart.data.labels = data.map(entry => new Date(entry.date).toLocaleString());
-        lineChart.data.datasets[0].data = data.map(entry => entry.price);
-        lineChart.update();
-      });
-  }
+       // 獲取 Canvas 元素
+var ctx = document.getElementById('myChart').getContext('2d');
 
-  updateChart();
-  setInterval(updateChart, 1000);
+// 創建線形圖表
+var lineChart = new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: [], // 日期標籤
+    datasets: [{
+      label: '泓幣Wcoins',
+      data: [], // 價格數據
+      borderColor: 'blue',
+      fill: false
+    }]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      x: {
+        display: true,
+        title: {
+          display: true,
+          text: 'Date'
+        }
+      },
+      y: {
+        display: true,
+        title: {
+          display: true,
+          text: 'Price/Value'
+        }
+      }
+    }
+  }
+});
+const updateData = () => {
+// 使用 fetch API 獲取數據
+fetch('/data')
+  .then(response => response.json())
+  .then(data => {
+    // 提取日期和價格數據
+    const dates = data.map(item => item.date);
+    const prices = data.map(item => item.price);
+
+    // 更新圖表數據
+    lineChart.data.labels = dates;
+    lineChart.data.datasets[0].data = prices;
+    lineChart.update();
+  })
+  .catch(error => console.error(error));
+};
+    setInterval(updateData,1000);
+    setInterval(
         var socket = io();
         var bal = '{{ balance }}';
         socket.on("connect",() => {
