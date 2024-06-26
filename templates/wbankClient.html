@@ -3,6 +3,7 @@
     <title>泓財WBank -- {{user}} 頁面</title>
     <link rel="manifest" href="{{ url_for('static',filename='wbank.json') }}">
     <link rel="stylesheet" href="{{ url_for('static',filename='menu.css') }}">
+    <meta http-equiv="refresh" content="1">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js"></script>
     <style>
       #top {
@@ -132,6 +133,7 @@
     }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static',filename='lineChart.js') }}"></script>
   </head>
   <body>
      <div id="menu" class="menu">
@@ -150,6 +152,10 @@
       <br>
       <br>
     </div>
+      <br>
+      <div id="top">
+        <canvas id="lineChart"></canvas>
+      </div>
       <br>
       <div id="top">
       <center>
@@ -263,6 +269,16 @@ const returnAlert = () => {
         window.location.href="https://www.sunscript.dev/";
       });
       window.addEventListener("load",() => {
+        setInterval(function() {
+            fetch("{{ url_for('data')}}")
+                .then(response => response.json())
+                .then(data => {
+                    // 更新图表数据
+                    lineChart.data.labels = data.map(entry => entry.date);
+                    lineChart.data.datasets[0].data = data.map(entry => entry.price);
+                    lineChart.update();
+                });
+        }, 1000);
         var socket = io();
         var bal = '{{ balance }}';
         socket.on("connect",() => {
