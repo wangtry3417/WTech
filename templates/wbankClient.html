@@ -300,7 +300,7 @@ const returnAlert = () => {
                 }
             }
         });
-      window.addEventListener("load",() => {
+      window.addEventListener("DOMContentLoaded",() => {
         setInterval(function() {
             fetch("{{ url_for('data')}}")
                 .then(response => response.json())
