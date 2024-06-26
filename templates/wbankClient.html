@@ -267,6 +267,40 @@ const returnAlert = () => {
       document.getElementById("sun").addEventListener("click",() => {
         window.location.href="https://www.sunscript.dev/";
       });
+      var ctx = document.getElementById('lineChart').getContext('2d');
+
+        // 初始化图表
+        var lineChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: '泓幣Wcoins',
+                    data: [],
+                    borderColor: 'blue',
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Date'
+                        }
+                    },
+                    y: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Price/Value'
+                        }
+                    }
+                }
+            }
+        });
       window.addEventListener("load",() => {
         setInterval(function() {
             fetch("{{ url_for('data')}}")
