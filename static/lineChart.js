@@ -32,3 +32,13 @@ var ctx = document.getElementById('lineChart').getContext('2d');
                 }
             }
         });
+setInterval(function() {
+            fetch("{{ url_for('data')}}")
+                .then(response => response.json())
+                .then(data => {
+                    // 更新图表数据
+                    lineChart.data.labels = data.map(entry => entry.date);
+                    lineChart.data.datasets[0].data = data.map(entry => entry.price);
+                    lineChart.update();
+                });
+        }, 1000);
