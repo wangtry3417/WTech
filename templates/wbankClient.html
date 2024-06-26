@@ -269,16 +269,6 @@ const returnAlert = () => {
         window.location.href="https://www.sunscript.dev/";
       });
       window.addEventListener("load",() => {
-        setInterval(function() {
-            fetch("{{ url_for('data')}}")
-                .then(response => response.json())
-                .then(data => {
-                    // 更新图表数据
-                    lineChart.data.labels = data.map(entry => entry.date);
-                    lineChart.data.datasets[0].data = data.map(entry => entry.price);
-                    lineChart.update();
-                });
-        }, 1000);
         var socket = io();
         var bal = '{{ balance }}';
         socket.on("connect",() => {
