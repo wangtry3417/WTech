@@ -2,7 +2,6 @@ flask
 cryptography
 flask_sqlalchemy
 paypalrestsdk
-nltk
 random2
 stripe
 requests
