@@ -51,7 +51,7 @@ class AIModules:
     return response
 
 app = Flask("WTech")
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://root:r7wPtW1z6ltgw4oW8hW6qeIzJacfgwCM@dpg-cop0h6779t8c73fimlm0-a.singapore-postgres.render.com/wbank'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://default:Gd2MsST3QYWF@ep-hidden-salad-a1a7pob9.ap-southeast-1.aws.neon.tech:5432/verceldb?sslmode=require'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
 app.config['SECRET_KEY'] = hashlib.sha256("WTech2225556".encode()).hexdigest()
@@ -117,8 +117,14 @@ def unauthorized():
     # return make_response(jsonify({'error': 'Unauthorized access'}), 401)
     return make_response("沒有授權訪問",401)
 
+"""
 conn = psycopg2.connect(database="wbank", user="root", 
 password="r7wPtW1z6ltgw4oW8hW6qeIzJacfgwCM", host="dpg-cop0h6779t8c73fimlm0-a.singapore-postgres.render.com", 
+port=5432)
+"""
+
+conn = psycopg2.connect(database="wbank", user="default", 
+password="Gd2MsST3QYWF", host="Gd2MsST3QYWF@ep-hidden-salad-a1a7pob9.ap-southeast-1.aws.neon.tech", 
 port=5432)
 
 """
