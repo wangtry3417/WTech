@@ -123,7 +123,7 @@ password="r7wPtW1z6ltgw4oW8hW6qeIzJacfgwCM", host="dpg-cop0h6779t8c73fimlm0-a.si
 port=5432)
 """
 
-conn = psycopg2.connect(database="wbank", user="default", 
+conn = psycopg2.connect(database="verceldb", user="default", 
 password="Gd2MsST3QYWF", host="Gd2MsST3QYWF@ep-hidden-salad-a1a7pob9.ap-southeast-1.aws.neon.tech", 
 port=5432)
 
