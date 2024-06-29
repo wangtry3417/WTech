@@ -50,7 +50,8 @@ class AIModules:
     response = self.text
     return response
 
-app = Flask("WTech")
+#app = Flask("WTech")
+app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://default:Gd2MsST3QYWF@ep-hidden-salad-a1a7pob9.ap-southeast-1.aws.neon.tech:5432/verceldb?sslmode=require'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
