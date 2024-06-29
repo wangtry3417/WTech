@@ -1,1 +1,1 @@
-web: gunicorn main:WTech
+web: gunicorn main:app
