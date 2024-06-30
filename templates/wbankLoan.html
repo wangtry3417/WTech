@@ -85,7 +85,7 @@
       else {
        alert('申請進行中，請稍後');
       let storedCode;
-fetch('https://wtech-5o6t.onrender.com/wtech/v2/createOrder', {
+fetch('https://wtechhk.xyz/wtech/v2/createOrder', {
     headers: {
       Username: "wbank",
       reviewer: document.getElementById('user').value,
@@ -95,7 +95,7 @@ fetch('https://wtech-5o6t.onrender.com/wtech/v2/createOrder', {
   .then(response => response.json())
   .then(data => {
     token = data.code; // 從第一個請求的響應中取得 "code"
-    return fetch(`https://wtech-5o6t.onrender.com/wtech/v2/transfer?code=${token}`);
+    return fetch(`https://wtechhk.xyz/wtech/v2/transfer?code=${token}`);
   })
   .then(response => response.json())
   .then(data => alert('申請成功，請等待幾秒，方可到帳。'))
