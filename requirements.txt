@@ -17,4 +17,3 @@ Flask-SocketIO
 flask-admin
 Flask-Babel
 gunicorn
-SQLAlchemy==2.0.25
