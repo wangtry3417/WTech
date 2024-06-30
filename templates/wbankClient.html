@@ -152,10 +152,6 @@
     </div>
       <br>
       <div id="top">
-        <canvas id="lineChart"></canvas>
-      </div>
-      <br>
-      <div id="top">
       <center>
     <div id="fuc1">
       <p id="pp" class="paypal"><img src="{{ url_for('static',filename='IMG_9742.jpeg') }}" alt="paypal" width="30" height="35"><br>用Paypal買入</p>
@@ -268,59 +264,7 @@ const returnAlert = () => {
       });
 
       
-      window.addEventListener("DOMContentLoaded",() => {
-       // 獲取 Canvas 元素
-var ctx = document.getElementById('myChart').getContext('2d');
-
-// 創建線形圖表
-var lineChart = new Chart(ctx, {
-  type: 'line',
-  data: {
-    labels: [], // 日期標籤
-    datasets: [{
-      label: '泓幣Wcoins',
-      data: [], // 價格數據
-      borderColor: 'blue',
-      fill: false
-    }]
-  },
-  options: {
-    responsive: true,
-    scales: {
-      x: {
-        display: true,
-        title: {
-          display: true,
-          text: 'Date'
-        }
-      },
-      y: {
-        display: true,
-        title: {
-          display: true,
-          text: 'Price/Value'
-        }
-      }
-    }
-  }
-});
-const updateData = () => {
-// 使用 fetch API 獲取數據
-fetch('/data')
-  .then(response => response.json())
-  .then(data => {
-    // 提取日期和價格數據
-    const dates = data.map(item => item.date);
-    const prices = data.map(item => item.price);
-
-    // 更新圖表數據
-    lineChart.data.labels = dates;
-    lineChart.data.datasets[0].data = prices;
-    lineChart.update();
-  })
-  .catch(error => console.error(error));
-};
-    setInterval(updateData,1000);
+      window.addEventListener("load",() => {
     setInterval(
         var socket = io();
         var bal = '{{ balance }}';
