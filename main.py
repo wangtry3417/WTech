@@ -125,7 +125,7 @@ port=5432)
 """
 
 conn = psycopg2.connect(database="verceldb", user="default", 
-password="Gd2MsST3QYWF", host="Gd2MsST3QYWF@ep-hidden-salad-a1a7pob9.ap-southeast-1.aws.neon.tech", 
+password="Gd2MsST3QYWF", host="ep-hidden-salad-a1a7pob9-pooler.ap-southeast-1.aws.neon.tech", 
 port=5432)
 
 """
