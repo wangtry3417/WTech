@@ -5,7 +5,7 @@ paypalrestsdk
 random2
 stripe
 requests
-psycopg2
+psycopg2-binary
 numpy
 PyQRCode
 flask_httpauth
