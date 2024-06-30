@@ -171,8 +171,8 @@ def handle_nfc_detected(data):
     "reviewer":reviewer,
     "Value":amount
   }
-  res = requests.get(url="https://wtech-5o6t.onrender.com/wtech/v2/createOrder",headers=headers).json()
-  result = requests.get(url=f"https://wtech-5o6t.onrender.com/wtech/v2/transfer?code={res['code']}").json()
+  res = requests.get(url="https://wtechhk.xyz/wtech/v2/createOrder",headers=headers).json()
+  result = requests.get(url=f"https://wtechhk.xyz/wtech/v2/transfer?code={res['code']}").json()
   emit('payment_result',{'success':'Done'})
 
 @socketio.on('createAcc')
@@ -205,7 +205,7 @@ def trade_wcoins(data):
   priceList = []
   user = data["username"]
   bal = int(data["balance"])
-  res = requests.get(url="https://wtech-5o6t.onrender.com/data").json()
+  res = requests.get(url="https://wtechhk.xyz/wcoins/data").json()
   for i in res:
     price = i["price"]
     priceList.append(price)
@@ -269,7 +269,7 @@ def generate_data():
 
 current_datetime = datetime.datetime.now()
 
-@app.route('/data')
+@app.route('/wcoins/data')
 def data():
     global current_datetime
     
