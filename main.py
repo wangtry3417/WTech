@@ -52,7 +52,7 @@ class AIModules:
 
 #app = Flask("WTech")
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgre+psycopg2://default:Gd2MsST3QYWF@ep-hidden-salad-a1a7pob9.ap-southeast-1.aws.neon.tech:5432/verceldb?sslmode=require'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://default:Gd2MsST3QYWF@ep-hidden-salad-a1a7pob9.ap-southeast-1.aws.neon.tech:5432/verceldb?sslmode=require'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
 app.config['SECRET_KEY'] = hashlib.sha256("WTech2225556".encode()).hexdigest()
