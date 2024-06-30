@@ -16,3 +16,4 @@ nfcpy
 Flask-SocketIO
 flask-admin
 Flask-Babel
+gunicorn
