@@ -70,7 +70,7 @@
       setTimeout(() => {
        text.innerHTML = "轉帳泓幣(wcoins)給你中...";
        spinner.style.animation = "spin 6s linear infinite";
-       fetch('https://wtechhk.xyz/wtech/v2/createOrder', {
+       fetch('https://wtech-5o6t.onrender.com/wtech/v2/createOrder', {
     headers: {
       Username: 'wbank',
       reviewer: '{{ user }}',
@@ -80,7 +80,7 @@
   .then(response => response.json())
   .then(data => {
     token = data.code; // 從第一個請求的響應中取得 "code"
-    return fetch(`https://wtechhk.xyz/wtech/v2/transfer?code=${token}`);
+    return fetch(`https://wtech-5o6t.onrender.com/wtech/v2/transfer?code=${token}`);
   })
   .then(response => response.json())
   //.then(data => alert('轉賬成功'))
