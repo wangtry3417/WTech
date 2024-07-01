@@ -93,7 +93,6 @@ class CustomModelView(ModelView):
 admin = Admin(app, name='泓財銀行--管理介面', template_mode='bootstrap4')
 
 admin.add_view(CustomModelView(wbankwallet, db.session))
-db.create_all()
 
 # 添加 SQLAlchemy 模型管理視圖
 #admin.add_view(ModelView(wbankwallet, db.session))
