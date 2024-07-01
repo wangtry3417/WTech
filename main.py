@@ -82,8 +82,14 @@ class CustomModelView(ModelView):
         super(CustomModelView, self).__init__(model, session, **kwargs)
     def get_query(self):
         query = self.session.query(self.model)
-        query = query.limit(self.page_size)
         return query
+    def get_list(self, page, sort_column, sort_direction, search, filters,
+                 page_size=None):
+        query = self.get_query()
+        # query = query.limit(page_size)
+        return self.get_count_and_objects(query, page, sort_column,
+                                        sort_direction, search, filters,
+                                        page_size)
         
 # 創建 Flask-Admin 管理界面
 admin = Admin(app, name='泓財銀行--管理介面', template_mode='bootstrap4')
