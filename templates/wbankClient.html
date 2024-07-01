@@ -13,14 +13,6 @@
        border-radius: 5px;
        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       }
-      #sun {
-        width: 200px;
-       margin: auto;
-       background-color: #fff;
-       padding: 20px;
-       border-radius: 5px;
-       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      }
       #scan {
          width: 200px;
        margin: auto;
@@ -178,9 +170,6 @@
       <br>
       <b><h4>其他服務：</h4></b>
       <br>
-      <div id="sun">
-        <b><p id="sunn" class="sun"><img src="{{ url_for('static',filename='IMG_0188.png') }}" alt="sun" width="90" height="60"><br>太陽開發商:提供各種插件服務</p></b>
-      </div>
       </center>
   </center>
     <center>
@@ -258,9 +247,6 @@ const returnAlert = () => {
       });
       document.getElementById("nfc").addEventListener("click",() => {
         window.location.href="/wbank/nfc?user=" + "{{ user }}";
-      });
-      document.getElementById("sun").addEventListener("click",() => {
-        window.location.href="https://www.sunscript.dev/";
       });
 
       
