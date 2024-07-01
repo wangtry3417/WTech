@@ -51,9 +51,9 @@ class AIModules:
     response = self.text
     return response
 
-#app = Flask("WTech")
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://default:Gd2MsST3QYWF@ep-hidden-salad-a1a7pob9.ap-southeast-1.aws.neon.tech:5432/verceldb?sslmode=require'
+app = Flask("WTech")
+#app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://root:r7wPtW1z6ltgw4oW8hW6qeIzJacfgwCM@dpg-cop0h6779t8c73fimlm0-a.singapore-postgres.render.com/wbank'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
 app.config['SECRET_KEY'] = hashlib.sha256("WTech2225556".encode()).hexdigest()
@@ -119,29 +119,14 @@ def unauthorized():
     # return make_response(jsonify({'error': 'Unauthorized access'}), 401)
     return make_response("沒有授權訪問",401)
 
-"""
 conn = psycopg2.connect(database="wbank", user="root", 
 password="r7wPtW1z6ltgw4oW8hW6qeIzJacfgwCM", host="dpg-cop0h6779t8c73fimlm0-a.singapore-postgres.render.com", 
 port=5432)
-"""
 
 """
 conn = psycopg2.connect(database="verceldb", user="default", 
 password="Gd2MsST3QYWF", host="ep-hidden-salad-a1a7pob9-pooler.ap-southeast-1.aws.neon.tech", 
-port=5432,sslmode="require")
-"""
-
-# 建立連線池
-pool = ThreadedConnectionPool(
-    1, 10,
-    host="ep-hidden-salad-a1a7pob9-pooler.ap-southeast-1.aws.neon.tech",
-    database="verceldb",
-    user="default",
-    password="Gd2MsST3QYWF",
-    sslmode="require"
-)
-# 從池中獲取連線
-conn = pool.getconn()
+port=5432,sslmode="""
 
 """
 paypalrestsdk.configure({
@@ -632,8 +617,6 @@ WHERE username='{col[0]}'""")
     ]
     }
       r = requests.post(url="https://discord.com/api/webhooks/1236986187793829930/OBBvTByDyP-fvcVKI40D51UpaN5wU5HOjeHtxdiwh40-b09-gVj-jmoLcdPwlLs0-M2x",json=data)
-      # 將連線歸還池
-      pool.putconn(conn)
       return jsonify({"Good news":"Success to transfer"})
   return "Cannot transfer it! check your code arg."
 
@@ -1064,8 +1047,6 @@ def wbank_hash_order():
       text1 = [row[0],reviewer,str(row[1])]
       t1 = ",".join(text1)
       hash1 = hashlib.sha256(t1.encode()).hexdigest()
-      # 將連線歸還池
-      pool.putconn(conn)
       return jsonify({"Your order hash-value":hash1})
   return "Somethings input data is wrong!."
 
@@ -1194,8 +1175,6 @@ def wbank_buyCoind():
       qr.svg(temp,scale=8)
       qr_bytes = temp.getvalue()
       qr_b64 = base64.b64encode(qr_bytes).decode('ascii')
-      # 將連線歸還池
-      pool.putconn(conn)
       # 使用 send_file 將 QR 碼圖像傳輸到前端
       return render_template("wbankSell.html", hash1=hash1,img=qr_b64)
   return "Cannot assign the user detail!."
@@ -1213,8 +1192,6 @@ def wbank_receCoins():
     text1 = [user,str(balance),fromer]
     t1 = ",".join(text1)
     hash1 = hashlib.sha256(t1.encode()).hexdigest()
-    # 將連線歸還池
-    pool.putconn(conn)
     if code == hash1:
       return render_template("wbankGet.html",user=user,balance=balance,fromer=fromer)
   return "無法驗證用戶信息，或者可能哈希值(hash-value)有誤。請刷新此QR code。"
@@ -1239,8 +1216,6 @@ def wbank_sellCoins():
       qr.svg(temp,scale=8)
       qr_bytes = temp.getvalue()
       qr_b64 = base64.b64encode(qr_bytes).decode('ascii')
-      # 將連線歸還池
-      pool.putconn(conn)
       # 使用 send_file 將 QR 碼圖像傳輸到前端
       return render_template("wbankSell.html", hash1=hash1,img=qr_b64)
   return "Cannot assign the user detail!."
@@ -1280,8 +1255,6 @@ def wbank_into_user():
       text1 = [str(user),"true"]
       t1 = ",".join(text1)
       hash1 = hashlib.sha256(t1.encode()).hexdigest()
-      # 將連線歸還池
-      pool.putconn(conn)
       content = f"""
    Hello There,
    This is your verify-link: https://wtech-5o6t.onrender.com/wbank/verify?code={hash1}
@@ -1314,8 +1287,6 @@ def wbank_verify():
     cur = conn.cursor()
     cur.execute(f"UPDATE wbankwallet set verify='yes' where username='{user}'")
     conn.commit()
-    # 將連線歸還池
-    pool.putconn(conn)
     return "你的帳號已成功驗證"
   # 將連線歸還池
   pool.putconn(conn)
@@ -1332,21 +1303,15 @@ def wbank_client():
   for row in rows:
     if user == row[0]:
       if row[3] == "no":
-        # 將連線歸還池
-        pool.putconn(conn)
         error_message = "你的帳號尚末驗證，請先查看你的電郵。"
         break
       elif pw != row[2]:
-        # 將連線歸還池
-        pool.putconn(conn)
         error_message = "密碼不正確"
         break
       else: 
         balance = row[1]
         HK_Value = int(balance)/10
         tw_value = HK_Value*4
-        # 將連線歸還池
-        pool.putconn(conn)
         return render_template("wbankClient.html",user=user,balance=balance,HK_Value=HK_Value,tw_value=tw_value)
   return error_message
 
