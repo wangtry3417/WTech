@@ -616,8 +616,6 @@ WHERE username='{data[0]}'""")
 SET balance={int(col[1])+data[2]}
 WHERE username='{col[0]}'""")
         conn.commit()
-        # 將連線歸還池
-        pool.putconn(conn)
         prompt = f"""
      轉帳方： {data[0]}
      收款方： {col[0]}
@@ -634,6 +632,8 @@ WHERE username='{col[0]}'""")
     ]
     }
       r = requests.post(url="https://discord.com/api/webhooks/1236986187793829930/OBBvTByDyP-fvcVKI40D51UpaN5wU5HOjeHtxdiwh40-b09-gVj-jmoLcdPwlLs0-M2x",json=data)
+      # 將連線歸還池
+      pool.putconn(conn)
       return jsonify({"Good news":"Success to transfer"})
   return "Cannot transfer it! check your code arg."
 
