@@ -151,7 +151,9 @@
       <br>
     </div>
       <br>
+      <center>
       <canvas id="lineChart"></canvas>
+      </center>
       <br>
       <div id="top">
       <center>
@@ -320,8 +322,12 @@ const returnAlert = () => {
         var body = document.body;
         if (userColor.value == "white") {
            body.style.backgroundColor = "white";
+           body.style.color = "black";
+           document.getElementById("linrChart").style.backgroundColor = "white";
         } else if (userColor.value == "black") {
            body.style.backgroundColor = "black";
+           body.style.color = "white";
+           document.getElementById("linrChart").style.backgroundColor = "black";
         }
       });
       document.getElementById("gift-code").addEventListener("click",() => {
