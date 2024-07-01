@@ -1063,8 +1063,6 @@ def wbank_sell_payCode():
     text1 = [user,str(balance)]
     t1 = ",".join(text1)
     hash1 = hashlib.sha256(t1.encode()).hexdigest()
-    # 將連線歸還池
-    pool.putconn(conn)
     if code == hash1:
       return render_template("wbankPayment.html",user=user,balance=balance,reviewer=reviewer)
   return "無法驗證用戶信息，或者可能哈希值(hash-value)有誤。請刷新此QR code。" , 400
