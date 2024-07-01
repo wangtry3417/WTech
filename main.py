@@ -87,7 +87,7 @@ class CustomModelView(ModelView):
                  page_size=None):
         query = self.get_query()
         # query = query.limit(page_size)
-        return self.get_list(query, page, sort_column,
+        return super().get_list(page, sort_column,
                                         sort_direction, search, filters,
                                         page_size)
         
