@@ -31,6 +31,7 @@ from flask_admin.contrib.sqla import ModelView
 from flask_sqlalchemy import SQLAlchemy
 from flask_babel import Babel
 import json
+import sys
 #from nltk.stem import WordNetLemmatizer
 #from nltk.book import *
 
@@ -76,25 +77,23 @@ class wbankwallet(db.Model):
 
 class CustomModelView(ModelView):
     column_display_all_fields = True
-    page_size = 30
+    page_size = sys.maxsize
     can_set_page_size = True
     def __init__(self, model, session, **kwargs):
         super(CustomModelView, self).__init__(model, session, **kwargs)
     def get_query(self):
         query = self.session.query(self.model)
         return query
-    def get_list(self, page, sort_column, sort_direction, search, filters,
-                 page_size=None):
-        query = self.get_query()
-        # query = query.limit(page_size)
-        return super().get_list(page, sort_column,
-                                        sort_direction, search, filters,
-                                        page_size)
-        
+    def get_count_and_objects(self, query, page, sort_column, sort_direction,
+                              search, filters, page_size=None):
+      objects = query.all()
+      return len(objects), objects
+                                
 # 創建 Flask-Admin 管理界面
 admin = Admin(app, name='泓財銀行--管理介面', template_mode='bootstrap4')
 
 admin.add_view(CustomModelView(wbankwallet, db.session))
+db.create_all()
 
 # 添加 SQLAlchemy 模型管理視圖
 #admin.add_view(ModelView(wbankwallet, db.session))
