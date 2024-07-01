@@ -159,14 +159,12 @@
       <center>
     <div id="fuc1">
       <p id="pp" class="paypal"><img src="{{ url_for('static',filename='IMG_9742.jpeg') }}" alt="paypal" width="30" height="35"><br>用Paypal買入</p>
-      <p id="atm" class="atm"><img src="{{ url_for('static',filename='IMG_9743.png') }}" alt="atm" width="30" height="35"><br>以Wcoins ATM存入</p>
       <p id="so" class="spend-out"><img src="{{ url_for('static',filename='IMG_9744.png') }}" alt="spend-out" width="30" height="35"><br>賣出或消費</p>
       <p id="gift-code" class="gift-code"><img src="{{ url_for('static',filename='IMG_0388.png') }}" alt="gift-code" width="30" height="35"><br>禮品卡代號</p>
     </div>
         <br>
         <div id="fuc1">
       <p id="record" class="record"><img src="{{ url_for('static',filename='IMG_2975.png') }}" alt="record" width="30" height="35"><br>收款明細</p>
-      <p id="fps" class="fps"><img src="{{ url_for('static',filename='IMG_9823.jpeg') }}" alt="fps" width="30" height="35"><br>轉數快(FPS-hk)</p>
       <p id="loan" class="loan"><img src="{{ url_for('static',filename='IMG_9992.jpeg') }}" alt="get-loan" width="30" height="35"><br>泓財信貸（貸款）</p>
       <p id="nfc" class="nfc"><img src="{{ url_for('static',filename='IMG_0152.png') }}" alt="nfc-pay" width="30" height="35"><br>泓之付</p>
     </div>
@@ -203,10 +201,6 @@
         let value = amount*3.5;
         window.location.href="/wbank/v1/paypal?user="+user+"&amount="+value;
       };
-      const bm = () => {
-        let user = '{{ user }}';
-        window.location.href="/wbank/buyCoins?user="+user;
-      };
       const sell = () => {
         let user = '{{ user }}';
         window.location.href="/wbank/sellCoins?user="+user;
@@ -242,17 +236,11 @@ const returnAlert = () => {
       document.getElementById("pp").addEventListener("click",() => {
         return buy();
       });
-      document.getElementById("atm").addEventListener("click",() => {
-        return bm();
-      });
       document.getElementById("so").addEventListener("click",() => {
         return sell();
       });
       document.getElementById("record").addEventListener("click",() => {
         window.location.href="/wbank/recordPage?user=" + "{{ user }}";
-      });
-      document.getElementById("fps").addEventListener("click",() => {
-        window.location.href="/wbank/fps?user=" + "{{ user }}";
       });
       document.getElementById("loan").addEventListener("click",() => {
         window.location.href="/wbank/loan?user=" + "{{ user }}";
