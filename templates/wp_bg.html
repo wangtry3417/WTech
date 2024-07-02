@@ -74,8 +74,6 @@
       playerCards = [random.randint(1, 13), random.randint(1, 13)];
       showCards(playerCards, 'player-cards');
     }
-    // 初始化玩家牌
-    initPlayerCards();
     // 閒按鈕事件
     document.getElementById('player-button').addEventListener('click', function() {
       chosenSide = 'player';
@@ -151,6 +149,8 @@
         container.appendChild(cardElement);
       });
     }
+    // 初始化玩家牌
+    initPlayerCards();
   </script>
 
 </body>
