@@ -760,6 +760,65 @@ def wp_bg_start():
     conn.rollback()
     return f"Error: {e}"
 
+@app.route('/bg/bet', methods=['POST'])
+def wp_bg_bet():
+    data = request.get_json()
+    side = data.get('side')
+    user = data.get('user')
+    amount = data.get('amount')
+
+    if side and amount and users[username]['balance'] >= amount:
+        # 這裡應該模擬遊戲邏輯，例如隨機決定輸贏
+        # 簡單示例：隨機決定輸贏
+        result = 'win' if random.random() < 0.5 else 'lose'
+        cur = conn.cursor()
+        cur.execute(f"select * from worldplay where username='{user}'")
+        rows = cur.fetchall()
+      
+        if result == 'win':
+            for row in rows:
+              cur = conn.cursor()
+              cur.execute(f"UPDATE worldplay set balance='{int(row[1])+amount}' where username='{user}'")
+              conn.commit()
+        else:
+            for row in rows:
+              cur = conn.cursor()
+              cur.execute(f"UPDATE worldplay set balance='{int(row[1])-amount}' where username='{user}'")
+              conn.commit()
+
+        return jsonify({'balance': users[username]['balance']})
+    else:
+        return jsonify({'error': 'Invalid bet'}), 400
+
+# 處理全部下注
+@app.route('/bg/all-in', methods=['POST'])
+def wp_bg_all_in():
+    data = request.get_json()
+    side = data.get('side')
+    user = data.get('user')
+
+    if side:
+        # 這裡應該模擬遊戲邏輯，例如隨機決定輸贏
+        # 簡單示例：隨機決定輸贏
+        result = 'win' if random.random() < 0.5 else 'lose'
+        cur = conn.cursor()
+        cur.execute(f"select * from worldplay where username='{user}'")
+        rows = cur.fetchall()
+        if result == 'win':
+            for row in rows:
+              cur = conn.cursor()
+              cur.execute(f"UPDATE worldplay set balance='{int(row[1])*2}' where username='{user}'")
+              conn.commit()  # 簡單示例：全部下注贏得雙倍
+        else:
+            for row in rows:
+              cur = conn.cursor()
+              cur.execute(f"UPDATE worldplay set balance='{int(row[1])-int(row[1])}' where username='{user}'")
+              conn.commit()  # 簡單示例：全部下注輸光
+
+        return jsonify({'balance': users[username]['balance']})
+    else:
+        return jsonify({'error': 'Invalid bet'}), 400
+
 @app.route("/wp/luck/start")
 def wp_luck_start():
   user = request.args.get("user")
