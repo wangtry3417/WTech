@@ -34,6 +34,16 @@
     .choice-buttons button {
       margin: 0 10px;
     }
+     .card {
+      display: inline-block;
+      width: 60px;
+      height: 80px;
+      border: 1px solid white;
+      margin: 10px;
+      text-align: center;
+      font-size: 2em;
+      padding-top: 15px;
+    }
   </style>
 </head>
 <body>
@@ -50,6 +60,8 @@
   <button id="bet-button">下注</button>
   <button id="all-in-button">全部下注</button>
 
+  <div id="player-cards"></div>
+  <div id="banker-cards"></div>
   <script>
     // 假設下注金額
     let betAmount = 10;
@@ -82,6 +94,8 @@
         .then(response => response.json())
          .then(data => {
         //   // 更新餘額
+           showCards(data.playerCards, 'player-cards');
+          showCards(data.bankerCards, 'banker-cards');
           document.querySelector('p').textContent = `歡迎，{{ user }}！您的餘額：${data.balance}`;
          });
 
@@ -107,6 +121,8 @@
          .then(response => response.json())
          .then(data => {
         //   // 更新餘額
+           showCards(data.playerCards, 'player-cards');
+          showCards(data.bankerCards, 'banker-cards');
            document.querySelector('p').textContent = `歡迎，{{ user }}！您的餘額：${data.balance}`;
          });
 
@@ -116,6 +132,18 @@
         alert('請先選擇閒或莊');
       }
     });
+    // 顯示牌面
+    function showCards(cards, containerId) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = ''; // 清除之前的牌面
+
+      cards.forEach(card => {
+        const cardElement = document.createElement('div');
+        cardElement.classList.add('card');
+        cardElement.textContent = card;
+        container.appendChild(cardElement);
+      });
+    }
   </script>
 
 </body>
