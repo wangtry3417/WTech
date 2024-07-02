@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>世遊娛樂城 - 登入</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-color: #f0f0f0;
+      font-family: sans-serif;
+    }
+
+    .login-box {
+      background-color: #fff;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      width: 350px;
+    }
+
+    .login-box h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .login-box input {
+      width: 100%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      display: inline-block;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+
+    .login-box button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 14px 20px;
+      margin: 8px 0;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      opacity: 0.9;
+    }
+
+    .login-box button:hover {
+      opacity: 1;
+    }
+
+    .login-box a {
+      color: #4CAF50;
+      font-size: 14px;
+      text-align: center;
+      display: block;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-box">
+    <h2>世遊娛樂城 - 登入</h2>
+    <form action="/wp" method="post">
+      <div>
+        <label for="username">帳號:</label>
+        <input type="text" id="username" name="username" placeholder="輸入帳號">
+      </div>
+      <div>
+        <label for="password">密碼:</label>
+        <input type="password" id="password" name="password" placeholder="輸入密碼">
+      </div>
+      <button type="submit">登入</button>
+    </form>
+  </div>
+
+</body>
+</html>
