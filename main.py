@@ -780,13 +780,14 @@ def wp_bg_bet():
               cur = conn.cursor()
               cur.execute(f"UPDATE worldplay set balance='{int(row[1])+amount}' where username='{user}'")
               conn.commit()
+              return jsonify({'balance': int(row[1])})
         else:
             for row in rows:
               cur = conn.cursor()
               cur.execute(f"UPDATE worldplay set balance='{int(row[1])-amount}' where username='{user}'")
               conn.commit()
 
-        return jsonify({'balance': users[username]['balance']})
+              return jsonify({'balance': int(row[1])})
     else:
         return jsonify({'error': 'Invalid bet'}), 400
 
@@ -809,13 +810,14 @@ def wp_bg_all_in():
               cur = conn.cursor()
               cur.execute(f"UPDATE worldplay set balance='{int(row[1])*2}' where username='{user}'")
               conn.commit()  # 簡單示例：全部下注贏得雙倍
+              return jsonify({'balance': int(row[1])})
         else:
             for row in rows:
               cur = conn.cursor()
               cur.execute(f"UPDATE worldplay set balance='{int(row[1])-int(row[1])}' where username='{user}'")
               conn.commit()  # 簡單示例：全部下注輸光
 
-        return jsonify({'balance': users[username]['balance']})
+              return jsonify({'balance': int(row[1])})
     else:
         return jsonify({'error': 'Invalid bet'}), 400
 
