@@ -644,7 +644,7 @@ def wtech_create_order():
   token = encrypted_data.decode()
   return jsonify({"code" : token})
 
-@app.route("wp/login")
+@app.route("/wp/login")
 def wp_user_login():
   return render_template("worldPlayLogin.html")
 
