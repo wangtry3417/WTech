@@ -72,15 +72,15 @@
       if (chosenSide) {
         // 這裡應該呼叫後端 API 進行下注操作，傳遞 chosenSide 和 betAmount
         // 例如：
-        // fetch('/bet', {
-        //   method: 'POST',
-        //   body: JSON.stringify({ side: chosenSide, amount: betAmount })
-        // })
-        // .then(response => response.json())
-        // .then(data => {
+        fetch('/bg:bet', {
+           method: 'POST',
+           body: JSON.stringify({ side: chosenSide, amount: betAmount, user: '{{user}}' })
+         })
+        .then(response => response.json())
+         .then(data => {
         //   // 更新餘額
-        //   document.querySelector('p').textContent = `歡迎，{{ user }}！您的餘額：${data.balance}`;
-        // });
+          document.querySelector('p').textContent = `歡迎，{{ user }}！您的餘額：${data.balance}`;
+         });
 
         console.log(`下注 ${betAmount} 在 ${chosenSide}`);
         chosenSide = null; // 重置選擇
@@ -94,15 +94,15 @@
       if (chosenSide) {
         // 這裡應該呼叫後端 API 進行全部下注操作，傳遞 chosenSide
         // 例如：
-        // fetch('/all-in', {
-        //   method: 'POST',
-        //   body: JSON.stringify({ side: chosenSide })
-        // })
-        // .then(response => response.json())
-        // .then(data => {
+        fetch('/bg/all-in', {
+           method: 'POST',
+           body: JSON.stringify({ side: chosenSide, user: '{{user}}' })
+        })
+         .then(response => response.json())
+         .then(data => {
         //   // 更新餘額
-        //   document.querySelector('p').textContent = `歡迎，{{ user }}！您的餘額：${data.balance}`;
-        // });
+           document.querySelector('p').textContent = `歡迎，{{ user }}！您的餘額：${data.balance}`;
+         });
 
         console.log(`全部下注在 ${chosenSide}`);
         chosenSide = null; // 重置選擇
