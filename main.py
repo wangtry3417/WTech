@@ -775,7 +775,6 @@ def wp_bg_bet():
         # 簡單示例：隨機決定輸贏
         result = 'win' if random.random() < 0.5 else 'lose'
         # 模擬發牌
-        playerCards = [random.randint(1, 13) for _ in range(2)]
         bankerCards = [random.randint(1, 13) for _ in range(2)]
         if result == 'win':
           cur = conn.cursor()
