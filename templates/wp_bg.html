@@ -71,7 +71,7 @@
 
     // 初始化玩家牌
     function initPlayerCards() {
-      playerCards = [random.randint(1, 13), random.randint(1, 13)];
+      playerCards = [Math.floor(Math.random() *13)+1, Math.floor(Math.random() *13)+1];
       showCards(playerCards, 'player-cards');
     }
     // 閒按鈕事件
