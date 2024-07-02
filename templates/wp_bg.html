@@ -72,7 +72,7 @@
       if (chosenSide) {
         // 這裡應該呼叫後端 API 進行下注操作，傳遞 chosenSide 和 betAmount
         // 例如：
-        fetch('/bg:bet', {
+        fetch('/bg/bet', {
            method: 'POST',
            body: JSON.stringify({ side: chosenSide, amount: betAmount, user: '{{user}}' })
          })
