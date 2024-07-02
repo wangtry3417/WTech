@@ -74,6 +74,9 @@
         // 例如：
         fetch('/bg/bet', {
            method: 'POST',
+           headers: {
+             'Content-Type' : 'application/json'
+           },
            body: JSON.stringify({ side: chosenSide, amount: betAmount, user: '{{user}}' })
          })
         .then(response => response.json())
@@ -96,6 +99,9 @@
         // 例如：
         fetch('/bg/all-in', {
            method: 'POST',
+           headers: {
+             'Content-Type' : 'application/json'
+           },
            body: JSON.stringify({ side: chosenSide, user: '{{user}}' })
         })
          .then(response => response.json())
