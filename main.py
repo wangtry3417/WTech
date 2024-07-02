@@ -781,13 +781,13 @@ def wp_bg_bet():
           cur = conn.cursor()
           cur.execute(f"UPDATE worldplay set balance='{int(row[1])+amount}' where username='{user}'")
           conn.commit()
-          return jsonify({'balance': int(row[1]),'playerCards': playerCards, 'bankerCards': bankerCards})
+          return jsonify({'balance': int(row[1]), 'bankerCards': bankerCards})
         else:
           cur = conn.cursor()
           cur.execute(f"UPDATE worldplay set balance='{int(row[1])-amount}' where username='{user}'")
           conn.commit()
 
-          return jsonify({'balance': int(row[1]),'playerCards': playerCards, 'bankerCards': bankerCards})
+          return jsonify({'balance': int(row[1]), 'bankerCards': bankerCards})
       else:
         return jsonify({'error': 'Invalid bet'}), 400
 
@@ -802,7 +802,6 @@ def wp_bg_all_in():
         # 這裡應該模擬遊戲邏輯，例如隨機決定輸贏
         # 簡單示例：隨機決定輸贏
         # 模擬發牌
-        playerCards = [random.randint(1, 13) for _ in range(2)]
         bankerCards = [random.randint(1, 13) for _ in range(2)]
         result = 'win' if random.random() < 0.5 else 'lose'
         cur = conn.cursor()
@@ -813,14 +812,14 @@ def wp_bg_all_in():
               cur = conn.cursor()
               cur.execute(f"UPDATE worldplay set balance='{int(row[1])*2}' where username='{user}'")
               conn.commit()  # 簡單示例：全部下注贏得雙倍
-              return jsonify({'balance': int(row[1]), 'playerCards': playerCards, 'bankerCards': bankerCards})
+              return jsonify({'balance': int(row[1]), 'bankerCards': bankerCards})
         else:
             for row in rows:
               cur = conn.cursor()
               cur.execute(f"UPDATE worldplay set balance='{int(row[1])-int(row[1])}' where username='{user}'")
               conn.commit()  # 簡單示例：全部下注輸光
 
-              return jsonify({'balance': int(row[1]), 'playerCards': playerCards, 'bankerCards': bankerCards})
+              return jsonify({'balance': int(row[1]),  'bankerCards': bankerCards})
     else:
         return jsonify({'error': 'Invalid bet'}), 400
 
