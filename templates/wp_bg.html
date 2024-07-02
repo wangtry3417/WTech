@@ -66,7 +66,15 @@
     // 假設下注金額
     let betAmount = 10;
     let chosenSide = null; // 儲存閒或莊的選擇
+    let playerCards = []; // 儲存玩家的牌
+    let bankerCards = []; // 儲存莊家的牌
 
+    // 初始化玩家牌
+    function initPlayerCards() {
+      playerCards = [random.randint(1, 13), random.randint(1, 13)];
+      showCards(playerCards, 'player-cards');
+    }
+    
     // 閒按鈕事件
     document.getElementById('player-button').addEventListener('click', function() {
       chosenSide = 'player';
@@ -94,7 +102,6 @@
         .then(response => response.json())
          .then(data => {
         //   // 更新餘額
-           showCards(data.playerCards, 'player-cards');
           showCards(data.bankerCards, 'banker-cards');
           document.querySelector('p').textContent = `歡迎，{{ user }}！您的餘額：${data.balance}`;
          });
@@ -121,7 +128,6 @@
          .then(response => response.json())
          .then(data => {
         //   // 更新餘額
-           showCards(data.playerCards, 'player-cards');
           showCards(data.bankerCards, 'banker-cards');
            document.querySelector('p').textContent = `歡迎，{{ user }}！您的餘額：${data.balance}`;
          });
@@ -144,6 +150,8 @@
         container.appendChild(cardElement);
       });
     }
+    // 初始化玩家牌
+    initPlayerCards();
   </script>
 
 </body>
