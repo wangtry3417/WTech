@@ -744,6 +744,22 @@ def wp_luck():
     conn.rollback()
     return f"Error: {e}"
 
+@app.route("/wp/bg/start")
+def wp_bg_start():
+  user = request.args.get("user")
+  try:
+    cur = conn.cursor()
+    cur.execute("select * from worldplay")
+    rows = cur.fetchall()
+    for row in rows:
+      if user == row[0]:
+        balance = row[1]
+        return render_template("wp_bg.html",balance=balance,user=user)
+    return "Somethings is wrong!."
+  except psycopg2.Error as e:
+    conn.rollback()
+    return f"Error: {e}"
+
 @app.route("/wp/luck/start")
 def wp_luck_start():
   user = request.args.get("user")
