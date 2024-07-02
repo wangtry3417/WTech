@@ -766,29 +766,27 @@ def wp_bg_bet():
     side = data.get('side')
     user = data.get('user')
     amount = data.get('amount')
-
-    if side and amount and users[username]['balance'] >= amount:
+    cur = conn.cursor()
+    cur.execute(f"select * from worldplay where username='{user}'")
+    rows = cur.fetchall()
+    for row in rows:
+      if side and amount and int(row[1]) >= amount:
         # 這裡應該模擬遊戲邏輯，例如隨機決定輸贏
         # 簡單示例：隨機決定輸贏
         result = 'win' if random.random() < 0.5 else 'lose'
-        cur = conn.cursor()
-        cur.execute(f"select * from worldplay where username='{user}'")
-        rows = cur.fetchall()
       
         if result == 'win':
-            for row in rows:
-              cur = conn.cursor()
-              cur.execute(f"UPDATE worldplay set balance='{int(row[1])+amount}' where username='{user}'")
-              conn.commit()
-              return jsonify({'balance': int(row[1])})
+          cur = conn.cursor()
+          cur.execute(f"UPDATE worldplay set balance='{int(row[1])+amount}' where username='{user}'")
+          conn.commit()
+          return jsonify({'balance': int(row[1])})
         else:
-            for row in rows:
-              cur = conn.cursor()
-              cur.execute(f"UPDATE worldplay set balance='{int(row[1])-amount}' where username='{user}'")
-              conn.commit()
+          cur = conn.cursor()
+          cur.execute(f"UPDATE worldplay set balance='{int(row[1])-amount}' where username='{user}'")
+          conn.commit()
 
-              return jsonify({'balance': int(row[1])})
-    else:
+          return jsonify({'balance': int(row[1])})
+      else:
         return jsonify({'error': 'Invalid bet'}), 400
 
 # 處理全部下注
