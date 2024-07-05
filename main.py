@@ -1398,11 +1398,12 @@ def wbank_verify():
 @app.route("/wbank/v1/kyc",methods=["POST"])
 def wbank_kyc_verify():
   user = request.form.get("user")
+  id = request.form.get("id")
   fname = request.form.get("fname")
   address = request.form.get("address")
   career = request.form.get("career")
   cur = conn.cursor()
-  cur.execute(f"INSERT INTO wbankkyc (fname, address, career) VALUES ('{fname}', '{address}', '{career}')")
+  cur.execute(f"INSERT INTO wbankkyc (fname, id, address, career) VALUES ('{fname}', '{id}','{address}', '{career}')")
   conn.commit()
   cur = conn.cursor()
   cur.execute(f"UPDATE wbankwallet set verify='yes' where username='user'")
