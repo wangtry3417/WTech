@@ -32,6 +32,9 @@
        <br>
        <p>你好 {{user}},你的身分證/證件號碼：{{id}} ，而且還需要進行進一步的驗證審查。</p>
        <form action="/wbank/v1/kyc" method="post">
+           <label>用戶名：</label>
+           <input type="text" name="user" value="{{user}}" readonly>
+           <br>
            <label>全名：［中英文都可以］</label>
            <input type="text" name="fname" placeholder="Fullname" required>
            <br>
