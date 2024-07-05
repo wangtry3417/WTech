@@ -186,13 +186,7 @@ def hash_value(user):
 
 @app.errorhandler(500)
 def error_server(e):
-  return jsonify({
-    "status" : "server error",
-    "status_code(https)" : 500,
-    "status_code(wtps)" : 407,
-    "server hint" : "carefully and try again!",
-    "error_detail" : str(e)
-  })
+  return render_template('500.html'), 500
 
 @app.errorhandler(401)
 def unauthorized(error):
