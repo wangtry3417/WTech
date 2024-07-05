@@ -197,6 +197,10 @@ def unauthorized(error):
         # 如果使用者已登入,但沒有權限訪問該頁面,則重定向到首頁
         return redirect('/')
 
+@app.errorhandler(404)
+def not_found(e):
+  return render_template('404.html'), 404
+
 @socketio.on('connect')
 def handle_connect():
   print("connected websocket!.")
