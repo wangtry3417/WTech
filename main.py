@@ -1406,7 +1406,7 @@ def wbank_kyc_verify():
   cur.execute(f"INSERT INTO wbankkyc (fname, id, address, career) VALUES ('{fname}', '{id}','{address}', '{career}')")
   #conn.commit()
   #cur = conn.cursor()
-  cur.execute(f"UPDATE wbankwallet set verify='yes' where username='user'")
+  cur.execute(f"UPDATE wbankwallet set verify='yes' where username='{user}'")
   conn.commit()
   return redirect("/wbank")
 
