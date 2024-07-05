@@ -1478,7 +1478,7 @@ def wbank_auth_client():
                 return redirect(url_for('wbank_client'))
             else:
                 flash('無效的用戶名或密碼.', 'danger')
-    return render_template('wbank_client.html')
+    return render_template('wbank.html')
 
 @app.route("/wbank/client",methods=["GET","POST"])
 @login_required
