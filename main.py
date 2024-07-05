@@ -1392,8 +1392,22 @@ def wbank_verify():
     conn.commit()
     return "你的帳號已成功驗證"
   # 將連線歸還池
-  pool.putconn(conn)
+  #pool.putconn(conn)
   return "無法驗證用戶信息，或者可能哈希值(hash-value)有誤，請聯繫我們。再一次致歉令您受到困擾🙏🥹！。"
+
+@app.route("/wbank/v1/kyc",methods=["POST"])
+def wbank_kyc_verify():
+  user = request.form.get("user")
+  fname = request.form.get("fname")
+  address = request.form.get("address")
+  career = request.form.get("career")
+  cur = conn.cursor()
+  cur.execute(f"INSERT INTO wbankkyc (fname, address, career) VALUES ('{fname}', '{address}', '{career}')")
+  conn.commit()
+  cur = conn.cursor()
+  cur.execute(f"UPDATE wbankwallet set verify='yes' where username='user'")
+  conn.commit()
+  return redirect("/wbank")
 
 @app.route("/wbank/client",methods=["POST"])
 def wbank_client():
