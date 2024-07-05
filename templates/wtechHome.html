@@ -8,6 +8,7 @@
   <meta name="bot" content="index,follow"/>
   <link rel="apple-touch-icon" type="image/jpg" href="{{ url_for('static',filename='IMG_8859.jpeg') }}">
   <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+  <script src="/static/wlang/index.js"></script>
 <style>
 body {
     font-family: Arial, sans-serif;
@@ -268,6 +269,47 @@ function closeMenu() {
    var openBtn = document.getElementsByClassName("open-btn");
     openBtn.style.display = "block";
 }
+  var Wcode = `
+  #page-title: 我的網頁;
+
+# css {
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+<main>
+  #text {
+    size: h1,
+    content: "這是標題"
+  };
+  #button {
+    size: auto,
+    content: "點擊我",
+    hover: {{ onClick= () => { alert('已點擊'); } }}
+  };
+  #form {
+    size: auto,
+    action: {
+      url: "/submit",
+      method: "post"
+    },
+    #add-tag {
+      type: "text",
+      placeholder: "輸入文字",
+      id: "input-field",
+      name: "input-name",
+      content: "預設值"
+    }
+  };
+</main>
+  `;
+      const interpreter = new WInterpreter();
+interpreter.parseW(wCode);
+const pageWrapper = interpreter.renderPage();
+document.body.appendChild(pageWrapper);
     </script>
     <footer>© 2024 W Tech. 版權所有。
        <br>
