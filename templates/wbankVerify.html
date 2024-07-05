@@ -1,1 +1,59 @@
-
+<html>
+  <head>
+    <title>W Bank -- KYC驗證頁面</title>
+    <style>
+      #top {
+       width: 300px;
+       margin: auto;
+       background-color: #fff;
+       padding: 20px;
+       border-radius: 5px;
+       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      }
+      #btn1 {
+        background-color: #2e3c4d;
+        color: rgb(255,255,255);
+        padding: 12px 14px;
+        font-size: 13px;
+        border_radius: 30%
+      }
+    </style>
+  </head>
+  <body>
+    <div id="top">
+       <h2>KYC(認識客戶)驗證</h2>
+       <br>
+       <p>你好 {{user}},你的身分證/證件號碼：{{id}} ，而且還需要進行進一步的驗證審查。</p>
+       <form action="/wbank/v1/kyc" method="post">
+           <label>全名：［中英文都可以］</label>
+           <input type="text" name="fname" placeholder="Fullname" required>
+           <br>
+           <label>住址：</label>
+           <input type="text" name="address" placeholder="Your address" required>
+           <br>
+           <label>職業：</label>
+           <input type="text" name="career" placeholder="Your career" required>
+           <br>
+           <input type="checkbox" required>
+           <label>本人已知悉泓財銀行WBank 的相關條款。</label>
+           <br>
+           <input type="checkbox" required>
+           <label>本人已知悉本人的個人資料將被保密。</label>
+           <br>
+           <input type="checkbox" required>
+           <label>本人已知悉 在一般情況下，本人的個人資料只會供自動程式查閱。</label>
+           <br>
+           <button class="btn1" id="btn1">提交!</button>
+      </form>
+    </div>
+    <br>
+    <br>
+  </body>
+</html>
