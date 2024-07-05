@@ -1337,6 +1337,7 @@ def wbank_receCoins():
   return "無法驗證用戶信息，或者可能哈希值(hash-value)有誤。請刷新此QR code。"
 
 @app.route("/wbank/sellCoins")
+@login_required
 def wbank_sellCoins():
   user = request.args.get("user")
   cur = conn.cursor()
