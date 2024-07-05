@@ -35,15 +35,19 @@ class WInterpreter {
   parseMain(lines, startLine) {
     const pageContent = [];
     let inMain = true;
+    let currentElement = null;
     for (let i = lines.indexOf(startLine) + 1; i < lines.length; i++) {
       const line = lines[i];
       if (line.trim() === '</main>') {
         inMain = false;
         break;
       }
-      const element = this.parseElement(line);
-      if (element) {
-        pageContent.push(element);
+      if (line.startsWith('#')) {
+        currentElement = this.parseElement(line);
+        pageContent.push(currentElement);
+      } else if (line.startsWith('  ')) {
+        const [key, value] = line.trim().split(':');
+        currentElement.properties[key.trim()] = value.trim();
       }
     }
     return pageContent;
@@ -53,11 +57,6 @@ class WInterpreter {
     if (line.startsWith('#')) {
       const [type, content] = line.split('{');
       const properties = {};
-      const parts = content.split(',');
-      for (const part of parts) {
-        const [key, value] = part.split(':');
-        properties[key.trim()] = value.trim();
-      }
       return { type: type.trim(), properties };
     }
   }
@@ -78,6 +77,13 @@ class WInterpreter {
       for (const [key, value] of Object.entries(properties)) {
         if (key === 'hover') {
           elementNode.addEventListener('click', new Function(value));
+        } else if (key === 'size') {
+          const [fontSize, contentValue] = value.split(',');
+          elementNode.style.fontSize = fontSize.trim();
+          elementNode.textContent = contentValue.trim();
+        } else if (key === 'action') {
+          elementNode.setAttribute('action', value.url);
+          elementNode.setAttribute('method', value.method);
         } else {
           elementNode.style[key] = value;
         }
@@ -88,48 +94,3 @@ class WInterpreter {
     return pageWrapper;
   }
 }
-
-// 使用示例
-const wCode = `
-#page-title: My Web Page;
-
-# css {
-  body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-  }
-}
-
-<main>
-  #text {
-    size: h1,
-    content: "This is a heading"
-  };
-  #button {
-    size: auto,
-    content: "Click me",
-    hover: {{ onClick= () => { alert('clicked'); } }}
-  };
-  #form {
-    size: auto,
-    action: {
-      url: "/submit",
-      method: "post"
-    },
-    #add-tag {
-      type: "text",
-      placeholder: "Enter text",
-      id: "input-field",
-      name: "input-name",
-      content: "Default value"
-    }
-  };
-</main>
-`;
-/*
-const interpreter = new WInterpreter();
-interpreter.parseW(wCode);
-const pageWrapper = interpreter.renderPage();
-document.body.appendChild(pageWrapper);
-*/
