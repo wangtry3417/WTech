@@ -99,7 +99,26 @@ class User(UserMixin):
     def __init__(self, username, password):
         self.username = username
         self.password = password
+    def is_authenticated(self):
+        return True
 
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return self.username
+
+@login_manager.user_loader
+def load_user(username):
+    with conn.cursor() as cur:
+        cur.execute("SELECT username, password FROM wbankwallet WHERE username = %s", (username,))
+        row = cur.fetchone()
+        if row:
+            return User(row[0], row[1])
+    return None
 
 # 創建 Flask-Admin 管理界面
 admin = Admin(app, name='泓財銀行--管理介面', template_mode='bootstrap4')
