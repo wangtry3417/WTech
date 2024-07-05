@@ -48,6 +48,16 @@
     <br>
     <br>
     <div id="top">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for category, message in messages %}
+      <li class="{{ category }}">{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+      <br>
        <h2>泓財銀行-安全登入</h2>
        <form action="/wbank/auth/login" method="post">
            <input type="text" name="user" placeholder="username">
