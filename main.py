@@ -1402,6 +1402,10 @@ def wbank_kyc_verify():
   fname = request.form.get("fname")
   address = request.form.get("address")
   career = request.form.get("career")
+  if user == None and id == None and fname == None and address == None and career == None:
+    return "此端點不能全空"
+  elif user == None or id == None or fname == None or address == None or career == None:
+    return "此端點可能有個空值"
   cur = conn.cursor()
   cur.execute(f"INSERT INTO wbankkyc (fname, id, address, career) VALUES ('{fname}', '{id}','{address}', '{career}')")
   #conn.commit()
