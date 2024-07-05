@@ -1426,6 +1426,14 @@ def wbank_kyc_verify():
   conn.commit()
   return redirect("/wbank")
 
+# 登出視圖函數
+@app.route('/wbank/logout')
+@login_required
+def logout():
+    logout_user()
+    flash('你已經登出.', 'success')
+    return redirect('/wbank')
+
 # 登錄視圖函數
 @app.route('/wbank/auth/login', methods=['GET', 'POST'])
 def wbank_auth_client():
