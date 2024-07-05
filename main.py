@@ -194,6 +194,15 @@ def error_server(e):
     "error_detail" : str(e)
   })
 
+@app.errorhandler(401)
+def unauthorized(error):
+    if not current_user.is_authenticated:
+        # 如果使用者沒有登入,渲染401錯誤頁面
+        return render_template('401.html'), 401
+    else:
+        # 如果使用者已登入,但沒有權限訪問該頁面,則重定向到首頁
+        return redirect('/')
+
 @socketio.on('connect')
 def handle_connect():
   print("connected websocket!.")
