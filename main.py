@@ -1,4 +1,4 @@
-from flask import Flask,render_template,jsonify,request,abort,url_for,redirect,make_response,send_file
+from flask import Flask,render_template,jsonify,request,abort,url_for,redirect,make_response,send_file,flash
 from flask_cors import CORS
 from cryptography.fernet import Fernet
 import hashlib
@@ -30,6 +30,7 @@ from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_sqlalchemy import SQLAlchemy
 from flask_babel import Babel
+from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 import json
 import sys
 #from nltk.stem import WordNetLemmatizer
@@ -65,6 +66,10 @@ CORS(app,resources={r"/*": {"origins": "*"}})
 
 db = SQLAlchemy(app)
 
+# 創建 Flask-Login 管理器
+login_manager = LoginManager()
+login_manager.init_app(app)
+
 babel = Babel(app)
 
 # 定義 SQLAlchemy 模型
@@ -88,7 +93,14 @@ class CustomModelView(ModelView):
                               search, filters, page_size=None):
       objects = query.all()
       return len(objects), objects
-                                
+
+# 定義用戶類
+class User(UserMixin):
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
+
+
 # 創建 Flask-Admin 管理界面
 admin = Admin(app, name='泓財銀行--管理介面', template_mode='bootstrap4')
 
@@ -1414,10 +1426,29 @@ def wbank_kyc_verify():
   conn.commit()
   return redirect("/wbank")
 
+# 登錄視圖函數
+@app.route('/wbank/auth/login', methods=['GET', 'POST'])
+def wbank_auth_client():
+    if request.method == 'POST':
+        username = request.form['user']
+        password = request.form['pw']
+        with conn.cursor() as cur:
+            cur.execute("SELECT username, password, verify FROM wbankwallet WHERE username = %s", (username,))
+            row = cur.fetchone()
+            if row and row[1] == password:
+                user = User(row[0], row[2])
+                login_user(user)
+                flash('登入成功.', 'success')
+                return redirect(url_for('wbank_client'))
+            else:
+                flash('無效的用戶名或密碼.', 'danger')
+    return render_template('wbank_client.html')
+
 @app.route("/wbank/client",methods=["POST"])
+@login_required
 def wbank_client():
-  user = request.form.get("user")
-  pw = request.form.get("pw")
+  user = current_user.username
+  pw = current_user.password
   cur = conn.cursor()
   cur.execute("select * from wbankwallet")
   rows = cur.fetchall()
