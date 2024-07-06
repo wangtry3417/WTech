@@ -201,7 +201,6 @@
     </ul>
   {% endif %}
 {% endwith %}
-    </center>
       <br>
     <div id="top">
        <h2>你好 {{user}}</h2>
@@ -369,7 +368,7 @@ const returnAlert = () => {
         });
         socket.on("UpdateProfit",(data) => {
           // 更新 HTML 元素
-  document.querySelector('p:first-of-type').textContent = `你的總資產: WTC${data.amount} || ~HKD${{HK_Value}} || ~NT${{tw_value}}`;
+  document.querySelector('p:first-of-type').textContent = `你的總資產: WTC${data.amount}`;
         });
         if (bal > 0) {
           setInterval(() => {
