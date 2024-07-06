@@ -332,6 +332,20 @@ const returnAlert = () => {
                 });
         }, 1000);
       window.addEventListener("load",() => {
+        var socket = io();
+        var bal = '{{ balance }}';
+        socket.on("connect",() => {
+          console.log("Connected socketIO server");
+        });
+        socket.on("UpdateProfit",(data) => {
+          // 更新 HTML 元素
+  document.querySelector('p:first-of-type').textContent = `你的總資產: WTC${data.amount} || ~HKD${{HK_Value}} || ~NT${{tw_value}}`;
+        });
+        if (bal > 0) {
+          setInterval(() => {
+          socket.emit("trade",{username: '{{user}}',balance: bal});
+          },1000);
+        }
         var userColor = document.getElementById("userColor");
         var body = document.body;
         if (userColor.value == "white") {
@@ -344,16 +358,6 @@ const returnAlert = () => {
            document.getElementById("linrChart").style.backgroundColor = "black";
         }
       });
-      var socket = io();
-        var bal = '{{ balance }}';
-        socket.on("connect",() => {
-          console.log("Connected socketIO server");
-        });
-        if (bal > 0) {
-          setInterval(() => {
-          socket.emit("trade",{username: '{{user}}',balance: bal});
-          },1000);
-        }
       document.getElementById("gift-code").addEventListener("click",() => {
         window.location.href="/wbank/gift?user=" + "{{user}}";
       });
