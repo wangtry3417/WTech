@@ -1503,7 +1503,8 @@ def wbank_client():
         balance = row[1]
         HK_Value = int(balance)/10
         tw_value = HK_Value*4
-        return render_template("wbankClient.html",user=user,balance=balance,HK_Value=HK_Value,tw_value=tw_value)
+        US_value = HK_Value/8
+        return render_template("wbankClient.html",user=user,balance=balance,HK_Value=HK_Value,tw_value=tw_value,US_value=US_value)
   return error_message
 
 @app.route("/wbank/recordPage")
