@@ -332,16 +332,6 @@ const returnAlert = () => {
                 });
         }, 1000);
       window.addEventListener("load",() => {
-        var socket = io();
-        var bal = '{{ balance }}';
-        socket.on("connect",() => {
-          console.log("Connected socketIO server");
-        });
-        if (bal > 0) {
-          setInterval(() => {
-          socket.emit("trade",{username: '{{user}}',balance: bal});
-          },1000);
-        }
         var userColor = document.getElementById("userColor");
         var body = document.body;
         if (userColor.value == "white") {
@@ -354,6 +344,16 @@ const returnAlert = () => {
            document.getElementById("linrChart").style.backgroundColor = "black";
         }
       });
+      var socket = io();
+        var bal = '{{ balance }}';
+        socket.on("connect",() => {
+          console.log("Connected socketIO server");
+        });
+        if (bal > 0) {
+          setInterval(() => {
+          socket.emit("trade",{username: '{{user}}',balance: bal});
+          },1000);
+        }
       document.getElementById("gift-code").addEventListener("click",() => {
         window.location.href="/wbank/gift?user=" + "{{user}}";
       });
