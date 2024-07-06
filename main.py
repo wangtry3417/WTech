@@ -59,10 +59,12 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://root:r7wPtW1z6ltgw4oW8hW6q
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
 app.config['SECRET_KEY'] = hashlib.sha256("WTech2225556".encode()).hexdigest()
+app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(minutes=30)
 
 socketio = SocketIO(app)
 
-CORS(app,resources={r"/*": {"origins": "*"}})
+#CORS(app,resources={r"/*": {"origins": "*"}})
+CORS(app, resources=r'/*')
 
 db = SQLAlchemy(app)
 
