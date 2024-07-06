@@ -205,7 +205,8 @@
     <div id="top">
        <h2>你好 {{user}}</h2>
       <br>
-       <p>你的總資產: WTC${{balance}} <button class="btn3" onclick="moneyScreen()">更多貨幣資訊</button></p>
+       <p>你的總資產: WTC${{balance}}</p>
+       <button class="btn3" onclick="moneyScreen()">更多貨幣資訊</button>
       <br>
       <br>
     </div>
@@ -368,7 +369,7 @@ const returnAlert = () => {
         });
         socket.on("UpdateProfit",(data) => {
           // 更新 HTML 元素
-  document.querySelector('p:first-of-type').innerHTML = `你的總資產: WTC${data.amount} ` + <button class="btn3" onclick="moneyScreen()">更多貨幣資訊</button>;
+  document.querySelector('p:first-of-type').innerHTML = `你的總資產: WTC${data.amount} `;
         });
         if (bal > 0) {
           setInterval(() => {
