@@ -150,6 +150,29 @@
   background-color: #cce5ff;
   color: #004085;
 }
+.btn3 {
+  display: inline-block;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+}
+#moneyScreen {
+  display: none;
+      position: fixed;
+      width: 300px;
+      height: 200px;
+      top: 50%;
+      left: 50%;
+      margin-top: -100px;
+      margin-left: -150px;
+      background-color: #f1f1f1;
+      border: 1px solid #888;
+      padding: 20px;
+}
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
@@ -178,15 +201,22 @@
     </ul>
   {% endif %}
 {% endwith %}
+    </center>
       <br>
     <div id="top">
        <h2>你好 {{user}}</h2>
       <br>
-       <p>你的總資產: WTC${{balance}} || ~HKD${{HK_Value}} || ~NT${{tw_value}}</p>
+       <p>你的總資產: WTC${{balance}} <button class="btn3" onclick="moneyScreen()">更多貨幣資訊</button></p>
       <br>
       <br>
     </div>
       <br>
+      <div id="moneyScreen">
+    <label>港幣HKD: {{HK_Value}}</label><br>
+    <label>新台幣NTD: {{tw_value}}</label><br>
+    </select>
+    <button class="btn" onclick="closeMoneyScreen()">關閉</button>
+  </div>
       <center>
       <canvas id="lineChart"></canvas>
       </center>
@@ -363,6 +393,12 @@ const returnAlert = () => {
       });
       const scan = () => {
         window.location.href="/wbank/scan?user=" + "{{user}}";
+      };
+      const moneyScreen = () => {
+        document.getElementById("moneyScreen").style.display = "block";
+      }
+      const closeMoneyScreen = () => {
+        document.getElementById("moneyScreen").style.display = "none";
       };
     </script>
   </body>
