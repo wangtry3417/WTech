@@ -1231,6 +1231,7 @@ def wbank_new_code():
     return jsonify({"Your code is": token})
 
 @app.route("/wbank/gift/code", methods=["POST"])
+@login_required
 def wbank_check_code():
     user = request.form.get("user")
     code = request.form.get("code")
@@ -1504,6 +1505,7 @@ def wbank_client():
   return error_message
 
 @app.route("/wbank/recordPage")
+@login_required
 def wbank_record_page_v2():
   user = request.args.get("user")
   return render_template("wbankRecordPage.html",user=user)
