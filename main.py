@@ -319,7 +319,7 @@ def token():
     cur.execute(f"SELECT password FROM wbankwallet WHERE username='{username}'")
     row = cur.fetchone()
     if row is not None:
-        stored_password = row[0]
+        stored_password = hashlib.sha256(row[0].encode()).hexdigest()
         # 使用 hashlib.sha256 雜湊使用者提供的密碼
         hashed_password = hashlib.sha256(password.encode()).hexdigest()
         if hashed_password == stored_password:
