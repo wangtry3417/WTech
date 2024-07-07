@@ -83,6 +83,8 @@
           alert('請輸入所需資料');
       }
       else {
+
+      }
        alert('申請進行中，請稍後');
         var socket = io();
       socket.on("connect",()=> {
@@ -93,7 +95,7 @@
          console.log(msg.success);
          alert("申請成功");
       });
-      }};
+      };
     </script>
   </body>
 </html>
