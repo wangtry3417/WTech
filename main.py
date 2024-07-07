@@ -227,6 +227,58 @@ def not_found(e):
 def handle_connect():
   print("connected websocket!.")
 
+@socket.on('transfer')
+def handle_transfer(data):
+  user = data['username']
+  amount = int(data['amount'])
+  reviewer = data['reviewer']
+  cur = conn.cursor()
+  cur.execute(f"select * from wbankwallet where Username='{user}'")
+  rows = cur.fetchall()
+  for row in rows:
+    if int(row[1]) < 0:
+      emit('error_msg','你不夠錢')
+    elif int(row[1]) < data[2]:
+      emit('error_msg','你沒有錢')
+    else:
+      cur.execute(f"""UPDATE wbankwallet
+SET balance={int(row[1])-amount}
+WHERE username='{user}'""")
+      conn.commit()
+      bl = f"由 {user} 轉帳 {amount} 給 {reviewer}"
+      tz = pytz.timezone('Asia/Taipei')
+      # 取得當前的 UTC 時間
+      utc_time = datetime.datetime.now(pytz.timezone('UTC'))
+      # 轉換 UTC 時間到 UTC+8 時區
+      local_time = utc_time.astimezone(tz)
+      cur.execute(f"INSERT INTO wbankrecord (username, action, time) VALUES ('{reviewer}', '{bl}', '{local_time}');")
+      conn.commit()
+      cur.execute(f"select * from wbankwallet where Username='{reviewer}'")
+      cols = cur.fetchall()
+      for col in cols:
+        cur.execute(f"""UPDATE wbankwallet
+SET balance={int(col[1])+amount}
+WHERE username='{col[0]}'""")
+        conn.commit()
+        prompt = f"""
+     轉帳方： {row[0]}
+     收款方： {col[0]}
+     金額: {data[2]}
+     狀態：成功✅
+     使用協定：Websocket/SocketIO
+    """
+        data = {
+        "embeds": [
+        {
+            "title": "Wcoins 轉帳通知",
+            "description": prompt,
+            "color": 65280,  # You can use hex color codes, this one is for blue
+        }
+    ]
+    }
+      r = requests.post(url="https://discord.com/api/webhooks/1236986187793829930/OBBvTByDyP-fvcVKI40D51UpaN5wU5HOjeHtxdiwh40-b09-gVj-jmoLcdPwlLs0-M2x",json=data)
+      emit({"success":"成功轉帳"})
+
 @socketio.on('nfc_detected')
 def handle_nfc_detected(data):
   user = data['username']
