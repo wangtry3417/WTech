@@ -317,16 +317,16 @@ def token():
     # 驗證使用者密碼
     cur = conn.cursor()
     cur.execute(f"SELECT password FROM wbankwallet WHERE username='{username}'")
-    row = cur.fetchone()
+    rows = cur.fetchall()
     if row is not None:
-        stored_password = hashlib.sha256(row[0].encode()).hexdigest()
-        # 使用 hashlib.sha256 雜湊使用者提供的密碼
-        hashed_password = hashlib.sha256(password.encode()).hexdigest()
-        if hashed_password == stored_password:
+        for row in rows:
+          stored_password = hashlib.sha256(row[0].encode()).hexdigest()
+          # 使用 hashlib.sha256 雜湊使用者提供的密碼
+          hashed_password = hashlib.sha256(password.encode()).hexdigest()
+          if hashed_password == stored_password:
             # 密碼驗證成功，發放 access token
             return oauth.token()
-        else:
-            return jsonify({'error': 'Invalid credentials'}), 401
+        return jsonify({'error': 'Invalid credentials'}), 401
     else:
         return jsonify({'error': 'Invalid credentials'}), 401
 
