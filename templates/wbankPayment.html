@@ -83,8 +83,9 @@
       });
       socket.emit("transfer",{"username":document.getElementById('user').value,"amount":document.getElementById('reviewer').value,"amount":document.getElementById('amount').value});
       socket.on("paymentSuccess",(msg) => {
-         alert(msg.success");
+         alert(msg.success);
       });
+      }
     </script>
   </body>
 </html>
