@@ -31,7 +31,7 @@ from flask_admin.contrib.sqla import ModelView
 from flask_sqlalchemy import SQLAlchemy
 from flask_babel import Babel
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
-from flask_oauthlib.server import ResourceProtector, OAuth2
+from flask_oauthlib import ResourceProtector, OAuth2
 import json
 import sys
 #from nltk.stem import WordNetLemmatizer
