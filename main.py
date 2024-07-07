@@ -295,15 +295,16 @@ WHERE username='{user}'""")
 # 建立 OAuth 授權路由
 @app.route('/oauth/authorize')
 @oauth.authorize_handler
-def authorize():
+def authorize(*args, **kwargs):
     # 處理授權請求
+    cur = conn.cursor()
     cur.execute("SELECT password FROM wbankwallet")
     rows = cur.fetchall()
     for row in rows:
-      hash1 = hashlib.sha256(row.encode()).hexdigest()
-      if oauth.token == hash1:
-        return oauth.authorize(callback=url_for('authorized', _external=True))
-    return abort(401)
+        hash1 = hashlib.sha256(row[0].encode()).hexdigest()
+        if oauth.token == hash1:
+            return True
+    return False
 
 @app.route('/oauth/authorized')
 def authorized():
