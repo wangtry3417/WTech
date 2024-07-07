@@ -325,7 +325,8 @@ def token():
           hashed_password = hashlib.sha256(password.encode()).hexdigest()
           if hashed_password == stored_password:
             # 密碼驗證成功，發放 access token
-            return oauth.token()
+            #return oauth.token()
+            return {}
         return jsonify({'error': 'Invalid credentials'}), 401
     else:
         return jsonify({'error': 'Invalid credentials'}), 401
