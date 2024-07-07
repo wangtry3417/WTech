@@ -71,6 +71,13 @@ oauth = OAuth2Provider(app)
 # 初始化 OAuth 伺服器
 #oauth.init_app(app)
 
+oauth.init_app(app,
+    token_url='/oauth/token',
+    authorize_url='/oauth/authorize',
+    access_token_url='/oauth/token',
+    refresh_token_url='/oauth/token'
+)
+
 socketio = SocketIO(app)
 
 #CORS(app,resources={r"/*": {"origins": "*"}})
