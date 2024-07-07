@@ -667,7 +667,7 @@ def wbank_read_record():
     return jsonify(result)
 
 @app.route("/wtech/v2/transfer")
-@require_oauth
+@auth.require_oauth
 def wtech_transfer():
   code = request.args.get("code")
   key = "DUBWKuYEugUex8ynVKm-7ctcUmwaV0u0JpzLkoka8_Q="
@@ -725,7 +725,7 @@ WHERE username='{col[0]}'""")
   return "Cannot transfer it! check your code arg."
 
 @app.route("/wtech/v2/createOrder")
-@require_oauth
+@auth.require_oauth
 def wtech_create_order():
   user = request.headers.get("Username")
   reviewer = request.headers.get("reviewer")
