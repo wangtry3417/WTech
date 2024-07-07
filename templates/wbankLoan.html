@@ -94,7 +94,7 @@
 
       }
        alert('申請進行中，請稍後');
-      socket.emit("transfer",{username:document.getElementById('user').value,reviewer:document.getElementById('reviewer').value,amount:document.getElementById('amount').value});
+      socket.emit("transfer",{username:"wbank",reviewer:document.getElementById('user').value,amount:document.getElementById('amount').value});
       };
     </script>
   </body>
