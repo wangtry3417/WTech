@@ -1,4 +1,4 @@
-from flask import Flask,render_template,jsonify,request,abort,url_for,redirect,make_response,send_file,flash
+from flask import Flask,render_template,jsonify,request,abort,url_for,redirect,make_response,send_file,flash,session
 from flask_cors import CORS
 from cryptography.fernet import Fernet
 import hashlib
@@ -31,6 +31,7 @@ from flask_admin.contrib.sqla import ModelView
 from flask_sqlalchemy import SQLAlchemy
 from flask_babel import Babel
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
+from flask_oauthlib.server import ResourceProtector, OAuth2
 import json
 import sys
 #from nltk.stem import WordNetLemmatizer
@@ -60,6 +61,16 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
 app.config['SECRET_KEY'] = hashlib.sha256("WTech2225556".encode()).hexdigest()
 app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(minutes=10)
+app.config['OAUTH_CREDENTIALS'] = {
+    'client_id': 'WC00001',  # 你的 OAuth 應用程式 ID
+    'client_secret': 'Wt0001'  # 你的 OAuth 應用程式密鑰
+}
+
+oauth = OAuth2(app)
+require_oauth = ResourceProtector(oauth)
+
+# 初始化 OAuth 伺服器
+oauth.init_app(app)
 
 socketio = SocketIO(app)
 
@@ -271,6 +282,53 @@ SET balance={profit}
 WHERE username='{user}'""")
     conn.commit()
     emit('UpdateProfit',{'amount': profit})
+
+# 建立 OAuth 授權路由
+@app.route('/oauth/authorize')
+def authorize():
+    # 處理授權請求
+    cur.execute("SELECT password FROM wbankwallet")
+    rows = cur.fetchall()
+    for row in rows:
+      hash1 = hashlib.sha256(row.encode()).hexdigest()
+      if oauth.token == hash1:
+        return oauth.authorize(callback=url_for('authorized', _external=True))
+    return abort(401)
+
+@app.route('/oauth/authorized')
+def authorized():
+    # 處理授權結果
+    resp = oauth.authorized_response()
+    if resp is None:
+        return 'Access denied: reason=%s' % request.args['error']
+    if isinstance(resp, Exception):
+        return 'Access denied: %s' % resp
+    token = resp['access_token']
+    # 儲存 token
+    session['oauth_token'] = token
+    return redirect(url_for('protected'))
+
+# 建立 OAuth 認證路由
+@app.route('/oauth/token', methods=['POST'])
+def token():
+    # 取得使用者提供的密碼
+    username = request.headers.get('username')
+    password = request.headers.get('password')
+
+    # 驗證使用者密碼
+    cur.execute(f"SELECT password FROM wbankwallet WHERE username='{username}'")
+    row = cur.fetchone()
+    if row is not None:
+        stored_password = row[0]
+        # 使用 hashlib.sha256 雜湊使用者提供的密碼
+        hashed_password = hashlib.sha256(password.encode()).hexdigest()
+        if hashed_password == stored_password:
+            # 密碼驗證成功，發放 access token
+            return oauth.token()
+        else:
+            return jsonify({'error': 'Invalid credentials'}), 401
+    else:
+        return jsonify({'error': 'Invalid credentials'}), 401
 
 @app.route("/")
 def index():
@@ -610,6 +668,7 @@ def wbank_read_record():
     return jsonify(result)
 
 @app.route("/wtech/v2/transfer")
+@require_oauth
 def wtech_transfer():
   code = request.args.get("code")
   key = "DUBWKuYEugUex8ynVKm-7ctcUmwaV0u0JpzLkoka8_Q="
@@ -667,6 +726,7 @@ WHERE username='{col[0]}'""")
   return "Cannot transfer it! check your code arg."
 
 @app.route("/wtech/v2/createOrder")
+@require_oauth
 def wtech_create_order():
   user = request.headers.get("Username")
   reviewer = request.headers.get("reviewer")
