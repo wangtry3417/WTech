@@ -71,6 +71,15 @@ oauth = OAuth2Provider(app)
 # 初始化 OAuth 伺服器
 #oauth.init_app(app)
 
+def verify_password(username, password):
+    cur = conn.cursor()
+    cur.execute("SELECT password FROM wbankwallet WHERE username=?", (username,))
+    row = cur.fetchone()
+    if row:
+        stored_password = row[0]
+        hashed_password = hashlib.sha256(password.encode()).hexdigest()
+        return hashed_password == stored_password
+    return False
 
 socketio = SocketIO(app)
 
@@ -159,7 +168,7 @@ users = {
 
 
 @auth.verify_password
-def verify_password(username, password):
+def verify_pw(username, password):
     if username in users and \
             check_password_hash(users.get(username), password):
         return username
@@ -317,21 +326,11 @@ def token():
     password = request.headers.get('password')
 
     # 驗證使用者密碼
-    cur = conn.cursor()
-    cur.execute(f"SELECT password FROM wbankwallet WHERE username='{username}'")
-    rows = cur.fetchall()
-    if rows is not None:
-        for row in rows:
-          stored_password = hashlib.sha256(row[0].encode()).hexdigest()
-          # 使用 hashlib.sha256 雜湊使用者提供的密碼
-          hashed_password = hashlib.sha256(password.encode()).hexdigest()
-          if hashed_password == stored_password:
-            # 密碼驗證成功，發放 access token
-            #return oauth.token()
-            return hashed_password
-        return jsonify({'error': 'Invalid credentials'}), 401
-    else:
-        return jsonify({'error': 'Invalid credentials'}), 401
+    if verify_password(username, password):
+        # 密碼驗證成功，發放 access token
+        return jsonify({'token': oauth.generate_token()})
+    return jsonify({'error': 'Invalid credentials'}), 401
+
 
 @app.route("/")
 def index():
