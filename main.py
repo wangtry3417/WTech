@@ -309,7 +309,7 @@ def authorized():
 
 # 建立 OAuth 認證路由
 @app.route('/oauth/token', methods=['POST'])
-@oauth.access_token_handler
+@oauth.token_handler
 def token():
     # 取得使用者提供的密碼
     username = request.headers.get('username')
