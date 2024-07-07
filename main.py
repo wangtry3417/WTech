@@ -315,6 +315,7 @@ def token():
     password = request.headers.get('password')
 
     # 驗證使用者密碼
+    cur = conn.cursor()
     cur.execute(f"SELECT password FROM wbankwallet WHERE username='{username}'")
     row = cur.fetchone()
     if row is not None:
