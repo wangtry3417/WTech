@@ -309,6 +309,7 @@ def authorized():
 
 # 建立 OAuth 認證路由
 @app.route('/oauth/token', methods=['POST'])
+@oauth.access_token_handler
 def token():
     # 取得使用者提供的密碼
     username = request.headers.get('username')
@@ -326,7 +327,7 @@ def token():
           if hashed_password == stored_password:
             # 密碼驗證成功，發放 access token
             #return oauth.token()
-            return hashed_password
+            return {}
         return jsonify({'error': 'Invalid credentials'}), 401
     else:
         return jsonify({'error': 'Invalid credentials'}), 401
@@ -669,7 +670,7 @@ def wbank_read_record():
     return jsonify(result)
 
 @app.route("/wtech/v2/transfer")
-@oauth.require_oauth()
+@oauth.require_oauth("email")
 def wtech_transfer():
   code = request.args.get("code")
   key = "DUBWKuYEugUex8ynVKm-7ctcUmwaV0u0JpzLkoka8_Q="
@@ -727,7 +728,7 @@ WHERE username='{col[0]}'""")
   return "Cannot transfer it! check your code arg."
 
 @app.route("/wtech/v2/createOrder")
-@oauth.require_oauth
+@oauth.require_oauth("email")
 def create_order():
   user = request.headers.get("Username")
   reviewer = request.headers.get("reviewer")
