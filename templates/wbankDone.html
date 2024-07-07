@@ -75,7 +75,7 @@
       socket.on("connect",()=> {
         console.log("Server connected!.");
       });
-      socket.emit("transfer",{"username":document.getElementById('user').value,"amount":document.getElementById('reviewer').value,"amount":document.getElementById('amount').value});
+      socket.emit("transfer",{"username":document.getElementById('user').value,"reviewer":document.getElementById('reviewer').value,"amount":document.getElementById('amount').value});
       socket.on("paymentSuccess",(msg) => {
          console.log(msg.success);
       });
