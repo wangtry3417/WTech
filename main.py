@@ -285,6 +285,7 @@ WHERE username='{user}'""")
 
 # 建立 OAuth 授權路由
 @app.route('/oauth/authorize')
+@oauth.authorize_handler
 def authorize():
     # 處理授權請求
     cur.execute("SELECT password FROM wbankwallet")
