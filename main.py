@@ -311,7 +311,6 @@ def authorized():
 
 # 建立 OAuth 認證路由
 @app.route('/oauth/token', methods=['POST'])
-@oauth.token_handler
 def token():
     # 取得使用者提供的密碼
     username = request.headers.get('username')
@@ -329,7 +328,7 @@ def token():
           if hashed_password == stored_password:
             # 密碼驗證成功，發放 access token
             #return oauth.token()
-            return {}
+            return hashed_password
         return jsonify({'error': 'Invalid credentials'}), 401
     else:
         return jsonify({'error': 'Invalid credentials'}), 401
