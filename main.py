@@ -668,7 +668,7 @@ def wbank_read_record():
 
 @app.route("/wbank/v1/transfer")
 @oauth.require_oauth
-def wtech_transfer():
+def wbank_wcoins_transfer():
   code = request.args.get("code")
   key = "DUBWKuYEugUex8ynVKm-7ctcUmwaV0u0JpzLkoka8_Q="
   fernet = Fernet(key)
@@ -726,7 +726,7 @@ WHERE username='{col[0]}'""")
 
 @app.route("/wbank/v1/createOrder")
 @oauth.require_oauth
-def wtech_create_order():
+def wbank_wcoins_create_order():
   user = request.headers.get("Username")
   reviewer = request.headers.get("reviewer")
   count = int(request.headers.get("Value"))
