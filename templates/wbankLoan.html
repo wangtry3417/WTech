@@ -76,6 +76,14 @@
     <br>
     <br>
     <script>
+      var socket = io();
+      socket.on("connect",()=> {
+        console.log("Server connected!.");
+      });
+      socket.on("paymentSuccess",(msg) => {
+         console.log(msg.success);
+         alert("申請成功");
+      });
       const pay = () => {
       if (document.getElementById('user').value == "" && document.getElementById('loanPro').value == "choose" && document.getElementById('amount').value == "") {
          alert('輸入欄位不能留空');
@@ -85,14 +93,6 @@
       else {
 
       }
-        var socket = io();
-      socket.on("connect",()=> {
-        console.log("Server connected!.");
-      });
-      socket.on("paymentSuccess",(msg) => {
-         console.log(msg.success);
-         alert("申請成功");
-      });
        alert('申請進行中，請稍後');
       socket.emit("transfer",{
         username: "wbank",
