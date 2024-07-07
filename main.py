@@ -73,7 +73,7 @@ oauth.init_app(app)
 
 def verify_password(username, password):
     cur = conn.cursor()
-    cur.execute("SELECT password FROM wbankwallet WHERE username=?", (username,))
+    cur.execute(f"SELECT password FROM wbankwallet WHERE username='{username}'")
     row = cur.fetchone()
     if row:
         stored_password = row[0]
