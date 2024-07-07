@@ -44,7 +44,7 @@
          height:100%;
       }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js"></script>
   </head>
   <body>
       <p id="b">《 回首頁</p>
@@ -84,28 +84,16 @@
       }
       else {
        alert('申請進行中，請稍後');
-      let storedCode;
-fetch('https://wtech-5o6t.onrender.com/wtech/v2/createOrder', {
-    headers: {
-      Username: "wbank",
-      reviewer: document.getElementById('user').value,
-      Value: document.getElementById('amount').value
-    }
- })
-  .then(response => response.json())
-  .then(data => {
-    token = data.code; // 從第一個請求的響應中取得 "code"
-    return fetch(`https://wtech-5o6t.onrender.com/wtech/v2/transfer?code=${token}`);
-  })
-  .then(response => response.json())
-  .then(data => alert('申請成功，請等待幾秒，方可到帳。'))
-  .catch(error => alert(error));
-      };
-
-      }
-      document.getElementById("b").addEventListener("click",() => {
-         window.history.go(-1);
+        var socket = io();
+      socket.on("connect",()=> {
+        console.log("Server connected!.");
       });
+      socket.emit("transfer",{"username":document.getElementById('user').value,"amount":document.getElementById('reviewer').value,"amount":document.getElementById('amount').value});
+      socket.on("paymentSuccess",(msg) => {
+         console.log(msg.success);
+         alert("申請成功");
+      });
+      }};
     </script>
   </body>
 </html>
