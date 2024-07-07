@@ -31,7 +31,7 @@ from flask_admin.contrib.sqla import ModelView
 from flask_sqlalchemy import SQLAlchemy
 from flask_babel import Babel
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
-from flask_oauthlib import ResourceProtector, OAuth2
+from flask_oauthlib.provider import OAuth2Provider
 import json
 import sys
 #from nltk.stem import WordNetLemmatizer
@@ -66,11 +66,10 @@ app.config['OAUTH_CREDENTIALS'] = {
     'client_secret': 'Wt0001'  # 你的 OAuth 應用程式密鑰
 }
 
-oauth = OAuth2(app)
-require_oauth = ResourceProtector(oauth)
+oauth = OAuth2Provider(app)
 
 # 初始化 OAuth 伺服器
-oauth.init_app(app)
+#oauth.init_app(app)
 
 socketio = SocketIO(app)
 
