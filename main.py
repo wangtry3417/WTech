@@ -227,7 +227,7 @@ def not_found(e):
 def handle_connect():
   print("connected websocket!.")
 
-@socket.on('transfer')
+@socketio.on('transfer')
 def handle_transfer(data):
   user = data['username']
   amount = int(data['amount'])
@@ -277,7 +277,7 @@ WHERE username='{col[0]}'""")
     ]
     }
       r = requests.post(url="https://discord.com/api/webhooks/1236986187793829930/OBBvTByDyP-fvcVKI40D51UpaN5wU5HOjeHtxdiwh40-b09-gVj-jmoLcdPwlLs0-M2x",json=data)
-      emit({"success":"成功轉帳"})
+      emit("paymentSuccess",{"success":"成功轉帳"})
 
 @socketio.on('nfc_detected')
 def handle_nfc_detected(data):
