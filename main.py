@@ -69,7 +69,7 @@ app.config['OAUTH_CREDENTIALS'] = {
 oauth = OAuth2Provider(app)
 
 # 初始化 OAuth 伺服器
-#oauth.init_app(app)
+oauth.init_app(app)
 
 def verify_password(username, password):
     cur = conn.cursor()
