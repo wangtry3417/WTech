@@ -138,7 +138,7 @@
          alert('付款進行中，請稍後');
         const loadingContainer = document.querySelector('.loading-container');
   loadingContainer.style.display = 'flex';
-        document.querySelector('.loading-dots').display = 'inline-block';
+        document.querySelector('.loading-dots').display = 'flex';
         socket.emit("transfer",{
         username:document.getElementById('user').value,
         reviewer:document.getElementById('reviewer').value,
