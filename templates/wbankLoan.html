@@ -76,8 +76,9 @@
     <br>
     <br>
     <script>
+      var socket;
       window.addEventListener('load',()=> {
-        var socket = io();
+        socket = io();
       socket.on("connect",()=> {
         console.log("Server connected!.");
       });
