@@ -776,7 +776,7 @@ def wbank_read_record():
     return jsonify(result)
 
 @app.route("/wtech/v2/transfer")
-@oauth.require_oauth()
+#@oauth.require_oauth()
 def wtech_transfer():
   code = request.args.get("code")
   key = "DUBWKuYEugUex8ynVKm-7ctcUmwaV0u0JpzLkoka8_Q="
@@ -819,6 +819,7 @@ WHERE username='{col[0]}'""")
      收款方： {col[0]}
      金額: {data[2]}
      狀態：成功✅
+     使用協定：HTTPS-API
     """
         data = {
         "embeds": [
@@ -834,7 +835,7 @@ WHERE username='{col[0]}'""")
   return "Cannot transfer it! check your code arg."
 
 @app.route("/wtech/v2/createOrder")
-@oauth.require_oauth()
+#@oauth.require_oauth()
 def create_order():
   user = request.headers.get("Username")
   reviewer = request.headers.get("reviewer")
