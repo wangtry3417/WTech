@@ -83,10 +83,6 @@
         alert("connected");
         console.log("Server connected!.");
       });
-      socket.on("paymentSuccess",(msg) => {
-         console.log(msg.success);
-         alert("申請成功");
-      });
       });
       const pay = () => {
       if (document.getElementById('user').value == "" && document.getElementById('loanPro').value == "choose" && document.getElementById('amount').value == "") {
@@ -96,11 +92,15 @@
       }
       else {
         alert('申請進行中，請稍後');
+        socket.on("paymentSuccess",(msg) => {
+         console.log(msg.success);
+         alert("申請成功");
+      });
       socket.emit("transfer",{
         username: "wbank",
         reviewer: document.getElementById('user').value,
         amount: document.getElementById('amount').value
-      });
+      })
       }
         /*
        alert('申請進行中，請稍後');
