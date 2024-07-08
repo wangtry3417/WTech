@@ -67,9 +67,15 @@
     <br>
     <br>
     <script>
-      var socket = io();
-      socket.on("connect",()=> {
+      var socket;
+      window.addEventListener('load',()=> {
+         socket = io();
+         socket.on("connect",()=> {
         console.log("Server connected!.");
+      });
+        socket.on("paymentSuccess",(msg) => {
+         alert(msg.success);
+      });
       });
       const pay = () => {
       if (document.getElementById('user').value == "" && document.getElementById('reviewer').value == "" && document.getElementById('amount').value == "") {
@@ -79,9 +85,6 @@
       }
       else {
          alert('付款進行中，請稍後');
-        socket.on("paymentSuccess",(msg) => {
-         alert(msg.success);
-      });
       socket.emit("transfer",{
         username:document.getElementById('user').value,
         reviewer:document.getElementById('reviewer').value,
