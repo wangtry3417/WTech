@@ -80,6 +80,7 @@
       window.addEventListener('load',()=> {
         socket = io();
       socket.on("connect",()=> {
+        alert("connected");
         console.log("Server connected!.");
       });
       socket.on("paymentSuccess",(msg) => {
