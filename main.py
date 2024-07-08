@@ -434,7 +434,7 @@ def token():
     # 驗證使用者密碼
     if verify_password(username, password):
         # 密碼驗證成功，發放 access token
-        return jsonify({'token': oauth.generate_token()})
+        return jsonify(oauth.create_token_response(request.headers))
     return jsonify({'error': 'Invalid credentials'}), 401
 
 
