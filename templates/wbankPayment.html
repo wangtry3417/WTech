@@ -123,11 +123,14 @@
       });
         socket.on("paymentSuccess",(msg) => {
          alert(msg.success);
-         document.querySelector('.loading-text').innerHTML = "支付完成，準備退出。";
       });
         socket.on("error_msg",(msg) => {
          alert(msg);
-         document.querySelector('.loading-text').innerHTML = "支付失敗，請再試一次。原因：" + msg;
+          setTimeout(() => {
+          loadingContainer.style.display = 'none';
+          document.querySelector('.loading-dots').display = 'none';
+          document.querySelector('.loading-text').innerHTML = "支付失敗，請再試一次。原因：" + msg;
+   }, 3000);
       });
       });
       const pay = () => {
@@ -149,6 +152,7 @@
         setTimeout(() => {
           loadingContainer.style.display = 'none';
           document.querySelector('.loading-dots').display = 'none';
+          document.querySelector('.loading-text').innerHTML = "支付完成，準備退出。";
    }, 3000);
       };
       /*
