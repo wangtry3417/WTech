@@ -1011,7 +1011,7 @@ def wtech_transfer():
     conn.commit()  # 提交資料庫更新
 
     # 記錄轉帳記錄
-    bl = f"由 {data[0]} 轉帳 {data[2]} 給 {reviewer}"
+    bl = f"由 {data[0]} 轉帳 {int(data[2])} 給 {data[1]}"
     tz = pytz.timezone('Asia/Taipei')  # 設定時區為台北時間
     utc_time = datetime.datetime.now(pytz.timezone('UTC'))  # 取得目前 UTC 時間
     local_time = utc_time.astimezone(tz)  # 將 UTC 時間轉換為台北時間
