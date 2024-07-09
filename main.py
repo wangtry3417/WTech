@@ -575,15 +575,22 @@ def authorize(*args, **kwargs):
 
 # 建立 OAuth 認證路由
 @app.route('/oauth/token', methods=['GET','POST'])
+@oauth.token_handler
 def token():
     # 取得使用者提供的密碼
     username = request.headers.get('username')
     password = request.headers.get('password')
-
-    # 驗證使用者密碼
-    if verify_password(username, password):
-        # 密碼驗證成功，發放 access token
-        return jsonify(oauth.create_token_response(request.headers))
+    cur = conn.cursor()
+    cur.execute(f"SELECT password FROM wbankwallet WHERE username='{username}'")
+    rows = cur.fetchall()
+    for row in rows:
+        stored_password = row[0]
+        hashed_password = hashlib.sha256(password.encode()).hexdigest()
+  
+        # 驗證使用者密碼
+        if hashed_password == hashed_password:
+          # 密碼驗證成功，發放 access token
+          return jsonify({"access-token":hashed_password})
     return jsonify({'error': 'Invalid credentials'}), 401
 
 
