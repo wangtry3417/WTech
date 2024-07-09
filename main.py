@@ -1022,7 +1022,7 @@ def wtech_transfer():
     cur.execute(f"select * from wbankwallet where Username='{data[1]}'")
     cols = cur.fetchall()
     if not cols:
-      send_error_to_discord('收款方不存在', data[0], amount, data[2]1)  # 發送錯誤訊息到 Discord
+      send_error_to_discord('收款方不存在', data[0], amount, data[2])  # 發送錯誤訊息到 Discord
       return
 
     col = cols[0]
