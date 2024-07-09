@@ -1077,7 +1077,7 @@ def wtech_transfer():
     elif int(row[1]) < data[2]:
       return jsonify({"message":"Your account have not any balance!."}) , 500
     else:
-      cur.execute(f"""UPDATE wbankwallet
+      #cur.execute(f"""UPDATE wbankwallet
 SET balance={int(row[1])-data[2]}
 WHERE username='{data[0]}'""")
       conn.commit()
