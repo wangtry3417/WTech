@@ -561,7 +561,7 @@ def save_token(token, request, *args, **kwargs):
     return tok
 
 @app.route('/oauth/authorize', methods=['GET', 'POST'])
-@oauth.require_login
+#@require_login
 @oauth.authorize_handler
 def authorize(*args, **kwargs):
     if request.method == 'GET':
