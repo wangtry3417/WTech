@@ -1092,17 +1092,17 @@ WHERE username='{data[0]}'""")
       cur.execute(f"select * from wbankwallet where Username='{data[1]}'")
       cols = cur.fetchall()
       for col in cols:
-        cur.execute(f"""UPDATE wbankwallet
+        #cur.execute(f"""UPDATE wbankwallet
 SET balance={int(col[1])+data[2]}
 WHERE username='{col[0]}'""")
         conn.commit()
-        prompt = f"""
-     轉帳方： {data[0]}
-     收款方： {col[0]}
-     金額: {data[2]}
-     狀態：成功✅
-     使用協定：HTTPS-API
-    """
+       # prompt = f'''
+    # 轉帳方： {data[0]}
+   #  收款方： {col[0]}
+    # 金額: {data[2]}
+   #  狀態：成功✅
+  #   使用協定：HTTPS-API
+   # '''
         data = {
         "embeds": [
         {
