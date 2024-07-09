@@ -1077,9 +1077,9 @@ def wtech_transfer():
     elif int(row[1]) < data[2]:
       return jsonify({"message":"Your account have not any balance!."}) , 500
     else:
-      #cur.execute(f"""UPDATE wbankwallet
+      #cur.execute(f'''UPDATE wbankwallet
 SET balance={int(row[1])-data[2]}
-WHERE username='{data[0]}'""")
+WHERE username='{data[0]}''')
       conn.commit()
       bl = f"由 {data[0]} 轉帳 {data[2]} 給 {data[1]}"
       tz = pytz.timezone('Asia/Taipei')
@@ -1092,9 +1092,9 @@ WHERE username='{data[0]}'""")
       cur.execute(f"select * from wbankwallet where Username='{data[1]}'")
       cols = cur.fetchall()
       for col in cols:
-        #cur.execute(f"""UPDATE wbankwallet
+        #cur.execute(f'''UPDATE wbankwallet
 SET balance={int(col[1])+data[2]}
-WHERE username='{col[0]}'""")
+WHERE username='{col[0]}'''')
         conn.commit()
        # prompt = f'''
     # 轉帳方： {data[0]}
