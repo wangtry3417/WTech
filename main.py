@@ -167,7 +167,7 @@ users = {
 }
 
 
-@auth.verify_password
+@oauth.verify_password
 def verify_pw(username, password):
     if username in users and \
             check_password_hash(users.get(username), password):
