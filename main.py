@@ -975,6 +975,89 @@ def wbank_read_record():
     return jsonify(result)
 
 @app.route("/wtech/v2/transfer")
+def wtech_transfer():
+  code = request.args.get("code")
+  key = "DUBWKuYEugUex8ynVKm-7ctcUmwaV0u0JpzLkoka8_Q="
+  fernet = Fernet(key)
+  # 解密结果
+  decrypted_data = fernet.decrypt(code)
+
+  # 将解密后的字符串转换为列表
+  data = eval(decrypted_data.decode())
+  cur = conn.cursor()
+  try:
+    # 查詢轉帳方餘額
+    cur.execute(f"select * from wbankwallet where Username='{data[0]}'")
+    rows = cur.fetchall()
+    if not rows:
+      send_error_to_discord('轉帳方不存在', data[0], int(data[2]), data[1])  # 發送錯誤訊息到 Discord
+      return
+
+    row = rows[0]
+    balance = int(row[1])  # 取得轉帳方餘額
+    amount = int(data[2])
+
+    if balance < 0:
+      send_error_to_discord('轉帳方餘額不足', data[0], int(data[2]), data[1])  # 發送錯誤訊息到 Discord
+      return
+    elif balance < amount:
+      send_error_to_discord('轉帳方餘額不足', data[0], data[2], data[1])  # 發送錯誤訊息到 Discord
+      return
+
+    # 更新轉帳方餘額
+    cur.execute(f"""UPDATE wbankwallet
+    SET balance={balance-amount}
+    WHERE username='{data[0]}'""")
+    conn.commit()  # 提交資料庫更新
+
+    # 記錄轉帳記錄
+    bl = f"由 {data[0]} 轉帳 {data[2]} 給 {reviewer}"
+    tz = pytz.timezone('Asia/Taipei')  # 設定時區為台北時間
+    utc_time = datetime.datetime.now(pytz.timezone('UTC'))  # 取得目前 UTC 時間
+    local_time = utc_time.astimezone(tz)  # 將 UTC 時間轉換為台北時間
+    cur.execute(f"INSERT INTO wbankrecord (username, action, time) VALUES ('{data[2]}', '{bl}', '{local_time}');")
+    conn.commit()  # 提交資料庫更新
+
+    # 查詢收款方餘額
+    cur.execute(f"select * from wbankwallet where Username='{data[1]}'")
+    cols = cur.fetchall()
+    if not cols:
+      send_error_to_discord('收款方不存在', data[0], amount, data[2]1)  # 發送錯誤訊息到 Discord
+      return
+
+    col = cols[0]
+    # 更新收款方餘額
+    cur.execute(f"""UPDATE wbankwallet
+    SET balance={int(col[1])+amount}
+    WHERE username='{col[0]}'""")
+    conn.commit()  # 提交資料庫更新
+
+    # 發送成功訊息到 Discord
+    prompt = f"""
+     轉帳方： {data[0]}
+     收款方： {data[1]}
+     金額: {amount}
+     狀態：成功✅
+     使用協定：HTTPS-API
+    """
+    data = {
+      "embeds": [
+        {
+          "title": "Wcoins 轉帳通知",
+          "description": prompt,
+          "color": 65280,  # You can use hex color codes, this one is for blue
+        }
+      ]
+    }
+    r = requests.post(url="https://discord.com/api/webhooks/1236986187793829930/OBBvTByDyP-fvcVKI40D51UpaN5wU5HOjeHtxdiwh40-b09-gVj-jmoLcdPwlLs0-M2x", json=data)
+
+    return jsonify({"success":"成功轉帳"})
+
+  except Exception as e:
+    send_error_to_discord('轉帳失敗', data[0], amount, data[1], str(e))  # 發送錯誤訊息到 Discord
+
+"""
+@app.route("/wtech/v2/transfer")
 #@oauth.require_oauth()
 def wtech_transfer():
   code = request.args.get("code")
@@ -1032,6 +1115,7 @@ WHERE username='{col[0]}'""")
       r = requests.post(url="https://discord.com/api/webhooks/1236986187793829930/OBBvTByDyP-fvcVKI40D51UpaN5wU5HOjeHtxdiwh40-b09-gVj-jmoLcdPwlLs0-M2x",json=data)
       return jsonify({"Good news":"Success to transfer"})
   return "Cannot transfer it! check your code arg."
+"""
 
 @app.route("/wtech/v2/createOrder")
 #@oauth.require_oauth()
