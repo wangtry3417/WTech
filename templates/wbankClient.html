@@ -187,6 +187,14 @@
        border-radius: 5px;
        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       }
+      #c2c {
+        width: 200px;
+       margin: auto;
+       background-color: #fff;
+       padding: 20px;
+       border-radius: 5px;
+       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
@@ -261,6 +269,9 @@
       <br>
       <b><h4>其他服務：</h4></b>
       <br>
+      <div id="c2c">
+        <p>C2C交易（只限買入wcoins)</p>
+      </div>
       <div id="needHelp">
         <p>需要協助？ 點擊 <a href="https://discord.gg/qmV5978RuB">聯絡</a> 我們吧</p>
       </div>
@@ -419,6 +430,9 @@ const returnAlert = () => {
       const closeMoneyScreen = () => {
         document.getElementById("moneyScreen").style.display = "none";
       };
+      document.getElementById("c2c").addEventListener("click",() => {
+        window.location.href="/wbank/payment/c2c?user=" + "{{user}}";
+      });
     </script>
   </body>
 </html>
