@@ -167,9 +167,9 @@
       }
       function createOrder {
         socket.emit("newOrder",{
-          username: document.getElementById('username').value;
-          amount: document.getElementById('amount').value;
-          payment: document.getElementById('payment').value;
+          username: document.getElementById('username').value,
+          amount: document.getElementById('amount').value,
+          payment: document.getElementById('payment').value
         });
       }
       function closeMoneyScreen() {
