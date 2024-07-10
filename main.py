@@ -351,7 +351,7 @@ def create_new_order(data):
   user = data["username"]
   amount = data["amount"]
   payment = data["payment"]
-  emit("placeOrder",{"username":user,"amount",amount,"payment":payment})
+  emit("placeOrder",{"username":user,"amount":amount,"payment":payment})
 
 @socketio.on('createAcc')
 def handle_create_account(data):
