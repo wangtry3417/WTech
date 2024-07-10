@@ -112,6 +112,41 @@
       border: 1px solid #888;
       padding: 20px;
 }
+#chatContainer {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 300px;
+        height: 400px;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        display: none;
+      }
+      #chatHeader {
+        background-color: #f1f1f1;
+        padding: 10px;
+        border-bottom: 1px solid #ccc;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      #chatMessages {
+        height: 320px;
+        overflow-y: scroll;
+        padding: 10px;
+      }
+      #chatInput {
+        display: flex;
+        padding: 10px;
+        border-top: 1px solid #ccc;
+      }
+      #chatInput input {
+        flex-grow: 1;
+        margin-right: 10px;
+      }
+
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js"></script>
   </head>
@@ -125,7 +160,7 @@
       <th>商家或客戶名稱</th>
       <th>金額 (WTC$ / USD$)</th>
       <th>接受支付方式</th>
-      <th></th>
+      <th>聯繫買家</th>
     </tr>
      <button class="btn1" onclick="newOrder()">添加訂單</button>
   </thead>
@@ -143,8 +178,19 @@
     <button class="btn1" onclick="closeMoneyScreen()">關閉</button>
   </div>
   </center>
+     <br>
     <br>
-    <br>
+    <div id="chatContainer">
+      <div id="chatHeader">
+        <h3>與 {{user}} 的聊天</h3>
+        <button class="btn1" onclick="toggleChatContainer()">關閉</button>
+      </div>
+      <div id="chatMessages"></div>
+      <div id="chatInput">
+        <input type="text" id="chatMessage" placeholder="輸入訊息...">
+        <button class="btn1" onclick="sendMessage()">發送</button>
+      </div>
+    </div>
     <script>
       var socket = io();
       socket.on("connect",()=> {
@@ -159,6 +205,12 @@
     const userCell = newRow.insertCell();
     const amountCell = newRow.insertCell();
     const paymentCell = newRow.insertCell();
+    const btn = newRow.insertCell();
+    const chatButton = document.createElement('button');
+    chatButton.classList.add('btn1');
+    chatButton.textContent = '聊天';
+    chatButton.onclick = () => toggleChatContainer(item.username);
+    btn.appendChild(chatButton);
     userCell.textContent = item.username;
     amountCell.textContent = item.amount;
     paymentCell.textContent = item.payment;
@@ -172,6 +224,12 @@
     const userCell = newRow.insertCell();
     const amountCell = newRow.insertCell();
     const paymentCell = newRow.insertCell();
+    const btn = newRow.insertCell();
+    const chatButton = document.createElement('button');
+    chatButton.classList.add('btn1');
+    chatButton.textContent = '聊天';
+    chatButton.onclick = () => toggleChatContainer(item.username);
+    btn.appendChild(chatButton);
     userCell.textContent = item.username;
     amountCell.textContent = item.amount;
     paymentCell.textContent = item.payment;
@@ -189,6 +247,32 @@
       }
       function closeMoneyScreen() {
         document.getElementById("moneyScreen").style.display = "none";
+      }
+      function toggleChatContainer(username) {
+        const chatContainer = document.getElementById('chatContainer');
+        const chatMessages = document.getElementById('chatMessages');
+        if (chatContainer.style.display === 'none') {
+          chatContainer.style.display = 'block';
+          chatMessages.innerHTML = '';
+          socket.emit('joinChat', { username: '{{user}}', targetUsername: username });
+          socket.on('chatMessage', (message) => {
+            const messageElement = document.createElement('div');
+            messageElement.textContent = `${message.username}: ${message.text}`;
+            chatMessages.appendChild(messageElement);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+          });
+        } else {
+          chatContainer.style.display = 'none';
+          socket.emit('leaveChat', { username: '{{user}}', targetUsername: username });
+        }
+      }
+      function sendMessage() {
+        const chatInput = document.getElementById('chatMessage');
+        const message = chatInput.value.trim();
+        if (message) {
+          socket.emit('chatMessage', { username: '{{user}}', text: message });
+          chatInput.value = '';
+        }
       }
     </script>
   </body>
