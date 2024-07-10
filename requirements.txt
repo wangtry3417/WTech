@@ -18,3 +18,4 @@ flask-admin
 Flask-Babel
 Flask-Login
 Flask-OAuthlib
+flask-qrcode
