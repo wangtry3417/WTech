@@ -378,10 +378,10 @@ def handle_join_chat(data):
 def handle_chat_message(data):
     username = data['username']
     text = data['text']
-    target_username = data['targetUsername']
-    room = f'{username}_{target_username}'
-    chat_rooms[room].append({'username': username, 'text': text})
-    emit('chatMessage', data, room=room)
+    #target_username = data['targetUsername']
+    #room = f'{username}_{target_username}'
+    #chat_rooms[room].append({'username': username, 'text': text})
+    emit('chatMessage', data)
 
 @socketio.on('leaveChat')
 def handle_leave_chat(data):
