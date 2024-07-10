@@ -351,7 +351,19 @@ def create_new_order(data):
   user = data["username"]
   amount = data["amount"]
   payment = data["payment"]
+  cur = conn.cursor()
+  cur.execute(f"INSERT INTO wbankctc (username, amount, payment) VALUES ('{user}', '{amount}', '{payment}');")
+  conn.commit()
   emit("placeOrder",{"username":user,"amount":amount,"payment":payment})
+
+@socketio.on('checkOrder')
+def check_new_order():
+  cur = conn.cursor()
+  cur.execute("SELECT * FROM wbankctc")
+  rows = cur.fetchall()
+  for row in rows:
+    emit("updateOrder",{"username":row[0],"amount":row[1],"payment":row[2]})
+
 
 @socketio.on('createAcc')
 def handle_create_account(data):
