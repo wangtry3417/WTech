@@ -1729,7 +1729,12 @@ def wbank_check_code():
     cur.execute(f"INSERT INTO wbankcode (code) VALUES ('{code}')")
     conn.commit()
     return render_template("wbankDone.html",user=user,count=amount)
-                   
+
+@app.route("/wbank/payment/c2c")
+def wbank_payment_cToc():
+  user = request.args.get("user")
+  return render_template("wbankCToC.html",user=user)
+
 @app.route("/wbank/gift")
 def wbank_gift_code():
   user = request.args.get("user")
