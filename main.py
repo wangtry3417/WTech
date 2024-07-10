@@ -346,6 +346,13 @@ def handle_nfc_detected(data):
   result = requests.get(url=f"https://wtechhk.xyz/wtech/v2/transfer?code={res['code']}").json()
   emit('payment_result',{'success':'Done'})
 
+@socketio.on('newOrder')
+def create_new_order(data):
+  user = data["username"]
+  amount = data["amount"]
+  payment = data["payment"]
+  emit("placeOrder",{"username":user,"amount",amount,"payment":payment})
+
 @socketio.on('createAcc')
 def handle_create_account(data):
   user = data['username']
