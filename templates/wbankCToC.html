@@ -165,7 +165,7 @@
       function newOrder() {
         document.getElementById("moneyScreen").style.display = "block";
       }
-      function createOrder {
+      function createOrder() {
         socket.emit("newOrder",{
           username: document.getElementById('username').value,
           amount: document.getElementById('amount').value,
