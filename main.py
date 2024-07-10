@@ -354,7 +354,7 @@ def create_new_order(data):
   cur = conn.cursor()
   cur.execute(f"INSERT INTO wbankctc (username, amount, payment) VALUES ('{user}', '{amount}', '{payment}');")
   conn.commit()
-  emit("placeOrder",{"username":user,"amount":amount,"payment":payment})
+  emit("placeOrder",{"username":user,"amount":amount,"payment":payment},broadcast=True)
 
 @socketio.on('checkOrder')
 def check_new_order():
@@ -363,6 +363,33 @@ def check_new_order():
   rows = cur.fetchall()
   for row in rows:
     emit("updateOrder",{"username":row[0],"amount":row[1],"payment":row[2]})
+
+@socketio.on('joinChat')
+def handle_join_chat(data):
+    username = data['username']
+    target_username = data['targetUsername']
+    room = f'{username}_{target_username}'
+    if room not in chat_rooms:
+        chat_rooms[room] = []
+    join_room(room)
+    emit('chatMessage', {'username': 'System', 'text': f'{username} has joined the chat.'}, room=room)
+
+@socketio.on('chatMessage')
+def handle_chat_message(data):
+    username = data['username']
+    text = data['text']
+    target_username = data['targetUsername']
+    room = f'{username}_{target_username}'
+    chat_rooms[room].append({'username': username, 'text': text})
+    emit('chatMessage', data, room=room)
+
+@socketio.on('leaveChat')
+def handle_leave_chat(data):
+    username = data['username']
+    target_username = data['targetUsername']
+    room = f'{username}_{target_username}'
+    leave_room(room)
+    emit('chatMessage', {'username': 'System', 'text': f'{username} has left the chat.'}, room=room)
 
 
 @socketio.on('createAcc')
