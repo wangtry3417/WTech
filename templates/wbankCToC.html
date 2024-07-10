@@ -1,37 +1,37 @@
 <html>
   <head>
     <title>泓財WBank -- {{user}} 的C2C</title>
-    <link rel="manifest" href="{{ url_for('static',filename='wbank.json') }}">
-    <link rel="stylesheet" href="{{ url_for('static',filename='menu.css') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='wbank.json') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='menu.css') }}">
     <style>
       #top {
-       width: 2000px;
-       margin: auto;
-       background-color: #fff;
-       padding: 20px;
-       border-radius: 5px;
-       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 2000px;
+        margin: auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       }
       input[type="text"] {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 5px;
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
       }
       .btn1 {
-        background-color: rgb(255,255,255);
-        color: rgb(0,0,0);
+        background-color: rgb(255, 255, 255);
+        color: rgb(0, 0, 0);
         padding: 12px 14px;
         font-size: 13px;
       }
       #warn {
-       width: 298px;
-       margin: auto;
-       background-color: #fff;
-       padding: 20px;
-       border: 3px solid black;
-       animation: wn 5s linear 2s infinite alternate;
+        width: 298px;
+        margin: auto;
+        background-color: #fff;
+        padding: 20px;
+        border: 3px solid black;
+        animation: wn 5s linear 2s infinite alternate;
       }
       @keyframes wn {
         0% {
@@ -42,77 +42,49 @@
         }
       }
       #lineChart {
-         width: 100%;
-         height:100%;
+        width: 100%;
+        height: 100%;
       }
       .footer {
-   position: fixed;
-   left: 0;
-   bottom: 0;
-   width: 100%;
-   background-color: #d3d3d3;
-   color: black;
-   text-align: center;
-   display: flex;
-}
-  #fuc1 {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  .p2p {
-        background-color: rgb(255,255,255);
-        color: rgb(0,0,0);
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        background-color: #d3d3d3;
+        color: black;
+        text-align: center;
+        display: flex;
+      }
+      #fuc1 {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .p2p, .paypal, .atm, .spend-out, .record {
+        background-color: rgb(255, 255, 255);
+        color: rgb(0, 0, 0);
         padding: 12px 14px;
         font-size: 13px;
         text-align: center;
-  }
-  .paypal {
-        background-color: rgb(255,255,255);
-        color: rgb(0,0,0);
-        padding: 12px 14px;
-        font-size: 13px;
+      }
+      .demo {
         text-align: center;
-  }
-  .atm {
-        background-color: rgb(255,255,255);
-        color: rgb(0,0,0);
-        padding: 12px 14px;
-        font-size: 13px;
-        text-align: center;
-  }
-  .spend-out {
-        background-color: rgb(255,255,255);
-        color: rgb(0,0,0);
-        padding: 12px 14px;
-        font-size: 13px;
-        text-align: center;
-  }
-  .record {
-     background-color: rgb(255,255,255);
-        color: rgb(0,0,0);
-        padding: 12px 14px;
-        font-size: 13px;
-        text-align: center;
-  }
-    .demo {
-         text-align: center;
-         font-family: Arial, sans-serif;
-    }
+        font-family: Arial, sans-serif;
+      }
       #moneyScreen {
-  display: none;
-      position: fixed;
-      width: 300px;
-      height: 200px;
-      top: 50%;
-      left: 50%;
-      margin-top: -100px;
-      margin-left: -150px;
-      background-color: #f1f1f1;
-      border: 1px solid #888;
-      padding: 20px;
-}
-#chatContainer {
+        display: none;
+        position: fixed;
+        width: 300px;
+        height: 200px;
+        top: 50%;
+        left: 50%;
+        margin-top: -100px;
+        margin-left: -150px;
+        background-color: #f1f1f1;
+        border: 1px solid #888;
+        padding: 20px;
+      }
+      #chatContainer {
         position: fixed;
         bottom: 20px;
         right: 20px;
@@ -146,43 +118,42 @@
         flex-grow: 1;
         margin-right: 10px;
       }
-
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js"></script>
   </head>
   <body>
     <center>
-    <div id="top">
-      <br>
-      <table id="recordTable">
-  <thead>
-    <tr>
-      <th>商家或客戶名稱</th>
-      <th>金額 (WTC$ / USD$)</th>
-      <th>接受支付方式</th>
-      <th>聯繫買家</th>
-    </tr>
-     <button class="btn1" onclick="newOrder()">添加訂單</button>
-  </thead>
-  <tbody></tbody>
-</table>
-    </div>
+      <div id="top">
+        <br>
+        <table id="recordTable">
+          <thead>
+            <tr>
+              <th>商家或客戶名稱</th>
+              <th>金額 (WTC$ / USD$)</th>
+              <th>接受支付方式</th>
+              <th>聯繫買家</th>
+            </tr>
+            <button class="btn1" onclick="newOrder()">添加訂單</button>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
       <div id="moneyScreen">
-    <label>你的用戶名稱：</label>
-      <input type="text" id="username" value="{{user}}" disabled><br>
-    <label>金額： (WTC)</label>
-      <input type="number" id="amount"><br>
-    <label>接受的付款方式：</label>
-      <input type="text" id="payment"><br>
-    <button class="btn1" onclick="createOrder()">創建訂單</button>
-    <button class="btn1" onclick="closeMoneyScreen()">關閉</button>
-  </div>
-  </center>
-     <br>
+        <label>你的用戶名稱：</label>
+        <input type="text" id="username" value="{{user}}" disabled><br>
+        <label>金額： (WTC)</label>
+        <input type="number" id="amount"><br>
+        <label>接受的付款方式：</label>
+        <input type="text" id="payment"><br>
+        <button class="btn1" onclick="createOrder()">創建訂單</button>
+        <button class="btn1" onclick="closeMoneyScreen()">關閉</button>
+      </div>
+    </center>
+    <br>
     <br>
     <div id="chatContainer">
       <div id="chatHeader">
-        <h3>與 {{user}} 的聊天</h3>
+        <h3>與 <span id="chatWithUser">{{user}}</span> 的聊天</h3>
         <button class="btn1" onclick="toggleChatContainer()">關閉</button>
       </div>
       <div id="chatMessages"></div>
@@ -193,53 +164,53 @@
     </div>
     <script>
       var socket = io();
-      socket.on("connect",()=> {
-        console.log("Connected server!.");
+      socket.on("connect", () => {
+        console.log("Connected to server!");
       });
       socket.emit("checkOrder");
-      socket.on("updateOrder",(data)=> {
+      socket.on("updateOrder", (data) => {
         const orderData = [data]; // 將 JSON 物件轉換成陣列
-  const goodsTable = document.getElementById('recordTable').querySelector('tbody');
-  orderData.forEach(item => {
-    const newRow = goodsTable.insertRow();
-    const userCell = newRow.insertCell();
-    const amountCell = newRow.insertCell();
-    const paymentCell = newRow.insertCell();
-    const btn = newRow.insertCell();
-    const chatButton = document.createElement('button');
-    chatButton.classList.add('btn1');
-    chatButton.textContent = '聊天';
-    chatButton.onclick = () => toggleChatContainer(item.username);
-    btn.appendChild(chatButton);
-    userCell.textContent = item.username;
-    amountCell.textContent = item.amount;
-    paymentCell.textContent = item.payment;
-  });
+        const goodsTable = document.getElementById('recordTable').querySelector('tbody');
+        orderData.forEach(item => {
+          const newRow = goodsTable.insertRow();
+          const userCell = newRow.insertCell();
+          const amountCell = newRow.insertCell();
+          const paymentCell = newRow.insertCell();
+          const btn = newRow.insertCell();
+          const chatButton = document.createElement('button');
+          chatButton.classList.add('btn1');
+          chatButton.textContent = '聊天';
+          chatButton.onclick = () => toggleChatContainer(item.username);
+          btn.appendChild(chatButton);
+          userCell.textContent = item.username;
+          amountCell.textContent = item.amount;
+          paymentCell.textContent = item.payment;
+        });
       });
       socket.on("placeOrder", (data) => {
-  const orderData = [data]; // 將 JSON 物件轉換成陣列
-  const goodsTable = document.getElementById('recordTable').querySelector('tbody');
-  orderData.forEach(item => {
-    const newRow = goodsTable.insertRow();
-    const userCell = newRow.insertCell();
-    const amountCell = newRow.insertCell();
-    const paymentCell = newRow.insertCell();
-    const btn = newRow.insertCell();
-    const chatButton = document.createElement('button');
-    chatButton.classList.add('btn1');
-    chatButton.textContent = '聊天';
-    chatButton.onclick = () => toggleChatContainer(item.username);
-    btn.appendChild(chatButton);
-    userCell.textContent = item.username;
-    amountCell.textContent = item.amount;
-    paymentCell.textContent = item.payment;
-  });
-});
+        const orderData = [data]; // 將 JSON 物件轉換成陣列
+        const goodsTable = document.getElementById('recordTable').querySelector('tbody');
+        orderData.forEach(item => {
+          const newRow = goodsTable.insertRow();
+          const userCell = newRow.insertCell();
+          const amountCell = newRow.insertCell();
+          const paymentCell = newRow.insertCell();
+          const btn = newRow.insertCell();
+          const chatButton = document.createElement('button');
+          chatButton.classList.add('btn1');
+          chatButton.textContent = '聊天';
+          chatButton.onclick = () => toggleChatContainer(item.username);
+          btn.appendChild(chatButton);
+          userCell.textContent = item.username;
+          amountCell.textContent = item.amount;
+          paymentCell.textContent = item.payment;
+        });
+      });
       function newOrder() {
         document.getElementById("moneyScreen").style.display = "block";
       }
       function createOrder() {
-        socket.emit("newOrder",{
+        socket.emit("newOrder", {
           username: document.getElementById('username').value,
           amount: document.getElementById('amount').value,
           payment: document.getElementById('payment').value
@@ -251,9 +222,11 @@
       function toggleChatContainer(username) {
         const chatContainer = document.getElementById('chatContainer');
         const chatMessages = document.getElementById('chatMessages');
-        if (chatContainer.style.display === 'none') {
+        const chatWithUser = document.getElementById('chatWithUser');
+        if (chatContainer.style.display === 'none' || chatWithUser.textContent !== username) {
           chatContainer.style.display = 'block';
           chatMessages.innerHTML = '';
+          chatWithUser.textContent = username;
           socket.emit('joinChat', { username: '{{user}}', targetUsername: username });
           socket.on('chatMessage', (message) => {
             const messageElement = document.createElement('div');
