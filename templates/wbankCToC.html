@@ -150,6 +150,20 @@
       socket.on("connect",()=> {
         console.log("Connected server!.");
       });
+      socket.emit("checkOrder");
+      socket.on("updateOrder",(data)=> {
+        const orderData = [data]; // 將 JSON 物件轉換成陣列
+  const goodsTable = document.getElementById('recordTable').querySelector('tbody');
+  orderData.forEach(item => {
+    const newRow = goodsTable.insertRow();
+    const userCell = newRow.insertCell();
+    const amountCell = newRow.insertCell();
+    const paymentCell = newRow.insertCell();
+    userCell.textContent = item.username;
+    amountCell.textContent = item.amount;
+    paymentCell.textContent = item.payment;
+  });
+      });
       socket.on("placeOrder", (data) => {
   const orderData = [data]; // 將 JSON 物件轉換成陣列
   const goodsTable = document.getElementById('recordTable').querySelector('tbody');
