@@ -387,12 +387,8 @@ def handle_chat_message(data):
             f.write(image_data)
         data['imageUrl'] = f"/uploads/{data['username']}_{data['room_number']}_{data['timestamp']}.png"
         emit('chatMessage', data, room=data['room_number'])
-    else:
-      username = data['username']
-      text = data['text']
-      room = data['room_number']
-      chat_rooms[room].append({'username': username, 'text': text})
-      emit('chatMessage', data, room=room)
+    # 處理文字類型的 data
+    emit('chatMessage', data, room=data['room_number'])
 
 @socketio.on('leaveChat')
 def handle_leave_chat(data):
