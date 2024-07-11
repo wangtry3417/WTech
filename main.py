@@ -370,8 +370,8 @@ def check_new_order():
 @socketio.on('joinChat')
 def handle_join_chat(data):
     username = data['username']
-    target_username = data['targetUsername']
-    room = f'{username}_{target_username}'
+    room_no = data['room_number']
+    room = room_no
     if room not in chat_rooms:
         chat_rooms[room] = []
     join_room(room)
@@ -383,14 +383,14 @@ def handle_chat_message(data):
     text = data['text']
     target_username = data['targetUsername']
     room = f'{username}_{target_username}'
-    chat_rooms[room].append({'username': username, 'text': text})
+    #chat_rooms[room].append({'username': username, 'text': text})
     emit('chatMessage', data)
 
 @socketio.on('leaveChat')
 def handle_leave_chat(data):
     username = data['username']
-    target_username = data['targetUsername']
-    room = f'{username}_{target_username}'
+    room_no = data['room_number']
+    room = room_no
     leave_room(room)
     emit('chatMessage', {'username': 'System', 'text': f'{username} has left the chat.'}, room=room)
 
