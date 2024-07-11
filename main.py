@@ -606,6 +606,10 @@ def save_token(token, request, *args, **kwargs):
     db.session.commit()
     return tok
 
+@app.route("/wtech/v2/chat")
+def wtech_wchat_page():
+  return render_template("wtechChat.html")
+
 @app.route('/oauth/authorize', methods=['GET', 'POST'])
 #@require_login
 @oauth.authorize_handler
