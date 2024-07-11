@@ -371,7 +371,7 @@ def handle_join_chat(data):
     room = f'{username}_{target_username}'
     if room not in chat_rooms:
         chat_rooms[room] = []
-    join_room(room)
+    #join_room(room)
     emit('chatMessage', {'username': 'System', 'text': f'{username} has joined the chat.'}, room=room)
 
 @socketio.on('chatMessage')
