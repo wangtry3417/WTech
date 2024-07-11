@@ -226,6 +226,7 @@ def not_found(e):
 @socketio.on('connect')
 def handle_connect():
   print("connected websocket!.")
+  emit('userList', list(chat_rooms.keys()))
 
 @socketio.on('transfer')
 def handle_transfer(data):
