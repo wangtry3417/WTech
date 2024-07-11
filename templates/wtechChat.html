@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
   <title>聊天頁面</title>
@@ -53,11 +53,16 @@
   </style>
 </head>
 <body>
-  <div class="container">
+  <div id="username-input-area">
+    <input type="text" id="username-input" placeholder="輸入用戶名">
+    <button id="join-button">加入</button>
+  </div>
+
+  <div class="container" style="display: none;">
     <div class="sidebar">
       <h3>聊天對象</h3>
       <ul id="user-list">
-        </ul>
+      </ul>
     </div>
     <div class="chat-area">
       <div class="chat-messages" id="chat-messages"></div>
@@ -73,19 +78,22 @@
     const socket = io('http://localhost:5000'); // 替換成你的伺服器地址
     const usernameInput = document.getElementById('username-input');
     const joinButton = document.getElementById('join-button');
+    const usernameInputArea = document.getElementById('username-input-area');
     const userList = document.getElementById('user-list');
     const chatMessages = document.getElementById('chat-messages');
     const messageInput = document.getElementById('message-input');
     const sendButton = document.getElementById('send-button');
+    const container = document.querySelector('.container');
 
     let currentTargetUsername = null;
+    let username = null;
 
     joinButton.addEventListener('click', () => {
-      const username = usernameInput.value;
+      username = usernameInput.value;
       socket.emit('joinChat', { username: username });
       // 隱藏輸入欄位和按鈕
-      usernameInput.style.display = 'none';
-      joinButton.style.display = 'none';
+      usernameInputArea.style.display = 'none';
+      container.style.display = 'flex';
     });
 
     socket.on('chatMessage', (data) => {
