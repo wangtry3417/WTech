@@ -357,7 +357,7 @@ def create_new_order(data):
   conn.commit()
   emit("placeOrder",{"username":user,"amount":amount,"payment":payment},broadcast=True)
 
-chat_room = {}
+chat_rooms = {}
 
 @socketio.on('checkOrder')
 def check_new_order():
