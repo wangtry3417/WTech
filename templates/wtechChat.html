@@ -54,7 +54,7 @@
 </head>
 <body>
   <div id="username-input-area">
-    <input type="text" id="username-input" placeholder="輸入用戶名">
+    <input type="text" id="username-input" placeholder="輸入你的用戶名">
     <select id="room">
         <option value="default">請選擇部門通訊通道</option>
         <option value="default">----WTech部門----</option>
@@ -67,6 +67,10 @@
         <option value="chatTwo">包廂2號</option>
       </select>
     <button id="join-button">加入</button>
+    <br>
+    <input type="text" id="reviewer-input" placeholder="輸入對方的用戶名（只限加入dm）">
+    <button id="create-dm">創建私訊dm</button>
+    <button id="join-dm">加入私訊dm</button>
   </div>
 
   <div class="container" style="display: none;">
@@ -105,6 +109,9 @@
     const messageInput = document.getElementById('message-input');
     const sendButton = document.getElementById('send-button');
     const container = document.querySelector('.container');
+    const reviewerInput = document.getElementById('reviewer-input');
+    const createDM = document.getElementById('create-dm');
+    const joinDM = document.getElementById('join-dm');
     
     let currentTargetUsername = null;
     let username = null;
@@ -118,6 +125,18 @@
         return;
       }
       socket.emit('joinChat', { username: username, room_number: room });
+      usernameInputArea.style.display = 'none';
+      container.style.display = 'flex';
+    });
+
+    createDM.addEventListener('click', () => {
+      socket.emit('joinChat', { username: usernameInput.value, room_number: usernameInput.value });
+      usernameInputArea.style.display = 'none';
+      container.style.display = 'flex';
+    });
+
+    joinDM.addEventListener('click', () => {
+      socket.emit('joinChat', { username: usernameInput.value, room_number: reviewerInput.value });
       usernameInputArea.style.display = 'none';
       container.style.display = 'flex';
     });
