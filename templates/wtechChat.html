@@ -127,12 +127,12 @@
     socket.on('chatMessage', (data) => {
       const message = document.createElement('div');
       message.classList.add('message');
-      if (data.type === 'text') {
+      if (data.type == 'text') {
         message.innerHTML = `
           <span class="message-username">${data.username}:</span>
           <span class="message-text">${data.text}</span>
         `;
-      } else if (data.type === 'image') {
+      } else if (data.type == 'image') {
         message.innerHTML = `
           <span class="message-username">${data.username}:</span>
           <img src="${data.imageUrl}" alt="圖片" class="message-image">
