@@ -55,14 +55,25 @@
 <body>
   <div id="username-input-area">
     <input type="text" id="username-input" placeholder="輸入用戶名">
+    <select id="room">
+        <option value="default">請選擇部門</option>
+        <option value="cs">客戶服務部</option>
+        <option value="ta">技術部</option>
+        <option value="ma">市場部</option>
+      </select>
     <button id="join-button">加入</button>
   </div>
 
   <div class="container" style="display: none;">
     <div class="sidebar">
-      <h3>聊天對象</h3>
-      <ul id="user-list">
+      <h3>部門選擇</h3>
+      <select id="room">
+        <option value="cs">客戶服務部</option>
+        <option value="ta">技術部</option>
+        <option value="ma">市場部</option>
+      </select>
       </ul>
+      <button onclick="exit()">退出通道</button>
     </div>
     <div class="chat-area">
       <div class="chat-messages" id="chat-messages"></div>
@@ -90,7 +101,11 @@
 
     joinButton.addEventListener('click', () => {
       username = usernameInput.value;
-      socket.emit('joinChat', { username: username });
+      room_number = document.getElementById("room");
+      if (room_number.value == "default") {
+        console.log("請選擇部門");
+      }
+      socket.emit('joinChat', { username: username,room_number: room_number.value });
       // 隱藏輸入欄位和按鈕
       usernameInputArea.style.display = 'none';
       container.style.display = 'flex';
@@ -107,31 +122,16 @@
       chatMessages.scrollTop = chatMessages.scrollHeight;
     });
 
+    
     sendButton.addEventListener('click', () => {
       const message = messageInput.value;
       if (message) {
         socket.emit('chatMessage', { username: username, text: message, targetUsername: currentTargetUsername });
         messageInput.value = '';
       }
-    });
+    })
 
-    // 更新聊天對象列表
-    socket.on('userList', (users) => {
-      userList.innerHTML = '';
-      users.forEach(user => {
-        const li = document.createElement('li');
-        li.textContent = user;
-        li.addEventListener('click', () => {
-          currentTargetUsername = user;
-          // 顯示聊天內容
-          chatMessages.innerHTML = '';
-          // 加入房間
-          socket.emit('joinChat', { username: username, targetUsername: currentTargetUsername });
-        });
-        userList.appendChild(li);
-      });
-    });
-
+    const exit = ()=> {
     // 離開聊天室
     socket.on('leaveChat', (data) => {
       // 移除聊天內容
@@ -139,6 +139,7 @@
       // 離開房間
       socket.emit('leaveChat', { username: username, targetUsername: currentTargetUsername });
     });
+    };
   </script>
 </body>
 </html>
