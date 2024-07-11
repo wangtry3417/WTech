@@ -88,6 +88,7 @@
     <div class="chat-area">
       <div class="chat-messages" id="chat-messages"></div>
       <div class="input-area">
+        <input type="file" id="image-input" accept="image/*">
         <input type="text" class="input-field" id="message-input" placeholder="輸入訊息">
         <button class="send-button" id="send-button">發送</button>
       </div>
@@ -105,7 +106,8 @@
     const messageInput = document.getElementById('message-input');
     const sendButton = document.getElementById('send-button');
     const container = document.querySelector('.container');
-
+    const imageInput = document.getElementById('image-input');
+    
     let currentTargetUsername = null;
     let username = null;
     let room = null;
@@ -125,10 +127,17 @@
     socket.on('chatMessage', (data) => {
       const message = document.createElement('div');
       message.classList.add('message');
-      message.innerHTML = `
-        <span class="message-username">${data.username}:</span>
-        <span class="message-text">${data.text}</span>
-      `;
+      if (data.type === 'text') {
+        message.innerHTML = `
+          <span class="message-username">${data.username}:</span>
+          <span class="message-text">${data.text}</span>
+        `;
+      } else if (data.type === 'image') {
+        message.innerHTML = `
+          <span class="message-username">${data.username}:</span>
+          <img src="${data.imageUrl}" alt="圖片" class="message-image">
+        `;
+      }
       chatMessages.appendChild(message);
       chatMessages.scrollTop = chatMessages.scrollHeight;
     });
@@ -141,6 +150,17 @@
       }
     });
 
+    imageInput.addEventListener('change', (event) => {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const base64Image = e.target.result;
+        socket.emit('chatMessage', { username: username, imageUrl: base64Image, room_number: room, type: 'image' });
+      };
+      reader.readAsDataURL(file);
+    });
+
+    
     const exit = () => {
       // 離開聊天室
       socket.emit('leaveChat', { username: username, room_number: room });
