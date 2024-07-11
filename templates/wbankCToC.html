@@ -164,6 +164,7 @@
       </div>
     </div>
     <script>
+      var targetUser;
       var socket = io();
       socket.on("connect", () => {
         console.log("Connected to server!");
@@ -181,7 +182,8 @@
           const chatButton = document.createElement('button');
           chatButton.classList.add('btn1');
           chatButton.textContent = '聊天';
-          chatButton.onclick = () => toggleChatContainer(item.username);
+          targetUser = item.username;
+          chatButton.onclick = () => toggleChatContainer(targetUser);
           btn.appendChild(chatButton);
           userCell.textContent = item.username;
           amountCell.textContent = item.amount;
@@ -245,7 +247,7 @@
         const chatInput = document.getElementById('chatMessage');
         const message = chatInput.value.trim();
         if (message) {
-          socket.emit('chatMessage', { username: '{{user}}', text: message, room_number: targetUsername });
+          socket.emit('chatMessage', { username: '{{user}}', text: message, room_number: targetUser, type: 'text' });
           chatInput.value = '';
         }
       }
