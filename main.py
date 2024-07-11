@@ -379,11 +379,20 @@ def handle_join_chat(data):
 
 @socketio.on('chatMessage')
 def handle_chat_message(data):
-    username = data['username']
-    text = data['text']
-    room = data['room_number']
-    chat_rooms[room].append({'username': username, 'text': text})
-    emit('chatMessage', data, room=room)
+    if data['type'] == 'image':
+        # 將 Base64 編碼的圖片資料轉換為圖片檔案
+        image_data = base64.b64decode(data['imageUrl'].split(',')[1])
+        image_path = os.path.join(f"{app.static_folder}/wchat", 'uploads', f"{data['username']}_{data['room_number']}_{data['timestamp']}.png")
+        with open(image_path, 'wb') as f:
+            f.write(image_data)
+        data['imageUrl'] = f"/uploads/{data['username']}_{data['room_number']}_{data['timestamp']}.png"
+        emit('chatMessage', data, room=data['room_number'])
+    else:
+      username = data['username']
+      text = data['text']
+      room = data['room_number']
+      chat_rooms[room].append({'username': username, 'text': text})
+      emit('chatMessage', data, room=room)
 
 @socketio.on('leaveChat')
 def handle_leave_chat(data):
@@ -392,6 +401,7 @@ def handle_leave_chat(data):
     room = room_no
     leave_room(room)
     emit('chatMessage', {'username': '系統（自動程式）', 'text': f'{username}已經退出通訊通道.'}, room=room)
+
 
 
 @socketio.on('createAcc')
