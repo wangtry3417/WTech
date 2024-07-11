@@ -143,17 +143,6 @@
       }
     });
 
-    imageInput.addEventListener('change', (event) => {
-      const file = event.target.files[0];
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const base64Image = e.target.result;
-        const timestamp = Date.now();
-        socket.emit('chatMessage', { username: username, imageUrl: base64Image, room_number: room, type: 'image', timestamp: timestamp });
-      };
-      reader.readAsDataURL(file);
-    });
-
     
     const exit = () => {
       // 離開聊天室
