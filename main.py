@@ -375,16 +375,15 @@ def handle_join_chat(data):
     if room not in chat_rooms:
         chat_rooms[room] = []
     join_room(room)
-    emit('chatMessage', {'username': 'System', 'text': f'{username} has joined the chat.'}, room=room)
+    emit('chatMessage', {'username': '系統（自動程式）', 'text': f'{username} 已經加入通訊通道.'}, room=room)
 
 @socketio.on('chatMessage')
 def handle_chat_message(data):
     username = data['username']
     text = data['text']
-    target_username = data['targetUsername']
-    room = f'{username}_{target_username}'
-    #chat_rooms[room].append({'username': username, 'text': text})
-    emit('chatMessage', data)
+    room = data['room_number']
+    chat_rooms[room].append({'username': username, 'text': text})
+    emit('chatMessage', data, room=room)
 
 @socketio.on('leaveChat')
 def handle_leave_chat(data):
@@ -392,7 +391,7 @@ def handle_leave_chat(data):
     room_no = data['room_number']
     room = room_no
     leave_room(room)
-    emit('chatMessage', {'username': 'System', 'text': f'{username} has left the chat.'}, room=room)
+    emit('chatMessage', {'username': '系統（自動程式）', 'text': f'{username}已經退出通訊通道.'}, room=room)
 
 
 @socketio.on('createAcc')
