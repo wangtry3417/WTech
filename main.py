@@ -385,7 +385,7 @@ def handle_chat_message(data):
         image_path = os.path.join(f"{app.static_folder}/wchat", 'uploads', f"{data['username']}_{data['room_number']}_{data['timestamp']}.png")
         with open(image_path, 'wb') as f:
             f.write(image_data)
-        data['imageUrl'] = f"/uploads/{data['username']}_{data['room_number']}_{data['timestamp']}.png"
+        data['imageUrl'] = f"/static/wchat/{data['username']}_{data['room_number']}_{data['timestamp']}.png"
         emit('chatMessage', data, room=data['room_number'])
     # 處理文字類型的 data
     emit('chatMessage', data, room=data['room_number'])
