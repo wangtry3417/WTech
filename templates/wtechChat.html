@@ -130,13 +130,15 @@
     });
 
     createDM.addEventListener('click', () => {
-      socket.emit('joinChat', { username: usernameInput.value, room_number: usernameInput.value });
+      room = usernameInput.value;
+      socket.emit('joinChat', { username: usernameInput.value, room_number: room });
       usernameInputArea.style.display = 'none';
       container.style.display = 'flex';
     });
 
     joinDM.addEventListener('click', () => {
-      socket.emit('joinChat', { username: usernameInput.value, room_number: reviewerInput.value });
+      room = reviewerInput.value;
+      socket.emit('joinChat', { username: usernameInput.value, room_number: room });
       usernameInputArea.style.display = 'none';
       container.style.display = 'flex';
     });
