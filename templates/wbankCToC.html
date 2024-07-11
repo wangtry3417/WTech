@@ -228,7 +228,7 @@
           chatContainer.style.display = 'block';
           chatMessages.innerHTML = '';
           chatWithUser.textContent = username;
-          socket.emit('joinChat', { username: '{{user}}', targetUsername: username });
+          socket.emit('joinChat', { username: '{{user}}', room_number: username });
           socket.on('chatMessage', (message) => {
             const messageElement = document.createElement('div');
             messageElement.textContent = `${message.username}: ${message.text}`;
@@ -237,7 +237,7 @@
           });
         } else {
           chatContainer.style.display = 'none';
-          socket.emit('leaveChat', { username: '{{user}}', targetUsername: username });
+          socket.emit('leaveChat', { username: '{{user}}', room_number: username });
         }
       }
       function sendMessage() {
@@ -245,7 +245,7 @@
         const chatInput = document.getElementById('chatMessage');
         const message = chatInput.value.trim();
         if (message) {
-          socket.emit('chatMessage', { username: '{{user}}', text: message, targetUsername: targetUsername });
+          socket.emit('chatMessage', { username: '{{user}}', text: message, room_number: targetUsername });
           chatInput.value = '';
         }
       }
