@@ -388,7 +388,8 @@ def handle_chat_message(data):
         data['imageUrl'] = f"/static/wchat/{data['username']}_{data['room_number']}_{data['timestamp']}.png"
         emit('chatMessage', data, room=data['room_number'])
     # 處理文字類型的 data
-    emit('chatMessage', data, room=data['room_number'])
+    elif data['type'] == 'text':
+      emit('chatMessage', data, room=data['room_number'])
 
 @socketio.on('leaveChat')
 def handle_leave_chat(data):
