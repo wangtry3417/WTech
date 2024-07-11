@@ -72,14 +72,13 @@
         <option value="ta">技術部</option>
         <option value="ma">市場部</option>
       </select>
-      </ul>
       <button onclick="exit()">退出通道</button>
     </div>
     <div class="chat-area">
       <div class="chat-messages" id="chat-messages"></div>
       <div class="input-area">
         <input type="text" class="input-field" id="message-input" placeholder="輸入訊息">
-        <!--<button class="send-button" id="send-button">發送</button>-->
+        <button class="send-button" id="send-button">發送</button>
       </div>
     </div>
   </div>
@@ -98,15 +97,16 @@
 
     let currentTargetUsername = null;
     let username = null;
+    let room = null;
 
     joinButton.addEventListener('click', () => {
       username = usernameInput.value;
-      room_number = document.getElementById("room");
-      if (room_number.value == "default") {
+      room = document.getElementById("room").value;
+      if (room == "default") {
         console.log("請選擇部門");
+        return;
       }
-      socket.emit('joinChat', { username: username,room_number: room_number.value });
-      // 隱藏輸入欄位和按鈕
+      socket.emit('joinChat', { username: username, room_number: room });
       usernameInputArea.style.display = 'none';
       container.style.display = 'flex';
     });
@@ -122,23 +122,23 @@
       chatMessages.scrollTop = chatMessages.scrollHeight;
     });
 
-    
     sendButton.addEventListener('click', () => {
       const message = messageInput.value;
       if (message) {
-        socket.emit('chatMessage', { username: username, text: message, targetUsername: currentTargetUsername });
+        socket.emit('chatMessage', { username: username, text: message, room_number: room });
         messageInput.value = '';
       }
-    })
+    });
 
-    const exit = ()=> {
-    // 離開聊天室
-    socket.on('leaveChat', (data) => {
+    const exit = () => {
+      // 離開聊天室
+      socket.emit('leaveChat', { username: username, room_number: room });
       // 移除聊天內容
       chatMessages.innerHTML = '';
-      // 離開房間
-      socket.emit('leaveChat', { username: username, targetUsername: currentTargetUsername });
-    });
+      // 隱藏聊天頁面
+      container.style.display = 'none';
+      // 顯示用戶名輸入欄位和按鈕
+      usernameInputArea.style.display = 'block';
     };
   </script>
 </body>
