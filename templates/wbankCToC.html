@@ -241,10 +241,11 @@
         }
       }
       function sendMessage() {
+        const targetUsername = document.getElementById('chatWithUser');
         const chatInput = document.getElementById('chatMessage');
         const message = chatInput.value.trim();
         if (message) {
-          socket.emit('chatMessage', { username: '{{user}}', text: message });
+          socket.emit('chatMessage', { username: '{{user}}', text: message, targetUsername: targetUsername });
           chatInput.value = '';
         }
       }
