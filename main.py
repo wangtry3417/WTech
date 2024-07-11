@@ -25,7 +25,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import pytz
 from discord import Bot,Embed,Option
 import discord
-from flask_socketio import SocketIO,emit
+from flask_socketio import SocketIO,emit,join_room,leave_room
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_sqlalchemy import SQLAlchemy
@@ -356,6 +356,8 @@ def create_new_order(data):
   conn.commit()
   emit("placeOrder",{"username":user,"amount":amount,"payment":payment},broadcast=True)
 
+chat_room = {}
+
 @socketio.on('checkOrder')
 def check_new_order():
   cur = conn.cursor()
@@ -371,7 +373,7 @@ def handle_join_chat(data):
     room = f'{username}_{target_username}'
     if room not in chat_rooms:
         chat_rooms[room] = []
-    #join_room(room)
+    join_room(room)
     emit('chatMessage', {'username': 'System', 'text': f'{username} has joined the chat.'}, room=room)
 
 @socketio.on('chatMessage')
