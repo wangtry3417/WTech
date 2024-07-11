@@ -1,131 +1,136 @@
- <!DOCTYPE HTML>
+ <!DOCTYPE html>
 <html>
-  <head>
-    <title> WChat </title>
-    <meta name = "charset" charset = "utf-8">
-    <meta name = "viewport" content = "width=device-width">
-    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" integrity="sha384-2huaZvOR9iDzHqslqwpR87isEmrfxqyWOF7hr7BY6KG0+hVKLoEXMPUJw3ynWuhO" crossorigin="anonymous"></script>
+<head>
+  <title>聊天頁面</title>
   <style>
-   body{
-  background: #f5f5f5;
-  color: #303030;
-  font-family: 'Segoe UI';
-}
-
-label{
-  width: 5%;
-  display: inline-block;
-  text-align: right;
-}
-
-input{
-  background: #e5e5e5;
-  color: #303030;
-  font-size: 120%;
-  border: none;
-}
-
-.Message{
-  color: #a0a0a0;
-}
-
-#Main{
-  background: #a0a0a0;
-  border-radius: 1%;
-  padding-left: 1%;
-}
-
-#Title{
-  font-size: 300%;
-}
+    body {
+      font-family: sans-serif;
+    }
+    .container {
+      display: flex;
+      height: 100vh;
+    }
+    .sidebar {
+      width: 200px;
+      background-color: #f0f0f0;
+      padding: 20px;
+    }
+    .chat-area {
+      flex: 1;
+      padding: 20px;
+    }
+    .chat-messages {
+      height: 400px;
+      overflow-y: auto;
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+    .message {
+      margin-bottom: 10px;
+    }
+    .message-username {
+      font-weight: bold;
+    }
+    .message-text {
+      margin-left: 5px;
+    }
+    .input-area {
+      display: flex;
+      margin-top: 10px;
+    }
+    .input-field {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+    .send-button {
+      padding: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
   </style>
-  </head>
-  <body onload = "onload()">
-    <div id = "Main">
-      <h1 id = "Title"> Chat </h1>
-      <div id = "AccessPort">
-        <label id = "NameLabel"> 用戶名：  </label>
-        <input id = "NameInput" type = "text">
-        <br><br>
-        <label id = "IDLabel"> 房間： </label>
-        <select id="IDInput">
-         <option value="Room1">房間1</option>
-          <option value="Room2">房間2</option>
-          <option value="Room3">房間3</option>
-          <option value="Room4">房間4</option>
-        </select>
-        <input id = "ConnectButton" class = "Button" type = "submit" value = "Connect" onclick = "Connect()">
-      </div>
-      <h2 id = "RoomID"> Chatroom : None </h2>
-      <div id = "Chat">
-        <p id = "Message0" class = "Message"> - </p>
-        <p id = "Message1" class = "Message"> - </p>
-        <p id = "Message2" class = "Message"> - </p>
-        <p id = "Message3" class = "Message"> - </p>
-        <p id = "Message4" class = "Message"> - </p>
-        <p id = "Message5" class = "Message"> - </p>
-        <p id = "Message6" class = "Message"> - </p>
-        <p id = "Message7" class = "Message"> - </p>
-        <p id = "Message8" class = "Message"> - </p>
-        <p id = "Message9" class = "Message"> - </p>
-        <label id = "MessageLabel"> Message </label>
-        <input id = "ComposedMessage" type = "text">
-        <input id = "SendMessage" onclick="Send()" value = "Send" class = "Button" type = "submit">
-      </div>
-      <br><br>
+</head>
+<body>
+  <div class="container">
+    <div class="sidebar">
+      <h3>聊天對象</h3>
+      <ul id="user-list">
+        </ul>
     </div>
-   <script>
-    var socket;
-var usernameInput
-var chatIDInput;
-var messageInput;
-var chatRoom;
-var messages = [];
-var delay = true;
+    <div class="chat-area">
+      <div class="chat-messages" id="chat-messages"></div>
+      <div class="input-area">
+        <input type="text" class="input-field" id="message-input" placeholder="輸入訊息">
+        <button class="send-button" id="send-button">發送</button>
+      </div>
+    </div>
+  </div>
 
-function onload(){
-  socket = io("https://wserver-wtech.onrender.com");
-  usernameInput = document.getElementById("NameInput");
-  chatIDInput = document.getElementById("IDInput");
-  messageInput = document.getElementById("ComposedMessage");
-  chatRoom = document.getElementById("RoomID");
+  <script src="https://cdn.socket.io/4.7.1/socket.io.min.js"></script>
+  <script>
+    const socket = io('http://localhost:5000'); // 替換成你的伺服器地址
+    const usernameInput = document.getElementById('username-input');
+    const joinButton = document.getElementById('join-button');
+    const userList = document.getElementById('user-list');
+    const chatMessages = document.getElementById('chat-messages');
+    const messageInput = document.getElementById('message-input');
+    const sendButton = document.getElementById('send-button');
 
-  socket.on("join", function(room){
-    chatRoom.innerHTML = "Chatroom : " + room;
-  })
+    let currentTargetUsername = null;
 
-  socket.on("recieve", function(message){
-    console.log(message);
-    if (messages.length < 9){
-      messages.push(message);
-    }
-    else{
-      messages.shift();
-      messages.push(message);
-    }
-    for (i = 0; i < messages.length; i++){
-        document.getElementById("Message"+i).innerHTML = messages[i];
-        document.getElementById("Message"+i).style.color = "#303030";
-    }
-  })
-}
+    joinButton.addEventListener('click', () => {
+      const username = usernameInput.value;
+      socket.emit('joinChat', { username: username });
+      // 隱藏輸入欄位和按鈕
+      usernameInput.style.display = 'none';
+      joinButton.style.display = 'none';
+    });
 
-function Connect(){
-  socket.emit("join", chatIDInput.value, usernameInput.value);
-}
+    socket.on('chatMessage', (data) => {
+      const message = document.createElement('div');
+      message.classList.add('message');
+      message.innerHTML = `
+        <span class="message-username">${data.username}:</span>
+        <span class="message-text">${data.text}</span>
+      `;
+      chatMessages.appendChild(message);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    });
 
-function Send(){
-  if (delay && messageInput.value.replace(/\s/g, "") != ""){
-    delay = false;
-    setTimeout(delayReset, 1000);
-    socket.emit("send", messageInput.value);
-    messageInput.value = "";
-  }
-}
+    sendButton.addEventListener('click', () => {
+      const message = messageInput.value;
+      if (message) {
+        socket.emit('chatMessage', { username: username, text: message, targetUsername: currentTargetUsername });
+        messageInput.value = '';
+      }
+    });
 
-function delayReset(){
-  delay = true;
-}
-   </script>
-  </body>
+    // 更新聊天對象列表
+    socket.on('userList', (users) => {
+      userList.innerHTML = '';
+      users.forEach(user => {
+        const li = document.createElement('li');
+        li.textContent = user;
+        li.addEventListener('click', () => {
+          currentTargetUsername = user;
+          // 顯示聊天內容
+          chatMessages.innerHTML = '';
+          // 加入房間
+          socket.emit('joinChat', { username: username, targetUsername: currentTargetUsername });
+        });
+        userList.appendChild(li);
+      });
+    });
+
+    // 離開聊天室
+    socket.on('leaveChat', (data) => {
+      // 移除聊天內容
+      chatMessages.innerHTML = '';
+      // 離開房間
+      socket.emit('leaveChat', { username: username, targetUsername: currentTargetUsername });
+    });
+  </script>
+</body>
 </html>
