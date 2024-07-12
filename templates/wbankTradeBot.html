@@ -76,7 +76,7 @@
       });
        spinner.style.animation = "spin 3a linear infinite";
     },1200);
-      setInterval(() => {
+      let tradeBotloop = setInterval(() => {
        text.innerHTML = "Trade-Bot運行中...";
        spinner.style.animation = "spin 6s linear infinite";
       socket.emit("tradeBot",{username:"{{user}}",balance:"{{balance}}"});
@@ -84,6 +84,7 @@
       },3000);
       setTimeout(() => {
         alert("完成！");
+        clearInterval(tradeBotloop);
        text.innerHTML = "你現在可以關閉此頁了!";
         window.location.href="/wbank";
        spinner.style.animation = "spin 2s linear infinite";
