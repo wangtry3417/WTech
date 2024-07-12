@@ -452,8 +452,8 @@ WHERE username='{user}'""")
     conn.commit()
     emit('UpdateProfit',{'amount': profit})
 
-@socketio.on("trade")
-def trade_wcoins(data):
+@socketio.on("tradeBot")
+def trade_wcoins_bot(data):
   user = data["username"]
   bal = int(data["balance"])
   profit = bal + 10
@@ -1245,6 +1245,12 @@ def wp_buyIn():
   cur.execute(f"UPDATE worldplay set balance={balance} where username='{user}'")
   conn.commit()
   return jsonify({"Done":"Almost Done!."})
+
+@app.route("/wbank/trade/auto")
+def wcoins_auto_trade():
+  user = request.args.get("user")
+  balance = request.args.get("bal")
+  return render_template("wbankTradeBot.html",user=user,balance=balance)
 
 class Game:
     def __init__(self):
