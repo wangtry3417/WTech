@@ -458,7 +458,7 @@ def trade_wcoins_bot(data):
   bal = int(data["balance"])
   profit = bal + 10
   if bal == 0:
-    emit("errorMsg',"你沒有wcoins，請先買入")
+    emit("errorMsg','你沒有wcoins，請先買入')
     
   cur = conn.cursor()
   cur.execute(f"""UPDATE wbankwallet
