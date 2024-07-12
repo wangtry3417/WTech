@@ -452,6 +452,21 @@ WHERE username='{user}'""")
     conn.commit()
     emit('UpdateProfit',{'amount': profit})
 
+@socketio.on("trade")
+def trade_wcoins(data):
+  user = data["username"]
+  bal = int(data["balance"])
+  profit = bal + 10
+  if bal == 0:
+    emit("errorMsg',"你沒有wcoins，請先買入")
+    
+  cur = conn.cursor()
+  cur.execute(f"""UPDATE wbankwallet
+SET balance='{profit}
+WHERE username='{user}'""")
+  conn.commit()
+  emit('UpdateProfit',{'amount': profit})
+
 class wbankclients(db.Model):
     # human readable name, not required
     name = db.Column(db.String(40))
