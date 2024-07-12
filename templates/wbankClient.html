@@ -195,6 +195,19 @@
        border-radius: 5px;
        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       }
+      #sec-service {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      #trade-bot {
+        width: 200px;
+       margin: auto;
+       background-color: #fff;
+       padding: 20px;
+       border-radius: 5px;
+       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
@@ -269,8 +282,13 @@
       <br>
       <b><h4>其他服務：</h4></b>
       <br>
+      <div id="sec-service">
       <div id="c2c">
         <p>C2C交易（只限買入wcoins)</p>
+      </div>
+      <div id="trade-bot">
+        <p>自動程式交易</p>
+      </div>
       </div>
       <div id="needHelp">
         <p>需要協助？ 點擊 <a href="https://discord.gg/qmV5978RuB">聯絡</a> 我們吧</p>
@@ -432,6 +450,9 @@ const returnAlert = () => {
       };
       document.getElementById("c2c").addEventListener("click",() => {
         window.location.href="/wbank/payment/c2c?user=" + "{{user}}";
+      });
+      document.getElementById("trade-bot").addEventListener("click",() => {
+        window.location.href="/wbank/trade/auto?user=" + "{{user}}" + "&bal=" + "{{balance}}" ;
       });
     </script>
   </body>
