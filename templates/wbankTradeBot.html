@@ -70,28 +70,28 @@
     },1000);
     setTimeout(() => {
       text.innerHTML = "連接trade-bot中...";
+      var socket = io();
+      socket.on("connect",()=> {
+        console.log("Server connected!.");
+      });
        spinner.style.animation = "spin 3a linear infinite";
     },1200);
       setInterval(() => {
        text.innerHTML = "Trade-Bot運行中...";
        spinner.style.animation = "spin 6s linear infinite";
-       var socket = io();
-      socket.on("connect",()=> {
-        console.log("Server connected!.");
-      });
-      socket.on("errorMsg",(msg)=> {
-         alert(msg);
-         window.location.href="/wbank";
-      };
       socket.emit("tradeBot",{username:"{{user}}",balance:"{{balance}}"});
   
-    },3000);
+      },3000);
       setTimeout(() => {
         alert("完成！");
        text.innerHTML = "你現在可以關閉此頁了!";
         window.location.href="/wbank";
        spinner.style.animation = "spin 2s linear infinite";
     },30000);
+      socket.on("errorMsg",(msg)=> {
+         alert(msg);
+         window.location.href="/wbank";
+      };
   </script>
 </body>
 </html>
