@@ -327,6 +327,17 @@
     <br>
     <br>
     <script>
+      var userColor = document.getElementById("userColor");
+        var body = document.body;
+        if (userColor.value == "white") {
+           body.style.backgroundColor = "white";
+           body.style.color = "black";
+           document.getElementById("lineChart").style.backgroundColor = "white";
+        } else if (userColor.value == "black") {
+           body.style.backgroundColor = "black";
+           body.style.color = "white";
+           document.getElementById("lineChart").style.backgroundColor = "black";
+        }
       const transfer = () => {
         window.location.href="/wbank/transfer";
       };
@@ -444,17 +455,6 @@ const returnAlert = () => {
           setInterval(() => {
           socket.emit("trade",{username: '{{user}}',balance: bal});
           },1000);
-        }
-        var userColor = document.getElementById("userColor");
-        var body = document.body;
-        if (userColor.value == "white") {
-           body.style.backgroundColor = "white";
-           body.style.color = "black";
-           document.getElementById("lineChart").style.backgroundColor = "white";
-        } else if (userColor.value == "black") {
-           body.style.backgroundColor = "black";
-           body.style.color = "white";
-           document.getElementById("lineChart").style.backgroundColor = "black";
         }
         const botscreen = () => {
         document.getElementById("botScreen").style.display = "block";
