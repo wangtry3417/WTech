@@ -496,6 +496,7 @@ const returnAlert = () => {
         },3000);
       };
       const stopBot = () => {
+        bot_status = 'no';
         socket.emit("tradeBot",{
           username: "{{user}}",
           balance: "{{balance}}",
