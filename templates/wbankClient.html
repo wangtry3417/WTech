@@ -458,10 +458,10 @@ const returnAlert = () => {
         }
         const botscreen = () => {
         document.getElementById("botScreen").style.display = "block";
-      });
+      };
       const closeBotScreen = () => {
         document.getElementById("botScreen").style.display = "none";
-      });
+      };
       socket.on("errorMsg",(msg)=> {
          console.log(msg);
       });
@@ -471,14 +471,14 @@ const returnAlert = () => {
           balance: "{{balance}}",
           bot_status: "yes"
         });
-      });
+      };
       const stopBot = () => {
         socket.emit("tradeBot",{
           username: "{{user}}",
           balance: "{{balance}}",
           bot_status: "no"
         });
-      });
+      };
       });
       document.getElementById("gift-code").addEventListener("click",() => {
         window.location.href="/wbank/gift?user=" + "{{user}}";
