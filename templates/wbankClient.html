@@ -327,6 +327,7 @@
     <br>
     <br>
     <script>
+      var socket = io();
       var userColor = document.getElementById("userColor");
         var body = document.body;
         if (userColor.value == "white") {
@@ -442,7 +443,6 @@ const returnAlert = () => {
                 });
         }, 1000);
       window.addEventListener("load",() => {
-        var socket = io();
       socket.on("connect",() => {
           console.log("Connected socketIO server");
         });
@@ -456,7 +456,26 @@ const returnAlert = () => {
           socket.emit("trade",{username: '{{user}}',balance: bal});
           },1000);
         }
-        const botscreen = () => {
+      });
+      document.getElementById("gift-code").addEventListener("click",() => {
+        window.location.href="/wbank/gift?user=" + "{{user}}";
+      });
+      const scan = () => {
+        window.location.href="/wbank/scan?user=" + "{{user}}";
+      };
+      const moneyScreen = () => {
+        document.getElementById("moneyScreen").style.display = "block";
+      }
+      const closeMoneyScreen = () => {
+        document.getElementById("moneyScreen").style.display = "none";
+      };
+      document.getElementById("c2c").addEventListener("click",() => {
+        window.location.href="/wbank/payment/c2c?user=" + "{{user}}";
+      });
+      document.getElementById("trade-bot").addEventListener("click",() => {
+        window.location.href="/wbank/trade/auto?user=" + "{{user}}" + "&bal=" + "{{balance}}" ;
+      });
+      const botscreen = () => {
         document.getElementById("botScreen").style.display = "block";
       };
       const closeBotScreen = () => {
@@ -479,25 +498,6 @@ const returnAlert = () => {
           bot_status: "no"
         });
       };
-      });
-      document.getElementById("gift-code").addEventListener("click",() => {
-        window.location.href="/wbank/gift?user=" + "{{user}}";
-      });
-      const scan = () => {
-        window.location.href="/wbank/scan?user=" + "{{user}}";
-      };
-      const moneyScreen = () => {
-        document.getElementById("moneyScreen").style.display = "block";
-      }
-      const closeMoneyScreen = () => {
-        document.getElementById("moneyScreen").style.display = "none";
-      };
-      document.getElementById("c2c").addEventListener("click",() => {
-        window.location.href="/wbank/payment/c2c?user=" + "{{user}}";
-      });
-      document.getElementById("trade-bot").addEventListener("click",() => {
-        window.location.href="/wbank/trade/auto?user=" + "{{user}}" + "&bal=" + "{{balance}}" ;
-      });
     </script>
   </body>
 </html>
