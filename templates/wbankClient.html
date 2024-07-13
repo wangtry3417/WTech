@@ -432,7 +432,7 @@ const returnAlert = () => {
                 });
         }, 1000);
       window.addEventListener("load",() => {
-        var socket = io();
+        socket = io();
         var bal = '{{ balance }}';
         socket.on("connect",() => {
           console.log("Connected socketIO server");
@@ -481,6 +481,9 @@ const returnAlert = () => {
       });
       const closeBotScreen = () => {
         document.getElementById("botScreen").style.display = "none";
+      });
+      socket.on("errorMsg",(msg)=> {
+         console.log(msg);
       });
       const startBot = () => {
         socket.emit("tradeBot",{
