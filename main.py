@@ -275,6 +275,7 @@ def handle_transfer(data):
     cur.execute(f"select * from wbankwallet where Username='{reviewer}'")
     cols = cur.fetchall()
     if not cols:
+      cur.close()
       emit('error_msg', '收款方不存在')  # 發送錯誤訊息到客戶端
       send_error_to_discord('收款方不存在', user, amount, reviewer)  # 發送錯誤訊息到 Discord
       return
@@ -304,7 +305,7 @@ def handle_transfer(data):
       ]
     }
     r = requests.post(url="https://discord.com/api/webhooks/1236986187793829930/OBBvTByDyP-fvcVKI40D51UpaN5wU5HOjeHtxdiwh40-b09-gVj-jmoLcdPwlLs0-M2x", json=data)
-
+    cur.close()
     emit("paymentSuccess", {"success": "成功轉帳"})  # 發送成功訊息到客戶端
 
   except Exception as e:
@@ -450,6 +451,7 @@ WHERE username='{user}'""")
 SET balance={profit}
 WHERE username='{user}'""")
     conn.commit()
+    cur.close()
     emit('UpdateProfit',{'amount': profit})
 
 @socketio.on("tradeBot")
@@ -465,6 +467,7 @@ def trade_wcoins_bot(data):
 SET balance='{profit}
 WHERE username='{user}'""")
   conn.commit()
+  cur.close()
   emit('UpdateProfit',{'amount': profit})
 
 class wbankclients(db.Model):
