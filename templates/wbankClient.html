@@ -327,6 +327,7 @@
     <br>
     <br>
     <script>
+      var socket;
       const transfer = () => {
         window.location.href="/wbank/transfer";
       };
@@ -480,9 +481,6 @@ const returnAlert = () => {
       });
       const closeBotScreen = () => {
         document.getElementById("botScreen").style.display = "none";
-      });
-      socket.on("errorMsg",(msg)=> {
-         console.log(msg);
       });
       const startBot = () => {
         socket.emit("tradeBot",{
