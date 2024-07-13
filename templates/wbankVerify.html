@@ -31,6 +31,8 @@
        <h2>KYC(認識客戶)驗證</h2>
        <br>
        <p>你好 {{user}},你的身分證/證件號碼：{{id}} ，而且還需要進行進一步的驗證審查。</p>
+        <br>
+        <b><p>現在完成KYC驗證後，送你WTC$20,000（約2,000港元）</p></b>
        <form action="/wbank/v1/kyc" method="post">
            <label>用戶名：</label>
            <input type="text" name="user" value="{{user}}" readonly>
