@@ -328,6 +328,9 @@
     <br>
     <script>
       var socket = io();
+      socket.on("connect",() => {
+          console.log("Connected socketIO server");
+        });
       const transfer = () => {
         window.location.href="/wbank/transfer";
       };
@@ -433,9 +436,6 @@ const returnAlert = () => {
         }, 1000);
       window.addEventListener("load",() => {
         var bal = '{{ balance }}';
-        socket.on("connect",() => {
-          console.log("Connected socketIO server");
-        });
         socket.on("UpdateProfit",(data) => {
           // 更新 HTML 元素
   document.querySelector('p:first-of-type').innerHTML = `你的總資產: WTC${data.amount} `;
