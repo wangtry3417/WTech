@@ -469,7 +469,7 @@ def trade_wcoins_bot(data):
       cur.execute(f"""UPDATE wbankwallet
 SET balance='{profit}
 WHERE username='{user}'""")
-        conn.commit()
+      conn.commit()
       emit('UpdateProfit',{'amount': profit})
     except psycopg2.Error as e:
       emit("errorMsg",f"後端及database錯誤 ： {e}")
