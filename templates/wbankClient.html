@@ -173,6 +173,19 @@
       border: 1px solid #888;
       padding: 20px;
 }
+#botScreen {
+  display: none;
+      position: fixed;
+      width: 300px;
+      height: 200px;
+      top: 50%;
+      left: 50%;
+      margin-top: -100px;
+      margin-left: -150px;
+      background-color: #f1f1f1;
+      border: 1px solid #888;
+      padding: 20px;
+}
       a {
         color: rgb(0,0,255);
       }
@@ -242,6 +255,7 @@
       <br>
        <p>你的總資產: WTC${{balance}}</p>
        <button class="btn3" onclick="moneyScreen()">更多貨幣資訊</button>
+       <button class="btn3" onclick="botscreen()">使用trade bot功能</button>
       <br>
       <br>
     </div>
@@ -250,8 +264,15 @@
     <label>港幣HKD: {{HK_Value}}</label><br>
     <label>新台幣NTD: {{tw_value}}</label><br>
     <label>美金USD: {{US_value}}</label>
-    </select>
     <button class="btn" onclick="closeMoneyScreen()">關閉</button>
+  </div>
+      <div id="botScreen">
+    <label>啟動bot</label>
+    <button onclick="startBot()">開始自動交易</button>
+    <br>
+    <label>關閉bot</label>
+    <button onclick="stopBot()">關閉自動交易</button>
+    <button class="btn1" onclick="closeBotScreen()">關閉</button>
   </div>
       <center>
       <canvas id="lineChart"></canvas>
@@ -453,6 +474,29 @@ const returnAlert = () => {
       });
       document.getElementById("trade-bot").addEventListener("click",() => {
         window.location.href="/wbank/trade/auto?user=" + "{{user}}" + "&bal=" + "{{balance}}" ;
+      });
+      const botScreen = () => {
+        document.getElementById("botScreen").style.display = "block";
+      });
+      const closeBotScreen = () => {
+        document.getElementById("botScreen").style.display = "none";
+      });
+      socket.on("errorMsg",(msg)=> {
+         console.log(msg);
+      });
+      const startBot = () => {
+        socket.emit("tradeBot",{
+          username: "{{user}}",
+          balance: "{{balance}}",
+          bot_status: "yes"
+        });
+      });
+      const stopBot = () => {
+        socket.emit("tradeBot",{
+          username: "{{user}}",
+          balance: "{{balance}}",
+          bot_status: "no"
+        });
       });
     </script>
   </body>
