@@ -467,7 +467,7 @@ def trade_wcoins_bot(data):
     
       cur = conn.cursor()
       cur.execute(f"""UPDATE wbankwallet
-SET balance='{profit}
+SET balance='{profit}'
 WHERE username='{user}'""")
       conn.commit()
       emit('UpdateProfit',{'amount': profit})
