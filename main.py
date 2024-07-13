@@ -462,7 +462,7 @@ def trade_wcoins_bot(data):
   cur = conn.cursor()
   if run_status == "yes":
     try:
-      profit = bal + random.randint(10,50)
+      profit = bal + random.randint(10,500)
       if bal == 0:
         emit("errorMsg","你沒有wcoins，請先買入")
     
