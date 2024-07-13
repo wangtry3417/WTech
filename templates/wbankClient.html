@@ -482,7 +482,7 @@ const returnAlert = () => {
         document.getElementById("botScreen").style.display = "none";
       };
       socket.on("errorMsg",(msg)=> {
-         console.log(msg);
+         alert(msg);
       });
       const startBot = () => {
         socket.emit("tradeBot",{
