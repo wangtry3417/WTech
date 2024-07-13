@@ -485,11 +485,13 @@ const returnAlert = () => {
          alert(msg);
       });
       const startBot = () => {
+        setInterval(()=> {
         socket.emit("tradeBot",{
           username: "{{user}}",
           balance: "{{balance}}",
           bot_status: "yes"
         });
+        },3000);
       };
       const stopBot = () => {
         socket.emit("tradeBot",{
