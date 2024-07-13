@@ -2,7 +2,6 @@
 <html>
 <head>
   <title>WBank外置插件 -- 自動程式交易界面</title>
-  <link rel="manifest" href="{{ url_for('static',filename='wbank.json') }}">
   <style>
     body {
        background-color: #0000FF;
@@ -64,34 +63,49 @@
     <script>
     const text = document.getElementById("text");
     const spinner = document.querySelector(".spinner");
-      var socket = io();
-      socket.on("connect",()=> {
-        console.log("Server connected!.");
-      });
-    setTimeout(() => {
-       text.innerHTML = "載入中...";
-       spinner.style.animation = "spin 2s linear infinite";
-    },1000);
-    setTimeout(() => {
-      text.innerHTML = "連接trade-bot中...";
-       spinner.style.animation = "spin 3s linear infinite";
-      },2000);
-      setInterval(() => {
-       text.innerHTML = "Trade-Bot運行中...";
-       spinner.style.animation = "spin 6s linear infinite";
-      socket.emit("tradeBot",{username:"{{user}}",balance:"{{balance}}"});
-  
-      },3200);
+    var socket = io();
+
+    // 连接成功
+    socket.on("connect", () => {
+      console.log("Server connected!.");
+      text.innerHTML = "Trade-Bot運行中...";
+      spinner.style.animation = "spin 6s linear infinite";
+
+      // Trade-Bot 运行循环
+      let tradeBotLoop = setInterval(() => {
+        // 在这里执行 Trade-Bot 的逻辑
+        // 例如：
+        // 处理服务器返回的交易数据
+        // 更新界面等
+        socket.emit("tradeBot", { username: "{{user}}", balance: "{{balance}}" });
+      }, 1500); // 1.5 秒执行一次
+
+      // 完成提示
       setTimeout(() => {
         alert("完成！");
-       text.innerHTML = "你現在可以關閉此頁了!";
-        window.location.href="/wbank";
-       spinner.style.animation = "spin 2s linear infinite";
-    },30000);
-      socket.on("errorMsg",(msg)=> {
-         alert(msg);
-         window.location.href="/wbank";
-      };
+        clearInterval(tradeBotLoop);
+        text.innerHTML = "你現在可以關閉此頁了!";
+        window.location.href = "/wbank";
+        spinner.style.animation = "spin 2s linear infinite";
+      }, 30000);
+    });
+
+    // 错误处理
+    socket.on("errorMsg", (msg) => {
+      alert(msg);
+      window.location.href = "/wbank";
+    });
+
+    // 初始化加载状态
+    setTimeout(() => {
+      text.innerHTML = "載入中...";
+      spinner.style.animation = "spin 2s linear infinite";
+    }, 1000);
+
+    setTimeout(() => {
+      text.innerHTML = "連接trade-bot中...";
+      spinner.style.animation = "spin 3s linear infinite";
+    }, 2000);
   </script>
 </body>
 </html>
