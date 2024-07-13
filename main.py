@@ -1249,12 +1249,6 @@ def wp_buyIn():
   conn.commit()
   return jsonify({"Done":"Almost Done!."})
 
-@app.route("/wbank/trade/auto")
-def wcoins_auto_trade():
-  user = request.args.get("user")
-  balance = request.args.get("bal")
-  return render_template("wbankTradeBot.html",user=user,balance=balance)
-
 class Game:
     def __init__(self):
         self.reset()
