@@ -327,10 +327,6 @@
     <br>
     <br>
     <script>
-      var socket = io();
-      socket.on("connect",() => {
-          console.log("Connected socketIO server");
-        });
       const transfer = () => {
         window.location.href="/wbank/transfer";
       };
@@ -435,6 +431,10 @@ const returnAlert = () => {
                 });
         }, 1000);
       window.addEventListener("load",() => {
+        var socket = io();
+      socket.on("connect",() => {
+          console.log("Connected socketIO server");
+        });
         var bal = '{{ balance }}';
         socket.on("UpdateProfit",(data) => {
           // 更新 HTML 元素
@@ -450,32 +450,13 @@ const returnAlert = () => {
         if (userColor.value == "white") {
            body.style.backgroundColor = "white";
            body.style.color = "black";
-           document.getElementById("linrChart").style.backgroundColor = "white";
+           document.getElementById("lineChart").style.backgroundColor = "white";
         } else if (userColor.value == "black") {
            body.style.backgroundColor = "black";
            body.style.color = "white";
-           document.getElementById("linrChart").style.backgroundColor = "black";
+           document.getElementById("lineChart").style.backgroundColor = "black";
         }
-      });
-      document.getElementById("gift-code").addEventListener("click",() => {
-        window.location.href="/wbank/gift?user=" + "{{user}}";
-      });
-      const scan = () => {
-        window.location.href="/wbank/scan?user=" + "{{user}}";
-      };
-      const moneyScreen = () => {
-        document.getElementById("moneyScreen").style.display = "block";
-      }
-      const closeMoneyScreen = () => {
-        document.getElementById("moneyScreen").style.display = "none";
-      };
-      document.getElementById("c2c").addEventListener("click",() => {
-        window.location.href="/wbank/payment/c2c?user=" + "{{user}}";
-      });
-      document.getElementById("trade-bot").addEventListener("click",() => {
-        window.location.href="/wbank/trade/auto?user=" + "{{user}}" + "&bal=" + "{{balance}}" ;
-      });
-      const botscreen = () => {
+        const botscreen = () => {
         document.getElementById("botScreen").style.display = "block";
       });
       const closeBotScreen = () => {
@@ -497,6 +478,25 @@ const returnAlert = () => {
           balance: "{{balance}}",
           bot_status: "no"
         });
+      });
+      });
+      document.getElementById("gift-code").addEventListener("click",() => {
+        window.location.href="/wbank/gift?user=" + "{{user}}";
+      });
+      const scan = () => {
+        window.location.href="/wbank/scan?user=" + "{{user}}";
+      };
+      const moneyScreen = () => {
+        document.getElementById("moneyScreen").style.display = "block";
+      }
+      const closeMoneyScreen = () => {
+        document.getElementById("moneyScreen").style.display = "none";
+      };
+      document.getElementById("c2c").addEventListener("click",() => {
+        window.location.href="/wbank/payment/c2c?user=" + "{{user}}";
+      });
+      document.getElementById("trade-bot").addEventListener("click",() => {
+        window.location.href="/wbank/trade/auto?user=" + "{{user}}" + "&bal=" + "{{balance}}" ;
       });
     </script>
   </body>
