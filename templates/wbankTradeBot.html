@@ -74,8 +74,7 @@
       socket.on("connect",()=> {
         console.log("Server connected!.");
       });
-       spinner.style.animation = "spin 3a linear infinite";
-    },1200);
+       spinner.style.animation = "spin 3s linear infinite";
       let tradeBotloop = setInterval(() => {
        text.innerHTML = "Trade-Bot運行中...";
        spinner.style.animation = "spin 6s linear infinite";
@@ -93,6 +92,7 @@
          alert(msg);
          window.location.href="/wbank";
       };
+      },1200);
   </script>
 </body>
 </html>
