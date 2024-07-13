@@ -327,7 +327,7 @@
     <br>
     <br>
     <script>
-      var socket;
+      var socket = io();
       const transfer = () => {
         window.location.href="/wbank/transfer";
       };
@@ -432,7 +432,6 @@ const returnAlert = () => {
                 });
         }, 1000);
       window.addEventListener("load",() => {
-        socket = io();
         var bal = '{{ balance }}';
         socket.on("connect",() => {
           console.log("Connected socketIO server");
