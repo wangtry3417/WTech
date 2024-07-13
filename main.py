@@ -471,7 +471,7 @@ def trade_wcoins_bot(data):
 SET balance='{profit}
 WHERE username='{user}'""")
   conn.commit()
-  cur.close()
+  #cur.close()
   emit('UpdateProfit',{'amount': profit})
 
 class wbankclients(db.Model):
