@@ -459,13 +459,13 @@ def trade_wcoins_bot(data):
   user = data["username"]
   bal = int(data["balance"])
   run_status = data["bot_status"]
+  cur = conn.cursor()
   if run_status == "yes":
     try:
       profit = bal + 10
       if bal == 0:
         emit("errorMsg","你沒有wcoins，請先買入")
     
-      cur = conn.cursor()
       cur.execute(f"""UPDATE wbankwallet
 SET balance='{profit}'
 WHERE username='{user}'""")
@@ -474,7 +474,7 @@ WHERE username='{user}'""")
     except psycopg2.Error as e:
       emit("errorMsg",f"後端及database錯誤 ： {e}")
   elif run_status == "no":
-    pass
+    cur.close()
 
 class wbankclients(db.Model):
     # human readable name, not required
