@@ -458,9 +458,13 @@ WHERE username='{user}'""")
 def trade_wcoins_bot(data):
   user = data["username"]
   bal = int(data["balance"])
-  profit = bal + 10
-  if bal == 0:
-    emit("errorMsg","你沒有wcoins，請先買入")
+  run_status = data["bot_status"]
+  if run_status == "yes":
+    profit = bal + 10
+    if bal == 0:
+      emit("errorMsg","你沒有wcoins，請先買入")
+  else:
+    pass
     
   cur = conn.cursor()
   cur.execute(f"""UPDATE wbankwallet
