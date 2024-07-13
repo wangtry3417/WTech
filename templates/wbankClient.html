@@ -328,6 +328,7 @@
     <br>
     <script>
       var socket = io();
+      var bot_status = 'no';
       var userColor = document.getElementById("userColor");
         var body = document.body;
         if (userColor.value == "white") {
@@ -486,10 +487,11 @@ const returnAlert = () => {
       });
       const startBot = () => {
         setInterval(()=> {
+          bot_status = 'yes';
         socket.emit("tradeBot",{
           username: "{{user}}",
           balance: "{{balance}}",
-          bot_status: "yes"
+          bot_status: bot_status
         });
         },3000);
       };
@@ -497,7 +499,7 @@ const returnAlert = () => {
         socket.emit("tradeBot",{
           username: "{{user}}",
           balance: "{{balance}}",
-          bot_status: "no"
+          bot_status: bot_status
         });
       };
     </script>
