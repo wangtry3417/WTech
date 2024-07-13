@@ -1989,6 +1989,8 @@ def wbank_kyc_verify():
   #cur = conn.cursor()
   cur.execute(f"UPDATE wbankwallet set verify='yes' where username='{user}'")
   conn.commit()
+  cur.execute(f"UPDATE wbankwallet set balance='20000' where username='{user}'")
+  conn.commit()
   return redirect("/wbank")
 
 # 登出視圖函數
