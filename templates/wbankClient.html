@@ -415,51 +415,59 @@ const returnAlert = () => {
       document.getElementById("nfc").addEventListener("click",() => {
         window.location.href="/wbank/nfc?user=" + "{{ user }}";
       });
-    // Get the data from the API
-d3.json("/wcoins/data", function(error, data) {
-  if (error) throw error;
-
-  // Parse the data as JSON
-  var parsedData = JSON.parse(data);
-
-  // Create the SVG container
-  var svg = d3.select("#candlestickChart")
-    .append("svg")
-    .attr("width", 500)
+    // Load the data
+d3.json("/wcoins/data").then(function(data) {
+  // Create the SVG element
+  const svg = d3.select("#candlestickChart")
+    .attr("width", 960)
     .attr("height", 500);
 
   // Create the scales
-  var xScale = d3.scaleTime()
-    .domain([new Date(parsedData[0].date), new Date(parsedData[parsedData.length - 1].date)])
-    .range([0, 500]);
+  const xScale = d3.scaleTime()
+    .domain(d3.extent(data, d => d.date))
+    .range([0, 960]);
 
-  var yScale = d3.scaleLinear()
-    .domain([0, d3.max(parsedData, function(d) { return d.high; })])
+  const yScale = d3.scaleLinear()
+    .domain([0, d3.max(data, d => d.high)])
     .range([500, 0]);
 
-  // Create the axes
-  var xAxis = d3.axisBottom(xScale);
-  var yAxis = d3.axisLeft(yScale);
+  // Create the candlestick shape
+  const candlestick = svg.append("g")
+    .attr("transform", "translate(0, 0)");
 
-  // Add the axes to the SVG
-  svg.append("g")
-    .attr("transform", "translate(0, 0)")
-    .call(xAxis);
-
-  svg.append("g")
-    .attr("transform", "translate(0, 500)")
-    .call(yAxis);
-
-  // Create the candlesticks
-  var candlesticks = svg.selectAll(".candlestick")
-    .data(parsedData)
+  candlestick.selectAll("rect")
+    .data(data)
     .enter()
     .append("rect")
-      .attr("class", "candlestick")
-      .attr("x", function(d) { return xScale(new Date(d.date)); })
-      .attr("y", function(d) { return yScale(d.low); })
+      .attr("x", d => xScale(d.date))
+      .attr("y", d => yScale(d.low))
       .attr("width", 10)
-      .attr("height", function(d) { return yScale(d.high) - yScale(d.low); });
+      .attr("height", d => yScale(d.high) - yScale(d.low));
+
+  // Create the line connecting the top and bottom of the candlestick
+  const line = svg.append("g")
+    .attr("transform", "translate(0, 0)");
+
+  line.selectAll("line")
+    .data(data)
+    .enter()
+    .append("line")
+      .attr("x1", d => xScale(d.date))
+      .attr("y1", d => yScale(d.open))
+      .attr("x2", d => xScale(d.date))
+      .attr("y2", d => yScale(d.close));
+
+  // Display the date and price information for each candlestick
+  const text = svg.append("g")
+    .attr("transform", "translate(0, 0)");
+
+  text.selectAll("text")
+    .data(data)
+    .enter()
+    .append("text")
+      .attr("x", d => xScale(d.date))
+      .attr("y", d => yScale(d.low))
+      .text(d => `${d.date}: ${d.price}`);
 });
 
       window.addEventListener("load",() => {
