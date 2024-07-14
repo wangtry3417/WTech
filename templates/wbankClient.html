@@ -272,7 +272,7 @@
     <button class="btn1" onclick="closeBotScreen()">關閉</button>
   </div>
       <center>
-      <div id="lineChart"></div>
+      <div id="candleChart"></div>
       <!--<svg id="candlestickChart" class="candle" width="960" height="500"></svg>-->
       </center>
       <br>
@@ -422,7 +422,7 @@ const returnAlert = () => {
                 }))
             }]);
         }
-        var chart = new ApexCharts(document.querySelector("#lineChart"), options);
+        var chart = new ApexCharts(document.querySelector("#candleChart"), options);
         chart.render();
         setInterval(() => {
           fetch ("/wcoins/data")
