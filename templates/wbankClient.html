@@ -388,50 +388,53 @@ const returnAlert = () => {
 
       var ctx = document.getElementById('lineChart').getContext('2d');
 
-        // 初始化图表
-        var lineChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: [],
-                datasets: [{
-                    label: 'Wcoins',
-                    data: [],
-                    borderColor: 'blue',
-                    fill: false
-                }]
+// 初始化图表
+var lineChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: [],
+        datasets: [{
+            label: 'Wcoins',
+            data: [],
+            borderColor: function(context) {
+                const value = context.dataset.data[context.dataIndex];
+                return value >= 0 ? 'green' : 'red'; // 根據價格變化值設定線條顏色
             },
-            options: {
-                responsive: true,
-                scales: {
-                    x: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: 'Date'
-                        }
-                    },
-                    y: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: 'Price/Value'
-                        }
-                    }
+            fill: false
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            x: {
+                display: true,
+                title: {
+                    display: true,
+                    text: 'Date'
+                }
+            },
+            y: {
+                display: true,
+                title: {
+                    display: true,
+                    text: 'Price/Value'
                 }
             }
-        });
+        }
+    }
+});
 
-        // 定时器，每秒获取数据并更新图表
-        setInterval(function() {
-            fetch("{{ url_for('data')}}")
-                .then(response => response.json())
-                .then(data => {
-                    // 更新图表数据
-                    lineChart.data.labels = data.map(entry => entry.date);
-                    lineChart.data.datasets[0].data = data.map(entry => entry.price);
-                    lineChart.update();
-                });
-        }, 1000);
+// 定时器，每秒获取数据并更新图表
+setInterval(function() {
+    fetch("{{ url_for('data')}}")
+        .then(response => response.json())
+        .then(data => {
+            // 更新图表数据
+            lineChart.data.labels = data.map(entry => entry.date);
+            lineChart.data.datasets[0].data = data.map(entry => entry.price);
+            lineChart.update();
+        });
+}, 1000);
       window.addEventListener("load",() => {
       socket.on("connect",() => {
           console.log("Connected socketIO server");
