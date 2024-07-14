@@ -450,7 +450,7 @@ const returnAlert = () => {
             chart.updateSeries([{
                 name: 'candle',
                 data: data.map(item => ({
-                    x: item.date,
+                    x: new Date(item.date),
                     y: [item.open, item.high, item.low, item.close]
                 }))
             }]);
@@ -462,7 +462,7 @@ const returnAlert = () => {
                 .then(data => updateChart(data));
         }
 
-        //fetchData();
+        fetchData();
         setInterval(fetchData, 1000);
       socket.on("connect",() => {
           console.log("Connected socketIO server");
