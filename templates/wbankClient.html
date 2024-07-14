@@ -418,9 +418,7 @@ const returnAlert = () => {
     const margin = { top: 20, right: 20, bottom: 30, left: 50 };
     const width = 960 - margin.left - margin.right;
     const height = 500 - margin.top - margin.bottom;
-
-      window.addEventListener("load",() => {
-      // 建立 SVG 元素
+    // 建立 SVG 元素
     const svg = d3.select("#candlestickChart")
       .append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`);
@@ -501,8 +499,10 @@ const returnAlert = () => {
         .classed("up", d => d.close >= d.open);
 
       // 刪除不再需要的蠟燭
-     // candles.exit().remove();
+       candles.exit().remove();
     }
+
+      window.addEventListener("load",() => {
         
       socket.on("connect",() => {
           console.log("Connected socketIO server");
