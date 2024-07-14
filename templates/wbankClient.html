@@ -389,43 +389,29 @@ const returnAlert = () => {
 
   var ctx = document.getElementById('lineChart').getContext('2d');
 
-  // 數據
-  var data = {
-    labels: [],
-    datasets: [{
-      label: 'Wcoins',
-      data: [],
-      backgroundColor: function(context) {
-        const value = context.dataset.data[context.dataIndex];
-        return value.close >= value.open ? 'green' : 'red'; // 根據收盤價和開盤價設定蠟燭顏色
-      },
-      borderColor: function(context) {
-        const value = context.dataset.data[context.dataIndex];
-        return value.close >= value.open ? 'green' : 'red'; // 根據收盤價和開盤價設定蠟燭邊框顏色
-      },
-      borderWidth: 1
-    }]
-  };
-
-  // 選項
-  var options = {
-    scales: {
-      y: {
-        // beginAtZero: false, // 取消设置 y 轴从 0 开始
-        // suggestedMin: 0, // 取消设置 y 轴的最小值
-        // suggestedMax: 3000000 // 取消设置 y 轴的最大值
-      }
-    }
-  };
-
   // 初始化圖表
   var myChart = new Chart(ctx, {
-    type: 'bar',
-    data: data,
+    type: 'candlestick', // 改為 candlestick 圖表
+    data: {
+      labels: [],
+      datasets: [{
+        label: 'Wcoins',
+        data: [], // 數據陣列
+        backgroundColor: function(context) {
+          const value = context.dataset.data[context.dataIndex];
+          return value.close >= value.open ? 'green' : 'red'; // 根據收盤價和開盤價設定蠟燭顏色
+        },
+        borderColor: function(context) {
+          const value = context.dataset.data[context.dataIndex];
+          return value.close >= value.open ? 'green' : 'red'; // 根據收盤價和開盤價設定蠟燭邊框顏色
+        },
+        borderWidth: 1
+      }]
+    },
     options: options
   });
 
-  // 定时器，每秒获取数据并更新图表
+  // 定時器，每秒获取数据并更新图表
   setInterval(async function() {
     try {
       const response = await fetch("/wcoins/data");
