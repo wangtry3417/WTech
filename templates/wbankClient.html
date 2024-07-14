@@ -469,7 +469,7 @@ const returnAlert = () => {
         .classed("down", d => d.close < d.open);
 
       // 删除不再需要的蜡烛
-      candles.exit().remove();
+     // candles.exit().remove();
     }
       window.addEventListener("load",() => {
       socket.on("connect",() => {
