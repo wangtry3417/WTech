@@ -394,41 +394,46 @@ const returnAlert = () => {
 
       window.addEventListener("load",() => {
         var options = {
-          series: [{
-          data: [],
-          chart: {
-          type: 'candlestick',
-          height: 350
-        },
-        title: {
-          text: 'WCoins of CandleStick',
-          align: 'left'
-        },
-        xaxis: {
-          type: 'datetime'
-        },
-        yaxis: {
-          tooltip: {
-            enabled: true
-          }
-        }
+            chart: {
+                type: 'candlestick',
+                height: 350
+            },
+            title: {
+                text: 'WCoins of CandleStick',
+                align: 'left'
+            },
+            xaxis: {
+                type: 'datetime'
+            },
+            yaxis: {
+                tooltip: {
+                    enabled: true
+                }
+            },
+            series: [{
+                name: 'candle',
+                data: []
+            }]
         };
+
+        var chart = new ApexCharts(document.querySelector("#candleChart"), options);
+        chart.render();
+
         function updateChart(data) {
             chart.updateSeries([{
                 name: 'candle',
                 data: data.map(item => ({
-                    x: item.date,
+                    x: new Date(item.date), // 将日期字符串转换为 Date 对象
                     y: [item.open, item.high, item.low, item.close]
                 }))
             }]);
         }
-        var chart = new ApexCharts(document.querySelector("#candleChart"), options);
-        chart.render();
+
         setInterval(() => {
-          fetch ("/wcoins/data")
-          .then (resopnse => resopnse.json())
-          .then (data => updateChart(data));
-          },1000);
+            fetch("/wcoins/data")
+                .then(response => response.json())
+                .then(data => updateChart(data));
+        }, 1000);
       socket.on("connect",() => {
           console.log("Connected socketIO server");
         })
