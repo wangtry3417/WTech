@@ -387,58 +387,64 @@ const returnAlert = () => {
         window.location.href="/wbank/nfc?user=" + "{{ user }}";
       });
 
-      var ctx = document.getElementById('lineChart').getContext('2d');
+  var ctx = document.getElementById('lineChart').getContext('2d');
 
-// 數據
-var data = {
-  labels: [],
-  datasets: [{
-    label: 'Wcoins',
-    data: [],
-    backgroundColor: function(context) {
-      const value = context.dataset.data[context.dataIndex];
-      return value.close >= value.open ? 'green' : 'red'; // 根據收盤價和開盤價設定蠟燭顏色
-    },
-    borderColor: function(context) {
-      const value = context.dataset.data[context.dataIndex];
-      return value.close >= value.open ? 'green' : 'red'; // 根據收盤價和開盤價設定蠟燭邊框顏色
-    },
-    borderWidth: 1
-  }]
-};
+  // 數據
+  var data = {
+    labels: [],
+    datasets: [{
+      label: 'Wcoins',
+      data: [],
+      backgroundColor: function(context) {
+        const value = context.dataset.data[context.dataIndex];
+        return value.close >= value.open ? 'green' : 'red'; // 根據收盤價和開盤價設定蠟燭顏色
+      },
+      borderColor: function(context) {
+        const value = context.dataset.data[context.dataIndex];
+        return value.close >= value.open ? 'green' : 'red'; // 根據收盤價和開盤價設定蠟燭邊框顏色
+      },
+      borderWidth: 1
+    }]
+  };
 
-// 選項
-var options = {
-  scales: {
-    y: {
-     // beginAtZero: false
+  // 選項
+  var options = {
+    scales: {
+      y: {
+        // beginAtZero: false, // 取消设置 y 轴从 0 开始
+        // suggestedMin: 0, // 取消设置 y 轴的最小值
+        // suggestedMax: 3000000 // 取消设置 y 轴的最大值
+      }
     }
-  }
-};
+  };
 
-// 初始化圖表
-var myChart = new Chart(ctx, {
-  type: 'bar',
-  data: data,
-  options: options
-});
+  // 初始化圖表
+  var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: data,
+    options: options
+  });
 
-// 定时器，每秒获取数据并更新图表
-setInterval(function() {
-    fetch("{{ url_for('data')}}")
-        .then(response => response.json())
-        .then(data => {
-            // 更新图表数据
-            myChart.data.labels = data.map(entry => entry.date);
-            myChart.data.datasets[0].data = data.map(entry => ({
-                open: entry.open,
-                high: entry.high,
-                low: entry.low,
-                close: entry.close
-            }));
-            myChart.update();
-        });
-}, 1000);
+  // 定时器，每秒获取数据并更新图表
+  setInterval(async function() {
+    try {
+      const response = await fetch("/wcoins/data");
+      const data = await response.json();
+
+      // 更新图表数据
+      myChart.data.labels = data.map(entry => entry.date);
+      myChart.data.datasets[0].data = data.map(entry => ({
+        open: entry.open,
+        high: entry.high,
+        low: entry.low,
+        close: entry.close
+      }));
+      myChart.update();
+    } catch (error) {
+      alert(error);
+      console.error('Error fetching data:', error);
+    }
+  }, 1000);
       window.addEventListener("load",() => {
       socket.on("connect",() => {
           console.log("Connected socketIO server");
