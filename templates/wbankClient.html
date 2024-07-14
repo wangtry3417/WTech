@@ -392,93 +392,93 @@ const returnAlert = () => {
     const height = 500 - margin.top - margin.bottom;
 
       window.addEventListener("load",() => {
-  // 創建 SVG 元素
-  const svg = d3.select("#candlestickChart")
-    .append("g")
-    .attr("transform", `translate(${margin.left},${margin.top})`);
+     // 創建 SVG 元素
+      const svg = d3.select("#candlestickChart")
+        .append("g")
+        .attr("transform", `translate(${margin.left},${margin.top})`);
 
-  // 創建 x 軸比例尺
-  const xScale = d3.scaleBand()
-    .range([0, width])
-    .padding(0.1);
+      // 創建 x 軸比例尺
+      const xScale = d3.scaleBand()
+        .range([0, width])
+        .padding(0.1);
 
-  // 創建 y 軸比例尺
-  const yScale = d3.scaleLinear()
-    .range([height, 0]);
+      // 創建 y 軸比例尺
+      const yScale = d3.scaleLinear()
+        .range([height, 0]);
 
-  // 創建 x 軸
-  const xAxis = svg.append("g")
-    .attr("class", "axis")
-    .attr("transform", `translate(0,${height})`);
+      // 創建 x 軸
+      const xAxis = svg.append("g")
+        .attr("class", "axis")
+        .attr("transform", `translate(0,${height})`);
 
-  // 創建 y 軸
-  const yAxis = svg.append("g")
-    .attr("class", "axis");
+      // 創建 y 軸
+      const yAxis = svg.append("g")
+        .attr("class", "axis");
 
-  // 更新數據和比例尺
-  updateChart([]); // 初始化為空數據
+      // 更新數據和比例尺
+      updateChart([]); // 初始化為空數據
 
-  // 定時器，每秒獲取數據並更新圖表
-  setInterval(async function() {
-    try {
-      const response = await fetch("/wcoins/data");
-      const data = await response.json();
-      updateChart(data);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  }, 1000);
+      // 定時器，每秒獲取數據並更新圖表
+      setInterval(async function() {
+        try {
+          const response = await fetch("/wcoins/data");
+          const data = await response.json();
+          updateChart(data);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      }, 1000);
 
-  function updateChart(data) {
-    // 更新 x 軸比例尺
-    xScale.domain(data.map(d => d.date));
+      function updateChart(data) {
+        // 更新 x 軸比例尺
+        xScale.domain(data.map(d => d.date));
 
-    // 更新 y 軸比例尺
-    yScale.domain([
-      d3.min(data, d => d.low),
-      d3.max(data, d => d.high)
-    ]);
+        // 更新 y 軸比例尺
+        yScale.domain([
+          d3.min(data, d => d.low),
+          d3.max(data, d => d.high)
+        ]);
 
-    // 更新 x 軸
-    xAxis.call(d3.axisBottom(xScale));
+        // 更新 x 軸
+        xAxis.call(d3.axisBottom(xScale));
 
-    // 更新 y 軸
-    yAxis.call(d3.axisLeft(yScale));
+        // 更新 y 軸
+        yAxis.call(d3.axisLeft(yScale));
 
-    // 更新蠟燭圖
-    const candles = svg.selectAll(".candle-group")
-      .data(data);
+        // 更新蠟燭圖
+        const candles = svg.selectAll(".candle-group")
+          .data(data);
 
-    // 添加新的蠟燭
-    candles.enter()
-      .append("g")
-      .attr("class", "candle-group")
-      .attr("transform", d => `translate(${xScale(d.date)},0)`)
-      .append("rect")
-      .attr("class", "candle")
-      .attr("x", d => xScale(d.date) + (xScale.bandwidth() / 2) - (d.close - d.open) / 2) // 修正 x 位置
-      .attr("y", d => yScale(d.high))
-      .attr("width", d => Math.abs(d.close - d.open))
-      .attr("height", d => yScale(d.low) - yScale(d.high))
-      .classed("down", d => d.close < d.open)
-      .style("fill", d => d.close < d.open ? "red" : "green") // 添加填充顏色
-      .style("stroke", "black") // 添加邊框
-      .style("stroke-width", 1);
+        // 添加新的蠟燭
+        candles.enter()
+          .append("g")
+          .attr("class", "candle-group")
+          .attr("transform", d => `translate(${xScale(d.date)},0)`)
+          .append("rect")
+          .attr("class", "candle")
+          .attr("x", d => xScale(d.date) + (xScale.bandwidth() / 2) - (d.close - d.open) / 2) // 修正 x 位置
+          .attr("y", d => yScale(d.high))
+          .attr("width", d => Math.abs(d.close - d.open))
+          .attr("height", d => yScale(d.low) - yScale(d.high))
+          .classed("down", d => d.close < d.open)
+          .style("fill", d => d.close < d.open ? "red" : "green") // 添加填充顏色
+          .style("stroke", "black") // 添加邊框
+          .style("stroke-width", 1);
 
-    // 更新现有蠟燭
-    candles.select("rect.candle")
-      .attr("x", d => xScale(d.date) + (xScale.bandwidth() / 2) - (d.close - d.open) / 2) // 修正 x 位置
-      .attr("y", d => yScale(d.high))
-      .attr("width", d => Math.abs(d.close - d.open))
-      .attr("height", d => yScale(d.low) - yScale(d.high))
-      .classed("down", d => d.close < d.open)
-      .style("fill", d => d.close < d.open ? "red" : "green") // 添加填充顏色
-      .style("stroke", "black") // 添加邊框
-      .style("stroke-width", 1);
+        // 更新现有蠟燭
+        candles.select("rect.candle")
+          .attr("x", d => xScale(d.date) + (xScale.bandwidth() / 2) - (d.close - d.open) / 2) // 修正 x 位置
+          .attr("y", d => yScale(d.high))
+          .attr("width", d => Math.abs(d.close - d.open))
+          .attr("height", d => yScale(d.low) - yScale(d.high))
+          .classed("down", d => d.close < d.open)
+          .style("fill", d => d.close < d.open ? "red" : "green") // 添加填充顏色
+          .style("stroke", "black") // 添加邊框
+          .style("stroke-width", 1);
 
-    // 刪除不再需要的蠟燭
-    candles.exit().remove();
-  }
+        // 刪除不再需要的蠟燭
+        candles.exit().remove();
+      }
         
       socket.on("connect",() => {
           console.log("Connected socketIO server");
