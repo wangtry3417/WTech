@@ -441,15 +441,8 @@ const returnAlert = () => {
                     enabled: true
                 }
             }
-          plotOptions: {
-    candlestick: {
-      wick: {
-        useFillColor: true,
-      }
-    }
-  }
         };
-
+        
         var chart = new ApexCharts(document.querySelector("#lineChat"), options);
         chart.render();
 
