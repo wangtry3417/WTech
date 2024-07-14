@@ -242,8 +242,9 @@
       shape-rendering: crispEdges;
     }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!--<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>-->
     <!--<script src="https://d3js.org/d3.v7.min.js"></script>-->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
   </head>
   <body>
      <div id="menu" class="menu">
@@ -417,45 +418,67 @@ const returnAlert = () => {
       });
 
       window.addEventListener("load",() => {
-        var chartCanvas = document.getElementById('lineChart');
-        var myChart = new Chart(chartCanvas, {
-            type: 'candlestick',
-            data: {
-                datasets: [{
-                    label: 'WCoins',
-                    data: [],
-                    backgroundColor: 'rgba(0, 153, 255, 1)',
-                    borderColor: 'rgba(0, 153, 255, 1)',
-                    borderWidth: 1
-                }]
+        var options = {
+            series: [{
+                name: 'candle',
+                data: []
+            }],
+            chart: {
+                height: 350,
+                type: 'candlestick',
             },
-            options: {
-                scales: {
-                    xAxes: [{
-                        type: 'time',
-                        time: {
-                            unit: 'second'
+            title: {
+                text: 'CandleStick Chart - Category X-axis',
+                align: 'left'
+            },
+            annotations: {
+                xaxis: [
+                    {
+                        x: 'Oct 06 14:00',
+                        borderColor: '#00E396',
+                        label: {
+                            borderColor: '#00E396',
+                            style: {
+                                fontSize: '12px',
+                                color: '#fff',
+                                background: '#00E396'
+                            },
+                            orientation: 'horizontal',
+                            offsetY: 7,
+                            text: 'Annotation Test'
                         }
-                    }],
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: false
-                        }
-                    }]
+                    }
+                ]
+            },
+            tooltip: {
+                enabled: true,
+            },
+            xaxis: {
+                type: 'category',
+                labels: {
+                    formatter: function(val) {
+                        return dayjs(val).format('MMM DD HH:mm')
+                    }
+                }
+            },
+            yaxis: {
+                tooltip: {
+                    enabled: true
                 }
             }
-        });
+        };
+
+        var chart = new ApexCharts(document.querySelector("#lineChat"), options);
+        chart.render();
 
         function updateChart(data) {
-            myChart.data.datasets[0].data = data.map(item => ({
-                t: new Date(item.date),
-                o: item.open,
-                h: item.high,
-                l: item.low,
-                c: item.close
-            }));
-
-            myChart.update();
+            chart.updateSeries([{
+                name: 'candle',
+                data: data.map(item => ({
+                    x: item.date,
+                    y: [item.open, item.high, item.low, item.close]
+                }))
+            }]);
         }
 
         function fetchData() {
