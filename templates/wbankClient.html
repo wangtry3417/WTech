@@ -388,8 +388,8 @@ const returnAlert = () => {
       });
 
   var ctx = document.getElementById('lineChart').getContext('2d');
-
-  // 初始化圖表
+      window.addEventListener("load",() => {
+        // 初始化圖表
   var myChart = new Chart(ctx, {
     type: 'candlestick', // 改為 candlestick 圖表
     data: {
@@ -431,7 +431,6 @@ const returnAlert = () => {
       console.error('Error fetching data:', error);
     }
   }, 1000);
-      window.addEventListener("load",() => {
       socket.on("connect",() => {
           console.log("Connected socketIO server");
         });
