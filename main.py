@@ -777,8 +777,8 @@ def data():
     data = []
     for i in range(31):
         data.append({
-            #'date': current_datetime.strftime('%Y-%m-%d %H:%M:%S'),
-            'date': current_datetime.strftime('%Y-%m-%d'),
+            'date': current_datetime.strftime('%Y-%m-%d %H:%M:%S'),
+            #'date': current_datetime.strftime('%Y-%m-%d'),
             'price': random.randint(180, 3000000),
             'open' : random.randint(180, 3000000),
             'close' : random.randint(0, 180),
