@@ -487,7 +487,7 @@ const returnAlert = () => {
                 .then(data => updateChart(data));
         }
 
-        fetchData();
+        //fetchData();
         setInterval(fetchData, 1000);
       socket.on("connect",() => {
           console.log("Connected socketIO server");
