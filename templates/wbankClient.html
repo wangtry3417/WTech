@@ -415,92 +415,52 @@ const returnAlert = () => {
       document.getElementById("nfc").addEventListener("click",() => {
         window.location.href="/wbank/nfc?user=" + "{{ user }}";
       });
-    const margin = { top: 20, right: 20, bottom: 30, left: 50 };
-    const width = 960 - margin.left - margin.right;
-    const height = 500 - margin.top - margin.bottom;
-    // 建立 SVG 元素
-    const svg = d3.select("#candlestickChart")
-      .append("g")
-      .attr("transform", `translate(${margin.left},${margin.top})`);
+    // Get the data from the API
+d3.json("/wcoins/data", function(error, data) {
+  if (error) throw error;
 
-    // 建立 x 軸比例尺
-    const xScale = d3.scaleBand()
-      .range([0, width])
-      .padding(0.1);
+  // Parse the data as JSON
+  var parsedData = JSON.parse(data);
 
-    // 建立 y 軸比例尺
-    const yScale = d3.scaleLinear()
-      .range([height, 0]);
+  // Create the SVG container
+  var svg = d3.select("#candlestickChart")
+    .append("svg")
+    .attr("width", 500)
+    .attr("height", 500);
 
-    // 建立 x 軸
-    const xAxis = svg.append("g")
-      .attr("class", "axis")
-      .attr("transform", `translate(0,${height})`);
+  // Create the scales
+  var xScale = d3.scaleTime()
+    .domain([new Date(parsedData[0].date), new Date(parsedData[parsedData.length - 1].date)])
+    .range([0, 500]);
 
-    // 建立 y 軸
-    const yAxis = svg.append("g")
-      .attr("class", "axis");
+  var yScale = d3.scaleLinear()
+    .domain([0, d3.max(parsedData, function(d) { return d.high; })])
+    .range([500, 0]);
 
-    // 更新數據和比例尺
-    updateChart([]); // 初始化為空數據
+  // Create the axes
+  var xAxis = d3.axisBottom(xScale);
+  var yAxis = d3.axisLeft(yScale);
 
-    // 定時器，每秒取得數據並更新圖表
-    setInterval(async function() {
-      try {
-        const response = await fetch("/wcoins/data"); // 取得數據
-        const data = await response.json(); // 解析 JSON 數據
-        updateChart(data);
-      } catch (error) {
-        console.error('取得數據時發生錯誤:', error);
-      }
-    }, 1000); // 每秒更新一次
+  // Add the axes to the SVG
+  svg.append("g")
+    .attr("transform", "translate(0, 0)")
+    .call(xAxis);
 
-    function updateChart(data) {
-      // 更新 x 軸比例尺
-      xScale.domain(data.map(d => d.date)); // 使用日期作為 x 軸的域
+  svg.append("g")
+    .attr("transform", "translate(0, 500)")
+    .call(yAxis);
 
-      // 更新 y 軸比例尺
-      yScale.domain([
-        d3.min(data, d => d.low),
-        d3.max(data, d => d.high)
-      ]);
-
-      // 更新 x 軸
-      xAxis.call(d3.axisBottom(xScale));
-
-      // 更新 y 軸
-      yAxis.call(d3.axisLeft(yScale));
-
-      // 更新蠟燭圖
-      const candles = svg.selectAll(".candle-group")
-        .data(data);
-
-      // 添加新的蠟燭
-      candles.enter()
-        .append("g")
-        .attr("class", "candle-group")
-        .attr("transform", d => `translate(${xScale(d.date)},0)`)
-        .append("rect")
-        .attr("class", "candle")
-        .attr("x", d => xScale(d.date) + (xScale.bandwidth() / 2) - (d.close - d.open) / 2)
-        .attr("y", d => yScale(d.high))
-        .attr("width", d => Math.abs(d.close - d.open))
-        .attr("height", d => yScale(d.low) - yScale(d.high))
-        .classed("down", d => d.close < d.open)
-        .classed("up", d => d.close >= d.open);
-
-      // 更新現有的蠟燭
-      candles.select("rect.candle")
-        .attr("x", d => xScale(d.date) + (xScale.bandwidth() / 2) - (d.close - d.open) / 2)
-        .attr("y", d => yScale(d.high))
-        .attr("width", d => Math.abs(d.close - d.open))
-        .attr("height", d => yScale(d.low) - yScale(d.high))
-        .classed("down", d => d.close < d.open)
-        .classed("up", d => d.close >= d.open);
-
-      // 刪除不再需要的蠟燭
-       candles.exit().remove();
-    }
+  // Create the candlesticks
+  var candlesticks = svg.selectAll(".candlestick")
+    .data(parsedData)
+    .enter()
+    .append("rect")
+      .attr("class", "candlestick")
+      .attr("x", function(d) { return xScale(new Date(d.date)); })
+      .attr("y", function(d) { return yScale(d.low); })
+      .attr("width", 10)
+      .attr("height", function(d) { return yScale(d.high) - yScale(d.low); });
+});
 
       window.addEventListener("load",() => {
         
