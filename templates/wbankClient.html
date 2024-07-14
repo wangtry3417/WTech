@@ -242,8 +242,8 @@
       shape-rendering: crispEdges;
     }
     </style>
-    <!--script src="https://cdn.jsdelivr.net/npm/chart.js"-->
-    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!--<script src="https://d3js.org/d3.v7.min.js"></script>-->
   </head>
   <body>
      <div id="menu" class="menu">
@@ -296,8 +296,8 @@
     <button class="btn1" onclick="closeBotScreen()">關閉</button>
   </div>
       <center>
-      <!--<canvas id="lineChart"></canvas>-->
-      <svg id="candlestickChart" class="candle" width="960" height="500"></svg>
+      <canvas id="lineChart"></canvas>
+      <!--<svg id="candlestickChart" class="candle" width="960" height="500"></svg>-->
       </center>
       <br>
       <div id="top">
@@ -415,63 +415,57 @@ const returnAlert = () => {
       document.getElementById("nfc").addEventListener("click",() => {
         window.location.href="/wbank/nfc?user=" + "{{ user }}";
       });
-    // Load the data
-d3.json("/wcoins/data").then(function(data) {
-  // Create the SVG element
-  const svg = d3.select("#candlestickChart")
-    .attr("width", 960)
-    .attr("height", 500);
-
-  // Create the scales
-  const xScale = d3.scaleTime()
-    .domain(d3.extent(data, d => d.date))
-    .range([0, 960]);
-
-  const yScale = d3.scaleLinear()
-    .domain([0, d3.max(data, d => d.high)])
-    .range([500, 0]);
-
-  // Create the candlestick shape
-  const candlestick = svg.append("g")
-    .attr("transform", "translate(0, 0)");
-
-  candlestick.selectAll("rect")
-    .data(data)
-    .enter()
-    .append("rect")
-      .attr("x", d => xScale(d.date))
-      .attr("y", d => yScale(d.low))
-      .attr("width", 10)
-      .attr("height", d => yScale(d.high) - yScale(d.low));
-
-  // Create the line connecting the top and bottom of the candlestick
-  const line = svg.append("g")
-    .attr("transform", "translate(0, 0)");
-
-  line.selectAll("line")
-    .data(data)
-    .enter()
-    .append("line")
-      .attr("x1", d => xScale(d.date))
-      .attr("y1", d => yScale(d.open))
-      .attr("x2", d => xScale(d.date))
-      .attr("y2", d => yScale(d.close));
-
-  // Display the date and price information for each candlestick
-  const text = svg.append("g")
-    .attr("transform", "translate(0, 0)");
-
-  text.selectAll("text")
-    .data(data)
-    .enter()
-    .append("text")
-      .attr("x", d => xScale(d.date))
-      .attr("y", d => yScale(d.low))
-      .text(d => `${d.date}: ${d.price}`);
-});
 
       window.addEventListener("load",() => {
-        
+        var chartCanvas = document.getElementById('lineChart');
+        var myChart = new Chart(chartCanvas, {
+            type: 'candlestick',
+            data: {
+                datasets: [{
+                    label: 'WCoins',
+                    data: [],
+                    backgroundColor: 'rgba(0, 153, 255, 1)',
+                    borderColor: 'rgba(0, 153, 255, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    xAxes: [{
+                        type: 'time',
+                        time: {
+                            unit: 'second'
+                        }
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+
+        function updateChart(data) {
+            myChart.data.datasets[0].data = data.map(item => ({
+                t: new Date(item.date),
+                o: item.open,
+                h: item.high,
+                l: item.low,
+                c: item.close
+            }));
+
+            myChart.update();
+        }
+
+        function fetchData() {
+            fetch('/wcoins/data')
+                .then(response => response.json())
+                .then(data => updateChart(data));
+        }
+
+        fetchData();
+        setInterval(fetchData, 1000);
       socket.on("connect",() => {
           console.log("Connected socketIO server");
         });
