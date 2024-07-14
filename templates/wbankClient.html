@@ -403,7 +403,7 @@ const returnAlert = () => {
                 type: 'candlestick',
             },
             title: {
-                text: 'CandleStick Chart - Category X-axis',
+                text: 'WCoins of candlestick-type',
                 align: 'left'
             },
             annotations: {
@@ -441,6 +441,13 @@ const returnAlert = () => {
                     enabled: true
                 }
             }
+          plotOptions: {
+    candlestick: {
+      wick: {
+        useFillColor: true,
+      }
+    }
+  }
         };
 
         var chart = new ApexCharts(document.querySelector("#lineChat"), options);
