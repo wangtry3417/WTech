@@ -778,7 +778,11 @@ def data():
     for i in range(31):
         data.append({
             'date': current_datetime.strftime('%Y-%m-%d %H:%M:%S'),
-            'price': random.randint(180, 3000000)
+            'price': random.randint(180, 3000000),
+            'open' : random.randint(180, 3000000),
+            'close' : random.randint(0, 180),
+            'high' : random.randint(28000,3000000),
+            'low' : random.randint(180, 300000)
         })
         current_datetime += datetime.timedelta(seconds=1)  # 每次递增1秒
     
