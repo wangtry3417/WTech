@@ -400,7 +400,10 @@ def handle_leave_chat(data):
     leave_room(room)
     emit('chatMessage', {'username': '系統（自動程式）', 'text': f'{username}已經退出通訊通道.', 'type':'text'}, room=room)
 
-
+@socketio.on('channelCreated')
+def handle_channel_created(data):
+    channelName = data['channelName']
+    emit('channelCreated', {'channelName': channelName}, broadcast=True)
 
 @socketio.on('createAcc')
 def handle_create_account(data):
