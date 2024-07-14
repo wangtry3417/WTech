@@ -445,33 +445,35 @@ const returnAlert = () => {
       // 更新 y 轴
       yAxis.call(d3.axisLeft(yScale));
 
-      // 更新蜡烛图
-      const candles = svg.selectAll(".candle")
-        .data(data);
+      // 更新燭台圖
+  const candles = svg.selectAll(".candle")
+    .data(data);
 
-      // 添加新的蜡烛
-      candles.enter()
-        .append("g")
-        .attr("class", "candle")
-        .attr("transform", d => `translate(${xScale(d.date)},0)`)
-        .append("rect")
-        .attr("x", d => (xScale.bandwidth() / 2) - (d.close - d.open) / 2)
-        .attr("y", d => yScale(d.high))
-        .attr("width", d => Math.abs(d.close - d.open))
-        .attr("height", d => yScale(d.low) - yScale(d.high))
-        .classed("down", d => d.close < d.open);
+  // Enter 選擇：添加新的燭台
+  candles.enter()
+    .append("g")
+    .attr("class", "candle")
+    .attr("transform", d => `translate(${xScale(d.date)},0)`)
+    .append("rect")
+    .attr("x", d => (xScale.bandwidth() / 2) - (d.close - d.open) / 2)
+    .attr("y", d => yScale(d.high))
+    .attr("width", d => Math.abs(d.close - d.open))
+    .attr("height", d => yScale(d.low) - yScale(d.high))
+    .classed("down", d => d.close < d.open)
+    .style("fill", d => d.close < d.open ? "red" : "green"); // 添加填充顏色
 
-      // 更新现有蜡烛
-      candles.select("rect")
-        .attr("x", d => (xScale.bandwidth() / 2) - (d.close - d.open) / 2)
-        .attr("y", d => yScale(d.high))
-        .attr("width", d => Math.abs(d.close - d.open))
-        .attr("height", d => yScale(d.low) - yScale(d.high))
-        .classed("down", d => d.close < d.open);
+  // Update 選擇：更新現有的燭台
+  candles.select("rect")
+    .attr("x", d => (xScale.bandwidth() / 2) - (d.close - d.open) / 2)
+    .attr("y", d => yScale(d.high))
+    .attr("width", d => Math.abs(d.close - d.open))
+    .attr("height", d => yScale(d.low) - yScale(d.high))
+    .classed("down", d => d.close < d.open)
+    .style("fill", d => d.close < d.open ? "red" : "green"); // 添加填充顏色
 
-      // 删除不再需要的蜡烛
-      candles.exit().remove();
-    }
+  // Exit 選擇：刪除不再需要的燭台
+  candles.exit().remove();
+}
         
       socket.on("connect",() => {
           console.log("Connected socketIO server");
