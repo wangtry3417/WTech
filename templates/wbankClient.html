@@ -395,7 +395,7 @@ const returnAlert = () => {
       window.addEventListener("load",() => {
         var options = {
             series: [{
-                name: 'candle',
+                //name: 'candle',
                 data: []
             }],
             chart: {
@@ -448,7 +448,7 @@ const returnAlert = () => {
 
         function updateChart(data) {
             chart.updateSeries([{
-                name: 'candle',
+                //name: 'candle',
                 data: data.map(item => ({
                     x: new Date(item.date),
                     y: [item.open, item.high, item.low, item.close]
