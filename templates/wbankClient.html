@@ -213,14 +213,6 @@
         justify-content: center;
         align-items: center;
       }
-      #trade-bot {
-        width: 200px;
-       margin: auto;
-       background-color: #fff;
-       padding: 20px;
-       border-radius: 5px;
-       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
@@ -306,9 +298,6 @@
       <div id="sec-service">
       <div id="c2c">
         <p>C2C交易（只限買入wcoins)</p>
-      </div>
-      <div id="trade-bot">
-        <p>自動程式交易</p>
       </div>
       </div>
       <div id="needHelp">
@@ -472,9 +461,6 @@ const returnAlert = () => {
       };
       document.getElementById("c2c").addEventListener("click",() => {
         window.location.href="/wbank/payment/c2c?user=" + "{{user}}";
-      });
-      document.getElementById("trade-bot").addEventListener("click",() => {
-        window.location.href="/wbank/trade/auto?user=" + "{{user}}" + "&bal=" + "{{balance}}" ;
       });
       const botscreen = () => {
         document.getElementById("botScreen").style.display = "block";
