@@ -448,7 +448,7 @@ const returnAlert = () => {
 
         function updateChart(data) {
             myChart.data.datasets[0].data = data.map(item => ({
-                t: new Date(item.date),
+                t: item.date,
                 o: item.open,
                 h: item.high,
                 l: item.low,
