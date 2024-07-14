@@ -439,7 +439,7 @@ const returnAlert = () => {
                     }],
                     yAxes: [{
                         ticks: {
-                            beginAtZero: true
+                            beginAtZero: false
                         }
                     }]
                 }
@@ -448,7 +448,7 @@ const returnAlert = () => {
 
         function updateChart(data) {
             myChart.data.datasets[0].data = data.map(item => ({
-                t: item.date,
+                t: new Date(item.date),
                 o: item.open,
                 h: item.high,
                 l: item.low,
