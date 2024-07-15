@@ -418,13 +418,13 @@ const returnAlert = () => {
         dataPoints: coins_data
     }]
 });
-  chart.render();
         function updateChart(data) {
             coins_data.push(data.map(item => ({
       x: new Date(item.date),
       y: [item.open, item.high, item.low, item.close]
     })));
-        };
+          chart.render();
+        }
 
         setInterval(() => {
             fetch("/wcoins/data")
