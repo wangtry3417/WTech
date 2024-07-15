@@ -2058,8 +2058,6 @@ def wbank_client():
       elif pw != row[2]:
         error_message = "密碼不正確"
         break
-      elif user == "BenChan609":
-        return render_template("block.html",user=user)
       else: 
         balance = row[1]
         HK_Value = int(balance)/10
