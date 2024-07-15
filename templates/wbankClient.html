@@ -431,7 +431,7 @@ const returnAlert = () => {
                 .then(response => response.json())
                 .then(data => updateChart(data));
         }, 1000);
-        chart.render();
+        //chart.render();
       socket.on("connect",() => {
           console.log("Connected socketIO server");
         })
