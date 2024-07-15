@@ -410,12 +410,7 @@ const returnAlert = () => {
           enabled: true,
         },
         xaxis: {
-          type: 'category',
-          labels: {
-            formatter: function(val) {
-              return dayjs(val).format('MMM DD HH:mm')
-            }
-          }
+          type: 'datetime',
         },
         yaxis: {
           tooltip: {
