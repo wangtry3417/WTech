@@ -219,7 +219,7 @@
     </style>
     <!--<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>-->
     <!--<script src="https://d3js.org/d3.v7.min.js"></script>-->
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
   </head>
   <body>
      <div id="menu" class="menu">
@@ -391,36 +391,33 @@ const returnAlert = () => {
       document.getElementById("nfc").addEventListener("click",() => {
         window.location.href="/wbank/nfc?user=" + "{{ user }}";
       });
-
+      var coins_data = [];
       window.addEventListener("load",() => {
-        var options = {
-          series: [{
-          name: 'candle',
-          data: []
-        }],
-          chart: {
-          height: 450,
-          type: 'candlestick',
-        },
-        title: {
-          text: 'WCoins candlestick chart',
-          align: 'left'
-        },
-        tooltip: {
-          enabled: false,
-        },
-        xaxis: {
-          type: 'datetime',
-        },
-        yaxis: {
-          tooltip: {
-            enabled: false
-          }
+        var chart = new CanvasJS.Chart("candleChart", {
+    animationEnabled: true,
+    theme: "light2", // 選擇一個主題
+    title: {
+        text: "WCoins 蠟燭圖表"
+    },
+    axisX: {
+        valueFormatString: "YYYY-MM-DD",
+        crosshair: {
+            enabled: true,
+            snapToDataPoint: true
         }
-      };
-
-        var chart = new ApexCharts(document.querySelector("#candleChart"), options);
-        chart.render();
+    },
+    axisY: {
+        title: "價格",
+        includeZero: false,
+        crosshair: {
+            enabled: true
+        }
+    },
+    data: [{
+        type: "candlestick",
+        dataPoints: coins_data
+    }]
+});
 
         function updateChart(data) {
             chart.updateSeries([{
@@ -435,7 +432,7 @@ const returnAlert = () => {
         setInterval(() => {
             fetch("/wcoins/data")
                 .then(response => response.json())
-                .then(data => updateChart(data));
+                .then(data => coins_data.push(data));
         }, 1000);
       socket.on("connect",() => {
           console.log("Connected socketIO server");
