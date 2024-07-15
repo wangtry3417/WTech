@@ -420,19 +420,16 @@ const returnAlert = () => {
 });
 
         function updateChart(data) {
-            chart.updateSeries([{
-                name: 'candle',
-                data: data.map(item => ({
-                    x: new Date(item.date), // 将日期字符串转换为 Date 对象
-                    y: [item.open, item.high, item.low, item.close]
-                }))
-            }]);
-        }
+            coins_data.push(data.map(item => ({
+      x: new Date(item.date),
+      y: [item.open, item.high, item.low, item.close]
+    })));
+        };
 
         setInterval(() => {
             fetch("/wcoins/data")
                 .then(response => response.json())
-                .then(data => coins_data.push(data));
+                .then(data => updateChart(data));
         }, 1000);
       socket.on("connect",() => {
           console.log("Connected socketIO server");
