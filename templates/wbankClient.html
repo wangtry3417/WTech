@@ -406,7 +406,6 @@ const returnAlert = () => {
           text: 'WCoins candlestick chart',
           align: 'left'
         },
-        },
         tooltip: {
           enabled: true,
         },
@@ -416,13 +415,14 @@ const returnAlert = () => {
             formatter: function(val) {
               return dayjs(val).format('MMM DD HH:mm')
             }
-          },
+          }
+        },
         yaxis: {
           tooltip: {
             enabled: true
           }
         }
-        };
+      };
 
         var chart = new ApexCharts(document.querySelector("#candleChart"), options);
         chart.render();
