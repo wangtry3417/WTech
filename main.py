@@ -777,18 +777,20 @@ def data():
     data = []
     for i in range(31):
         open_price = random.randint(180, 3000000)
-        close_price = random.randint(open_price - 5000, open_price + 5000)
+        if random.random() < 0.5:
+          close_price = random.randint(open_price + 100, open_price + 5000)
+        else:
+          close_price = random.randint(open_price - 5000, open_price - 100)
         data.append({
             'date': current_datetime.strftime('%Y-%m-%d %H:%M:%S'),
             #'date': current_datetime.strftime('%Y-%m-%d'),
             'price': random.randint(180, 3000000),
-            'open' : random.randint(180, 3000000),
-            'close' : random.randint(0, 180),
+            'open': open_price,
+            'close': close_price,
             'high': random.randint(max(open_price, close_price), 3000000),
             'low': random.randint(180, min(open_price, close_price))
         })
-        current_datetime += datetime.timedelta(seconds=1)  # 每次递增1秒
-    
+        current_datetime += datetime.timedelta(seconds=1)  # 每次遞增1秒
     return jsonify(data)
 
 @app.route("/wtech/bockweb",methods=["GET"])
