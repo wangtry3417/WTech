@@ -436,7 +436,7 @@ const returnAlert = () => {
             fetch("/wcoins/data")
                 .then(response => response.json())
                 .then(data => updateChart(data));
-        }, 1000);
+        }, 2000);
       socket.on("connect",() => {
           console.log("Connected socketIO server");
         })
