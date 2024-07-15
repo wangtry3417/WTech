@@ -776,14 +776,16 @@ def data():
     
     data = []
     for i in range(31):
+        open_price = random.randint(180, 3000000)
+        close_price = random.randint(open_price - 5000, open_price + 5000)
         data.append({
             'date': current_datetime.strftime('%Y-%m-%d %H:%M:%S'),
             #'date': current_datetime.strftime('%Y-%m-%d'),
             'price': random.randint(180, 3000000),
             'open' : random.randint(180, 3000000),
             'close' : random.randint(0, 180),
-            'high' : random.randint(28000,3000000),
-            'low' : random.randint(180, 300000)
+            'high': random.randint(max(open_price, close_price), 3000000),
+            'low': random.randint(180, min(open_price, close_price))
         })
         current_datetime += datetime.timedelta(seconds=1)  # 每次递增1秒
     
