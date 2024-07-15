@@ -396,7 +396,11 @@ const returnAlert = () => {
         var options = {
             chart: {
                 type: 'candlestick',
-                height: 350
+                height: 350,
+                toolbar: {
+                   autoSelected: 'pan',
+                   show: false
+                }
             },
             title: {
                 text: 'WCoins of CandleStick',
