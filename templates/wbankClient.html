@@ -485,14 +485,14 @@ const returnAlert = () => {
           username: "{{user}}",
           balance: "{{balance}}",
           bot_status: bot_status,
-          trade_mode: "normal"
+          select_mode: "normal"
         },1000);
       } else if (document.getElementById("tradeModeSelect").value == "hardMode") {
            socket.emit("tradeBot",{
           username: "{{user}}",
           balance: "{{balance}}",
           bot_status: bot_status,
-          trade_mode: "hard"
+          select_mode: "hard"
         },1000);
           }
       };
