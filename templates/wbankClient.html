@@ -400,31 +400,36 @@ const returnAlert = () => {
       var coins_data = [];
       window.addEventListener("load",() => {
         var chart = new CanvasJS.Chart("candleChart", {
-    animationEnabled: true,
-    theme: "light2", // 選擇一個主題
-    title: {
-        text: "WCoins 蠟燭圖表"
-    },
-    axisX: {
-        title: "日期",
-        //valueFormatString: "YYYY-MM-DD",
-        crosshair: {
-            enabled: true,
-            snapToDataPoint: true
-        }
-    },
-    axisY: {
-        title: "價格",
-        includeZero: false,
-        crosshair: {
-            enabled: true
-        }
-    },
-    data: [{
-        type: "candlestick",
-        dataPoints: coins_data
-    }]
+	animationEnabled: true,
+	theme: "light2", // "light1", "light2", "dark1", "dark2"
+	exportEnabled: true,
+	title: {
+		text: "Netflix Stock Price in 2016"
+	},
+	subtitles: [{
+		text: "Weekly Averages"
+	}],
+	axisX: {
+		interval: 1,
+		valueFormatString: "MMM"
+	},
+	axisY: {
+		prefix: "$",
+		title: "Price"
+	},
+	toolTip: {
+		content: "Date: {x}<br /><strong>Price:</strong><br />Open: {y[0]}, Close: {y[3]}<br />High: {y[1]}, Low: {y[2]}"
+	},
+	data: [{
+		type: "candlestick",
+		yValueFormatString: "$##0.00",
+		dataPoints: coins_data
+	}]
 });
+ 
+$.get("/wcoins/data", updateChart);
+	chart.render();
+}
         function updateChart(data) {
             coins_data.push(data.map(item => ({
       x: new Date(item.date),
