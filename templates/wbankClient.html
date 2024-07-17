@@ -433,7 +433,6 @@ const returnAlert = () => {
 });
  
 $.get("/wcoins/data", updateChart);
-}
         function updateChart(data) {
             coins_data.push(data.map(item => ({
       x: new Date(item.date.replace(/-/g, '/')),
