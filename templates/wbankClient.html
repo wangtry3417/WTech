@@ -269,6 +269,13 @@
     <br>
     <label>關閉bot</label>
     <button onclick="stopBot()">關閉自動交易</button>
+    <br>
+    <label>選擇投資模式：</label>
+    <br>
+    <select id="tradeModeSelect">
+      <option value="normalMode">普通模式（預設模式）</option>
+      <option value="hardMode">暴力模式</option>
+    </select>
     <button class="btn1" onclick="closeBotScreen()">關閉</button>
   </div>
       <center>
@@ -473,12 +480,21 @@ const returnAlert = () => {
       const startBot = () => {
         setInterval(()=> {
           bot_status = 'yes';
+          if (document.getElementById("tradeModeSelect").value == "normalMode") {
         socket.emit("tradeBot",{
           username: "{{user}}",
           balance: "{{balance}}",
-          bot_status: bot_status
-        });
+          bot_status: bot_status,
+          trade_mode: "normal"
         },1000);
+      } else if (document.getElementById("tradeModeSelect").value == "hardMode") {
+           socket.emit("tradeBot",{
+          username: "{{user}}",
+          balance: "{{balance}}",
+          bot_status: bot_status,
+          trade_mode: "hard"
+        },1000);
+          }
       };
       const stopBot = () => {
         bot_status = 'no';
