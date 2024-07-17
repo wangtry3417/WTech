@@ -412,7 +412,12 @@ const returnAlert = () => {
 	}],
 	axisX: {
 		interval: 1,
-		valueFormatString: "MMM"
+		valueFormatString: "HH:mm:ss",
+                interval: 1,
+                intervalType: "second",
+                labelAngle: -45,
+                labelMaxWidth: 100,
+                labelWrap: true
 	},
 	axisY: {
 		prefix: "$",
@@ -433,7 +438,7 @@ $.get("/wcoins/data", updateChart);
 }
         function updateChart(data) {
             coins_data.push(data.map(item => ({
-      x: new Date(item.date),
+      x: new Date(item.date.replace(/-/g, '/')),
       y: [item.open, item.high, item.low, item.close]
     })));
         }
