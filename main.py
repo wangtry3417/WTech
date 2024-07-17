@@ -462,12 +462,18 @@ def trade_wcoins_bot(data):
   user = data["username"]
   bal = int(data["balance"])
   run_status = data["bot_status"]
+  trade_mode = data["select_mode"]
   cur = conn.cursor()
   if run_status == "yes":
     try:
-      profit = bal + random.randint(10,500)
-      if bal == 0:
-        emit("errorMsg","你沒有wcoins，請先買入")
+      if trade_mode == "normal":
+        profit = bal + random.randint(10,500)
+        if bal == 0:
+          emit("errorMsg","你沒有wcoins，請先買入")
+      elif trade_mode == "hard":
+        profit = bal + random.randint(200,10000)
+        if bal <= 50000:
+          emit("errorMsg","你沒有wcoins，請先買入")
     
       cur.execute(f"""UPDATE wbankwallet
 SET balance='{profit}'
