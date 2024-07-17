@@ -220,6 +220,7 @@
     <!--<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>-->
     <!--<script src="https://d3js.org/d3.v7.min.js"></script>-->
     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
   </head>
   <body>
      <div id="menu" class="menu">
@@ -435,7 +436,6 @@ $.get("/wcoins/data", updateChart);
       x: new Date(item.date),
       y: [item.open, item.high, item.low, item.close]
     })));
-          chart.render();
         }
 
         setInterval(() => {
