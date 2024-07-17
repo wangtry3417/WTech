@@ -473,7 +473,9 @@ def trade_wcoins_bot(data):
       elif trade_mode == "hard":
         profit = bal + random.randint(200,10000)
         if bal <= 50000:
-          emit("errorMsg","你沒有wcoins，請先買入")
+          emit("errorMsg","你沒有足夠的wcoins，請選用normal-mode")
+      elif trade_mode == "stop":
+        return
     
       cur.execute(f"""UPDATE wbankwallet
 SET balance='{profit}'
