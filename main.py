@@ -431,7 +431,7 @@ def handle_delete_account(data):
   emit('success',{'success':'成功操作'})
 
 @socketio.on("removeAccount")
-def remove_wbank_wcoins_acc():
+def remove_wbank_wcoins_acc(data):
   user = data["username"]
   cur = conn.cursor()
   cur.execute(f"SELECT balance FROM wbankwallet where username='{user}'")
