@@ -1239,6 +1239,10 @@ WHERE username='{col[0]}'''')
   return "Cannot transfer it! check your code arg." 
 """
 
+@app.route("/wbank/order/view")
+def wbank_order_page():
+  user = request.args.get("user")
+  return render_template("wbankOrderPage.html",user=user)
 
 @app.route("/wtech/v2/createOrder")
 #@oauth.require_oauth()
