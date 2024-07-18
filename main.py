@@ -471,6 +471,15 @@ WHERE username='{user}'""")
     cur.close()
     emit('UpdateProfit',{'amount': profit})
 
+@socketio.on("loopupBalance")
+def lookup_wcoins_balance(data):
+  user = data["username"]
+  cur = conn.cursor()
+  cur.execute(f"SELECT balance FROM wbankwallet WHERE username='{user}'")
+  rows = cur.fetchall()
+  for row in rows:
+    emit("renderBalance",row[0])
+
 @socketio.on("tradeBot")
 def trade_wcoins_bot(data):
   user = data["username"]
