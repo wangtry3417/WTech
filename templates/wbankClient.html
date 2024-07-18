@@ -434,7 +434,7 @@ const returnAlert = () => {
         window.location.href="/wbank/nfc?user=" + "{{ user }}";
       });
       var coins_data = [];
-      window.addEventListener("load",() => {
+      window.onload = function() {
         var dataPoints1 = [], dataPoints2 = [];
   var chart = new CanvasJS.StockChart("candleChart",{
     theme: "light2",
@@ -462,6 +462,8 @@ const returnAlert = () => {
     }
     chart.render();
   });
+      }
+      window.addEventListener("load",() => {
       socket.on("connect",() => {
           console.log("Connected socketIO server");
         })
