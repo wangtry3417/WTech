@@ -455,7 +455,7 @@ const returnAlert = () => {
       }]
     }
   });
-  $.getJSON("/wcoins/data", function(data) {
+  $.getJSON("https://wtechhk.xyz/wcoins/data", function(data) {
     for(var i = 0; i < data.length; i++){
       dataPoints1.push({x: new Date(data[i].date), y: [Number(data[i].open), Number(data[i].high), Number(data[i].low), Number(data[i].close)]});
       dataPoints2.push({x: new Date(data[i].date), y: Number(data[i].close)});
