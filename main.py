@@ -1814,7 +1814,7 @@ def wbank_hash_transfer():
         conn.commit()  # 提交資料庫更新
 
         # 發送成功訊息到 Discord
-         prompt = f"""
+        prompt = f"""
      轉帳方： {user}
      收款方： {reviewer}
      金額: {amount}
