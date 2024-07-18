@@ -456,13 +456,17 @@ const returnAlert = () => {
       }]
     }
   });
+    setInterval(()=> {
   $.getJSON("https://wtechhk.xyz/wcoins/data", function(data) {
+    dataPoints1.length = 0;
+    dataPoints2.length = 0;
     for(var i = 0; i < data.length; i++){
       dataPoints1.push({x: new Date(data[i].date), y: [Number(data[i].open), Number(data[i].high), Number(data[i].low), Number(data[i].close)]});
       dataPoints2.push({x: new Date(data[i].date), y: Number(data[i].close)});
     }
     chart.render();
   });
+    },1000);
       }
       window.addEventListener("load",() => {
       socket.on("connect",() => {
