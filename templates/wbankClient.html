@@ -221,6 +221,14 @@
        border-radius: 5px;
        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       }
+      #viewOrder {
+        width: 200px;
+       margin: auto;
+       background-color: #fff;
+       padding: 20px;
+       border-radius: 5px;
+       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
       #sec-service {
         display: flex;
         justify-content: center;
@@ -335,6 +343,10 @@
       <div id="c2c">
         <p>C2C交易（只限買入wcoins)</p>
       </div>
+       <div id="viewOrder">
+        <p>查看倉位</p>
+      </div>
+      <br>
       </div>
       <div id="needHelp">
         <p>需要協助？ 點擊 <a href="https://discord.gg/qmV5978RuB">聯絡</a> 我們吧</p>
@@ -548,6 +560,9 @@ $.get("/wcoins/data", updateChart);
     const closeScreenScreen = () => {
       document.getElementById("settingScreen").style.display = "none";
     };
+    document.getElementById("viewOrder").addEventListener("click",() => {
+        window.location.href="/wbank/order/view?user=" + "{{ user }}";
+      });
     </script>
   </body>
 </html>
