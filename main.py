@@ -1836,8 +1836,8 @@ def wbank_hash_transfer():
 
         return jsonify({"success":"成功轉帳"})
 
-    except Exception as e:
-      send_error_to_discord('轉帳失敗', data[0], amount, data[1], str(e))  # 發送錯誤訊息到 Discord
+      except Exception as e:
+        send_error_to_discord('轉帳失敗', data[0], amount, data[1], str(e))  # 發送錯誤訊息到 Discord
   return "Somethings input data is wrong!."
 
 @app.route("/wbank/v1/paycode")
