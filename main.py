@@ -1785,36 +1785,36 @@ def wbank_hash_transfer():
           send_error_to_discord('轉帳方餘額不足', user, int(count), reviewer)  # 發送錯誤訊息到 Discord
           return
 
-       # 更新轉帳方餘額
-       cur.execute(f"""UPDATE wbankwallet
+        # 更新轉帳方餘額
+        cur.execute(f"""UPDATE wbankwallet
     SET balance={balance-amount}
     WHERE username='{user}'""")
-       conn.commit()  # 提交資料庫更新
+        conn.commit()  # 提交資料庫更新
 
-       # 記錄轉帳記錄
-       bl = f"由 {user} 轉帳 {int(amount)} 給 {reviewer}"
-       tz = pytz.timezone('Asia/Taipei')  # 設定時區為台北時間
-       utc_time = datetime.datetime.now(pytz.timezone('UTC'))  # 取得目前 UTC 時間
-       local_time = utc_time.astimezone(tz)  # 將 UTC 時間轉換為台北時間
-       cur.execute(f"INSERT INTO wbankrecord (username, action, time) VALUES ('{reviewer}', '{amount}', '{local_time}');")
-       conn.commit()  # 提交資料庫更新
+        # 記錄轉帳記錄
+        bl = f"由 {user} 轉帳 {int(amount)} 給 {reviewer}"
+        tz = pytz.timezone('Asia/Taipei')  # 設定時區為台北時間
+        utc_time = datetime.datetime.now(pytz.timezone('UTC'))  # 取得目前 UTC 時間
+        local_time = utc_time.astimezone(tz)  # 將 UTC 時間轉換為台北時間
+        cur.execute(f"INSERT INTO wbankrecord (username, action, time) VALUES ('{reviewer}', '{amount}', '{local_time}');")
+        conn.commit()  # 提交資料庫更新
 
-       # 查詢收款方餘額
-       cur.execute(f"select * from wbankwallet where Username='{reviewer}'")
-       cols = cur.fetchall()
-       if not cols:
-         send_error_to_discord('收款方不存在', user, int(count), reviewer)  # 發送錯誤訊息到 Discord
-         return
+        # 查詢收款方餘額
+        cur.execute(f"select * from wbankwallet where Username='{reviewer}'")
+        cols = cur.fetchall()
+        if not cols:
+          send_error_to_discord('收款方不存在', user, int(count), reviewer)  # 發送錯誤訊息到 Discord
+          return
 
-       col = cols[0]
-       # 更新收款方餘額
-       cur.execute(f"""UPDATE wbankwallet
+        col = cols[0]
+        # 更新收款方餘額
+        cur.execute(f"""UPDATE wbankwallet
        SET balance={int(col[1])+amount}
        WHERE username='{col[0]}'""")
-       conn.commit()  # 提交資料庫更新
+        conn.commit()  # 提交資料庫更新
 
-       # 發送成功訊息到 Discord
-        prompt = f"""
+        # 發送成功訊息到 Discord
+         prompt = f"""
      轉帳方： {user}
      收款方： {reviewer}
      金額: {amount}
@@ -1822,8 +1822,8 @@ def wbank_hash_transfer():
      使用協定：HTTPS-API
      加密區塊鏈方式：哈希加密（Hash sha256)
      轉賬區塊：{hash1}
-       """
-       data = {
+        """
+        data = {
       "embeds": [
         {
           "title": "Wcoins 轉帳通知",
@@ -1832,9 +1832,9 @@ def wbank_hash_transfer():
         }
       ]
     }
-       r = requests.post(url="https://discord.com/api/webhooks/1236986187793829930/OBBvTByDyP-fvcVKI40D51UpaN5wU5HOjeHtxdiwh40-b09-gVj-jmoLcdPwlLs0-M2x", json=data)
+        r = requests.post(url="https://discord.com/api/webhooks/1236986187793829930/OBBvTByDyP-fvcVKI40D51UpaN5wU5HOjeHtxdiwh40-b09-gVj-jmoLcdPwlLs0-M2x", json=data)
 
-       return jsonify({"success":"成功轉帳"})
+        return jsonify({"success":"成功轉帳"})
 
     except Exception as e:
       send_error_to_discord('轉帳失敗', data[0], amount, data[1], str(e))  # 發送錯誤訊息到 Discord
