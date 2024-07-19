@@ -1170,6 +1170,7 @@ def wtech_transfer():
      狀態：成功✅
      使用協定：HTTPS-API
      加密區塊鏈方式：對稱加密
+     轉帳區塊： {code}
     """
     data = {
       "embeds": [
