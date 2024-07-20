@@ -1772,6 +1772,12 @@ def wbank_hash_transfer():
   user = request.headers.get("username")
   reviewer = request.headers.get("reviewer")
   count = int(request.headers.get("amount"))
+  
+  if user == None and reviewer == None and count == None:
+    return jsonify({"Invaild input":"Not in none"})
+  elif user == None or reviewer == None or count == None:
+    return jsonify({"Invaild input":"Not in other none"})
+    
   cur = conn.cursor()
   cur.execute(f"select username,balance from wbankwallet where username='{user}'")
   rows = cur.fetchall()
@@ -1852,7 +1858,8 @@ def wbank_hash_transfer():
 
       except Exception as e:
         send_error_to_discord('轉帳失敗', data[0], amount, data[1], str(e))  # 發送錯誤訊息到 Discord
-  return "Somethings input data is wrong!."
+        return jsonify({"fail":str(e)})
+  return jsonify({"fail":"內部錯誤，請檢查清楚再試一次，。"})
 
 @app.route("/wbank/v1/paycode")
 def wbank_sell_payCode():
