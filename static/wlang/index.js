@@ -10,7 +10,7 @@ class WInterpreter {
     for (const line of lines) {
       if (line.startsWith('#page-title:')) {
         this.pageTitle = line.split(':')[1].trim();
-      } else if (line.startsWith('# css {')) {
+      } else if (line.startsWith('#css {')) {
         this.cssCode = this.parseCss(lines, line);
       } else if (line.startsWith('<main>')) {
         this.pageContent = this.parseMain(lines, line);
@@ -45,7 +45,7 @@ class WInterpreter {
       if (line.startsWith('#')) {
         currentElement = this.parseElement(line);
         pageContent.push(currentElement);
-      } else if (line.startsWith('  ')) {
+      } else if (line.startsWith('  ') && currentElement) {
         const [key, value] = line.trim().split(':');
         currentElement.properties[key.trim()] = value.trim();
       }
@@ -82,8 +82,9 @@ class WInterpreter {
           elementNode.style.fontSize = fontSize.trim();
           elementNode.textContent = contentValue.trim();
         } else if (key === 'action') {
-          elementNode.setAttribute('action', value.url);
-          elementNode.setAttribute('method', value.method);
+          const { url, method } = JSON.parse(value);
+          elementNode.setAttribute('action', url);
+          elementNode.setAttribute('method', method);
         } else {
           elementNode.style[key] = value;
         }
