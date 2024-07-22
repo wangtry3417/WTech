@@ -63,9 +63,9 @@ class WInterpreter {
 
   renderPage() {
     const pageWrapper = document.createElement('div');
-    const pageTitle = document.createElement('h1');
-    pageTitle.textContent = this.pageTitle;
-    pageWrapper.appendChild(pageTitle);
+    const titleElement = document.createElement('title');
+    titleElement.textContent = this.pageTitle;
+    document.head.appendChild(titleElement);
 
     const styleElement = document.createElement('style');
     styleElement.textContent = this.cssCode;
