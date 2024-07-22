@@ -94,7 +94,7 @@ justify-content: center;
     display: none; /* 先設定為 none */
 }
 #csScreen {
-  display: none;
+  display: block;
       position: fixed;
       width: 300px;
       height: 200px;
@@ -289,16 +289,18 @@ justify-content: center;
     }
   } else {
     console.log("No cookies found");
-  }
+  } 
+      /*
     var popup = document.getElementById('popup');
-    popup.style.display = 'block'; /* 當頁面加載完後，將 display 設定為 block */
+    popup.style.display = 'block'; 
     popup.querySelector('button').addEventListener('click', function() {
       var button = document.getElementById("myButton");
         button.innerHTML = "...";
     popup.style.animationDuration = "1s";
     popup.style.animationName = "dots";
-        popup.style.display = 'none'; /* 點擊按鈕後，將 display 設回為 none */
-    });
+        popup.style.display = 'none';
+    }); 
+        */
 });
       const returnAlert = () => {
         window.location.href="/wbank";
