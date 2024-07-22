@@ -779,8 +779,7 @@ def index():
       return redirect("/wtech/bockweb?place=tw")
     else:
       session["code"] = hashlib.md5("I am a developer".encode()).hexdigest()
-      companys = ["cheapserver","apple"]
-      session["fav"] = random.choice(companys)
+      session["fav"] = "cheapserver"
       return render_template("wtechHome.html")
   else:
     return abort(502)
