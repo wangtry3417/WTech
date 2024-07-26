@@ -145,10 +145,10 @@ def load_user(username):
 # 創建 Flask-Admin 管理界面
 admin = Admin(app, name='泓財銀行--管理介面', template_mode='bootstrap4')
 
-admin.add_view(CustomModelView(wbankwallet, db.session))
+#admin.add_view(CustomModelView(wbankwallet, db.session))
 
 # 添加 SQLAlchemy 模型管理視圖
-#admin.add_view(ModelView(wbankwallet, db.session))
+admin.add_view(ModelView(wbankwallet, db.session))
 
 @app.after_request
 def after_request(response):
