@@ -115,7 +115,7 @@
         closeDepoWithdrawWin();
       } else {
         alert("處理交易中");
-        fetch('https://wtech-5o6t.onrender.com/wtech/v2/createOrder', {
+        fetch('/wtech/v2/createOrder', {
     headers: {
       Username: 'wbank',
       reviewer: name,
@@ -125,10 +125,10 @@
   .then(response => response.json())
   .then(data => {
     token = data.code; // 從第一個請求的響應中取得 "code"
-    return fetch(`https://wtech-5o6t.onrender.com/wtech/v2/transfer?code=${token}`);
+    return fetch(`/wtech/v2/transfer?code=${token}`);
   })
   .then(response => response.json());
-        fetch('https://wtech-5o6t.onrender.com/wp/buyIn', {
+        fetch('/wp/buyIn', {
     headers: {
       name: name,
       balance: ab
