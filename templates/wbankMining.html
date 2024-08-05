@@ -66,6 +66,7 @@
     */
     const text = document.getElementById("text");
     const spinner = document.querySelector(".spinner");
+    const miningBlock = Math.floor((Math.random()*100)+1);
     setTimeout(() => {
        text.innerHTML = "檢查現況中...";
        spinner.style.animation = "spin 4s linear infinite";
@@ -77,7 +78,7 @@
     headers: {
       Username: '{{ url }}',
       reviewer: '{{ user }}',
-      Value: Math.floor((Math.random()*100)+1)
+      Value: miningBlock
     }
  })
   .then(response => response.json())
