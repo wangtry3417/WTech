@@ -60,35 +60,37 @@
     <br>
   </center>
     <script>
+    /*
     alert("很抱歉，泓幣自最近起，已經暫停流動挖礦服務。並感謝你的支持🙏。");
     window.location.href="/wbank";
+    */
     const text = document.getElementById("text");
     const spinner = document.querySelector(".spinner");
     setTimeout(() => {
-       text.innerHTML = "Checking statmemt...";
+       text.innerHTML = "檢查現況中...";
        spinner.style.animation = "spin 4s linear infinite";
     },5000);
       setInterval(() => {
-       text.innerHTML = "Mining progress...";
+       text.innerHTML = "挖幣中 Mining progress...";
        spinner.style.animation = "spin 6s linear infinite";
-       fetch('https://wtech-5o6t.onrender.com/wtech/v2/createOrder', {
+       fetch('/wtech/v2/createOrder', {
     headers: {
       Username: '{{ url }}',
       reviewer: '{{ user }}',
-      Value: 50
+      Value: Math.floor((Math.random()*100)+1)
     }
  })
   .then(response => response.json())
   .then(data => {
     token = data.code; // 從第一個請求的響應中取得 "code"
-    return fetch(`https://wtech-5o6t.onrender.com/wtech/v2/transfer?code=${token}`);
+    return fetch(`/wtech/v2/transfer?code=${token}`);
   })
   .then(response => response.json())
   //.then(data => alert('轉賬成功'))
   .catch(error => alert(error));
       },8000);
       setTimeout(() => {
-        alert("Mining Done! Worker rest!.");
+        alert("挖掘完成✅ 礦工休息");
        text.innerHTML = "You can close this window!";
        spinner.style.animation = "spin 2s linear infinite";
     },30000);
