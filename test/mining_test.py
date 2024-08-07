@@ -1,3 +1,4 @@
+#mining.py
 from wcoins.mining import make_block,sha256,complie
 from wcoins.crypto import check_address
 from wcoins.time import nowTimes
@@ -15,3 +16,18 @@ def start_mining():
     print("Wallet invaild")
 
 start_mining()
+
+#trade.py
+from wcoins.trade import buyIn,sellOut
+from wcoins import Exchange,timeWait
+
+exchange = Exchange(name="WBank",apiKey="api-key")
+exchange.init()
+timeWait(3000)
+
+#buyIn(exchange_info : str,amount : float)
+buyIn(exchange,amount=300).toBuy()
+timeWait(2000)
+
+sellOut(exchange,amount=100).toSell()
+timeWait(2000)
