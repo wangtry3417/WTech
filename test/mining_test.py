@@ -31,3 +31,21 @@ timeWait(2000)
 
 sellOut(exchange,amount=100).toSell()
 timeWait(2000)
+
+#tradeBot.py
+from wbank.trade import Bot,complier
+from wbank.wcoins import data
+from wtech.ai.math import *
+
+class tradeBot(Bot):
+  def __init__(self):
+    self.coinName = "wcoins"
+    self.symbol = "WTC"
+    self.mode = "simple"
+    self.data = complie(data,mode="json-list",format="wcoins-**/")
+    super().__init__(self)
+  def start(self):
+    statement = random(type="list",data="['buy','sell']")
+    return complier(statement=statement,followData=self.data,rules=True)
+  def has_troubles(self):
+    return complier(statement="cancel-all",followData=self.data,rules=True)
