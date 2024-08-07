@@ -52,3 +52,29 @@ class tradeBot(Bot):
 
 bot = tradeBot(apiKey="api-key")
 bot.start()
+
+#chatapi.py
+import wchat
+from wchat.slash import Commands
+
+client = wchat.Client(intents=wchat.Intents.all())
+slash = Commands(prefix="/",client=client)
+
+@client.on("connect")
+#on_connect(c : Client,msg=None)
+async def on_connect(c):
+  await c.prepare()
+  print("Bot is online")
+
+@client.on("on_message")
+#on_message(c : Client,msg : Message,tts=None,system_message=None...)
+async def on_message(c,msg):
+  if msg.content == "Ping":
+    await c.message.send("Pong")
+
+@slash.cmds("createChannel",options=wchat.slash.options(type="input",name="Channel name",description="Enter the channel name",require=True))
+async def createChannel(ctx : wchat.slash.Context):
+  await ctx.create(type="channel",name=wchat.slash.find_option("Channel name")) #建立通訊通道
+  await ctx.reply("Created channel")
+
+client.run(apiKey="api-key")
