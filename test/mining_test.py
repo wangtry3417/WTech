@@ -49,3 +49,6 @@ class tradeBot(Bot):
     return complier(statement=statement,followData=self.data,rules=True)
   def has_troubles(self):
     return complier(statement="cancel-all",followData=self.data,rules=True)
+
+bot = tradeBot(apiKey="api-key")
+bot.start()
