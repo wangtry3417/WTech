@@ -78,3 +78,25 @@ async def createChannel(ctx : wchat.slash.Context):
   await ctx.reply("Created channel")
 
 client.run(apiKey="api-key")
+
+#cin.py
+from wcoins.blockchain import createChain,addressSetup,nodeSetup
+from wcoins.payment import p2p
+from wcoins import Rules
+
+class blockChain(createChain):
+  def __init__(self):
+    self.coinName = "cat-coins",
+    self.symbol = "CIN",
+    super().__init__(self.coinName,self.symbol)
+  def crypto_address(self):
+    addrs = addressSetup()
+    return addrs.generate()
+  def payment(self,sender_address,recv_address,amount):
+    return p2p(sender_address,recv_address,amount)
+  def upload(self,rules: Rules):
+    ns = nodeSetup(name="cat-coins",url="wtps://cin.wcoins.net")
+    return ns.start()
+
+bc = blockChain()
+bc.upload(rules=True)
