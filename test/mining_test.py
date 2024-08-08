@@ -25,7 +25,7 @@ exchange = Exchange(name="WBank",apiKey="api-key")
 exchange.init()
 timeWait(3000)
 
-#buyIn(exchange_info : str,amount : float)
+#buyIn(exchange_info : wcoins.Exchange,amount : float)
 buyIn(exchange,amount=300).toBuy()
 timeWait(2000)
 
