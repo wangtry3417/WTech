@@ -84,6 +84,8 @@ from wcoins.blockchain import createChain,addressSetup,nodeSetup
 from wcoins.payment import p2p
 from wcoins import Rules
 
+cli = CLI()
+
 class blockChain(createChain):
   def __init__(self):
     self.coinName = "cat-coins",
