@@ -1963,6 +1963,7 @@ def wbank_check_code():
     return render_template("wbankDone.html",user=user,count=amount)
 
 @app.route("/wbank/payment/c2c")
+@login_required
 def wbank_payment_cToc():
   user = request.args.get("user")
   return render_template("wbankCToC.html",user=user)
@@ -1983,6 +1984,7 @@ def wbank_nfc_page():
   return render_template("wbankNfc.html",user=user)
 
 @app.route("/wbank/loan")
+@login_required
 def wbank_loan_page():
   user = request.args.get("user")
   return render_template("wbankLoan.html",user=user)
