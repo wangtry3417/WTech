@@ -101,3 +101,19 @@ class blockChain(createChain):
 
 bc = blockChain()
 bc.upload(rules=True)
+
+#tradev2.py
+import wbank
+from wtech.w import complier
+
+bot = wbank.Bot(apiKey="api-key")
+
+wcode = """
+  bot --> auto.wcoins.net:3344;
+  bot << bot.calling -> firstend;
+  bot >> math3.complier --> block;
+  bot.toHex --> block.toHash();
+  bot --> secondEnd;
+"""
+
+bot.run(complier(wcode))
