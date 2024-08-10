@@ -9,5 +9,6 @@ gm.on("connect",(player,game)=> {
    game.ui.new(position="left-top", callback=uiBuilder);
 });
 const uiBuilder = (player,game,screen) => {
-  ui.add(inputType="text-button",fontColor=gm.color.rgb(255,255,255), fontValue="選單1",callback=null)
+  ui.add(inputType="text-button",fontColor=gm.color.rgb(255,255,255), fontValue="選單1",callback=null);
+  ui.add(inputType="text-button",fontColor=gm.color.rgb(255,255,255), fontValue="選單2",callback=null)
 };
