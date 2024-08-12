@@ -1,8 +1,12 @@
 const { GameManager } = require("wplay.js");
+const { URL } = require("wtps");
+
+const server = new URL("wtps://test.vm.net");
 
 const gm = new GameManager()
                .name="VM-mod"
-               .gameName="GTL-1";
+               .gameName="GTL-1"
+               .selfServer=server;
 gm.setKey("F2")
 
 gm.on("connect",(player,game)=> {
