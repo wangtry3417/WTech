@@ -11,6 +11,7 @@ gm.setKey("F2")
 
 gm.on("connect",(player,game)=> {
    game.emit("welcome","歡迎加入");
+   gm.server.emit("userJoin","歡迎加入");
    game.ui.new(position="left-top", callback=uiBuilder);
 });
 const uiBuilder = (player,game,screen) => {
