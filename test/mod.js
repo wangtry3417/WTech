@@ -24,3 +24,6 @@ const lifeRemote = (player,game) => {
 const RPRemote = (player,game) => {
   game.remote(player.level.increaseValue(500),forever=false);
 };
+gm.protect("wtech-check-isusing-other-tools",(game) {
+  game.lock(target="thisMod");
+});
