@@ -117,3 +117,27 @@ wcode = """
 """
 
 bot.run(complier(wcode))
+
+#person.py
+import fungpt
+
+ai = fungpt.Client(apiKey="api-key",scrope="physical-model")
+complie_model = fungpt.Client(apiKey="api-key",scrope="math-model")
+
+device = None
+
+@ai.ready
+async def on_ready():
+  device = await ai.connect(fungpt.physical_device("Vvs-3639l"))
+  return device
+@device.start
+async def on_start():
+  env = await device.scan(type="image-anyplace",image_type="png").toImage()
+  scan_env = await complie_model.complie(type="base64",data=env.toHex())
+  return ai.toImage(data=scan_env)
+@device.start
+async def on_front(image,model):
+  if image.findRoad(prompt="color-rgb") == "(0,255,0)":
+    await model.moveTo(x=model.location.x,y=model.location.y,z=model.location.z +1)
+
+fungpt.models.run([ai,complie_model])
