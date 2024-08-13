@@ -141,3 +141,21 @@ async def on_front(image,model):
     await model.moveTo(x=model.location.x,y=model.location.y,z=model.location.z +1)
 
 fungpt.models.run([ai,complie_model])
+
+#web.py
+import wcloud
+
+http = wcloud.https.server(ssl=wclouds.https.ssl.cer(key="key-here"))
+
+@http.listen(host="127.0.0.1",port=5000)
+async def port_listen(host,port):
+  await http.console.write("Listen on port "+5000)
+
+@http.on(endpoint="/index",methods=["GET"])
+async def index():
+  await http.files.render("index.html")
+
+"""
+ Run command:
+ wcloud run -t https -a 127.0.0.1:5000
+"""
