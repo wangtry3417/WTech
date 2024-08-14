@@ -14,7 +14,7 @@ class URL {
      set socket of Socket.create(those.url);
      socket.tcp_socket();
   }
-  func-cle close(those) {
+  func-cls close(those) {
      set socket of Socket.cancel(those.url);
      socket.close(0);
   }
