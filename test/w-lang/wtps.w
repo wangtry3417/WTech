@@ -12,6 +12,7 @@ class URL {
   }
   func-cls goto(those) {
      set socket of Socket.create(those.url);
+     socket.format = "HH:PP -p 80->100 -h 00".format(set H of socket.format.host,set P of socket.format.Port);
      socket.tcp_socket();
   }
   func-cls close(those) {
