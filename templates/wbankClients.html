@@ -164,20 +164,7 @@
     const balance = '{{ balance }}';
     const img = '{{ img }}';
     const socket = io();
-
-    navLinks.forEach(link => {
-      link.addEventListener('click', (event) => {
-        event.preventDefault(); // 阻止預設行為
-
-        // 移除所有連結的 active 類別
-        navLinks.forEach(l => l.classList.remove('active'));
-
-        // 將點擊的連結設為 active
-        link.classList.add('active');
-
-        // 取得目標介面
-        const target = link.dataset.target;
-        window.onload = function() {
+    window.onload = function() {
         var dataPoints1 = [], dataPoints2 = [];
   var chart = new CanvasJS.StockChart("candleChart",{
     theme: "light2",
@@ -227,6 +214,20 @@
           },1000);
         }
       });
+
+    navLinks.forEach(link => {
+      link.addEventListener('click', (event) => {
+        event.preventDefault(); // 阻止預設行為
+
+        // 移除所有連結的 active 類別
+        navLinks.forEach(l => l.classList.remove('active'));
+
+        // 將點擊的連結設為 active
+        link.classList.add('active');
+
+        // 取得目標介面
+        const target = link.dataset.target;
+        
         // 顯示對應的介面
         switch (target) {
           case 'home':
