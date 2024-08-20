@@ -161,6 +161,7 @@
     const navLinks = document.querySelectorAll('.nav a');
     const content = document.getElementById('content');
     const qrcodePage = document.getElementById('qrcode-page');
+    const balance = '{{ balance }}';
 
     navLinks.forEach(link => {
       link.addEventListener('click', (event) => {
@@ -174,8 +175,56 @@
 
         // 取得目標介面
         const target = link.dataset.target;
-        const balance = "{{balance}}";
-
+        window.onload = function() {
+        var dataPoints1 = [], dataPoints2 = [];
+  var chart = new CanvasJS.StockChart("candleChart",{
+    theme: "light2",
+    exportEnabled: true,
+    title:{
+      text:"WCoins Market"
+    },
+    charts: [{
+      axisY: {
+        prefix: "WTC$"
+      },
+      data: [{
+        type: "candlestick",
+        dataPoints : dataPoints1
+      }]
+    }],
+    navigator: {
+      data: [{
+        color: "#6D78AD",
+        dataPoints: dataPoints2
+      }]
+    }
+  });
+    setInterval(()=> {
+  $.getJSON("/wcoins/data", function(data) {
+    dataPoints1.length = 0;
+    dataPoints2.length = 0;
+    for(var i = 0; i < data.length; i++){
+      dataPoints1.push({x: new Date(data[i].date), y: [Number(data[i].open), Number(data[i].high), Number(data[i].low), Number(data[i].close)]});
+      dataPoints2.push({x: new Date(data[i].date), y: Number(data[i].close)});
+    }
+    chart.render();
+  });
+    },1000);
+      }
+      window.addEventListener("load",() => {
+      socket.on("connect",() => {
+          console.log("Connected socketIO server");
+        })
+        socket.on("UpdateProfit",(data) => {
+          // 更新 HTML 元素
+  document.querySelector('p:first-of-type').innerHTML = `你的總資產: WTC${data.amount} `;
+        });
+        if (balance > 0) {
+          setInterval(() => {
+          socket.emit("trade",{username: '{{user}}',balance: balance});
+          },1000);
+        }
+      });
         // 顯示對應的介面
         switch (target) {
           case 'home':
@@ -204,57 +253,6 @@
         }
       });
     });
-    window.onload = function() {
-        var dataPoints1 = [], dataPoints2 = [];
-  var chart = new CanvasJS.StockChart("candleChart",{
-    theme: "light2",
-    exportEnabled: true,
-    title:{
-      text:"WCoins Market"
-    },
-    charts: [{
-      axisY: {
-        prefix: "WTC$"
-      },
-      data: [{
-        type: "candlestick",
-        dataPoints : dataPoints1
-      }]
-    }],
-    navigator: {
-      data: [{
-        color: "#6D78AD",
-        dataPoints: dataPoints2
-      }]
-    }
-  });
-    setInterval(()=> {
-  $.getJSON("https://wtechhk.xyz/wcoins/data", function(data) {
-    dataPoints1.length = 0;
-    dataPoints2.length = 0;
-    for(var i = 0; i < data.length; i++){
-      dataPoints1.push({x: new Date(data[i].date), y: [Number(data[i].open), Number(data[i].high), Number(data[i].low), Number(data[i].close)]});
-      dataPoints2.push({x: new Date(data[i].date), y: Number(data[i].close)});
-    }
-    chart.render();
-  });
-    },1000);
-      }
-      window.addEventListener("load",() => {
-      socket.on("connect",() => {
-          console.log("Connected socketIO server");
-        })
-        var bal = '{{ balance }}';
-        socket.on("UpdateProfit",(data) => {
-          // 更新 HTML 元素
-  document.querySelector('p:first-of-type').innerHTML = `你的總資產: WTC${data.amount} `;
-        });
-        if (bal > 0) {
-          setInterval(() => {
-          socket.emit("trade",{username: '{{user}}',balance: bal});
-          },1000);
-        }
-      });
   </script>
 </body>
 </html>
