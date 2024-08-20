@@ -164,114 +164,113 @@
     const balance = '{{ balance }}';
     const img = '{{ img }}';
     const socket = io();
-    window.onload = function() {
-        var dataPoints1 = [], dataPoints2 = [];
-  var chart = new CanvasJS.StockChart("candleChart",{
-    theme: "light2",
-    exportEnabled: true,
-    title:{
-      text:"WCoins Market"
-    },
-    charts: [{
-      axisY: {
-        prefix: "WTC$"
-      },
-      data: [{
-        type: "candlestick",
-        dataPoints : dataPoints1
-      }]
-    }],
-    navigator: {
-      data: [{
-        color: "#6D78AD",
-        dataPoints: dataPoints2
-      }]
-    }
-  });
-    setInterval(()=> {
-  $.getJSON("/wcoins/data", function(data) {
-    dataPoints1.length = 0;
-    dataPoints2.length = 0;
-    for(var i = 0; i < data.length; i++){
-      dataPoints1.push({x: new Date(data[i].date), y: [Number(data[i].open), Number(data[i].high), Number(data[i].low), Number(data[i].close)]});
-      dataPoints2.push({x: new Date(data[i].date), y: Number(data[i].close)});
-    }
-    chart.render();
-  });
-    },1000);
-      }
-      window.addEventListener("load",() => {
-      socket.on("connect",() => {
-          console.log("Connected socketIO server");
-        })
-        socket.on("UpdateProfit",(data) => {
-          // 更新 HTML 元素
-  document.querySelector('p:first-of-type').innerHTML = `你的總資產: WTC$${data.amount} `;
-        });
-        if (balance > 0) {
-          setInterval(() => {
-          socket.emit("trade",{username: '{{user}}',balance: balance});
-          },1000);
+    var dataPoints1 = [], dataPoints2 = [];
+    var chart;
+
+    function initializeChart() {
+      chart = new CanvasJS.StockChart("candleChart",{
+        theme: "light2",
+        exportEnabled: true,
+        title:{
+          text:"WCoins Market"
+        },
+        charts: [{
+          axisY: {
+            prefix: "WTC$"
+          },
+          data: [{
+            type: "candlestick",
+            dataPoints : dataPoints1
+          }]
+        }],
+        navigator: {
+          data: [{
+            color: "#6D78AD",
+            dataPoints: dataPoints2
+          }]
         }
       });
-
-    navLinks.forEach(link => {
-      link.addEventListener('click', (event) => {
-        event.preventDefault(); // 阻止預設行為
-
-        // 移除所有連結的 active 類別
-        navLinks.forEach(l => l.classList.remove('active'));
-
-        // 將點擊的連結設為 active
-        link.classList.add('active');
-
-        // 取得目標介面
-        const target = link.dataset.target;
-        
-        // 顯示對應的介面
-        switch (target) {
-          case 'home':
-            content.innerHTML = `
-              <p>你的總資產: WTC$ ${{balance}}</p>
-              <br>
-              <div id="candleChart" style="width:100%; height:300px;"></div>
-            `;
-            setInterval(()=> {
-  $.getJSON("/wcoins/data", function(data) {
-    dataPoints1.length = 0;
-    dataPoints2.length = 0;
-    for(var i = 0; i < data.length; i++){
-      dataPoints1.push({x: new Date(data[i].date), y: [Number(data[i].open), Number(data[i].high), Number(data[i].low), Number(data[i].close)]});
-      dataPoints2.push({x: new Date(data[i].date), y: Number(data[i].close)});
+      setInterval(()=> {
+        $.getJSON("/wcoins/data", function(data) {
+          dataPoints1.length = 0;
+          dataPoints2.length = 0;
+          for(var i = 0; i < data.length; i++){
+            dataPoints1.push({x: new Date(data[i].date), y: [Number(data[i].open), Number(data[i].high), Number(data[i].low), Number(data[i].close)]});
+            dataPoints2.push({x: new Date(data[i].date), y: Number(data[i].close)});
+          }
+          chart.render();
+        });
+      },1000);
     }
-    chart.render();
-  });
-    },1000);
-            qrcodePage.style.display = 'none';
-            break;
-          case 'wpay':
-            content.innerHTML = `
-              <h2>泓之付 WPay</h2>
-              <p>安全、便捷的支付方式。</p>
-            `;
-            qrcodePage.style.display = 'none';
-            break;
-          case 'qrcode':
-            content.innerHTML = `
-                <h2>下方為你的付款或收款碼:</h2>
-       <img src="data:image/svg+xml;base64,${img}">
-            `;
-            //qrcodePage.style.display = 'block';
-            break;
-          case 'my':
-            content.innerHTML = `
-              <h2>我的</h2>
-              <p>餘額: WTC$ ${{balance}}</p>
-              <button onclick="window.location.href='/wbank/logout';">登出</button>
-            `;
-            qrcodePage.style.display = 'none';
-            break;
-        }
+
+    window.addEventListener("load",() => {
+      // 在網頁載入時初始化圖表
+      initializeChart();
+
+      socket.on("connect",() => {
+        console.log("Connected socketIO server");
+      });
+
+      socket.on("UpdateProfit",(data) => {
+        // 更新 HTML 元素
+        document.querySelector('p:first-of-type').innerHTML = `你的總資產: WTC$${data.amount} `;
+      });
+
+      if (balance > 0) {
+        setInterval(() => {
+          socket.emit("trade",{username: '{{user}}',balance: balance});
+        },1000);
+      }
+
+      navLinks.forEach(link => {
+        link.addEventListener('click', (event) => {
+          event.preventDefault(); // 阻止預設行為
+
+          // 移除所有連結的 active 類別
+          navLinks.forEach(l => l.classList.remove('active'));
+
+          // 將點擊的連結設為 active
+          link.classList.add('active');
+
+          // 取得目標介面
+          const target = link.dataset.target;
+
+          // 顯示對應的介面
+          switch (target) {
+            case 'home':
+              content.innerHTML = `
+                <p>你的總資產: WTC$ ${{balance}}</p>
+                <br>
+                <div id="candleChart" style="width:100%; height:300px;"></div>
+              `;
+              // 切換到首頁時重新渲染圖表
+              initializeChart();
+              qrcodePage.style.display = 'none';
+              break;
+            case 'wpay':
+              content.innerHTML = `
+                <h2>泓之付 WPay</h2>
+                <p>安全、便捷的支付方式。</p>
+              `;
+              qrcodePage.style.display = 'none';
+              break;
+            case 'qrcode':
+              content.innerHTML = `
+                  <h2>下方為你的付款或收款碼:</h2>
+         <img src="data:image/svg+xml;base64,${img}">
+              `;
+              //qrcodePage.style.display = 'block';
+              break;
+            case 'my':
+              content.innerHTML = `
+                <h2>我的</h2>
+                <p>餘額: WTC$ ${{balance}}</p>
+                <button onclick="window.location.href='/wbank/logout';">登出</button>
+              `;
+              qrcodePage.style.display = 'none';
+              break;
+          }
+        });
       });
     });
   </script>
