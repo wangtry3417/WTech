@@ -163,6 +163,7 @@
     const qrcodePage = document.getElementById('qrcode-page');
     const balance = '{{ balance }}';
     const img = '{{ img }}';
+    const socket = io();
 
     navLinks.forEach(link => {
       link.addEventListener('click', (event) => {
