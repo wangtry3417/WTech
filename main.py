@@ -2198,7 +2198,19 @@ def wbank_client():
         HK_Value = int(balance)/10
         tw_value = HK_Value*4
         US_value = HK_Value/8
-        return render_template("wbankClients.html",user=user,balance=balance,HK_Value=HK_Value,tw_value=tw_value,US_value=US_value)
+        text1 = [row[0],str(row[1])]
+        t1 = ",".join(text1)
+        hash1 = hashlib.sha256(t1.encode()).hexdigest()
+        wallet_address = hash1
+        # 生成 QR 碼
+        qr = pyqrcode.create(wallet_address)
+        # 使用 BytesIO 創建一個在記憶體中的臨時檔案
+        temp = BytesIO()
+        # 保存 QR 碼圖像到臨時檔案
+        qr.svg(temp,scale=8)
+        qr_bytes = temp.getvalue()
+        qr_b64 = base64.b64encode(qr_bytes).decode('ascii')
+        return render_template("wbankClients.html",user=user,balance=balance,HK_Value=HK_Value,tw_value=tw_value,US_value=US_value,img=qr_b64)
   return error_message
 
 @app.route("/wbank/recordPage")
