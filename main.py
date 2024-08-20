@@ -1818,7 +1818,7 @@ def wbank_hash_transfer():
         tz = pytz.timezone('Asia/Taipei')  # 設定時區為台北時間
         utc_time = datetime.datetime.now(pytz.timezone('UTC'))  # 取得目前 UTC 時間
         local_time = utc_time.astimezone(tz)  # 將 UTC 時間轉換為台北時間
-        cur.execute(f"INSERT INTO wbankrecord (username, action, time) VALUES ('{reviewer}', '{amount}', '{local_time}');")
+        cur.execute(f"INSERT INTO wbankrecord (username, action, time) VALUES ('{reviewer}', '{bl}', '{local_time}');")
         conn.commit()  # 提交資料庫更新
 
         # 查詢收款方餘額
