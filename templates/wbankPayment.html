@@ -103,14 +103,6 @@
       <button class="btn1" onclick="pay()">點擊支付</button>
       <br>
     </div>
-      <div class="loading-container">
-    <div class="loading-text">支付進行中...</div>
-    <div class="loading-dots">
-      <span class="dot"></span>
-      <span class="dot"></span>
-      <span class="dot"></span>
-    </div>
-  </div>
   </center>
     <br>
     <br>
@@ -140,28 +132,13 @@
           alert('請輸入所需資料');
       }
       else {
-         alert('付款進行中，請稍後');
-        const loadingContainer = document.querySelector('.loading-container');
-  loadingContainer.style.display = 'flex';
-        document.querySelector('.loading-dots').display = 'flex';
-        socket.emit("transfer",{
-        username:document.getElementById('user').value,
-        reviewer:document.getElementById('reviewer').value,
-        amount:document.getElementById('amount').value
-      });
-        setTimeout(() => {
-          loadingContainer.style.display = 'none';
-          document.querySelector('.loading-dots').display = 'none';
-          document.querySelector('.loading-text').innerHTML = "支付完成，準備退出。";
-   }, 3000);
+         
       };
-      /*
       alert('付款進行中，請稍後');
       socket.emit("transfer",{username:document.getElementById('user').value,amount:document.getElementById('reviewer').value,amount:document.getElementById('amount').value});
       socket.on("paymentSuccess",(msg) => {
          alert(msg.success);
       });
-      */
     </script>
   </body>
 </html>
