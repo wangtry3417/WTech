@@ -241,12 +241,17 @@
             qrcodePage.style.display = 'none';
             break;
           case 'qrcode':
-            qrcodePage.style.display = 'block';
+            content.innerHTML = `
+                <h2>下方為你的付款或收款碼:</h2>
+       <img src="data:image/svg+xml;base64,{{ img }}">
+            `;
+            //qrcodePage.style.display = 'block';
             break;
           case 'my':
             content.innerHTML = `
               <h2>我的</h2>
               <p>餘額: WTC$ ${{balance}}</p>
+              <button onclick="window.location.href='/wbank/logout';">登出</button>
             `;
             qrcodePage.style.display = 'none';
             break;
