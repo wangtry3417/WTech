@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WBank - 用戶介面/title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .header {
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 2.5rem;
+    }
+
+    .content {
+      padding: 20px;
+    }
+
+    .content h2 {
+      margin-top: 0;
+    }
+
+    .nav {
+      background-color: #ddd; /* 灰色背景 */
+      color: #fff;
+      padding: 10px;
+      text-align: center;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
+
+    .nav a {
+      color: #fff;
+      text-decoration: none;
+      padding: 10px 20px;
+      display: inline-block;
+      position: relative;
+    }
+
+    .nav a:hover {
+      background-color: #bbb;
+    }
+
+    .active {
+      background-color: #bbb;
+    }
+
+    .nav a img {
+      width: 20px;
+      height: 20px;
+      vertical-align: middle;
+      margin-right: 5px;
+    }
+
+    .qrcode {
+      text-align: center;
+    }
+
+    .qrcode img {
+      max-width: 200px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h2>你好 {{user}}</h2>
+    </div>
+
+    <div class="content" id="content">
+      <!-- 預設顯示首頁內容 -->
+      <p>你的總資產: WTC${{balance}}</p>
+    </div>
+
+    <div class="nav">
+      <a href="#" class="active" data-target="home">
+        <img src="https://img.icons8.com/ios-filled/50/000000/home.png" alt="首頁圖標">
+        首頁
+      </a>
+      <a href="#" data-target="wpay">
+        泓之付 WPay
+      </a>
+      <a href="#" data-target="qrcode">
+        <img src="https://img.icons8.com/ios-filled/50/000000/qr-code.png" alt="錢包二維碼圖標">
+        錢包二維碼
+      </a>
+      <a href="#" data-target="my">
+        <img src="https://img.icons8.com/ios-filled/50/000000/user.png" alt="我的圖標">
+        我的
+      </a>
+    </div>
+  </div>
+
+  <div id="qrcode-page" class="container" style="display: none;">
+    <div class="qrcode">
+      <button onclick='window.location.href="/wbank/scan?user=" + "{{user}}";'>掃描二維碼</button>
+    </div>
+  </div>
+
+  <script>
+    const navLinks = document.querySelectorAll('.nav a');
+    const content = document.getElementById('content');
+    const qrcodePage = document.getElementById('qrcode-page');
+
+    navLinks.forEach(link => {
+      link.addEventListener('click', (event) => {
+        event.preventDefault(); // 阻止預設行為
+
+        // 移除所有連結的 active 類別
+        navLinks.forEach(l => l.classList.remove('active'));
+
+        // 將點擊的連結設為 active
+        link.classList.add('active');
+
+        // 取得目標介面
+        const target = link.dataset.target;
+        const balance = "{{balance}}";
+
+        // 顯示對應的介面
+        switch (target) {
+          case 'home':
+            content.innerHTML = `
+              <p>你的總資產: WTC$ ${{balance}}</p>
+            `;
+            qrcodePage.style.display = 'none';
+            break;
+          case 'wpay':
+            content.innerHTML = `
+              <h2>泓之付 WPay</h2>
+              <p>安全、便捷的支付方式。</p>
+            `;
+            qrcodePage.style.display = 'none';
+            break;
+          case 'qrcode':
+            qrcodePage.style.display = 'block';
+            break;
+          case 'my':
+            content.innerHTML = `
+              <h2>我的</h2>
+              <p>餘額: WTC$ ${{balance}}</p>
+            `;
+            qrcodePage.style.display = 'none';
+            break;
+        }
+      });
+    });
+  </script>
+</body>
+</html>
