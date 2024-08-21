@@ -1792,8 +1792,7 @@ def wbank_hash_transfer():
         cur.execute(f"select * from wbankwallet where Username='{user}'")
         rows = cur.fetchall()
         if not rows:
-          send_error_to_discord('轉帳方不存在', user, int(count), reviewer)  # 發送錯誤訊息到 Discord
-          return
+          return send_error_to_discord('轉帳方不存在', user, int(count), reviewer)  # 發送錯誤訊息到 Discord
 
         row = rows[0]
         balance = int(row[1])  # 取得轉帳方餘額
@@ -1801,10 +1800,10 @@ def wbank_hash_transfer():
 
         if balance < 0:
           send_error_to_discord('轉帳方餘額不足', user, int(count), reviewer)  # 發送錯誤訊息到 Discord
-          return
+          return jsonify({"fail":"內部錯誤，請檢查清楚再試一次，。"})
         elif balance < amount:
           send_error_to_discord('轉帳方餘額不足', user, int(count), reviewer)  # 發送錯誤訊息到 Discord
-          return
+          return jsonify({"fail":"內部錯誤，請檢查清楚再試一次，。"})
 
         # 更新轉帳方餘額
         cur.execute(f"""UPDATE wbankwallet
@@ -1825,7 +1824,7 @@ def wbank_hash_transfer():
         cols = cur.fetchall()
         if not cols:
           send_error_to_discord('收款方不存在', user, int(count), reviewer)  # 發送錯誤訊息到 Discord
-          return
+          return jsonify({"fail":"內部錯誤，請檢查清楚再試一次，。"})
 
         col = cols[0]
         # 更新收款方餘額
