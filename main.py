@@ -304,7 +304,7 @@ def handle_transfer(data):
         }
       ]
     }
-    r = requests.post(url="https://discord.com/api/webhooks/1236986187793829930/OBBvTByDyP-fvcVKI40D51UpaN5wU5HOjeHtxdiwh40-b09-gVj-jmoLcdPwlLs0-M2x", json=data)
+    r = requests.post(url="https://discord.com/api/webhooks/1275720389510828144/T6Kkez2OQuyJl_nEscBOv-N8-GnXBJUSsOqqxXKoK31guklio4SDjAzP89k7A-1laSZX", json=data)
     cur.close()
     emit("paymentSuccess", {"success": "成功轉帳"})  # 發送成功訊息到客戶端
 
@@ -332,7 +332,7 @@ def send_error_to_discord(error_message, user, amount, reviewer, detail=None):
       }
     ]
   }
-  requests.post(url="https://discord.com/api/webhooks/1259706423642951800/n57jqap26278CACS1fJ_WhEWpTUvoQ0KAwfMGV6SXo_sRGb4btLhRy_b-eUbWhkdDUgT", json=data)
+  requests.post(url="https://discord.com/api/webhooks/1275720385924435968/duYQMlwrX9onxSrvwG1NNizEe9dDA9l9LXG3P2MkobPsecNSoLtq7XRff3TAiutRV7Ky", json=data)
 
 @socketio.on('nfc_detected')
 def handle_nfc_detected(data):
@@ -344,8 +344,8 @@ def handle_nfc_detected(data):
     "reviewer":reviewer,
     "Value":amount
   }
-  res = requests.get(url="https://wtechhk.xyz/wtech/v2/createOrder",headers=headers).json()
-  result = requests.get(url=f"https://wtechhk.xyz/wtech/v2/transfer?code={res['code']}").json()
+  res = requests.get(url="https://wtech-5o6t.onrender.com/wtech/v2/createOrder",headers=headers).json()
+  result = requests.get(url=f"wtech-5o6t.onrender.com/wtech/v2/transfer?code={res['code']}").json()
   emit('payment_result',{'success':'Done'})
 
 @socketio.on('newOrder')
@@ -1183,7 +1183,7 @@ def wtech_transfer():
         }
       ]
     }
-    r = requests.post(url="https://discord.com/api/webhooks/1236986187793829930/OBBvTByDyP-fvcVKI40D51UpaN5wU5HOjeHtxdiwh40-b09-gVj-jmoLcdPwlLs0-M2x", json=data)
+    r = requests.post(url="https://discord.com/api/webhooks/1275720389510828144/T6Kkez2OQuyJl_nEscBOv-N8-GnXBJUSsOqqxXKoK31guklio4SDjAzP89k7A-1laSZX", json=data)
 
     return jsonify({"success":"成功轉帳"})
 
@@ -1854,7 +1854,7 @@ def wbank_hash_transfer():
         }
       ]
     }
-        r = requests.post(url="https://discord.com/api/webhooks/1236986187793829930/OBBvTByDyP-fvcVKI40D51UpaN5wU5HOjeHtxdiwh40-b09-gVj-jmoLcdPwlLs0-M2x", json=data)
+        r = requests.post(url="https://discord.com/api/webhooks/1275720389510828144/T6Kkez2OQuyJl_nEscBOv-N8-GnXBJUSsOqqxXKoK31guklio4SDjAzP89k7A-1laSZX, json=data)
 
         return jsonify({"success":"成功轉帳"})
 
