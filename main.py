@@ -1840,7 +1840,6 @@ def wbank_hash_transfer():
      收款方： {reviewer}
      金額: {amount}
      狀態：成功✅
-     使用協定：HTTPS-API
      加密區塊鏈方式：哈希加密（Hash sha256)
      轉賬區塊：{hash1}
         """
