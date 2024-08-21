@@ -340,13 +340,12 @@ def handle_nfc_detected(data):
   amount = data['amount']
   reviewer = data['reviewer']
   headers = {
-   "Username":user,
+   "username":user,
     "reviewer":reviewer,
-    "Value":amount
+    "amount":amount
   }
-  res = requests.get(url="https://wtech-5o6t.onrender.com/wtech/v2/createOrder",headers=headers).json()
-  result = requests.get(url=f"wtech-5o6t.onrender.com/wtech/v2/transfer?code={res['code']}").json()
-  emit('payment_result',{'success':'Done'})
+  result = requests.get(url="https://wtechhk.xyz/wbank/hash/transfer",headers=headers).json()
+  emit('payment_result',{'success':'ok'})
 
 @socketio.on('newOrder')
 def create_new_order(data):
