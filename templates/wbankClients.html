@@ -193,23 +193,6 @@
     const socket = io();
     var dataPoints1 = [], dataPoints2 = [];
     var chart;
-    const moneyScreen = () => {
-        document.getElementById("moneyScreen").style.display = "block";
-      }
-      const closeMoneyScreen = () => {
-        document.getElementById("moneyScreen").style.display = "none";
-      };
-    const openSettingScreen = () => {
-      document.getElementById("settingScreen").style.display = "block";
-    };
-    const removeAcc = () => {
-      socket.emit("removeAccount",{
-         username: "{{user}}"
-      });
-    };
-    const closeScreenScreen = () => {
-      document.getElementById("settingScreen").style.display = "none";
-    };
     document.getElementById("viewOrder").addEventListener("click",() => {
         window.location.href="/wbank/order/view?user=" + "{{ user }}";
       });
@@ -396,6 +379,23 @@
         });
       });
     });
+    const moneyScreen = () => {
+        document.getElementById("moneyScreen").style.display = "block";
+      }
+      const closeMoneyScreen = () => {
+        document.getElementById("moneyScreen").style.display = "none";
+      };
+    const openSettingScreen = () => {
+      document.getElementById("settingScreen").style.display = "block";
+    };
+    const removeAcc = () => {
+      socket.emit("removeAccount",{
+         username: "{{user}}"
+      });
+    };
+    const closeScreenScreen = () => {
+      document.getElementById("settingScreen").style.display = "none";
+    };
   </script>
 </body>
 </html>
