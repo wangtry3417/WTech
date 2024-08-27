@@ -289,7 +289,6 @@
               route = prompt("請選擇金流閘道： \n 1:泓財內部系統（本行) \n 2:泓財（本行)");
         amount = prompt("請輸入應付金額：");
         if (route == 1) {
-        var socket = io();
 
         socket.on('connect', function() {
             console.log('Connected to server');
@@ -373,13 +372,7 @@
                 <button onclick="openSettingScreen()">設定</button>
                 <button onclick="window.location.href='/wbank/logout';">登出</button>
               `;
-              qrcodePage.style.display = 'none';
-              break;
-          }
-        });
-      });
-    });
-    const moneyScreen = () => {
+              const moneyScreen = () => {
         document.getElementById("moneyScreen").style.display = "block";
       }
       const closeMoneyScreen = () => {
@@ -396,6 +389,12 @@
     const closeScreenScreen = () => {
       document.getElementById("settingScreen").style.display = "none";
     };
+              qrcodePage.style.display = 'none';
+              break;
+          }
+        });
+      });
+    });
   </script>
 </body>
 </html>
