@@ -150,21 +150,6 @@
 {% endwith %}
       <h2>你好 {{user}}</h2>
     </div>
-<div id="moneyScreen">
-    <label>港幣HKD: {{HK_Value}}</label><br>
-    <label>新台幣NTD: {{tw_value}}</label><br>
-    <label>美金USD: {{US_value}}</label>
-    <button class="btn" onclick="closeMoneyScreen()">關閉</button>
-  </div>
-    <div id="settingScreen">
-     <label>平台名稱： WBank -- 泓幣官方認可交易平台</label>
-     <br>
-     <label>版本： ~v2（按泓幣wcoins版本結算）</label>
-     <br>
-     <label>註銷帳號：</label>
-     <button onclick="removeAcc()">註銷</button>
-    <button class="btn1" onclick="closeScreenScreen()">關閉</button>
-  </div>
     <div class="content" id="content">
       <!-- 預設顯示首頁內容 -->
       <!--<p>你的總資產: WTC${{balance}}</p>-->
@@ -386,6 +371,22 @@
                 <p>餘額: WTC$ ${{balance}}</p>
                 <button class="btn3" onclick="moneyScreen()">更多貨幣資訊</button>
                 <br>
+                <div id="moneyScreen">
+    <label>港幣HKD: {{HK_Value}}</label><br>
+    <label>新台幣NTD: {{tw_value}}</label><br>
+    <label>美金USD: {{US_value}}</label>
+    <button class="btn" onclick="closeMoneyScreen()">關閉</button>
+  </div>
+    <div id="settingScreen">
+     <label>平台名稱： WBank -- 泓幣官方認可交易平台</label>
+     <br>
+     <label>版本： ~v2（按泓幣wcoins版本結算）</label>
+     <br>
+     <label>註銷帳號：</label>
+     <button onclick="removeAcc()">註銷</button>
+    <button class="btn1" onclick="closeScreenScreen()">關閉</button>
+  </div>
+  <br>
                 <button onclick="openSettingScreen()">設定</button>
                 <button onclick="window.location.href='/wbank/logout';">登出</button>
               `;
