@@ -234,24 +234,7 @@
 
     window.addEventListener("load",() => {
       // 在網頁載入時初始化圖表
-      initializeChart();
-      const moneyScreen = () => {
-        document.getElementById("moneyScreen").style.display = "block";
-      }
-      const closeMoneyScreen = () => {
-        document.getElementById("moneyScreen").style.display = "none";
-      };
-    const openSettingScreen = () => {
-      document.getElementById("settingScreen").style.display = "block";
-    };
-    const removeAcc = () => {
-      socket.emit("removeAccount",{
-         username: "{{user}}"
-      });
-    };
-    const closeScreenScreen = () => {
-      document.getElementById("settingScreen").style.display = "none";
-    };
+      initializeChart();   
       socket.on("connect",() => {
         console.log("Connected socketIO server");
       });
@@ -364,6 +347,23 @@
               //qrcodePage.style.display = 'block';
               break;
             case 'my':
+              const moneyScreen = () => {
+        document.getElementById("moneyScreen").style.display = "block";
+      }
+      const closeMoneyScreen = () => {
+        document.getElementById("moneyScreen").style.display = "none";
+      };
+    const openSettingScreen = () => {
+      document.getElementById("settingScreen").style.display = "block";
+    };
+    const removeAcc = () => {
+      socket.emit("removeAccount",{
+         username: "{{user}}"
+      });
+    };
+    const closeScreenScreen = () => {
+      document.getElementById("settingScreen").style.display = "none";
+    };
               content.innerHTML = `
                 <h2>我的</h2>
                 <p>餘額: WTC$ ${balance}</p>
