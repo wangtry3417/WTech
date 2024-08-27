@@ -104,6 +104,32 @@
   background-color: #cce5ff;
   color: #004085;
 }
+#moneyScreen {
+  display: none;
+      position: fixed;
+      width: 300px;
+      height: 200px;
+      top: 50%;
+      left: 50%;
+      margin-top: -100px;
+      margin-left: -150px;
+      background-color: #f1f1f1;
+      border: 1px solid #888;
+      padding: 20px;
+}
+#settingScreen {
+     display: none;
+      position: fixed;
+      width: 300px;
+      height: 200px;
+      top: 50%;
+      left: 50%;
+      margin-top: -100px;
+      margin-left: -150px;
+      background-color: #f1f1f1;
+      border: 1px solid #888;
+      padding: 20px;
+    }
   </style>
     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
     <script src="https://cdn.canvasjs.com/ga/canvasjs.stock.min.js"></script>
@@ -124,14 +150,27 @@
 {% endwith %}
       <h2>你好 {{user}}</h2>
     </div>
-
+<div id="moneyScreen">
+    <label>港幣HKD: {{HK_Value}}</label><br>
+    <label>新台幣NTD: {{tw_value}}</label><br>
+    <label>美金USD: {{US_value}}</label>
+    <button class="btn" onclick="closeMoneyScreen()">關閉</button>
+  </div>
     <div class="content" id="content">
       <!-- 預設顯示首頁內容 -->
       <!--<p>你的總資產: WTC${{balance}}</p>-->
       <br>
       <div id="candleChart" style="width:100%; height:300px;"></div>
     </div>
-
+    <div id="settingScreen">
+     <label>平台名稱： WBank -- 泓幣官方認可交易平台</label>
+     <br>
+     <label>版本： ~v2（按泓幣wcoins版本結算）</label>
+     <br>
+     <label>註銷帳號：</label>
+     <button onclick="removeAcc()">註銷</button>
+    <button class="btn1" onclick="closeScreenScreen()">關閉</button>
+  </div>
     <div class="nav">
       <a href="#" class="active" data-target="home">
         <img src="https://img.icons8.com/ios-filled/50/000000/home.png" alt="首頁圖標">
@@ -163,10 +202,32 @@
     const qrcodePage = document.getElementById('qrcode-page');
     const balance = '{{ balance }}';
     const img = '{{ img }}';
+    const HKValue = '{{ HK_Value }}';
+    const twValue = '{{ tw_value }}';
+    const USValue = '{{ US_Value }}';
     const socket = io();
     var dataPoints1 = [], dataPoints2 = [];
     var chart;
-
+    const moneyScreen = () => {
+        document.getElementById("moneyScreen").style.display = "block";
+      }
+      const closeMoneyScreen = () => {
+        document.getElementById("moneyScreen").style.display = "none";
+      };
+    const openSettingScreen = () => {
+      document.getElementById("settingScreen").style.display = "block";
+    };
+    const removeAcc = () => {
+      socket.emit("removeAccount",{
+         username: "{{user}}"
+      });
+    };
+    const closeScreenScreen = () => {
+      document.getElementById("settingScreen").style.display = "none";
+    };
+    document.getElementById("viewOrder").addEventListener("click",() => {
+        window.location.href="/wbank/order/view?user=" + "{{ user }}";
+      });
     function initializeChart() {
       chart = new CanvasJS.StockChart("candleChart",{
         theme: "light2",
@@ -323,6 +384,9 @@
               content.innerHTML = `
                 <h2>我的</h2>
                 <p>餘額: WTC$ ${{balance}}</p>
+                <button class="btn3" onclick="moneyScreen()">更多貨幣資訊</button>
+                <br>
+                <button onclick="openSettingScreen()">設定</button>
                 <button onclick="window.location.href='/wbank/logout';">登出</button>
               `;
               qrcodePage.style.display = 'none';
