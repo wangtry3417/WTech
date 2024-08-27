@@ -268,7 +268,7 @@
           switch (target) {
             case 'home':
               content.innerHTML = `
-                <p>你的總資產: WTC$ ${{balance}}</p>
+                <p>你的總資產: WTC$ ${balance}</p>
                 <br>
                 <div id="candleChart" style="width:100%; height:300px;"></div>
               `;
@@ -351,13 +351,13 @@
             case 'my':
               content.innerHTML = `
                 <h2>我的</h2>
-                <p>餘額: WTC$ ${{balance}}</p>
+                <p>餘額: WTC$ ${balance}</p>
                 <button class="btn3" onclick="moneyScreen()">更多貨幣資訊</button>
                 <br>
                 <div id="moneyScreen">
-    <label>港幣HKD: {{HK_Value}}</label><br>
-    <label>新台幣NTD: {{tw_value}}</label><br>
-    <label>美金USD: {{US_value}}</label>
+    <label>港幣HKD: ${HKValue}</label><br>
+    <label>新台幣NTD: ${twValue}</label><br>
+    <label>美金USD: ${USValue}</label>
     <button class="btn" onclick="closeMoneyScreen()">關閉</button>
   </div>
     <div id="settingScreen">
