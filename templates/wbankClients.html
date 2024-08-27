@@ -357,6 +357,9 @@
       document.getElementById("settingScreen").style.display = "block";
     };
     const removeAcc = () => {
+      socket.on('connect', function() {
+            console.log('Connected to server');
+        });
       socket.emit("removeAccount",{
          username: "{{user}}"
       });
