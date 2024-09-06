@@ -346,49 +346,11 @@
               `;
               //qrcodePage.style.display = 'block';
               break;
-            case 'my':
-              const moneyScreen = () => {
-        document.getElementById("moneyScreen").style.display = "block";
-      }
-              const closeMoneyScreen = () => {
-        document.getElementById("moneyScreen").style.display = "none";
-      };
-              const openSettingScreen = () => {
-      document.getElementById("settingScreen").style.display = "block";
-    };
-              const removeAcc = () => {
-      socket.on('connect', function() {
-            console.log('Connected to server');
-        });
-      socket.emit("removeAccount",{
-         username: "{{user}}"
-      });
-    };
-              const closeScreenScreen = () => {
-                document.getElementById("settingScreen").style.display = "none";
-          };
+            case 'my':   
               content.innerHTML = `
                 <h2>我的</h2>
                 <p>餘額: WTC$ ${balance}</p>
-                <button class="btn3" onclick="moneyScreen()">更多貨幣資訊</button>
                 <br>
-                <div id="moneyScreen">
-    <label>港幣HKD: ${HKValue}</label><br>
-    <label>新台幣NTD: ${twValue}</label><br>
-    <label>美金USD: ${USValue}</label>
-    <button class="btn" onclick="closeMoneyScreen()">關閉</button>
-  </div>
-    <div id="settingScreen">
-     <label>平台名稱： WBank -- 泓幣官方認可交易平台</label>
-     <br>
-     <label>版本： ~v2（按泓幣wcoins版本結算）</label>
-     <br>
-     <label>註銷帳號：</label>
-     <button onclick="removeAcc()">註銷</button>
-    <button class="btn1" onclick="closeScreenScreen()">關閉</button>
-  </div>
-  <br>
-                <button onclick="openSettingScreen()">設定</button>
                 <button onclick="window.location.href='/wbank/logout';">登出</button>
               `;
               qrcodePage.style.display = 'none';
