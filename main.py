@@ -96,11 +96,26 @@ babel = Babel(app)
 
 # 定義 SQLAlchemy 模型
 class wbankwallet(db.Model):
-    username = db.Column(db.String(64), nullable=False)
+    username = db.Column(db.String(64), primary_key=True, nullable=False)
     balance = db.Column(db.String(120), nullable=False)
     password = db.Column(db.String(120), nullable=False)
-    verify = db.Column(db.String(64), primary_key=True,nullable=False, default='yes')
+    verify = db.Column(db.String(64), nullable=False, default='no')
     sub = db.Column(db.String(64), nullable=True)
+    def __init__(self,username,balance,password,verify,sub):
+      self.username = username
+      self.balance = balance
+      self.password = password
+      self.verify = verify
+      self.sub = sub
+
+class wbankrecord(db.Model):
+  username = db.Column(db.String(64), primary_key=True, nullable=False)
+  action = db.Column(db.String(120), nullable=True)
+  time = db.Column(db.DateTime, nullable=False)
+  def __init__(self,username,action,time):
+    self.username = username
+    self.action = action
+    self.time = time
 
 class CustomModelView(ModelView):
     column_display_all_fields = True
@@ -241,19 +256,17 @@ def handle_transfer(data):
   user = data['username']  # 取得轉帳方帳戶名稱
   amount = int(data['amount'])  # 取得轉帳金額
   reviewer = data['reviewer']  # 取得收款方帳戶名稱
-  cur = conn.cursor()  # 取得資料庫游標
+  # cur = conn.cursor()  # 取得資料庫游標
 
   try:
     # 查詢轉帳方餘額
-    cur.execute(f"select * from wbankwallet where Username='{user}'")
-    rows = cur.fetchall()
-    if not rows:
+    user = wbankwallet.query.filter_by(username=user).first()
+    if not user:
       emit('error_msg', '轉帳方不存在')  # 發送錯誤訊息到客戶端
       send_error_to_discord('轉帳方不存在', user, amount, reviewer)  # 發送錯誤訊息到 Discord
       return
 
-    row = rows[0]
-    balance = int(row[1])  # 取得轉帳方餘額
+    balance = int(user.balance)  # 取得轉帳方餘額
 
     if balance < 0:
       emit('error_msg', '轉帳方餘額不足')  # 發送錯誤訊息到客戶端
@@ -265,18 +278,24 @@ def handle_transfer(data):
       return
 
     # 更新轉帳方餘額
-    cur.execute(f"""UPDATE wbankwallet
+    #cur.execute(f"""UPDATE wbankwallet
     SET balance={balance-amount}
-    WHERE username='{user}'""")
-    conn.commit()  # 提交資料庫更新
+   # WHERE username='{user}')
+    #conn.commit()  # 提交資料庫更新
 
+    user.balance = balance-amount
+    db.session.commit()
+    
     # 記錄轉帳記錄
     bl = f"由 {user} 轉帳 {amount} 給 {reviewer}"
     tz = pytz.timezone('Asia/Taipei')  # 設定時區為台北時間
     utc_time = datetime.datetime.now(pytz.timezone('UTC'))  # 取得目前 UTC 時間
     local_time = utc_time.astimezone(tz)  # 將 UTC 時間轉換為台北時間
+    """
     cur.execute(f"INSERT INTO wbankrecord (username, action, time) VALUES ('{reviewer}', '{bl}', '{local_time}');")
     conn.commit()  # 提交資料庫更新
+    """
+    
 
     # 查詢收款方餘額
     cur.execute(f"select * from wbankwallet where Username='{reviewer}'")
@@ -359,9 +378,11 @@ def create_new_order(data):
   user = data["username"]
   amount = data["amount"]
   payment = data["payment"]
+  """
   cur = conn.cursor()
   cur.execute(f"INSERT INTO wbankctc (username, amount, payment) VALUES ('{user}', '{amount}', '{payment}');")
   conn.commit()
+  """
   emit("placeOrder",{"username":user,"amount":amount,"payment":payment},broadcast=True)
 
 chat_rooms = {}
@@ -1099,17 +1120,14 @@ def wtech_wcoins_card():
 @app.route("/wbank/v1/record")
 def wbank_read_record():
     user = request.headers.get("user")
-    cur = conn.cursor()
-    cur.execute(f"select * from wbankrecord where username='{user}'")
-    rows = cur.fetchall()
+    users = wbankrecord.query.filter_by(username=user)
     result = []
-    for row in rows:
-        record = {
-            "user" : row[0],
-            "action" : row[1],
-            "time" : row[2]
+    record = {
+            "user" : user,
+            "action" : users.action,
+            "time" : users.time
         }
-        result.append(record)
+    result.append(record)
     return jsonify(result)
 
 @app.route("/wtech/v2/transfer")
@@ -1786,23 +1804,17 @@ def wbank_hash_transfer():
   elif user == None or reviewer == None or count == None:
     return jsonify({"Invaild input":"Not in other none"})
     
-  cur = conn.cursor()
-  cur.execute(f"select username,balance from wbankwallet where username='{user}'")
-  rows = cur.fetchall()
-  for row in rows:
-    if row[1] >= count:
-      text1 = [row[0],reviewer,str(row[1])]
-      t1 = ",".join(text1)
-      hash1 = hashlib.sha256(t1.encode()).hexdigest()
-      try:
-        # 查詢轉帳方餘額
-        cur.execute(f"select * from wbankwallet where Username='{user}'")
-        rows = cur.fetchall()
-        if not rows:
-          return send_error_to_discord('轉帳方不存在', user, int(count), reviewer)  # 發送錯誤訊息到 Discord
+  users = wbankwallet.query.filter_by(username=user)
+  if users.balance >= count:
+    text1 = [user,reviewer,str(users.balance)]
+    t1 = ",".join(text1)
+    hash1 = hashlib.sha256(t1.encode()).hexdigest()
+    try:
+      # 查詢轉帳方餘額
+      if not users:
+        return send_error_to_discord('轉帳方不存在', user, int(count), reviewer)  # 發送錯誤訊息到 Discord
 
-        row = rows[0]
-        balance = int(row[1])  # 取得轉帳方餘額
+        balance = int(users.balance)  # 取得轉帳方餘額
         amount = int(count)
 
         if balance < 0:
@@ -1813,11 +1825,15 @@ def wbank_hash_transfer():
           return jsonify({"fail":"內部錯誤，請檢查清楚再試一次，。"})
 
         # 更新轉帳方餘額
-        cur.execute(f"""UPDATE wbankwallet
-    SET balance={balance-amount}
-    WHERE username='{user}'""")
-        conn.commit()  # 提交資料庫更新
+        #cur.execute(f"""UPDATE wbankwallet
+   # SET balance={balance-amount}
+    #WHERE username='{user}')
+        #conn.commit()  # 提交資料庫更新
 
+        users.balance = balance-amount
+        db.session.commit()
+
+        """
         # 記錄轉帳記錄
         bl = f"由 {user} 轉帳 {int(amount)} 給 {reviewer}"
         tz = pytz.timezone('Asia/Taipei')  # 設定時區為台北時間
@@ -1825,21 +1841,22 @@ def wbank_hash_transfer():
         local_time = utc_time.astimezone(tz)  # 將 UTC 時間轉換為台北時間
         cur.execute(f"INSERT INTO wbankrecord (username, action, time) VALUES ('{reviewer}', '{bl}', '{local_time}');")
         conn.commit()  # 提交資料庫更新
-
+        """
+        db.session.add(wbankrecord(username=user,action=bl,time=local_time))
+        db.commit()
         # 查詢收款方餘額
-        cur.execute(f"select * from wbankwallet where Username='{reviewer}'")
-        cols = cur.fetchall()
-        if not cols:
+        rece = wbankwallet.query.filter_by(username=reviewer)
+        if not rece:
           send_error_to_discord('收款方不存在', user, int(count), reviewer)  # 發送錯誤訊息到 Discord
           return jsonify({"fail":"內部錯誤，請檢查清楚再試一次，。"})
-
-        col = cols[0]
+          
         # 更新收款方餘額
-        cur.execute(f"""UPDATE wbankwallet
-       SET balance={int(col[1])+amount}
-       WHERE username='{col[0]}'""")
-        conn.commit()  # 提交資料庫更新
-
+       # cur.execute(f""UPDATE wbankwallet
+      # SET balance={int(col[1])+amount}
+       #WHERE username='{col[0]}'")
+       # conn.commit()  # 提交資料庫更新
+        rece.balance = rece.balance+amount
+        db.session.commit()
         # 發送成功訊息到 Discord
         prompt = f"""
      轉帳方： {user}
