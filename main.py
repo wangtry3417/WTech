@@ -278,8 +278,8 @@ def handle_transfer(data):
       return
 
     # 更新轉帳方餘額
-    #cur.execute(f"""UPDATE wbankwallet
-    SET balance={balance-amount}
+    #cur.execute(f"UPDATE wbankwallet
+    #SET balance={balance-amount}
    # WHERE username='{user}')
     #conn.commit()  # 提交資料庫更新
 
@@ -295,23 +295,19 @@ def handle_transfer(data):
     cur.execute(f"INSERT INTO wbankrecord (username, action, time) VALUES ('{reviewer}', '{bl}', '{local_time}');")
     conn.commit()  # 提交資料庫更新
     """
-    
+    db.session.add(wbankrecord(username=user,action=bl,time=local_time))
+    db.session.commit()
 
     # 查詢收款方餘額
-    cur.execute(f"select * from wbankwallet where Username='{reviewer}'")
-    cols = cur.fetchall()
-    if not cols:
-      cur.close()
+    rece = wbankwallet.query.filter_by(username=reviewer)
+    if not rece:
       emit('error_msg', '收款方不存在')  # 發送錯誤訊息到客戶端
       send_error_to_discord('收款方不存在', user, amount, reviewer)  # 發送錯誤訊息到 Discord
       return
 
-    col = cols[0]
     # 更新收款方餘額
-    cur.execute(f"""UPDATE wbankwallet
-    SET balance={int(col[1])+amount}
-    WHERE username='{col[0]}'""")
-    conn.commit()  # 提交資料庫更新
+    rece.balance = rece.balance+amount
+    db.session.commit()
 
     # 發送成功訊息到 Discord
     prompt = f"""
