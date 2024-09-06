@@ -351,7 +351,7 @@ def handle_nfc_detected(data):
     "reviewer":reviewer,
     "amount":amount
   }
-  result = requests.get(url="https://wtechhk.xyz/wbank/hash/transfer",headers=headers).json()
+  result = requests.get(url="https://sites.wtechhk.xyz/wbank/hash/transfer",headers=headers).json()
   emit('payment_result',{'success':'ok'})
 
 @socketio.on('newOrder')
@@ -455,7 +455,7 @@ def trade_wcoins(data):
   priceList = []
   user = data["username"]
   bal = int(data["balance"])
-  res = requests.get(url="https://wtech-5o6t.onrender.com/wcoins/data").json()
+  res = requests.get(url="https://sites.wtechhk.xyz/wcoins/data").json()
   for i in res:
     price = i["price"]
     priceList.append(price)
