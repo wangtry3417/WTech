@@ -350,13 +350,13 @@
               const moneyScreen = () => {
         document.getElementById("moneyScreen").style.display = "block";
       }
-      const closeMoneyScreen = () => {
+              const closeMoneyScreen = () => {
         document.getElementById("moneyScreen").style.display = "none";
       };
-    const openSettingScreen = () => {
+              const openSettingScreen = () => {
       document.getElementById("settingScreen").style.display = "block";
     };
-    const removeAcc = () => {
+              const removeAcc = () => {
       socket.on('connect', function() {
             console.log('Connected to server');
         });
@@ -364,9 +364,9 @@
          username: "{{user}}"
       });
     };
-    const closeScreenScreen = () => {
-      document.getElementById("settingScreen").style.display = "none";
-    };
+              const closeScreenScreen = () => {
+                document.getElementById("settingScreen").style.display = "none";
+          };
               content.innerHTML = `
                 <h2>我的</h2>
                 <p>餘額: WTC$ ${balance}</p>
