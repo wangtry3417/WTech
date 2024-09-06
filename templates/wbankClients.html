@@ -187,9 +187,6 @@
     const qrcodePage = document.getElementById('qrcode-page');
     const balance = '{{ balance }}';
     const img = '{{ img }}';
-    const HKValue = '{{ HK_Value }}';
-    const twValue = '{{ tw_value }}';
-    const USValue = '{{ US_Value }}';
     const socket = io();
     var dataPoints1 = [], dataPoints2 = [];
     var chart;
@@ -355,7 +352,7 @@
               `;
               qrcodePage.style.display = 'none';
               break;
-          }
+          };
         });
       });
     });
