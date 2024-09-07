@@ -1665,12 +1665,12 @@ def wbank_hash_transfer():
       users.balance = balance-amount
       db.session.commit()
 
-      """
         # 記錄轉帳記錄
         bl = f"由 {user} 轉帳 {int(amount)} 給 {reviewer}"
         tz = pytz.timezone('Asia/Taipei')  # 設定時區為台北時間
         utc_time = datetime.datetime.now(pytz.timezone('UTC'))  # 取得目前 UTC 時間
         local_time = utc_time.astimezone(tz)  # 將 UTC 時間轉換為台北時間
+      """
         cur.execute(f"INSERT INTO wbankrecord (username, action, time) VALUES ('{reviewer}', '{bl}', '{local_time}');")
         conn.commit()  # 提交資料庫更新
       """
