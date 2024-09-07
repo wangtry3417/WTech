@@ -299,7 +299,7 @@ def handle_transfer(data):
     db.session.commit()
 
     # 查詢收款方餘額
-    rece = wbankwallet.query.filter_by(username=reviewer)
+    rece = wbankwallet.query.filter_by(username=reviewer).first()
     if not rece:
       emit('error_msg', '收款方不存在')  # 發送錯誤訊息到客戶端
       send_error_to_discord('收款方不存在', user, amount, reviewer)  # 發送錯誤訊息到 Discord
@@ -1637,7 +1637,7 @@ def wbank_hash_transfer():
   elif user == None or reviewer == None or count == None:
     return jsonify({"Invaild input":"Not in other none"})
     
-  users = wbankwallet.query.filter_by(username=user)
+  users = wbankwallet.query.filter_by(username=user).first()
   if users.balance >= count:
     text1 = [user,reviewer,str(users.balance)]
     t1 = ",".join(text1)
@@ -1678,7 +1678,7 @@ def wbank_hash_transfer():
         db.session.add(wbankrecord(username=user,action=bl,time=local_time))
         db.commit()
         # 查詢收款方餘額
-        rece = wbankwallet.query.filter_by(username=reviewer)
+        rece = wbankwallet.query.filter_by(username=reviewer).first()
         if not rece:
           send_error_to_discord('收款方不存在', user, int(count), reviewer)  # 發送錯誤訊息到 Discord
           return jsonify({"fail":"內部錯誤，請檢查清楚再試一次，。"})
