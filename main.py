@@ -111,7 +111,7 @@ class wbankwallet(db.Model):
 class wbankrecord(db.Model):
   username = db.Column(db.String(64), primary_key=True, nullable=False)
   action = db.Column(db.String(120), nullable=True)
-  time = db.Column(db.DateTime, nullable=False)
+  time = db.Column(db.String(120), nullable=False)
   def __init__(self,username,action,time):
     self.username = username
     self.action = action
