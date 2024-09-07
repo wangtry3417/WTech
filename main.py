@@ -1875,7 +1875,7 @@ def wbank_hash_transfer():
 
         return jsonify({"success":"成功轉帳"})
 
-      except Exception as e:
+    except Exception as e:
         send_error_to_discord('轉帳失敗', data[0], amount, data[1], str(e))  # 發送錯誤訊息到 Discord
         return jsonify({"fail":str(e)})
   return jsonify({"fail":"內部錯誤，請檢查清楚再試一次，。"})
