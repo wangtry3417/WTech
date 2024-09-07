@@ -1646,8 +1646,8 @@ def wbank_hash_transfer():
       if not users:
         return send_error_to_discord('轉帳方不存在', user, int(count), reviewer)  # 發送錯誤訊息到 Discord
 
-        balance = int(users.balance)  # 取得轉帳方餘額
-        amount = int(count)
+      balance = int(users.balance)  # 取得轉帳方餘額
+      amount = int(count)
 
       if balance < 0:
         send_error_to_discord('轉帳方餘額不足', user, int(count), reviewer)  # 發送錯誤訊息到 Discord
@@ -1712,7 +1712,7 @@ def wbank_hash_transfer():
       return jsonify({"success":"成功轉帳"})
 
     except Exception as e:
-        send_error_to_discord('轉帳失敗', users.username, amount, rece.username, str(e))  # 發送錯誤訊息到 Discord
+        send_error_to_discord('轉帳失敗', users.username, count, rece.username, str(e))  # 發送錯誤訊息到 Discord
         return jsonify({"fail":str(e)})
   return jsonify({"fail":"內部錯誤，請檢查清楚再試一次，。"})
 
