@@ -1713,10 +1713,10 @@ def wbank_hash_transfer():
       db.session.commit()
       # 發送成功訊息到 Discord
       prompt = f"""
-      轉帳方： {user}
-     收款方： {reviewer}
+      轉帳方: {user}
+     收款方: {reviewer}
      金額: {amount}
-     狀態：成功✅
+     狀態: 成功✅
      加密區塊鏈方式：哈希加密（Hash sha256)
       轉賬區塊：{hash1}
         """
