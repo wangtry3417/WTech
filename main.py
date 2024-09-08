@@ -32,6 +32,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_babel import Babel
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from flask_oauthlib.provider import OAuth2Provider
+from wtforms.validators import DataRequired
 import json
 import sys
 #from nltk.stem import WordNetLemmatizer
@@ -119,6 +120,23 @@ class wbankrecord(db.Model):
 
 class walletView(ModelView):
   column_list = ('username','balance','password','verify','sub')
+  form_args = {
+    'username': {
+       'validators' : [DataRequired()],
+     },
+    'balance' : {
+      'validators' : [DataRequired()],
+    },
+    'password' : {
+      'validators' : [DataRequired()],
+    },
+    'verify' : {
+      'validators' : [DataRequired()],
+    },
+    'sub' : {
+      'validators' : [],
+    },
+  }
 
 class CustomModelView(ModelView):
     column_display_all_fields = True
