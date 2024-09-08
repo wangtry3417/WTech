@@ -128,9 +128,25 @@ class wbankkyc(db.Model):
     address = db.Column(db.String(255), nullable=False)
     career = db.Column(db.String(120), nullable=False)
     username = db.Column(db.String(64), db.ForeignKey('wbankwallet.username'), nullable=False)
-    
-    # Relationship to wbankwallet (if needed)
-    #user = db.relationship('wbankwallet', back_populates='kyc_records')
+
+    column_list = ('username','fname','id_number','address','career')
+    form_args = {
+    'username': {
+       'validators' : [DataRequired()],
+     },
+    'fname' : {
+      'validators' : [DataRequired()],
+    },
+    'id_number' : {
+      'validators' : [DataRequired()],
+    },
+    'address' : {
+      'validators' : [DataRequired()],
+    },
+    'career' : {
+      'validators' : [DataRequired()],
+    },
+  }
 
 
 class walletView(ModelView):
@@ -196,6 +212,7 @@ admin = Admin(app, name='泓財銀行--管理介面', template_mode='bootstrap4'
 # 添加 SQLAlchemy 模型管理視圖
 admin.add_view(walletView(wbankwallet, db.session))
 admin.add_view(CustomModelView(wbankrecord, db.session))
+admin.add_view(CustomModelView(wbankkyc, db.session))
 
 @app.after_request
 def after_request(response):
