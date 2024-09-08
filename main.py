@@ -185,7 +185,7 @@ admin = Admin(app, name='泓財銀行--管理介面', template_mode='bootstrap4'
 
 # 添加 SQLAlchemy 模型管理視圖
 admin.add_view(walletView(wbankwallet, db.session))
-admin.add_view(ModelView(wbankrecord, db.session))
+admin.add_view(CustomModelView(wbankrecord, db.session))
 
 @app.after_request
 def after_request(response):
