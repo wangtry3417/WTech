@@ -2016,26 +2016,39 @@ def wbank_verify():
   #pool.putconn(conn)
   return "無法驗證用戶信息，或者可能哈希值(hash-value)有誤，請聯繫我們。再一次致歉令您受到困擾🙏🥹！。"
 
-@app.route("/wbank/v1/kyc",methods=["POST"])
+@app.route("/wbank/v1/kyc", methods=["POST"])
 def wbank_kyc_verify():
-  user = request.form.get("user")
-  id = request.form.get("id")
-  fname = request.form.get("fname")
-  address = request.form.get("address")
-  career = request.form.get("career")
-  if user == None and id == None and fname == None and address == None and career == None:
-    return "此端點不能全空"
-  elif user == None or id == None or fname == None or address == None or career == None:
-    return "此端點可能有個空值"
-  cur = conn.cursor()
-  cur.execute(f"INSERT INTO wbankkyc (fname, id, address, career) VALUES ('{fname}', '{id}','{address}', '{career}')")
-  #conn.commit()
-  #cur = conn.cursor()
-  cur.execute(f"UPDATE wbankwallet set verify='yes' where username='{user}'")
-  conn.commit()
-  cur.execute(f"UPDATE wbankwallet set balance='20000' where username='{user}'")
-  conn.commit()
-  return redirect("/wbank")
+    user = request.form.get("user")
+    id_number = request.form.get("id")
+    fname = request.form.get("fname")
+    address = request.form.get("address")
+    career = request.form.get("career")
+
+    if not all([user, id_number, fname, address, career]):
+        return "所有字段都必須填寫"
+
+    # Create a new KYC record
+    new_kyc = wbankkyc(
+        fname=fname,
+        id_number=id_number,
+        address=address,
+        career=career,
+        username=user
+    )
+    
+    db.session.add(new_kyc)
+
+    # Update the user's verify status and balance
+    user_data = wbankwallet.query.get(user)
+    if user_data:
+        user_data.verify = 'yes'
+        user_data.balance = '20000'
+        db.session.commit()
+    else:
+        return "用戶不存在"
+
+    return redirect("/wbank")
+
 
 # 登出視圖函數
 @app.route('/wbank/logout')
