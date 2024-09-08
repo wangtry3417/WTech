@@ -72,11 +72,11 @@
             <form id="step1Form">
                 <div class="form-group">
                     <label for="user">用戶名：</label>
-                    <input type="text" id="user" name="user" value="{{user}}" readonly>
+                    <input type="text" id="user" name="user" value="{{user}}">
                 </div>
                 <div class="form-group">
                     <label for="id">身份證或證件號碼：</label>
-                    <input type="text" id="id" name="id" value="{{id}}" readonly>
+                    <input type="text" id="id" name="id" value="{{id}}">
                 </div>
                 <div class="form-navigation">
                     <button type="button" id="nextBtn" onclick="nextStep()">下一步</button>
@@ -128,6 +128,7 @@
     </div>
 
     <script>
+        let readonly = null;
         let currentStep = 1;
         const totalSteps = 3;
 
