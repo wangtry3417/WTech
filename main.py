@@ -1986,30 +1986,9 @@ def wbank_into_user():
   pw = request.form.get("pw")
   email = request.form.get("email")
   id = request.form.get("id")
-  cur = conn.cursor()
-  cur.execute(f"INSERT INTO wbankwallet (username, balance, password, verify) VALUES ('{user}', '0', '{pw}','no')")
-  conn.commit()
-  cur = conn.cursor()
-  cur.execute(f"select username,balance,verify from wbankwallet where username='{user}'")
-  rows = cur.fetchall()
-  for row in rows:
-    if user == row[0]:
-      text1 = [str(user),"true"]
-      t1 = ",".join(text1)
-      hash1 = hashlib.sha256(t1.encode()).hexdigest()
-      content = f"""
-   Hello There,
-   This is your verify-link: https://wtech-5o6t.onrender.com/wbank/verify?code={hash1}
-      """
-      #msg = MIMEText(content,"plain","utf-8")
-      #msg["To"] = email
-      #msg["From"] = "verify@wtechhk.xyz"
-      #msg["Subject"] = "Verify your account"
-      #s = smtplib.SMTP("mail.wtechhk.xyz",587)
-      #s.login("verify@wtechhk.xyz","WTechStaff1234#")
-      #send_data = f"Subject: {subject} \n\n {content}"
-      #s.sendmail("verify@wtechhk.xyz",[email],msg.as_string())
-      return render_template("wbankVerify.html",user=user,id=id)
+  db.session.add(wbankwallet(username=user,balance="0",password=pw,verify="no",sub=None))
+  db.session.commit()
+  return render_template("wbankVerify.html",user=user,id=id)
   return "Cannot do that!."
 
 @app.route("/wbank/verify")
