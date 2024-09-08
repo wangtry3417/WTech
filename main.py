@@ -130,7 +130,7 @@ class wbankkyc(db.Model):
     username = db.Column(db.String(64), db.ForeignKey('wbankwallet.username'), nullable=False)
     
     # Relationship to wbankwallet (if needed)
-    user = db.relationship('wbankwallet', back_populates='kyc_records')
+    #user = db.relationship('wbankwallet', back_populates='kyc_records')
 
 
 class walletView(ModelView):
