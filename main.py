@@ -1675,7 +1675,7 @@ def wbank_hash_transfer():
         conn.commit()  # 提交資料庫更新
       """
       db.session.add(wbankrecord(username=user,action=bl,time=local_time))
-      db.commit()
+      db.session.commit()
       # 查詢收款方餘額
       rece = wbankwallet.query.filter_by(username=reviewer).first()
       if not rece:
