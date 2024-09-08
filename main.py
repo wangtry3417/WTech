@@ -1653,10 +1653,10 @@ def wbank_hash_transfer():
   reviewer = request.headers.get("reviewer")
   count = int(request.headers.get("amount"))
   
-  if user == None and reviewer == None and count == None:
+  if user is None and reviewer is None and count is None:
     return jsonify({"Invaild input":"Not in none"})
-  elif user == None or reviewer == None or count == None:
-    return jsonify({"Invaild input":"Not in other none"})
+  elif user is None or reviewer is None or count is None:
+    return jsonify({"Invalid input": "One or more fields are None"})
     
   users = wbankwallet.query.filter_by(username=user).first()
   if users.balance >= count:
@@ -1730,8 +1730,10 @@ def wbank_hash_transfer():
       ]
     }
       r = requests.post(url="https://discord.com/api/webhooks/1275720389510828144/T6Kkez2OQuyJl_nEscBOv-N8-GnXBJUSsOqqxXKoK31guklio4SDjAzP89k7A-1laSZX", json=data, headers={"Content-Type":"application/json"})
-
-      return jsonify({"success":"成功轉帳"})
+      if r.status_code != 204:
+        return jsonify({"success":"成功轉帳","System-record":False})
+      else:
+        return jsonify({"success":"成功轉帳","System-record":True})
 
     except Exception as e:
         send_error_to_discord('轉帳失敗', users.username, count, reviewer, str(e))  # 發送錯誤訊息到 Discord
