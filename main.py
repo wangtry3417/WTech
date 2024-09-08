@@ -96,7 +96,7 @@ login_manager.init_app(app)
 babel = Babel(app)
 
 # 定義 SQLAlchemy 模型
-class wbankwallet(db.Model):
+class wbankwallet(db.Model,UserMixin):
     username = db.Column(db.String(64), primary_key=True, nullable=False)
     balance = db.Column(db.String(120), nullable=False)
     password = db.Column(db.String(120), nullable=False)
@@ -108,6 +108,8 @@ class wbankwallet(db.Model):
       self.password = password
       self.verify = verify
       self.sub = sub
+    def get_id(self):
+        return self.username
 
 class wbankrecord(db.Model):
   username = db.Column(db.String(64), primary_key=True, nullable=False)
