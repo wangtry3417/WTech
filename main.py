@@ -120,6 +120,19 @@ class wbankrecord(db.Model):
     self.action = action
     self.time = time
 
+class wbankkyc(db.Model):
+    __tablename__ = 'wbankkyc'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    fname = db.Column(db.String(120), nullable=False)
+    id_number = db.Column(db.String(120), nullable=False)
+    address = db.Column(db.String(255), nullable=False)
+    career = db.Column(db.String(120), nullable=False)
+    username = db.Column(db.String(64), db.ForeignKey('wbankwallet.username'), nullable=False)
+    
+    # Relationship to wbankwallet (if needed)
+    user = db.relationship('wbankwallet', back_populates='kyc_records')
+
+
 class walletView(ModelView):
   column_list = ('username','balance','password','verify','sub')
   form_args = {
