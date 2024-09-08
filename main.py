@@ -2099,18 +2099,16 @@ def wbank_login():
 def user_balance():
   user = request.args.get("username")
   if user != "":
-    cur = conn.cursor()
-    cur.execute("select * from wbankwallet")
-    rows = cur.fetchall()
-    for row in rows:
-      if user == row[0]:
-        return jsonify({
-         "Username" : user,
-         "Balance" : row[1]
-        })
-    return "Cannot find the user!."
+    users = wbankwallet.query.filter_by(username=user).first()
+    try:
+      return jsonify({
+         "Username" : users.username,
+         "Balance" : int(users.balance)
+      })
+    except:
+      return "找不到該用戶!."
   else:
-    return jsonify({"Error":"Cannot provided null username"})
+    return jsonify({"錯誤":"不能提供空值"})
 
 @app.route("/chat",methods=["POST"])
 def chat():
