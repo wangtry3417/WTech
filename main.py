@@ -1772,12 +1772,10 @@ def wbank_hash_transfer():
 def wbank_sell_payCode():
   code = request.args.get("code")
   reviewer = request.args.get("reviewer")
-  cur = conn.cursor()
-  cur.execute("select username,balance from wbankwallet")
-  rows = cur.fetchall()
-  for row in rows:
-    user = row[0]
-    balance = row[1]
+  users = wbankwallet.query.all()
+  for u in users:
+    user = u.username
+    balance = u.balance
     text1 = [user,str(balance)]
     t1 = ",".join(text1)
     hash1 = hashlib.sha256(t1.encode()).hexdigest()
@@ -1922,12 +1920,10 @@ def wbank_buyCoind():
 @app.route("/wbank/v1/rece")
 def wbank_receCoins():
   code = request.args.get("code")
-  cur = conn.cursor()
-  cur.execute("select username,balance from wbankwallet")
-  rows = cur.fetchall()
-  for row in rows:
-    user = row[0]
-    balance = row[1]
+  users = wbankwallet.query.all()
+  for u in users:
+    user = u.username
+    balance = u.balance
     fromer = "wtech-wcoins-m1"
     text1 = [user,str(balance),fromer]
     t1 = ",".join(text1)
@@ -1940,12 +1936,9 @@ def wbank_receCoins():
 @login_required
 def wbank_sellCoins():
   user = request.args.get("user")
-  cur = conn.cursor()
-  cur.execute(f"select username,balance from wbankwallet where username='{user}'")
-  rows = cur.fetchall()
-  for row in rows:
-    if user == row[0]:
-      text1 = [row[0],str(row[1])]
+  users = wbankwallet.query.filter_by(username=user).first()
+  if users:
+      text1 = [users.username,str(users.balance)]
       t1 = ",".join(text1)
       hash1 = hashlib.sha256(t1.encode()).hexdigest()
       wallet_address = hash1
