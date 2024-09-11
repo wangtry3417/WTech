@@ -33,6 +33,8 @@ from flask_babel import Babel
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from flask_oauthlib.provider import OAuth2Provider
 from wtforms.validators import DataRequired
+from wtforms import StringField
+from flask_admin.form import BaseForm
 import json
 import sys
 #from nltk.stem import WordNetLemmatizer
@@ -129,9 +131,16 @@ class wbankkyc(db.Model):
     career = db.Column(db.String(120), nullable=False)
     username = db.Column(db.String(64), db.ForeignKey('wbankwallet.username'), nullable=False)
 
+class IDBrandForm(BaseForm):
+    username = StringField()
+    balance = StringField()
+    password = StringField()
+    verify = StringField()
+    sub = StringField()
 
 class walletView(ModelView):
-  column_list = ('username','balance','password','verify','sub')
+  #column_list = ('username','balance','password','verify','sub')
+  """
   form_args = {
     'username': {
        'validators' : [DataRequired()],
@@ -149,6 +158,16 @@ class walletView(ModelView):
       'validators' : [],
     },
   }
+  """
+  column_display_pk=True
+  column_labels = {
+        'username': u'用戶名或帳戶號碼',
+        'balance': u'餘額',
+        'password': u'密碼',
+        'vetify': u'驗證狀態',
+        'sub':u'備註'
+    }
+  form = IDBrandForm
 
 class kycView(ModelView):
   column_list = ('username','fname','id_number','address','career')
