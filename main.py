@@ -527,20 +527,15 @@ def trade_wcoins(data):
     priceList.append(price)
   if priceList[-1] > priceList[0]:
     profit = bal + random.randint(0,10)
-    cur = conn.cursor()
-    cur.execute(f"""UPDATE wbankwallet
-SET balance={profit}
-WHERE username='{user}'""")
-    conn.commit()
+    users = wbankwallet.query.filter_by(username=user).first()
+    users.balance = profit
+    db.session.commit()
     emit('UpdateProfit',{'amount': profit})
   else:
     profit = bal - random.randint(0,10)
-    cur = conn.cursor()
-    cur.execute(f"""UPDATE wbankwallet
-SET balance={profit}
-WHERE username='{user}'""")
-    conn.commit()
-    cur.close()
+    users = wbankwallet.query.filter_by(username=user).first()
+    users.balance = profit
+    db.session.commit()
     emit('UpdateProfit',{'amount': profit})
 
 @socketio.on("loopupBalance")
@@ -558,7 +553,6 @@ def trade_wcoins_bot(data):
   bal = int(data["balance"])
   run_status = data["bot_status"]
   trade_mode = data["select_mode"]
-  cur = conn.cursor()
   if run_status == "yes":
     try:
       if trade_mode == "normal":
@@ -572,15 +566,14 @@ def trade_wcoins_bot(data):
       elif trade_mode == "stop":
         return
     
-      cur.execute(f"""UPDATE wbankwallet
-SET balance='{profit}'
-WHERE username='{user}'""")
-      conn.commit()
+      users = wbankwallet.query.filter_by(username=user).first()
+      users.balance = profit
+      db.session.commit()
       emit('UpdateProfit',{'amount': profit})
     except psycopg2.Error as e:
       emit("errorMsg",f"後端及database錯誤 ： {e}")
   elif run_status == "no":
-    cur.close()
+    return
 
 @app.route("/wtech/v2/chat")
 def wtech_wchat_page():
