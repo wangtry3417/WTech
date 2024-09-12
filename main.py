@@ -1014,7 +1014,7 @@ def wtech_wcoins_card():
 @app.route("/wbank/v1/record")
 def wbank_read_record():
     user = request.headers.get("user")
-    users = wbankrecord.query.filter_by(username=user)
+    users = wbankrecord.query.filter_by(username=user).first()
     result = []
     record = {
             "user" : user,
