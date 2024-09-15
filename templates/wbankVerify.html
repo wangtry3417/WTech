@@ -197,21 +197,6 @@
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(dataToSend)
-            })
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw new Error('Network response was not ok.');
-            })
-            .then(data => {
-                // 處理成功響應
-                console.log('Success:', data);
-                // 在此可以添加成功提交後的處理邏輯，例如顯示消息或重定向
-            })
-            .catch((error) => {
-                // 處理錯誤
-                console.error('Error:', error);
             });
         });
 
