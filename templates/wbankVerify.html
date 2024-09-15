@@ -110,7 +110,7 @@
         </div>
 
         <div id="step3" class="step">
-            <form id="step3Form" action="/wbank/v1/kyc" method="post">
+            <form id="step3Form" method="post">
                 <div class="form-group">
                     <input type="checkbox" id="terms1" name="terms1" required>
                     <label for="terms1">本人已知悉泓財銀行WBank 的相關條款。</label>
@@ -132,7 +132,6 @@
     </div>
 
     <script>
-        let readonly = null;
         let currentStep = 1;
         const totalSteps = 3;
 
@@ -175,8 +174,45 @@
             }
         }
 
-        document.getElementById('step3Form').addEventListener('submit', function() {
+        document.getElementById('step3Form').addEventListener('submit', function(event) {
+            event.preventDefault(); // 阻止默認提交行為
             saveStepData();
+
+            // 收集需要傳遞的數據
+            const dataToSend = {
+                user: sessionStorage.getItem('user'),
+                id: sessionStorage.getItem('id'),
+                fname: sessionStorage.getItem('fname'),
+                address: sessionStorage.getItem('address'),
+                career: sessionStorage.getItem('career'),
+                terms1: document.getElementById('terms1').checked,
+                terms2: document.getElementById('terms2').checked,
+                terms3: document.getElementById('terms3').checked
+            };
+
+            // 使用 fetch 發送數據到後端
+            fetch('/wbank/v1/kyc', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(dataToSend)
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error('Network response was not ok.');
+            })
+            .then(data => {
+                // 處理成功響應
+                console.log('Success:', data);
+                // 在此可以添加成功提交後的處理邏輯，例如顯示消息或重定向
+            })
+            .catch((error) => {
+                // 處理錯誤
+                console.error('Error:', error);
+            });
         });
 
         window.onload = loadStepData;
