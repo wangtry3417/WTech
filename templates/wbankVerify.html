@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="Hang">
+<html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -110,10 +110,10 @@
         </div>
 
         <div id="step3" class="step">
-            <form id="step3Form" method="post">
+            <form id="step3Form">
                 <div class="form-group">
                     <input type="checkbox" id="terms1" name="terms1" required>
-                    <label for="terms1">本人已知悉泓財銀行WBank 的相關條款。</label>
+                    <label for="terms1">本人已知悉泓財銀行WBank的相關條款。</label>
                 </div>
                 <div class="form-group">
                     <input type="checkbox" id="terms2" name="terms2" required>
@@ -175,7 +175,7 @@
         }
 
         document.getElementById('step3Form').addEventListener('submit', function(event) {
-            // event.preventDefault(); // 阻止默認提交行為
+            event.preventDefault(); // 阻止默認提交行為
             saveStepData();
 
             // 收集需要傳遞的數據
@@ -197,6 +197,17 @@
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(dataToSend)
+            })
+            .then(response => {
+                if (response.redirected) {
+                    // 如果是重定向，手動轉到新的 URL
+                    window.location.href = response.url;
+                }
+                throw new Error('Network response was not ok.');
+            })
+            .catch((error) => {
+                // 處理錯誤
+                console.error('Error:', error);
             });
         });
 
