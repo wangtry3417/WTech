@@ -2027,7 +2027,7 @@ def wbank_kyc_verify():
     career = request.form.get("career")
 
     if not all([user, id_number, fname, address, career]):
-        return f"所有字段都必須填寫 : {user} | {id_number} | {fmame} | {address} | {career}"
+        return f"所有字段都必須填寫 : {user} | {id_number} | {fname} | {address} | {career}"
 
     # Create a new KYC record
     new_kyc = wbankkyc(
