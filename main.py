@@ -2083,7 +2083,7 @@ def wbank_client():
     
     if user_data:
         if user_data.verify == "no":
-            error_message = "你的帳號尚未進行KYC驗證，請聯絡我們。"
+            return render_template("wbankVerify.html",user=user)
         elif user_data.password != current_user.password:
             error_message = "密碼不正確"
         else:
