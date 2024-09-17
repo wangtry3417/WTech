@@ -2086,6 +2086,8 @@ def wbank_client():
             return render_template("wbankVerify.html",user=user)
         elif user_data.password != current_user.password:
             error_message = "密碼不正確"
+        elif user_data.username == "wangtry":
+            error_message = "由於你金額過大，需要過來WBank任意一間分行 完成相關程序"
         else:
             balance = user_data.balance
             HK_Value = int(balance) / 10
