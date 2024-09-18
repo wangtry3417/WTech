@@ -190,9 +190,6 @@
             // 使用 fetch 發送數據到後端
             fetch('/wbank/v1/kyc', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
                 body: JSON.stringify(dataToSend)
             })
             .then(response => {
