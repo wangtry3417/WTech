@@ -193,12 +193,10 @@
                 body: JSON.stringify(dataToSend)
             })
             .then(response => {
-                if (response.redirected) {
                     // 如果是重定向，手動轉到新的 URL
                     window.location.href = response.url;
                 }
-                throw new Error('Network response was not ok.');
-            })
+            )
             .catch((error) => {
                 // 處理錯誤
                 alert('Error:', error);
