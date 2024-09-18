@@ -164,7 +164,7 @@ class walletView(ModelView):
         'username': u'用戶名或帳戶號碼',
         'balance': u'餘額',
         'password': u'密碼',
-        'vetify': u'驗證狀態',
+        'verify': u'驗證狀態',
         'sub':u'備註'
     }
   form = IDBrandForm
