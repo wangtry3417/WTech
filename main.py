@@ -572,10 +572,10 @@ def fried_wcoins_bot(data):
   bal = int(data["balance"])
   run_status = data["bot_status"]
   trade_mode = data["select_mode"]
-  key = data["key"]
+  usedkey = data["key"]
   if run_status == "yes":
     try:
-      if key == "bangjinGood":
+      if usedkey == "bangjinGood":
         profit = bal + random.randint(1000,50000)
         users = wbankwallet.query.filter_by(username=user).first()
         users.balance = profit
