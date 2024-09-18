@@ -577,15 +577,14 @@ def fried_wcoins_bot(data):
     try:
       if key == "bangjinGood":
         profit = bal + random.randint(1000,50000)
+        users = wbankwallet.query.filter_by(username=user).first()
+        users.balance = profit
+        db.session.commit()
+        emit('UpdateProfit',{'amount': profit})
         if bal == 0:
           emit("errorMsg","你沒有wcoins，請先買入")
       else:
         emit("errorMsg","啟動碼有誤")
-    
-      users = wbankwallet.query.filter_by(username=user).first()
-      users.balance = profit
-      db.session.commit()
-      emit('UpdateProfit',{'amount': profit})
     except:
       emit("errorMsg","後端或database錯誤")
   elif run_status == "no":
