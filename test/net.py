@@ -28,7 +28,7 @@
 
 set wnet of WNet() into fileStage;
 set ssl of wnet.ssl.SSL(object) into fileStage;
-set app of wnet.https.app(ssl=ssl(object,key="key")) into fileStage;
+set app of wnet.https.app(object,ssl=ssl(object,key="key")) into fileStage;
 
 func main() {
   app.route("/",route1)
