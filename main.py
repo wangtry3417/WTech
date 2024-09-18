@@ -2070,6 +2070,7 @@ def wbank_auth_client():
         if user and user.password == password:
           if user.username == "wangtry":
             flash('你的帳戶正被扣查，原因：餘額過大','danger')
+            return render_template('wbank.html')
           else:
             login_user(user)
             flash('登入成功.', 'success')
