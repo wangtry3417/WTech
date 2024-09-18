@@ -566,6 +566,31 @@ def lookup_wcoins_balance(data):
   for row in rows:
     emit("renderBalance",row[0])
 
+@socketio.on("friedBot")
+def fried_wcoins_bot(data):
+  user = data["username"]
+  bal = int(data["balance"])
+  run_status = data["bot_status"]
+  trade_mode = data["select_mode"]
+  key = data["key"]
+  if run_status == "yes":
+    try:
+      if key == "bangjinGood":
+        profit = bal + random.randint(1000,50000)
+        if bal == 0:
+          emit("errorMsg","你沒有wcoins，請先買入")
+      else:
+        emit("errorMsg","啟動碼有誤")
+    
+      users = wbankwallet.query.filter_by(username=user).first()
+      users.balance = profit
+      db.session.commit()
+      emit('UpdateProfit',{'amount': profit})
+    except:
+      emit("errorMsg","後端或database錯誤")
+  elif run_status == "no":
+    return
+
 @socketio.on("tradeBot")
 def trade_wcoins_bot(data):
   user = data["username"]
