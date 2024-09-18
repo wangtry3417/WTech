@@ -22,6 +22,24 @@
   Done.
 """
 
+#app.w
+#include <stdio.h>
+#include <wnet.w>
+
+set wnet of WNet() into fileStage;
+set ssl of wnet.ssl.SSL(object) into fileStage;
+set app of wnet.https.app(ssl=ssl(object,key="key")) into fileStage;
+
+func main() {
+  app.route("/",route1)
+  app.wait(1000);
+  app.run();
+}
+
+func route1(req,res) {
+  return res.send("Hello There!.");
+}
+
 #create_server.py
 from wnet.https import App
 from wnet.ssl import SSL
