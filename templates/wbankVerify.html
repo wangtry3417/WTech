@@ -192,11 +192,6 @@
                 method: 'POST',
                 body: JSON.stringify(dataToSend)
             })
-            .then(response => {
-                    // 如果是重定向，手動轉到新的 URL
-                    window.location.href = response.url;
-                }
-            )
             .catch((error) => {
                 // 處理錯誤
                 alert('Error:', error);
