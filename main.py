@@ -2068,10 +2068,6 @@ def wbank_auth_client():
         password = request.form['pw']
         user = wbankwallet.query.filter_by(username=username).first()
         if user and user.password == password:
-          if user.username == "wangtry":
-            flash('你的帳戶正被扣查，原因：餘額過大','danger')
-            return render_template('wbank.html')
-          else:
             login_user(user)
             flash('登入成功.', 'success')
             return redirect(url_for('wbank_client'))
