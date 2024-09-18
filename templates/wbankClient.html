@@ -298,6 +298,7 @@
     <select id="tradeModeSelect">
       <option value="normalMode">普通模式（預設模式）</option>
       <option value="hardMode">暴力模式</option>
+      <option value="fried">炒幣Bot</option>
     </select>
     <button class="btn1" onclick="closeBotScreen()">關閉</button>
   </div>
@@ -526,6 +527,15 @@ const returnAlert = () => {
           balance: "{{balance}}",
           bot_status: bot_status,
           select_mode: "hard"
+        });
+          } else if (document.getElementById("tradeModeSelect").value == "fried") {
+            var key = prompt("請輸入wcoins-v2-apiKey");
+           socket.emit("friedBot",{
+          username: "{{user}}",
+          balance: "{{balance}}",
+          bot_status: bot_status,
+          select_mode: "fried",
+          key: key
         });
           }
       },1000);
