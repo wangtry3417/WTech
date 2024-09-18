@@ -581,14 +581,13 @@ def fried_wcoins_bot(data):
         users.balance = profit
         db.session.commit()
         emit('UpdateProfit',{'amount': profit})
+        return
         if bal == 0:
           emit("errorMsg","你沒有wcoins，請先買入")
       else:
         emit("errorMsg","啟動碼有誤")
     except:
       emit("errorMsg","後端或database錯誤")
-  elif run_status == "no":
-    return
 
 @socketio.on("tradeBot")
 def trade_wcoins_bot(data):
