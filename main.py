@@ -28,7 +28,7 @@ import discord
 from flask_socketio import SocketIO,emit,join_room,leave_room
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
-from flask_admin.theme import Bootstrap4Theme
+from flask_admin import Bootstrap4Theme
 from flask_sqlalchemy import SQLAlchemy
 from flask_babel import Babel
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
