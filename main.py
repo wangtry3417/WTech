@@ -116,11 +116,15 @@ class wbankwallet(db.Model,UserMixin):
 class wbankrecord(db.Model):
   username = db.Column(db.String(64), primary_key=True, nullable=False)
   action = db.Column(db.String(120), nullable=True)
-  time = db.Column(db.String(120), nullable=False)
+  time = db.Column(db.DateTime, nullable=False)
   def __init__(self,username,action,time):
     self.username = username
     self.action = action
     self.time = time
+
+class wbankRecordView(ModelView):
+  column_list = ('username','action','time')
+  can_export = True
 
 class wbankkyc(db.Model):
     __tablename__ = 'wbankkyc'
@@ -231,7 +235,7 @@ admin = Admin(app, name='泓財銀行--管理介面', template_mode='bootstrap4'
 
 # 添加 SQLAlchemy 模型管理視圖
 admin.add_view(walletView(wbankwallet, db.session))
-admin.add_view(CustomModelView(wbankrecord, db.session))
+admin.add_view(wbankRecordView(wbankrecord, db.session))
 admin.add_view(kycView(wbankkyc, db.session))
 
 @app.after_request
