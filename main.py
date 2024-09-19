@@ -28,6 +28,7 @@ import discord
 from flask_socketio import SocketIO,emit,join_room,leave_room
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
+from flask_admin.theme import Bootstrap4Theme
 from flask_sqlalchemy import SQLAlchemy
 from flask_babel import Babel
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
@@ -259,7 +260,7 @@ def load_user(username):
     return wbankwallet.query.filter_by(username=username).first()
 
 # 創建 Flask-Admin 管理界面
-admin = Admin(app, name='泓財銀行--管理介面', template_mode='bootstrap5')
+admin = Admin(app, name='泓財銀行--管理介面', template_mode='bootstrap4', theme=Bootstrap4Theme(swatch='flatly'))
 
 #admin.add_view(walletView(wbankwallet, db.session))
 
