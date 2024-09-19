@@ -129,6 +129,8 @@ class wbankRecordView(ModelView):
   export_types = ['csv','html']
   can_edit = False
   can_create = False
+  column_searchable_list = ('username',)
+  column_display_pk=True
 
 class wbankkyc(db.Model):
     __tablename__ = 'wbankkyc'
