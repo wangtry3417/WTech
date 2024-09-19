@@ -125,6 +125,7 @@ class wbankrecord(db.Model):
 class wbankRecordView(ModelView):
   column_list = ('username','action','time')
   can_export = True
+  page_size = 200
 
 class wbankkyc(db.Model):
     __tablename__ = 'wbankkyc'
