@@ -20,3 +20,4 @@ Flask-Login
 Flask-OAuthlib
 flask-qrcode
 Flask-WTF
+tablib
