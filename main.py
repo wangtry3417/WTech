@@ -126,7 +126,8 @@ class wbankRecordView(ModelView):
   column_list = ('username','action','time')
   can_export = True
   can_view_details = True
-  export_types = ['csv','plain','html']
+  export_types = ['csv','html']
+  can_set_page_size = True
 
 class wbankkyc(db.Model):
     __tablename__ = 'wbankkyc'
