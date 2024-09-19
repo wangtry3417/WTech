@@ -214,6 +214,14 @@ class kycView(ModelView):
       'validators' : [DataRequired()],
     },
   }
+  column_display_pk=True
+  column_labels = {
+        'username': u'用戶名或帳戶號碼',
+        'fnane': u'全名',
+        'id_number': u'身份證或證件號碼',
+        'address': u'地址',
+        'career':u'職業'
+    }
 
 class CustomModelView(ModelView):
     column_display_all_fields = True
