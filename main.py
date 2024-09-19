@@ -125,7 +125,7 @@ class wbankrecord(db.Model):
 class wbankRecordView(ModelView):
   column_list = ('username','action','time')
   can_export = True
-  can_view_details = False
+  can_view_details = True
   export_types = ['csv','html']
   can_edit = False
   can_create = False
