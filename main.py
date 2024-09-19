@@ -333,7 +333,7 @@ def load_token(token=None, client_id=None):
 
 @oauth.tokensetter
 def save_token(token, client, user):
-    new_token = Token(id=token['access_token'], user_id=user.id, client_id=client.id)
+    new_token = Token(id=token, user_id=user.id, client_id=client.id)
     db.session.add(new_token)
     db.session.commit()
 
