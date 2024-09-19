@@ -259,7 +259,7 @@ def load_user(username):
     return wbankwallet.query.filter_by(username=username).first()
 
 # 創建 Flask-Admin 管理界面
-admin = Admin(app, name='泓財銀行--管理介面', template_mode='bootstrap5')
+admin = Admin(app, name='泓財銀行--管理介面', template_mode='jqm')
 
 #admin.add_view(walletView(wbankwallet, db.session))
 
