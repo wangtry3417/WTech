@@ -325,7 +325,7 @@ def load_client(client_id):
 
 @oauth.grantgetter
 def load_grant(client_id, code):
-    return None  # 實現授權碼的加載邏輯
+    return hash.sha256(b"client_id").hexdigest()
 
 @oauth.tokengetter
 def load_token(token=None, client_id=None):
