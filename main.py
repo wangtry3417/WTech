@@ -125,12 +125,13 @@ class wbankrecord(db.Model):
 class wbankRecordView(ModelView):
   column_list = ('username','action','time')
   can_export = True
-  can_view_details = True
+  can_view_details = False
   export_types = ['csv','html']
   can_edit = False
   can_create = False
   column_searchable_list = ('username',)
   column_display_pk=True
+  edit_modal=True
 
 class wbankkyc(db.Model):
     __tablename__ = 'wbankkyc'
@@ -196,6 +197,7 @@ class walletView(ModelView):
         'verify': u'驗證狀態',
         'sub':u'備註'
     }
+  edit_modal=True
   form = IDBrandForm
 
 class kycView(ModelView):
@@ -219,6 +221,7 @@ class kycView(ModelView):
     },
   }
   column_display_pk=True
+  edit_modal=True
   column_labels = {
         'username': u'用戶名或帳戶號碼',
         'fname': u'全名',
