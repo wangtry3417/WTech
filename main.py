@@ -28,7 +28,6 @@ import discord
 from flask_socketio import SocketIO,emit,join_room,leave_room
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
-from flask_admin import Bootstrap4Theme
 from flask_sqlalchemy import SQLAlchemy
 from flask_babel import Babel
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
@@ -187,6 +186,7 @@ class walletView(ModelView):
   }
   """
   column_display_pk=True
+  column_searchable_list = ('username', 'sub')
   column_labels = {
         'username': u'用戶名或帳戶號碼',
         'balance': u'餘額',
@@ -198,6 +198,7 @@ class walletView(ModelView):
 
 class kycView(ModelView):
   column_list = ('username','fname','id_number','address','career')
+  column_searchable_list = ('fname', 'id_number')
   form_args = {
     'username': {
        'validators' : [DataRequired()],
@@ -218,7 +219,7 @@ class kycView(ModelView):
   column_display_pk=True
   column_labels = {
         'username': u'用戶名或帳戶號碼',
-        'fnane': u'全名',
+        'fname': u'全名',
         'id_number': u'身份證或證件號碼',
         'address': u'地址',
         'career':u'職業'
@@ -260,7 +261,7 @@ def load_user(username):
     return wbankwallet.query.filter_by(username=username).first()
 
 # 創建 Flask-Admin 管理界面
-admin = Admin(app, name='泓財銀行--管理介面', template_mode='bootstrap4', theme=Bootstrap4Theme(swatch='flatly'))
+admin = Admin(app, name='泓財銀行--管理介面', template_mode='bootstrap3')
 
 #admin.add_view(walletView(wbankwallet, db.session))
 
