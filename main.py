@@ -256,9 +256,9 @@ admin = Admin(app, name='泓財銀行--管理介面', template_mode='bootstrap3'
 #admin.add_view(walletView(wbankwallet, db.session))
 
 # 添加 SQLAlchemy 模型管理視圖
-admin.add_view(walletView(wbankwallet, db.session))
-admin.add_view(wbankRecordView(wbankrecord, db.session))
-admin.add_view(kycView(wbankkyc, db.session))
+admin.add_view(walletView(wbankwallet, db.session, name="泓財銀行用戶"))
+admin.add_view(wbankRecordView(wbankrecord, db.session, name="交易或轉帳紀錄"))
+admin.add_view(kycView(wbankkyc, db.session, name="KYC(防洗錢)驗證紀錄"))
 
 @app.after_request
 def after_request(response):
