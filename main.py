@@ -139,6 +139,24 @@ class wbankkyc(db.Model):
     career = db.Column(db.String(120), nullable=False)
     username = db.Column(db.String(64), db.ForeignKey('wbankwallet.username'), nullable=False)
 
+class Users(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+
+# 定義 OAuth2 客戶端模型
+class Client(db.Model):
+    __tablename__ = "clients"
+    id = db.Column(db.String(40), primary_key=True)
+    secret = db.Column(db.String(40), nullable=False)
+    redirect_uris = db.Column(db.Text, nullable=False)
+
+# 定義 OAuth2 訪問令牌模型
+class Token(db.Model):
+    __tablename__ = "token"
+    id = db.Column(db.String(40), primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    client_id = db.Column(db.String(40), db.ForeignKey('client.id'))
+
 class IDBrandForm(BaseForm):
     username = StringField()
     balance = StringField()
@@ -299,6 +317,31 @@ paypalrestsdk.configure({
   'client_id': 'AZsh7JUNnTOO2eYLuwhfwMltWUUCcDS--qf2TzNVDCvlDK20lhbUrbRXYfZgfJEaDskmPi5nmssIQWme',
   'client_secret': 'ELlPg1idvYkNyzL1nBip5r2qL-fLBhHUpuz_aFQUD6OC7D1AlYj7qxPislk8_0igdkcp0afgPw2O5K0a'
 })
+
+# OAuth2 提供者的認證和授權
+@oauth.clientgetter
+def load_client(client_id):
+    return Client.query.filter_by(id=client_id).first()
+
+@oauth.grantgetter
+def load_grant(client_id, code):
+    return None  # 實現授權碼的加載邏輯
+
+@oauth.tokengetter
+def load_token(token=None, client_id=None):
+    return Token.query.filter_by(id=token).first()
+
+@oauth.tokensetter
+def save_token(token, client, user):
+    new_token = Token(id=token['access_token'], user_id=user.id, client_id=client.id)
+    db.session.add(new_token)
+    db.session.commit()
+
+@app.route('/wbank/oauth/token', methods=['POST'])
+@oauth.token_handler
+def access_token():
+    return None  # Flask-OAuthlib 會自動處理
+
 
 def hash_value(user):
   u = user.encode()
