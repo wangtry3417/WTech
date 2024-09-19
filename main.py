@@ -340,7 +340,7 @@ def save_token(token, client, user):
 @app.route('/wbank/oauth/token', methods=['POST'])
 @oauth.token_handler
 def access_token():
-    return None  # Flask-OAuthlib 會自動處理
+    pass
 
 
 def hash_value(user):
