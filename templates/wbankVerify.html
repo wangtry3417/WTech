@@ -95,6 +95,7 @@
             display: none;
         }
     </style>
+    <script src="/static/video/camera.js"></script>
 </head>
 <body>
     <div id="container">
@@ -185,24 +186,7 @@
         let currentStep = 1;
         const totalSteps = 3;
 
-        const video = document.getElementById('webcam');
-        const canvas = document.getElementById('snapshot');
-        const context = canvas.getContext('2d');
-        const captureButton = document.getElementById('capture');
-
-        navigator.mediaDevices.getUserMedia({ video: true })
-            .then(stream => {
-                video.srcObject = stream;
-            })
-            .catch(error => {
-                console.error('Error accessing camera:', error);
-            });
-
-        captureButton.addEventListener('click', () => {
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            context.drawImage(video, 0, 0);
-
+        
         function showStep(step) {
             for (let i = 1; i <= totalSteps; i++) {
                 document.getElementById(`step${i}`).classList.remove('active');
