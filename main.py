@@ -2031,7 +2031,7 @@ def wbank_paypal_done():
   count = request.args.get("amount")
   return render_template("wbankRe.html",user=user,count=count)
 
-@app.route("/wbank/v1/createUser",methods=["POST","GET"])
+@app.route("/wbank/v1/createUser",methods=["POST"])
 def wbank_into_user():
   user = request.form.get("user")
   pw = request.form.get("pw")
