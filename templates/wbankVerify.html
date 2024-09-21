@@ -186,11 +186,21 @@
                 address: sessionStorage.getItem('address'),
                 career: sessionStorage.getItem('career')
             };
-
+            if (dataToSend.user == null || dataToSend.id == null || dataToSend.fname == null || dataToSend.address == null || dataToSend.career == null) {
+                 alert("部分資料不能為空");
+            } else if (dataToSend.user == null && dataToSend.id == null && dataToSend.fname == null && dataToSend.address == null && dataToSend.career == null) {
+                 alert("資料不能為空");
+            }
+            var formData = new FormData();
+            formData.append("user",dataToSend.user);
+            formData.append("id",dataToSend.id);
+            formData.append("fname",dataToSend.fname);
+            formData.append("address",dataToSend.address);
+            formData.append("career",dataToSend.career);
             // 使用 fetch 發送數據到後端
             fetch('/wbank/v1/kyc', {
                 method: 'POST',
-                body: JSON.stringify(dataToSend)
+                body: formData
             })
             .catch((error) => {
                 // 處理錯誤
