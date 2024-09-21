@@ -85,6 +85,15 @@
             font-size: 16px;
             color: #555;
         }
+        video {
+            width: 100%;
+            max-width: 640px;
+            border: 2px solid #3498db;
+            border-radius: 10px;
+        }
+        canvas {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -132,13 +141,26 @@
                 </div>
             </form>
         </div>
-
         <div id="step3" class="step">
+            <form id="step3Form">
+                <div class="form-group">
+                    <label for="ID">身分證或證件照</label>
+                    <video id="webcam" autoplay></video>
+                    <button id="capture">拍照</button>
+                    <canvas id="snapshot"></canvas>
+                </div>
+                <div class="form-navigation">
+                    <button type="button" class="prev" onclick="prevStep()">上一步</button>
+                    <button type="button" id="nextBtn" onclick="nextStep()">下一步</button>
+                </div>
+            </form>
+        </div>
+        <div id="step4" class="step">
             <div id="lc" class="loading-container">
         <div class="loader"></div>
         <div class="loading-text">資料處理中，請稍候...</div>
     </div>
-            <form id="step3Form">
+            <form id="step4Form">
                 <div class="form-group">
                     <input type="checkbox" id="terms1" name="terms1" required>
                     <label for="terms1">本人已知悉泓財銀行WBank的相關條款。</label>
@@ -162,6 +184,24 @@
     <script>
         let currentStep = 1;
         const totalSteps = 3;
+
+        const video = document.getElementById('webcam');
+        const canvas = document.getElementById('snapshot');
+        const context = canvas.getContext('2d');
+        const captureButton = document.getElementById('capture');
+
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                video.srcObject = stream;
+            })
+            .catch(error => {
+                console.error('Error accessing camera:', error);
+            });
+
+        captureButton.addEventListener('click', () => {
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0);
 
         function showStep(step) {
             for (let i = 1; i <= totalSteps; i++) {
@@ -202,10 +242,10 @@
             }
         }
 
-        document.getElementById('step3Form').addEventListener('submit', function(event) {
+        document.getElementById('step4Form').addEventListener('submit', function(event) {
             event.preventDefault(); // 阻止默認提交行為
             saveStepData();
-            document.getElementById("step3Form").style.display = "none";
+            document.getElementById("step4Form").style.display = "none";
             document.getElementById("lc").style.display = "block";
 
             // 收集需要傳遞的數據
