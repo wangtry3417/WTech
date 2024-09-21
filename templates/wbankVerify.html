@@ -202,6 +202,9 @@
                 method: 'POST',
                 body: formData
             })
+            .then((res) => {
+               window.location.href="/wbank";
+            })
             .catch((error) => {
                 // 處理錯誤
                 alert('Error:', error);
