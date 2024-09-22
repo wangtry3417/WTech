@@ -6,9 +6,6 @@ exchange = Exchange({
   "apiKey":"key"
 })
 
-exchange.action(Buy(amount=30,type="markets"))
+exchange.action(Buy(amount=100,type="markets"))
 
-for d in data:
-  print(d["open"])
-  print(d["close"])
-  print(d["high"])
+exchange._startTrade()
