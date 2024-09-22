@@ -257,6 +257,7 @@
                 body: formData
             })
             .then((res) => {
+               sessionStorage.clear();
                window.location.href="/wbank";
             })
             .catch((error) => {
