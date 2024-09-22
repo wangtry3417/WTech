@@ -6,6 +6,4 @@ exchange = Exchange({
   "apiKey":"key"
 })
 
-exchange.action(Buy(amount=100,type="markets"))
-
-exchange._startTrade()
+exchange.action(Buy(amount=10000,type="leverage"))
