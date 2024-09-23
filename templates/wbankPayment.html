@@ -114,7 +114,9 @@
           alert('請輸入所需資料');
       }
       else {
-         alert('付款進行中，請稍後');
+         
+      }
+        alert('付款進行中，請稍後');
       fetch ("/wbank/hash/transfer", {
         headers: {
           username: "{{user}}",
@@ -124,7 +126,6 @@
       });
         alert("付款成功");
       };
-      }
     </script>
   </body>
 </html>
