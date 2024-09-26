@@ -162,7 +162,7 @@
             chart.render();
           })
           .catch(error => {
-            alert("載入圖表錯誤："+error);
+            alert("載入圖表錯誤："+error.message);
             console.error("Error fetching data from /wcoins/data:", error);
           });
       }, 1000);
