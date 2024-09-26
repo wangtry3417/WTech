@@ -11,7 +11,6 @@
       padding: 0;
       background-color: #f4f4f4;
     }
-
     .container {
       max-width: 960px;
       margin: 0 auto;
@@ -19,27 +18,19 @@
       background-color: #fff;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
-
     .header {
       text-align: center;
       padding: 20px 0;
     }
-
     .header h1 {
       margin: 0;
       font-size: 2.5rem;
     }
-
     .content {
       padding: 20px;
     }
-
-    .content h2 {
-      margin-top: 0;
-    }
-
     .nav {
-      background-color: #ddd; /* 灰色背景 */
+      background-color: #ddd;
       color: #fff;
       padding: 10px;
       text-align: center;
@@ -47,317 +38,197 @@
       bottom: 0;
       width: 100%;
     }
-
     .nav a {
       color: #fff;
       text-decoration: none;
       padding: 10px 20px;
       display: inline-block;
-      position: relative;
     }
-
     .nav a:hover {
       background-color: #bbb;
     }
-
     .active {
       background-color: #bbb;
     }
-
-    .nav a img {
-      width: 20px;
-      height: 20px;
-      vertical-align: middle;
-      margin-right: 5px;
-    }
-
     .qrcode {
       text-align: center;
     }
-
     .qrcode img {
       max-width: 200px;
     }
     .flashes {
-  list-style-type: none;
-  padding: 0;
-}
-
-.flashes li {
-  padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 5px;
-  font-weight: bold;
-}
-
-.flashes li.success {
-  background-color: #d4edda;
-  color: #155724;
-}
-
-.flashes li.error {
-  background-color: #f8d7da;
-  color: #721c24;
-}
-
-.flashes li.info {
-  background-color: #cce5ff;
-  color: #004085;
-}
-#moneyScreen {
-  display: none;
-      position: fixed;
-      width: 300px;
-      height: 200px;
-      top: 50%;
-      left: 50%;
-      margin-top: -100px;
-      margin-left: -150px;
-      background-color: #f1f1f1;
-      border: 1px solid #888;
-      padding: 20px;
-}
-#settingScreen {
-     display: none;
-      position: fixed;
-      width: 300px;
-      height: 200px;
-      top: 50%;
-      left: 50%;
-      margin-top: -100px;
-      margin-left: -150px;
-      background-color: #f1f1f1;
-      border: 1px solid #888;
-      padding: 20px;
+      list-style-type: none;
+      padding: 0;
+    }
+    .flashes li {
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+    .flashes li.success { background-color: #d4edda; color: #155724; }
+    .flashes li.error { background-color: #f8d7da; color: #721c24; }
+    .flashes li.info { background-color: #cce5ff; color: #004085; }
+    #qrcode-page {
+      display: none;
     }
   </style>
-    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
-    <script src="https://cdn.canvasjs.com/ga/canvasjs.stock.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js"></script>
+  <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js"></script>
 </head>
 <body>
   <div class="container">
     <div class="header">
       {% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-    <ul class=flashes>
-    {% for category, message in messages %}
-      <li class="{{ category }}">{{ message }}</li>
-    {% endfor %}
-    </ul>
-  {% endif %}
-{% endwith %}
-      <h2>你好 {{user}}</h2>
+      {% if messages %}
+        <ul class="flashes">
+        {% for category, message in messages %}
+          <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+      {% endwith %}
+      <h2>你好 {{ user }}</h2>
     </div>
     <div class="content" id="content">
-      <!-- 預設顯示首頁內容 -->
-      <p>你的總資產: WTC${{balance}}</p>
+      <p>你的總資產: WTC${{ balance }}</p>
       <br>
       <div id="candleChart" style="width:100%; height:300px;"></div>
     </div>
     <div class="nav">
-      <a href="#" class="active" data-target="home">
-        <img src="https://img.icons8.com/ios-filled/50/000000/home.png" alt="首頁圖標">
-        首頁
-      </a>
-      <a href="#" data-target="wpay">
-        泓之付 WPay
-      </a>
-      <a href="#" data-target="qrcode">
-        <img src="https://img.icons8.com/ios-filled/50/000000/qr-code.png" alt="錢包二維碼圖標">
-        錢包二維碼
-      </a>
-      <a href="#" data-target="my">
-        <img src="https://img.icons8.com/ios-filled/50/000000/user.png" alt="我的圖標">
-        我的
-      </a>
+      <a href="#" class="active" data-target="home">首頁</a>
+      <a href="#" data-target="wpay">泓之付 WPay</a>
+      <a href="#" data-target="qrcode">錢包二維碼</a>
+      <a href="#" data-target="my">我的</a>
     </div>
   </div>
 
-  <div id="qrcode-page" class="container" style="display: none;">
-    <div class="qrcode">
-      
-    </div>
+  <div id="qrcode-page" class="container">
+    <div class="qrcode"></div>
   </div>
 
   <script>
     const navLinks = document.querySelectorAll('.nav a');
     const content = document.getElementById('content');
     const qrcodePage = document.getElementById('qrcode-page');
-    const balance = '{{ balance }}';
+    const balance = {{ balance }};
     const img = '{{ img }}';
     const socket = io();
-    var dataPoints1 = [], dataPoints2 = [];
-    var chart;
-    document.getElementById("viewOrder").addEventListener("click",() => {
-        window.location.href="/wbank/order/view?user=" + "{{ user }}";
-      });
+    let dataPoints1 = [], dataPoints2 = [];
+    let chart;
+
     function initializeChart() {
-      chart = new CanvasJS.StockChart("candleChart",{
+      chart = new CanvasJS.StockChart("candleChart", {
         theme: "light2",
         exportEnabled: true,
-        title:{
-          text:"WCoins Market"
-        },
+        title: { text: "WCoins Market" },
         charts: [{
-          axisY: {
-            prefix: "WTC$"
-          },
-          data: [{
-            type: "candlestick",
-            dataPoints : dataPoints1
-          }]
+          axisY: { prefix: "WTC$" },
+          data: [{ type: "candlestick", dataPoints: dataPoints1 }]
         }],
         navigator: {
-          data: [{
-            color: "#6D78AD",
-            dataPoints: dataPoints2
-          }]
+          data: [{ color: "#6D78AD", dataPoints: dataPoints2 }]
         }
       });
-      setInterval(()=> {
+      setInterval(() => {
         $.getJSON("/wcoins/data", function(data) {
           dataPoints1.length = 0;
           dataPoints2.length = 0;
-          for(var i = 0; i < data.length; i++){
-            dataPoints1.push({x: new Date(data[i].date), y: [Number(data[i].open), Number(data[i].high), Number(data[i].low), Number(data[i].close)]});
-            dataPoints2.push({x: new Date(data[i].date), y: Number(data[i].close)});
-          }
+          data.forEach(item => {
+            dataPoints1.push({
+              x: new Date(item.date),
+              y: [Number(item.open), Number(item.high), Number(item.low), Number(item.close)]
+            });
+            dataPoints2.push({ x: new Date(item.date), y: Number(item.close) });
+          });
           chart.render();
+        }).fail(() => {
+          console.error("Error fetching data from /wcoins/data");
         });
-      },1000);
+      }, 1000);
     }
 
-    window.addEventListener("load",() => {
-      // 在網頁載入時初始化圖表
-      initializeChart();   
-      socket.on("connect",() => {
-        console.log("Connected socketIO server");
+    window.addEventListener("load", () => {
+      initializeChart();
+      socket.on("connect", () => {
+        console.log("Connected to socketIO server");
       });
 
-      socket.on("UpdateProfit",(data) => {
-        // 更新 HTML 元素
-        document.querySelector('p:first-of-type').innerHTML = `你的總資產: WTC$${data.amount} `;
+      socket.on("UpdateProfit", (data) => {
+        document.querySelector('p:first-of-type').innerHTML = `你的總資產: WTC$${data.amount}`;
       });
 
       if (balance > 0) {
         setInterval(() => {
-          socket.emit("trade",{username: '{{user}}',balance: balance});
-        },1000);
+          socket.emit("trade", { username: '{{ user }}', balance: balance });
+        }, 1000);
       }
 
       navLinks.forEach(link => {
         link.addEventListener('click', (event) => {
           event.preventDefault(); // 阻止預設行為
-
-          // 移除所有連結的 active 類別
           navLinks.forEach(l => l.classList.remove('active'));
-
-          // 將點擊的連結設為 active
           link.classList.add('active');
-
-          // 取得目標介面
           const target = link.dataset.target;
 
-          // 顯示對應的介面
           switch (target) {
             case 'home':
-              content.innerHTML = `
-                <p>你的總資產: WTC$ ${balance}</p>
-                <br>
-                <div id="candleChart" style="width:100%; height:300px;"></div>
-              `;
-              // 切換到首頁時重新渲染圖表
+              content.innerHTML = `<p>你的總資產: WTC$ ${balance}</p><br><div id="candleChart" style="width:100%; height:300px;"></div>`;
               initializeChart();
               qrcodePage.style.display = 'none';
               break;
             case 'wpay':
               content.innerHTML = `
-                <br>
-        <br>
-        <br>
-        <br>
-    <h1>NFC無感支付</h1>
-    <p id="user-info">等待NFC裝置感應...</p>
-    <p id="payment-result"></p>
+                <h1>NFC無感支付</h1>
+                <p id="user-info">等待NFC裝置感應...</p>
+                <p id="payment-result"></p>
               `;
-              route = prompt("請選擇金流閘道： \n 1:泓財內部系統（本行) \n 2:泓財（本行)");
-        amount = prompt("請輸入應付金額：");
-        if (route == 1) {
-
-        socket.on('connect', function() {
-            console.log('Connected to server');
-        });
-
-        socket.on('user_info', function(data) {
-            document.getElementById('user-info').textContent = '用戶: ' + data.username;
-        });
-
-        socket.on('payment_result', function(data) {
-            if (data.success) {
-                document.getElementById('payment-result').textContent = '支付成功!';
-            } else {
-                document.getElementById('payment-result').textContent = '支付失敗,請重試。';
-            }
-        });
-
-        // 當NFC裝置感應到卡片時,發送 'nfc_detected' 事件
-        // 並傳遞收款帳戶、金額和用戶名
-        socket.emit('nfc_detected', {
-            username: '{{ user }}',
-            reviewer: 'wbank',
-            amount: amount
-        });
-        } else if (route == 2) {
-            re = prompt("請輸入收款人：");
-
-        socket.on('user_info', function(data) {
-            document.getElementById('user-info').textContent = '用戶: ' + data.username;
-        });
-
-        socket.on('payment_result', function(data) {
-            if (data.success) {
-                document.getElementById('payment-result').textContent = '支付成功!';
-            } else {
-                document.getElementById('payment-result').textContent = '支付失敗,請重試。';
-            }
-        });
-
-        // 當NFC裝置感應到卡片時,發送 'nfc_detected' 事件
-        // 並傳遞收款帳戶、金額和用戶名
-        socket.emit('nfc_detected', {
-            username: '{{ user }}',
-            reviewer: re,
-            amount: amount
-        });
-        } else {
-            alert("輸入有誤");
-        }
+              handlePayment();
               qrcodePage.style.display = 'none';
               break;
             case 'qrcode':
-              content.innerHTML = `
-                  <button onclick="window.location.href='/wbank/client';">更新</button>
-                  <br>
-                  <h2>下方為你的付款或收款碼:</h2>
-         <img src="data:image/svg+xml;base64,${img}">
-              `;
+              content.innerHTML = `<button onclick="window.location.href='/wbank/client';">更新</button><h2>下方為你的付款或收款碼:</h2><img src="data:image/svg+xml;base64,${img}">`;
               qrcodePage.style.display = 'block';
               break;
-            case 'my':   
-              content.innerHTML = `
-                <h2>我的</h2>
-                <p>餘額: WTC$ ${balance}</p>
-                <br>
-                <button onclick="window.location.href='/wbank/logout';">登出</button>
-              `;
+            case 'my':
+              content.innerHTML = `<h2>我的</h2><p>餘額: WTC$ ${balance}</p><button onclick="window.location.href='/wbank/logout';">登出</button>`;
               qrcodePage.style.display = 'none';
               break;
-          };
+          }
         });
       });
     });
+
+    function handlePayment() {
+      const route = prompt("請選擇金流閘道： \n 1:泓財內部系統（本行) \n 2:泓財（本行)");
+      const amount = prompt("請輸入應付金額：");
+
+      if (route == 1) {
+        initiatePayment({ reviewer: 'wbank', amount });
+      } else if (route == 2) {
+        const reviewer = prompt("請輸入收款人：");
+        initiatePayment({ reviewer, amount });
+      } else {
+        alert("輸入有誤");
+      }
+    }
+
+    function initiatePayment({ reviewer, amount }) {
+      socket.on('user_info', (data) => {
+        document.getElementById('user-info').textContent = '用戶: ' + data.username;
+      });
+
+      socket.on('payment_result', (data) => {
+        document.getElementById('payment-result').textContent = data.success ? '支付成功!' : '支付失敗,請重試。';
+      });
+
+      socket.emit('nfc_detected', {
+        username: '{{ user }}',
+        reviewer,
+        amount
+      });
+    }
   </script>
 </body>
 </html>
