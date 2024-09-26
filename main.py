@@ -11,7 +11,7 @@ import random
 import smtplib
 import stripe
 import datetime
-import requests,socket
+import requests,socket,ssl
 from email.mime.text import MIMEText
 import psycopg2
 from psycopg2.pool import ThreadedConnectionPool
