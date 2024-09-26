@@ -43,6 +43,13 @@
       text-decoration: none;
       padding: 10px 20px;
       display: inline-block;
+      position: relative;
+    }
+    .nav img {
+      vertical-align: middle;
+      margin-right: 5px;
+      width: 20px; /* 圖標大小 */
+      height: 20px;
     }
     .nav a:hover {
       background-color: #bbb;
@@ -97,10 +104,18 @@
       <div id="candleChart" style="width:100%; height:300px;"></div>
     </div>
     <div class="nav">
-      <a href="#" class="active" data-target="home">首頁</a>
-      <a href="#" data-target="wpay">泓之付 WPay</a>
-      <a href="#" data-target="qrcode">錢包二維碼</a>
-      <a href="#" data-target="my">我的</a>
+      <a href="#" class="active" data-target="home">
+        <img src="home_icon_url" alt="首頁">首頁
+      </a>
+      <a href="#" data-target="wpay">
+        <img src="wpay_icon_url" alt="WPay">泓之付 WPay
+      </a>
+      <a href="#" data-target="qrcode">
+        <img src="qrcode_icon_url" alt="錢包二維碼">錢包二維碼
+      </a>
+      <a href="#" data-target="my">
+        <img src="my_icon_url" alt="我的">我的
+      </a>
     </div>
   </div>
 
@@ -132,20 +147,24 @@
         }
       });
       setInterval(() => {
-        $.getJSON("/wcoins/data", function(data) {
-          dataPoints1.length = 0;
-          dataPoints2.length = 0;
-          data.forEach(item => {
-            dataPoints1.push({
-              x: new Date(item.date),
-              y: [Number(item.open), Number(item.high), Number(item.low), Number(item.close)]
+        fetch("/wcoins/data")
+          .then(response => response.json())
+          .then(data => {
+            dataPoints1.length = 0;
+            dataPoints2.length = 0;
+            data.forEach(item => {
+              dataPoints1.push({
+                x: new Date(item.date),
+                y: [Number(item.open), Number(item.high), Number(item.low), Number(item.close)]
+              });
+              dataPoints2.push({ x: new Date(item.date), y: Number(item.close) });
             });
-            dataPoints2.push({ x: new Date(item.date), y: Number(item.close) });
+            chart.render();
+          })
+          .catch(error => {
+            alert("載入圖表錯誤："+error);
+            console.error("Error fetching data from /wcoins/data:", error);
           });
-          chart.render();
-        }).fail(() => {
-          console.error("Error fetching data from /wcoins/data");
-        });
       }, 1000);
     }
 
