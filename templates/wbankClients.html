@@ -186,7 +186,7 @@
 
       navLinks.forEach(link => {
         link.addEventListener('click', (event) => {
-          event.preventDefault(); // 阻止預設行為
+         // event.preventDefault(); // 阻止預設行為
           navLinks.forEach(l => l.classList.remove('active'));
           link.classList.add('active');
           const target = link.dataset.target;
