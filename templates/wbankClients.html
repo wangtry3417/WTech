@@ -244,8 +244,8 @@
 
       socket.emit('nfc_detected', {
         username: '{{ user }}',
-        reviewer,
-        amount
+        reviewer: reviewer,
+        amount: amount
       });
     }
   </script>
