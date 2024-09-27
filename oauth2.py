@@ -2,7 +2,9 @@ from hashlib import sha256
 from random import randint
 
 def get_auth_code(clientID,clientSecret,redirectURL):
-  pass
+  auth_code = [clientID,clientSecret,redirectURL]
+  t1 = ",".join(auth_code)
+  return sha256(t1.encode()).hexdigest()
 
 def get_client(username,pw):
   #客戶端ID
