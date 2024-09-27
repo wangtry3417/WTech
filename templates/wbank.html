@@ -127,7 +127,7 @@
     <script>
       const checkSession = () => {
          if (sessionStorage.getItem("user_id") !== null) {
-           document.getElementById("step4Form").style.display = "none";
+           
             document.getElementById("lc").style.display = "block";
             window.location.href="/wbank/auth/login";
          }
