@@ -125,10 +125,21 @@
     <br>
     <br>
     <script>
+      var username = "{{ session['username'] }}";
+      var pw = "{{ session['pw'] }}
       const checkSession = () => {
-         if (sessionStorage.getItem("username") !== null) {
+         if (username !== null) {
               document.getElementById("lc").style.display = "block";
-              window.location.href="/wbank/client";
+              var formData = new FormData();
+              formData.append("user",username);
+              formData.append("pw",pw);
+              fetch("/wbank/auth/login",{
+                method: "POST",
+                body: formData
+              })
+              .catch(error => {
+                 alert(error);
+              });
          }
       };
       window.onload = checkSession;
