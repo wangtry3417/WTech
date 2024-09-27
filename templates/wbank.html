@@ -65,6 +65,30 @@
   background-color: #cce5ff;
   color: #004085;
 }
+  .loading-container {
+            text-align: center;
+            background-color: rgb(255,255,255);
+            border: 5px soilc rgb(0,0,0);
+            display: none;
+        }
+        .loader {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .loading-text {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #555;
+        }
     </style>
   </head>
   <body>
@@ -93,8 +117,22 @@
            <br>
            沒有帳號？ <a href="/wbank/new_client">注册帳號</a>
       </form>
+      <div id="lc" class="loading-container">
+        <div class="loader"></div>
+        <div class="loading-text">自動登入中...</div>
+    </div>
     </div>
     <br>
     <br>
+    <script>
+      const checkSession = () => {
+         if (sessionStorage.getItem !== null) {
+           document.getElementById("step4Form").style.display = "none";
+            document.getElementById("lc").style.display = "block";
+            window.location.href="/wbank/auth/login";
+         }
+      };
+      window.onload = checkSession;
+    </script>
   </body>
 </html>
