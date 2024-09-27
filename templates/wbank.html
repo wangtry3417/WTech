@@ -137,6 +137,9 @@
                 method: "POST",
                 body: formData
               })
+              .then (res => {
+                 window.location.href=res.url;
+              })
               .catch(error => {
                  alert(error);
               });
