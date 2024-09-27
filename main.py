@@ -2146,7 +2146,7 @@ def wbank_client():
             qr.svg(temp, scale=8)
             qr_bytes = temp.getvalue()
             qr_b64 = base64.b64encode(qr_bytes).decode('ascii')
-            return render_template("wbankClients.html", user=user, balance=balance, HK_Value=HK_Value, tw_value=tw_value, US_value=US_value, img=qr_b64)
+            return render_template("wbankClient.html", user=user, balance=balance, HK_Value=HK_Value, tw_value=tw_value, US_value=US_value, img=qr_b64)
     else:
         error_message = "找不到該用戶"
     
