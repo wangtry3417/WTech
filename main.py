@@ -2115,6 +2115,8 @@ def wbank_auth_client():
         user = wbankwallet.query.filter_by(username=username).first()
         if user and user.password == password:
             login_user(user)
+            session["username"] = username
+            session["pw"] = password
             flash('登入成功.', 'success')
             return redirect(url_for('wbank_client'))
         else:
