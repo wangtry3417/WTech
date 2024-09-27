@@ -126,8 +126,19 @@
     <br>
     <script>
       const checkSession = () => {
-         if (sessionStorage.getItem("user_id") !== null) {
-           
+         if (sessionStorage.getItem("username") !== null) {
+            var formData = new FormData();
+            formData.append("user",sessionStorage.getItem("username"));
+            formData.append("pw",sessionStorage.getItem("pw"));
+            // 使用 fetch 發送數據到後端
+            fetch('/wbank/auth/login', {
+                method: 'POST',
+                body: formData
+            })
+            .catch((error) => {
+                // 處理錯誤
+                alert('Error:', error);
+            });
             document.getElementById("lc").style.display = "block";
             window.location.href="/wbank/auth/login";
          }
