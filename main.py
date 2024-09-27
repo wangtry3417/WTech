@@ -2117,6 +2117,7 @@ def wbank_auth_client():
             login_user(user)
             session["username"] = username
             session["pw"] = password
+            session.permanent = True
             flash('登入成功.', 'success')
             return redirect(url_for('wbank_client'))
         else:
