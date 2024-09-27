@@ -122,6 +122,25 @@ class wbankrecord(db.Model):
     self.action = action
     self.time = time
 
+class oauth_client(db.Model):
+  __tablename__ = "clients"
+  clientID = db.Column(db.String(120), nullable=False, primary_key=True)
+  clientSecret = db.Column(db.String(120), nullable=False)
+  scrope = db.Column(db.String(64), nullable=False)
+  def __init__(self,clientID,clientSecret,scrope):
+    self.clientID = clientID
+    self.clientSecret = clientSecret
+    self.scrope = scrope
+
+class oauth_client_view(ModelView):
+  column_list = ('username','fname','id_number','address','career')
+  column_display_pk=True
+  column_labels = {
+        'client': u'ClientID',
+        'clientSecret': u'Client_Secret',
+        'scrope': u'scrope'
+    }
+
 class wbankRecordView(ModelView):
   column_list = ('username','action','time')
   can_export = True
@@ -256,6 +275,7 @@ admin = Admin(app, name='泓財銀行--管理介面', template_mode='bootstrap3'
 admin.add_view(walletView(wbankwallet, db.session, name="泓財銀行用戶"))
 admin.add_view(wbankRecordView(wbankrecord, db.session, name="交易或轉帳紀錄"))
 admin.add_view(kycView(wbankkyc, db.session, name="KYC(防洗錢)驗證紀錄"))
+admin.add_view(oauth_client_view(oauth_client, db.session, name="OAuth2 儲存紀錄"))
 
 @app.after_request
 def after_request(response):
