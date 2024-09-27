@@ -109,7 +109,7 @@
 {% endwith %}
       <br>
        <h2>wcoins官方認可交易平台-安全登入</h2>
-       <form action="/wbank/auth/login" method="post">
+       <form id="login-stage" action="/wbank/auth/login" method="post">
            <input type="text" name="user" placeholder="username">
            <input type="password" name="pw" placeholder="password">
            <br>
@@ -128,7 +128,7 @@
       var username = "{{ session['username'] }}";
       var pw = "{{ session['pw'] }}";
       const checkSession = () => {
-         if (username !== null) {
+         if (username !== null && username !== "") {
               document.getElementById("lc").style.display = "block";
               var formData = new FormData();
               formData.append("user",username);
