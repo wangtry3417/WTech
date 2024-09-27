@@ -2123,6 +2123,8 @@ def wbank_kyc_verify():
 @login_required
 def logout():
     logout_user()
+    session["username"] = False
+    session["pw"] = False
     flash('你已經登出.', 'success')
     return redirect('/wbank')
 
