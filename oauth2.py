@@ -1,6 +1,10 @@
 from hashlib import sha256
 from random import randint
 
+auth_url_endpoints = [
+  "/wbank/hash/transfer"
+]
+
 def get_auth_code(clientID,clientSecret,redirectURL):
   auth_code = [clientID,clientSecret,redirectURL]
   t1 = ",".join(auth_code)
