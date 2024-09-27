@@ -133,10 +133,10 @@ class oauth_client(db.Model):
     self.scrope = scrope
 
 class oauth_client_view(ModelView):
-  column_list = ('username','fname','id_number','address','career')
+  column_list = ('clientID','clientSecret','scrope')
   column_display_pk=True
   column_labels = {
-        'client': u'ClientID',
+        'clientID': u'ClientID',
         'clientSecret': u'Client_Secret',
         'scrope': u'scrope'
     }
