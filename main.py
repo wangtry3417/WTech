@@ -2134,12 +2134,15 @@ def wbank_auth_client():
         password = request.form['pw']
         user = wbankwallet.query.filter_by(username=username).first()
         if user and user.password == password:
-            login_user(user)
-            session["username"] = username
-            session["pw"] = password
-            session.permanent = True
-            flash('登入成功.', 'success')
-            return redirect(url_for('wbank_client'))
+            if user.sub == None:
+              login_user(user)
+              session["username"] = username
+              session["pw"] = password
+              session.permanent = True
+              flash('登入成功.', 'success')
+              return redirect(url_for('wbank_client'))
+            else:
+              flash(user.sub,'danger')
         else:
             flash('無效的用戶名或密碼.', 'danger')
     return render_template('wbank.html')
