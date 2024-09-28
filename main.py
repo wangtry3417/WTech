@@ -2134,7 +2134,7 @@ def wbank_auth_client():
         password = request.form['pw']
         user = wbankwallet.query.filter_by(username=username).first()
         if user and user.password == password:
-            if user.sub == None or user.sub = "":
+            if user.sub == None or user.sub == "":
               login_user(user)
               session["username"] = username
               session["pw"] = password
