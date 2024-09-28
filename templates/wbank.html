@@ -138,7 +138,12 @@
                 body: formData
               })
               .then (res => {
+                 if (res.status == 302) {
                  window.location.href=res.url;
+                 document.getElementById("lc").style.display = "none";
+                 } else {
+                   alert(res.text());
+                 }
               })
               .catch(error => {
                  alert(error);
