@@ -142,9 +142,12 @@
                  window.location.href=res.url;
                  document.getElementById("lc").style.display = "none";
                  } else {
-                   alert(res.text());
+                   return res.text();
                  }
               })
+              .then(text => {
+                 alert(text);
+              });
               .catch(error => {
                  alert(error);
               });
