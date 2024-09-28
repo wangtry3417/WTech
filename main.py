@@ -567,16 +567,14 @@ def handle_delete_account(data):
 @socketio.on("removeAccount")
 def remove_wbank_wcoins_acc(data):
   user = data["username"]
-  cur = conn.cursor()
-  cur.execute(f"SELECT balance FROM wbankwallet where username='{user}'")
-  rows = cur.fetchall()
-  for row in rows:
-    if int(row[0]) != 0:
-      emit("errorMsg","你有餘額 請清除餘額")
-    else:
-      cur = conn.cursor()
-      cur.execute(f"DELETE FROM wbankwallet where username='{user}'")
-      conn.commit()
+  users = wbankwallet.query.filter_by(username=user).first()
+  if int(users.balance) != 0:
+    emit("errorMsg","你有餘額 請清除餘額")
+  else:
+    db.session.delete(users)
+    db.session.commit()
+    emit("errorMsg","已成功刪除帳戶。")
+    return redirect("/wbank/logout")
 
 @socketio.on("trade")
 def trade_wcoins(data):
