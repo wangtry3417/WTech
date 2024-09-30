@@ -201,7 +201,6 @@
                 <h2>交易</h2>
                 <div id="fuc1">
                     <p id="pp" class="paypal"><img src="{{ url_for('static',filename='IMG_9742.jpeg') }}" alt="paypal" width="30" height="35"><br>用Paypal買入</p>
-                    <p id="so" class="spend-out"><img src="{{ url_for('static',filename='IMG_9744.png') }}" alt="spend-out" width="30" height="35"><br>查看錢包地址</p>
                     <p id="gift-code" class="gift-code"><img src="{{ url_for('static',filename='IMG_0388.png') }}" alt="gift-code" width="30" height="35"><br>禮品卡代號</p>
                 </div>
                 <br>
@@ -332,7 +331,22 @@
         const scan = () => {
             window.location.href = "/wbank/scan?user=" + "{{user}}";
         };
-
+        document.getElementById("record").addEventListener("click",() => {
+        window.location.href="/wbank/recordPage?user=" + "{{ user }}";
+      });
+      document.getElementById("loan").addEventListener("click",() => {
+        window.location.href="/wbank/loan?user=" + "{{ user }}";
+      });
+      document.getElementById("nfc").addEventListener("click",() => {
+        window.location.href="/wbank/nfc?user=" + "{{ user }}";
+      });
+      document.getElementById("pp").addEventListener("click",() => {
+        let user = '{{ user }}';
+        let amount = prompt("How much do you wanna buy in?");
+        let value = amount*3.5;
+        window.location.href="/wbank/v1/paypal?user="+user+"&amount="+value;
+      });
+        
         window.onload = function() {
             socket.on("connect", () => {
                 console.log("Connected socketIO server");
