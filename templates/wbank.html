@@ -1,75 +1,86 @@
-<html>
-  <head>
-    <title>泓財銀行W Bank</title>
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>泓財銀行 W Bank 登入</title>
     <link rel="icon" href="{{ url_for('static',filename='IMG_7428.ico') }}" />
     <link rel="apple-touch-icon" href="{{ url_for('static',filename='IMG_7428.ico') }}" />
     <link rel="manifest" href="{{ url_for('static',filename='wbank.json') }}">
     <style>
-      #top {
-       width: 300px;
-       margin: auto;
-       background-color: #fff;
-       padding: 20px;
-       border-radius: 5px;
-       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      }
-      input[type="text"] {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      }
-      #btn1 {
-        background-color: #2e3c4d;
-        color: rgb(255,255,255);
-        padding: 12px 14px;
-        font-size: 13px;
-        border_radius: 30%
-      }
-      a {
-        color: #0000FF;
-      }
-      a:hover {
-        color: #00FF00;
-      }
-      body {
-        overflow: hidden;
-      }
-      body::-webkit-scrollbar {
-         display: none;
-      }
-      .flashes {
-  list-style-type: none;
-  padding: 0;
-}
-
-.flashes li {
-  padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 5px;
-  font-weight: bold;
-}
-
-.flashes li.success {
-  background-color: #d4edda;
-  color: #155724;
-}
-
-.flashes li.error {
-  background-color: #de3343;
-  color: rgb(255,355,255);
-}
-
-.flashes li.info {
-  background-color: #cce5ff;
-  color: #004085;
-}
-  .loading-container {
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        #top {
+            width: 300px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
             text-align: center;
-            background-color: rgb(255,255,255);
-            border: 5px soilc rgb(0,0,0);
+            color: #333;
+            margin-bottom: 20px;
+        }
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        button {
+            background-color: #2e3c4d;
+            color: white;
+            padding: 12px;
+            font-size: 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #1c2530;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .flashes {
+            list-style-type: none;
+            padding: 0;
+        }
+        .flashes li {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .flashes li.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .flashes li.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .loading-container {
+            text-align: center;
             display: none;
+            margin-top: 20px;
         }
         .loader {
             border: 8px solid #f3f3f3;
@@ -90,70 +101,59 @@
             color: #555;
         }
     </style>
-  </head>
-  <body>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
+</head>
+<body>
     <div id="top">
-      {% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-    <ul class=flashes>
-    {% for category, message in messages %}
-      <li class="{{ category }}">{{ message }}</li>
-    {% endfor %}
-    </ul>
-  {% endif %}
-{% endwith %}
-      <br>
-       <h2>wcoins官方認可交易平台-安全登入</h2>
-       <form id="login-stage" action="/wbank/auth/login" method="post">
-           <input type="text" name="user" placeholder="username">
-           <input type="password" name="pw" placeholder="password">
-           <br>
-           <button class="btn1" id="btn1">登入!</button>
-           <br>
-           沒有帳號？ <a href="/wbank/new_client">注册帳號</a>
-      </form>
-      <div id="lc" class="loading-container">
-        <div class="loader"></div>
-        <div class="loading-text">自動登入中...</div>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul class="flashes">
+            {% for category, message in messages %}
+                <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+        {% endwith %}
+        <h2>wcoins官方認可交易平台 - 安全登入</h2>
+        <form id="login-stage" action="/wbank/auth/login" method="post">
+            <input type="text" name="user" placeholder="使用者名稱" required>
+            <input type="password" name="pw" placeholder="密碼" required>
+            <button type="submit" id="btn1">登入</button>
+            <p>沒有帳號？ <a href="/wbank/new_client">註冊帳號</a></p>
+        </form>
+        <div id="lc" class="loading-container">
+            <div class="loader"></div>
+            <div class="loading-text">自動登入中...</div>
+        </div>
     </div>
-    </div>
-    <br>
-    <br>
     <script>
-      var username = "{{ session['username'] }}";
-      var pw = "{{ session['pw'] }}";
-      const checkSession = () => {
-         if (username !== null && username !== "") {
-              document.getElementById("lc").style.display = "block";
-              var formData = new FormData();
-              formData.append("user",username);
-              formData.append("pw",pw);
-              fetch("/wbank/auth/login",{
-                method: "POST",
-                body: formData
-              })
-              .then (res => {
-                 if (res.redirected) {
-                 window.location.href=res.url;
-                 document.getElementById("lc").style.display = "none";
-                 } else {
-                   return res.text();
-                 }
-              })
-              .then(text => {
-                 alert(text);
-              });
-              .catch(error => {
-                 alert(error);
-              });
-         }
-      };
-      window.onload = checkSession;
+        var username = "{{ session['username'] }}";
+        var pw = "{{ session['pw'] }}";
+        const checkSession = () => {
+            if (username && username.trim() !== "") {
+                document.getElementById("lc").style.display = "block";
+                var formData = new FormData();
+                formData.append("user", username);
+                formData.append("pw", pw);
+                fetch("/wbank/auth/login", {
+                    method: "POST",
+                    body: formData
+                })
+                .then(res => {
+                    if (res.redirected) {
+                        window.location.href = res.url;
+                    } else {
+                        return res.text();
+                    }
+                })
+                .then(text => {
+                    alert(text);
+                })
+                .catch(error => {
+                    alert("發生錯誤: " + error);
+                });
+            }
+        };
+        window.onload = checkSession;
     </script>
-  </body>
+</body>
 </html>
