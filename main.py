@@ -35,6 +35,7 @@ from flask_oauthlib.provider import OAuth2Provider
 from wtforms.validators import DataRequired
 from wtforms import StringField
 from flask_admin.form import BaseForm
+from flask_qrcode import QRcode
 import json,sys,threading
 from DDos import checkUrl, DDos
 #from nltk.stem import WordNetLemmatizer
@@ -68,6 +69,8 @@ app.config['OAUTH_CREDENTIALS'] = {
     'client_id': 'WC00001',  # 你的 OAuth 應用程式 ID
     'client_secret': 'Wt0001'  # 你的 OAuth 應用程式密鑰
 }
+
+QRcode(app)
 
 oauth = OAuth2Provider(app)
 
