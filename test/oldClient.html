@@ -1,0 +1,567 @@
+<html>
+  <head>
+    <title>泓財WBank -- {{user}} 頁面</title>
+    <link rel="manifest" href="{{ url_for('static',filename='wbank.json') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='menu.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js"></script>
+    <style>
+      #top {
+       width: 2000px;
+       margin: auto;
+       background-color: #fff;
+       padding: 20px;
+       border-radius: 5px;
+       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      #scan {
+         width: 200px;
+       margin: auto;
+       background-color: #fff;
+       padding: 20px;
+       border-radius: 5px;
+       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      }
+      .btn1 {
+        background-color: rgb(255,255,255);
+        color: rgb(0,0,0);
+        padding: 12px 14px;
+        font-size: 13px;
+      }
+      #warn {
+       width: 298px;
+       margin: auto;
+       background-color: #fff;
+       padding: 20px;
+       border: 3px solid black;
+       animation: wn 5s linear 2s infinite alternate;
+      }
+      @keyframes wn {
+        0% {
+          border: 3px solid #FF0000;
+        }
+        100% {
+          border: 3px solid black;
+        }
+      }
+      #lineChart {
+         width: 100%;
+         height:100%;
+         justify-content: center;
+         align-items: center;
+      }
+      .footer {
+   position: fixed;
+   left: 0;
+   bottom: 0;
+   width: 100%;
+   background-color: #d3d3d3;
+   color: black;
+   text-align: center;
+   display: flex;
+}
+  #fuc1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .paypal {
+        background-color: rgb(255,255,255);
+        color: rgb(0,0,0);
+        padding: 12px 14px;
+        font-size: 13px;
+        text-align: center;
+  }
+  .atm {
+        background-color: rgb(255,255,255);
+        color: rgb(0,0,0);
+        padding: 12px 14px;
+        font-size: 13px;
+        text-align: center;
+  }
+  .spend-out {
+        background-color: rgb(255,255,255);
+        color: rgb(0,0,0);
+        padding: 12px 14px;
+        font-size: 13px;
+        text-align: center;
+  }
+  .record {
+     background-color: rgb(255,255,255);
+        color: rgb(0,0,0);
+        padding: 12px 14px;
+        font-size: 13px;
+        text-align: center;
+  }
+  .fps {
+    background-color: rgb(255,255,255);
+        color: rgb(0,0,0);
+        padding: 12px 14px;
+        font-size: 13px;
+        text-align: center;
+  }
+  .loan {
+    background-color: rgb(255,255,255);
+        color: rgb(0,0,0);
+        padding: 12px 14px;
+        font-size: 13px;
+        text-align: center;
+  }
+  .nfc {
+   background-color: rgb(255,255,255);
+        color: rgb(0,0,0);
+        padding: 12px 14px;
+        font-size: 13px;
+        text-align: center;
+  }
+    .demo {
+         text-align: center;
+         font-family: Arial, sans-serif;
+    }
+      .flashes {
+  list-style-type: none;
+  padding: 0;
+}
+
+.flashes li {
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.flashes li.success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.flashes li.error {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.flashes li.info {
+  background-color: #cce5ff;
+  color: #004085;
+}
+.btn3 {
+  display: inline-block;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+}
+#moneyScreen {
+  display: none;
+      position: fixed;
+      width: 300px;
+      height: 200px;
+      top: 50%;
+      left: 50%;
+      margin-top: -100px;
+      margin-left: -150px;
+      background-color: #f1f1f1;
+      border: 1px solid #888;
+      padding: 20px;
+}
+#botScreen {
+  display: none;
+      position: fixed;
+      width: 300px;
+      height: 200px;
+      top: 50%;
+      left: 50%;
+      margin-top: -100px;
+      margin-left: -150px;
+      background-color: #f1f1f1;
+      border: 1px solid #888;
+      padding: 20px;
+}
+#settingScreen {
+     display: none;
+      position: fixed;
+      width: 300px;
+      height: 200px;
+      top: 50%;
+      left: 50%;
+      margin-top: -100px;
+      margin-left: -150px;
+      background-color: #f1f1f1;
+      border: 1px solid #888;
+      padding: 20px;
+    }
+      a {
+        color: rgb(0,0,255);
+      }
+      a:hover {
+        color: rgb(0,255,0);
+      }
+      #needHelp {
+         width: 200px;
+       margin: auto;
+       background-color: #fff;
+       padding: 20px;
+       border-radius: 5px;
+       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      #c2c {
+        width: 200px;
+       margin: auto;
+       background-color: #fff;
+       padding: 20px;
+       border-radius: 5px;
+       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      #viewOrder {
+        width: 200px;
+       margin: auto;
+       background-color: #fff;
+       padding: 20px;
+       border-radius: 5px;
+       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      #sec-service {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      candle-group {
+      transform-origin: 50% 100%; /* 设置旋转中心 */
+      }
+    </style>
+    <!--<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>-->
+    <!--<script src="https://d3js.org/d3.v7.min.js"></script>-->
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script src="https://cdn.canvasjs.com/ga/canvasjs.stock.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  </head>
+  <body>
+     <div id="menu" class="menu">
+        <button class="close-btn" onclick="closeMenu()">X</button>
+        <ul>
+        <li><a href="/wbank/logout" class="home">登出 log-out</a></li>
+        <br>
+        </ul>
+    </div>
+    <button class="open-btn" onclick="openMenu()">選單</button>
+    <br>
+    <select id="userColor">
+      <option value="init">--請選擇背景顏色--</option>
+      <option value="black">黑色</option>
+      <option value="white">白色</option>
+    </select>
+    <button onclick="openSettingScreen()">設定</button>
+    <center>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for category, message in messages %}
+      <li class="{{ category }}">{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+      <br>
+    <div id="top">
+       <h2>你好 {{user}}</h2>
+      <br>
+       <p>你的總資產: WTC${{balance}}</p>
+       <button class="btn3" onclick="moneyScreen()">更多貨幣資訊</button>
+       <button class="btn3" onclick="botscreen()">使用trade bot功能</button>
+      <br>
+      <br>
+    </div>
+      <br>
+      <div id="moneyScreen">
+    <label>港幣HKD: {{HK_Value}}</label><br>
+    <label>新台幣NTD: {{tw_value}}</label><br>
+    <label>美金USD: {{US_value}}</label>
+    <button class="btn" onclick="closeMoneyScreen()">關閉</button>
+  </div>
+      <div id="botScreen">
+    <label>啟動bot</label>
+    <button onclick="startBot()">開始自動交易</button>
+    <br>
+    <label>關閉bot</label>
+    <button onclick="stopBot()">關閉自動交易</button>
+    <br>
+    <label>選擇投資模式：</label>
+    <select id="tradeModeSelect">
+      <option value="normalMode">普通模式（預設模式）</option>
+      <option value="hardMode">暴力模式</option>
+      <option value="fried">炒幣Bot</option>
+    </select>
+    <button class="btn1" onclick="closeBotScreen()">關閉</button>
+  </div>
+     <div id="settingScreen">
+     <label>平台名稱： WBank -- 泓幣官方認可交易平台</label>
+     <br>
+     <label>版本： ~v2（按泓幣wcoins版本結算）</label>
+     <br>
+     <label>註銷帳號：</label>
+     <button onclick="removeAcc()">註銷</button>
+    <button class="btn1" onclick="closeScreenScreen()">關閉</button>
+  </div>
+      <center>
+      <div id="candleChart" style="width:100%; height:300px;"></div>
+      <!--<svg id="candlestickChart" class="candle" width="960" height="500"></svg>-->
+      </center>
+      <br>
+      <div id="top">
+      <center>
+    <div id="fuc1">
+      <p id="pp" class="paypal"><img src="{{ url_for('static',filename='IMG_9742.jpeg') }}" alt="paypal" width="30" height="35"><br>用Paypal買入</p>
+      <p id="so" class="spend-out"><img src="{{ url_for('static',filename='IMG_9744.png') }}" alt="spend-out" width="30" height="35"><br>查看錢包地址</p>
+      <p id="gift-code" class="gift-code"><img src="{{ url_for('static',filename='IMG_0388.png') }}" alt="gift-code" width="30" height="35"><br>禮品卡代號</p>
+    </div>
+        <br>
+        <div id="fuc1">
+      <p id="record" class="record"><img src="{{ url_for('static',filename='IMG_2975.png') }}" alt="record" width="30" height="35"><br>收款明細</p>
+      <p id="loan" class="loan"><img src="{{ url_for('static',filename='IMG_9992.jpeg') }}" alt="get-loan" width="30" height="35"><br>借幣（貸款）</p>
+      <p id="nfc" class="nfc"><img src="{{ url_for('static',filename='IMG_0152.png') }}" alt="nfc-pay" width="30" height="35"><br>泓之付</p>
+    </div>
+      </center>
+      <center>
+      <br>
+      </div>
+    <center>
+      <div id="scan">
+        <button class="btn1" onclick="scan()">掃描QR-code（只限wcoins)</button>
+      </div>
+    </center>
+      <br>
+      <b><h4>其他服務：</h4></b>
+      <br>
+      <div id="sec-service">
+      <div id="c2c">
+        <p>C2C交易（只限買入wcoins)</p>
+      </div>
+       <div id="viewOrder">
+        <p>查看倉位</p>
+      </div>
+      <br>
+      </div>
+      <div id="needHelp">
+        <p>需要協助？ 點擊 <a href="https://discord.gg/qmV5978RuB">聯絡</a> 我們吧</p>
+      </div>
+      <br>
+      </center>
+  </center>
+    <center>
+    <div class="footer">
+  <p id="toHome" class="demo"><img src="{{ url_for('static',filename='IMG_9730.jpeg') }}" alt="home-page" width="20" height="30"/>主頁</p>
+  <p id="toAtm" class="demo">  ATM存入</p>
+  <p id="toPay" class="demo">  消費或支付</p>
+   
+</div>
+    <br>
+    <br>
+    <script>
+      var socket = io();
+      var bot_status = 'no';
+      var userColor = document.getElementById("userColor");
+        var body = document.body;
+        if (userColor.value == "white") {
+           body.style.backgroundColor = "white";
+           body.style.color = "black";
+           document.getElementById("lineChart").style.backgroundColor = "white";
+        } else if (userColor.value == "black") {
+           body.style.backgroundColor = "black";
+           body.style.color = "white";
+           document.getElementById("lineChart").style.backgroundColor = "black";
+        }
+      const transfer = () => {
+        window.location.href="/wbank/transfer";
+      };
+      const buy = () => {
+        let user = '{{ user }}';
+        let amount = prompt("How much do you wanna buy in?");
+        let value = amount*3.5;
+        window.location.href="/wbank/v1/paypal?user="+user+"&amount="+value;
+      };
+      const sell = () => {
+        let user = '{{ user }}';
+        window.location.href="/wbank/sellCoins?user="+user;
+      };
+      function openMenu()  {
+    document.getElementById('menu').style.right = '0';
+      var openBtn = document.getElementsByClassName("open-btn");
+      openBtn.style.display = "none";
+}
+function closeMenu() {
+    document.getElementById('menu').style.right = '-200px';
+   var openBtn = document.getElementsByClassName("open-btn");
+    openBtn.style.display = "block";
+}
+const returnAlert = () => {
+        var popup = document.getElementById('warn');
+         popup.style.display = 'block'; 
+    popup.querySelector('button').addEventListener('click', function() {
+      var button = document.getElementById("myButton");
+        button.innerHTML = "...";
+    popup.style.animationDuration = "1s";
+    popup.style.animationName = "dots";
+        popup.style.display = 'none'; /* 點擊按鈕後，將 display 設回為 none */
+    });
+      };
+      document.getElementById("toHome").addEventListener("click",() => {
+          window.reload();
+      });
+      document.getElementById("toAtm").addEventListener("click",() => {
+          let user = '{{ user }}';
+        window.location.href="/wbank/buyCoins?user="+user;
+      });
+      document.getElementById("pp").addEventListener("click",() => {
+        return buy();
+      });
+      document.getElementById("so").addEventListener("click",() => {
+        return sell();
+      });
+      document.getElementById("record").addEventListener("click",() => {
+        window.location.href="/wbank/recordPage?user=" + "{{ user }}";
+      });
+      document.getElementById("loan").addEventListener("click",() => {
+        window.location.href="/wbank/loan?user=" + "{{ user }}";
+      });
+      document.getElementById("nfc").addEventListener("click",() => {
+        window.location.href="/wbank/nfc?user=" + "{{ user }}";
+      });
+      var coins_data = [];
+      window.onload = function() {
+        var dataPoints1 = [], dataPoints2 = [];
+  var chart = new CanvasJS.StockChart("candleChart",{
+    theme: "light2",
+    exportEnabled: true,
+    title:{
+      text:"WCoins Market"
+    },
+    charts: [{
+      axisY: {
+        prefix: "WTC$"
+      },
+      data: [{
+        type: "candlestick",
+        dataPoints : dataPoints1
+      }]
+    }],
+    navigator: {
+      data: [{
+        color: "#6D78AD",
+        dataPoints: dataPoints2
+      }]
+    }
+  });
+    setInterval(()=> {
+  $.getJSON("/wcoins/data", function(data) {
+    dataPoints1.length = 0;
+    dataPoints2.length = 0;
+    for(var i = 0; i < data.length; i++){
+      dataPoints1.push({x: new Date(data[i].date), y: [Number(data[i].open), Number(data[i].high), Number(data[i].low), Number(data[i].close)]});
+      dataPoints2.push({x: new Date(data[i].date), y: Number(data[i].close)});
+    }
+    chart.render();
+  });
+    },1000);
+      }
+      window.addEventListener("load",() => {
+      socket.on("connect",() => {
+          console.log("Connected socketIO server");
+        })
+        var bal = '{{ balance }}';
+        socket.on("UpdateProfit",(data) => {
+          // 更新 HTML 元素
+  document.querySelector('p:first-of-type').innerHTML = `你的總資產: WTC$${data.amount} `;
+        });
+        if (bal > 0) {
+          setInterval(() => {
+          socket.emit("trade",{username: '{{user}}',balance: bal});
+          },1000);
+        }
+      });
+      document.getElementById("gift-code").addEventListener("click",() => {
+        window.location.href="/wbank/gift?user=" + "{{user}}";
+      });
+      const scan = () => {
+        window.location.href="/wbank/scan?user=" + "{{user}}";
+      };
+      const moneyScreen = () => {
+        document.getElementById("moneyScreen").style.display = "block";
+      }
+      const closeMoneyScreen = () => {
+        document.getElementById("moneyScreen").style.display = "none";
+      };
+      document.getElementById("c2c").addEventListener("click",() => {
+        window.location.href="/wbank/payment/c2c?user=" + "{{user}}";
+      });
+      const botscreen = () => {
+        document.getElementById("botScreen").style.display = "block";
+      };
+      const closeBotScreen = () => {
+        document.getElementById("botScreen").style.display = "none";
+      };
+      socket.on("errorMsg",(msg)=> {
+         alert(msg);
+      });
+      const startBot = () => {
+        setInterval(()=> {
+          bot_status = 'yes';
+          if (document.getElementById("tradeModeSelect").value == "normalMode") {
+        socket.emit("tradeBot",{
+          username: "{{user}}",
+          balance: "{{balance}}",
+          bot_status: bot_status,
+          select_mode: "normal"
+        });
+      } else if (document.getElementById("tradeModeSelect").value == "hardMode") {
+           socket.emit("tradeBot",{
+          username: "{{user}}",
+          balance: "{{balance}}",
+          bot_status: bot_status,
+          select_mode: "hard"
+        });
+          } else if (document.getElementById("tradeModeSelect").value == "fried") {
+           socket.emit("friedBot",{
+          username: "{{user}}",
+          balance: "{{balance}}",
+          bot_status: bot_status,
+          select_mode: "fried",
+          key: "bangjinGood"
+        });
+          }
+      },1000);
+      };
+      const stopBot = () => {
+        bot_status = 'no';
+        socket.emit("tradeBot",{
+          username: "{{user}}",
+          balance: "{{balance}}",
+          bot_status: bot_status,
+          select_mode: "stop"
+        });
+      };
+    const openSettingScreen = () => {
+      document.getElementById("settingScreen").style.display = "block";
+    };
+    const removeAcc = () => {
+      socket.emit("removeAccount",{
+         username: "{{user}}"
+      });
+    };
+    const closeScreenScreen = () => {
+      document.getElementById("settingScreen").style.display = "none";
+    };
+    document.getElementById("viewOrder").addEventListener("click",() => {
+        window.location.href="/wbank/order/view?user=" + "{{ user }}";
+      });
+    </script>
+  </body>
+</html>
