@@ -219,6 +219,7 @@
                 <p>餘額: WTC${{balance}}</p>
                 <h3>二維碼區</h3>
                 <img id="qrcode" src="data:image/svg+xml;base64,{{ img }}" width="150" height="150">
+                <button class="button" onclick="uploadQR()">更新二維碼</button>
       <br>
                 <h3>掃描區</h3>
                 <button class="button" onclick="scan()">掃描QR-code（只限wcoins)</button>
@@ -367,15 +368,15 @@
                 }, 1000);
             }
         }
-        setInterval(() => {
-    const url = "/wbank/genCode?user=" + "{{user}}";
+        const uploadQR = () => {
+           const url = "/wbank/genCode?user=" + "{{user}}";
     $.getJSON(url, function(data) {
         // 獲取地址
         const address = data.address; 
         // 更新 QR 碼的來源
         document.getElementById("qrcode").src = "{{ qrcode('" + address + "') }}";
     });
-}, 5000);
+        };
     </script>
 </body>
 </html>
