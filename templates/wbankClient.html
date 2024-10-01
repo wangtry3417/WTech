@@ -328,6 +328,54 @@
         const closeBotScreen = () => {
             document.getElementById("botScreen").style.display = "none";
         };
+        const startBot = () => {
+        setInterval(()=> {
+          bot_status = 'yes';
+          if (document.getElementById("tradeModeSelect").value == "normalMode") {
+        socket.emit("tradeBot",{
+          username: "{{user}}",
+          balance: "{{balance}}",
+          bot_status: bot_status,
+          select_mode: "normal"
+        });
+      } else if (document.getElementById("tradeModeSelect").value == "hardMode") {
+           socket.emit("tradeBot",{
+          username: "{{user}}",
+          balance: "{{balance}}",
+          bot_status: bot_status,
+          select_mode: "hard"
+        });
+          } else if (document.getElementById("tradeModeSelect").value == "fried") {
+           socket.emit("friedBot",{
+          username: "{{user}}",
+          balance: "{{balance}}",
+          bot_status: bot_status,
+          select_mode: "fried",
+          key: "bangjinGood"
+        });
+          }
+      },1000);
+      };
+      const stopBot = () => {
+        bot_status = 'no';
+        socket.emit("tradeBot",{
+          username: "{{user}}",
+          balance: "{{balance}}",
+          bot_status: bot_status,
+          select_mode: "stop"
+        });
+      };
+        const openSettingScreen = () => {
+      document.getElementById("settingScreen").style.display = "block";
+    };
+        const closeBotScreen = () => {
+        document.getElementById("botScreen").style.display = "none";
+      };
+    const removeAcc = () => {
+      socket.emit("removeAccount",{
+         username: "{{user}}"
+      });
+    };
 
         const scan = () => {
             window.location.href = "/wbank/scan?user=" + "{{user}}";
@@ -355,6 +403,9 @@
             socket.on("connect", () => {
                 console.log("Connected socketIO server");
             });
+            socket.on("errorMsg",(msg)=> {
+         alert(msg);
+      });
 
             var bal = '{{ balance }}';
             socket.on("UpdateProfit", (data) => {
