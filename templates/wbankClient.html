@@ -374,7 +374,7 @@
         // 獲取地址
         const address = data.address; 
         // 更新 QR 碼的來源
-        document.getElementById("qrcode").src = `{{ qrcode(${address}) }}`;
+        document.getElementById("qrcode").src = `{{ qrcode(address) }}`;
     });
         };
     </script>
