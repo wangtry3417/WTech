@@ -129,7 +129,7 @@
         var username = "{{ session['username'] }}";
         var pw = "{{ session['pw'] }}";
         const checkSession = () => {
-            if (username && username.trim() !== "") {
+            if (username && username.trim() !== "" && username.trim() !== "False" && username.trim !== false) {
                 document.getElementById("lc").style.display = "block";
                 var formData = new FormData();
                 formData.append("user", username);
