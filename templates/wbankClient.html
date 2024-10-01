@@ -201,7 +201,7 @@
                 <h2>交易</h2>
                 <div id="fuc1">
                     <p id="pp" class="paypal"><img src="{{ url_for('static',filename='IMG_9742.jpeg') }}" alt="paypal" width="30" height="35"><br>用Paypal買入</p>
-                    <p id="gift-code" class="gift-code"><img src="{{ url_for('static',filename='IMG_0388.png') }}" alt="gift-code" width="30" height="35"><br>禮品卡代號</p>
+                    <p id="so" class="spend-out"><img src="{{ url_for('static',filename='IMG_9744.png') }}" alt="spend-out" width="30" height="35"><br>查看錢包地址</p>
                 </div>
                 <br>
                 <div id="fuc1">
@@ -217,10 +217,7 @@
                 <h2>我的</h2>
                 <p>用戶名: {{user}}</p>
                 <p>餘額: WTC${{balance}}</p>
-                <h3>二維碼區</h3>
-                <img id="qrcode" src="data:image/svg+xml;base64,{{ img }}" width="150" height="150">
-                <button class="button" onclick="uploadQR()">更新二維碼</button>
-      <br>
+                <br>
                 <h3>掃描區</h3>
                 <button class="button" onclick="scan()">掃描QR-code（只限wcoins)</button>
                 <br>
@@ -344,6 +341,9 @@
       document.getElementById("nfc").addEventListener("click",() => {
         window.location.href="/wbank/nfc?user=" + "{{ user }}";
       });
+      document.getElementById("so").addEventListener("click",() => {
+        window.location.href="/wbank/sellCoins?user=" + "{{ user }}";
+      });
       document.getElementById("pp").addEventListener("click",() => {
         let user = '{{ user }}';
         let amount = prompt("How much do you wanna buy in?");
@@ -368,15 +368,6 @@
                 }, 1000);
             }
         }
-        const uploadQR = () => {
-           const url = "/wbank/genCode?user=" + "{{user}}";
-    $.getJSON(url, function(data) {
-        // 獲取地址
-        const address = data.address; 
-        // 更新 QR 碼的來源
-        document.getElementById("qrcode").src = `{{ qrcode(address) }}`;
-    });
-        };
     </script>
 </body>
 </html>
