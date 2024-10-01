@@ -2033,17 +2033,6 @@ def wbank_sellCoins():
       return render_template("wbankSell.html", hash1=hash1,img=qr_b64)
   return "Cannot assign the user detail!."
 
-@app.route("/wbank/genCode")
-def wbank_genAddress():
-  user = request.args.get("user")
-  users = wbankwallet.query.filter_by(username=user).first()
-  if users:
-      text1 = [users.username,str(users.balance)]
-      t1 = ",".join(text1)
-      hash1 = hashlib.sha256(t1.encode()).hexdigest()
-      return jsonify({"address":hash1})
-  return "Cannot assign the user detail!."
-
 @app.route("/wbank/v1/mining")
 def wbank_mining():
   user = request.args.get("user")
