@@ -398,14 +398,13 @@
         let value = amount*3.5;
         window.location.href="/wbank/v1/paypal?user="+user+"&amount="+value;
       });
-        
+        socket.on("errorMsg",(msg)=> {
+         alert(msg);
+      });
         window.onload = function() {
             socket.on("connect", () => {
                 console.log("Connected socketIO server");
             });
-            socket.on("errorMsg",(msg)=> {
-         alert(msg);
-      });
 
             var bal = '{{ balance }}';
             socket.on("UpdateProfit", (data) => {
