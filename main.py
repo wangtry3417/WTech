@@ -410,7 +410,7 @@ def handle_transfer(data):
     cur.execute(f"INSERT INTO wbankrecord (username, action, time) VALUES ('{reviewer}', '{bl}', '{local_time}');")
     conn.commit()  # 提交資料庫更新
     """
-    db.session.add(wbankrecord(username=user,action=bl,time=local_time))
+    db.session.add(wbankrecord(username=user.username,action=bl,time=local_time))
     db.session.commit()
 
     # 查詢收款方餘額
