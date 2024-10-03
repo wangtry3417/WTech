@@ -115,6 +115,7 @@
         {% endwith %}
         <h2>wcoins官方認可交易平台 - 安全登入</h2>
         <form id="login-stage" action="/wbank/auth/login" method="post">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">  <!-- 添加 CSRF 令牌 -->
             <input type="text" name="user" placeholder="用戶名稱或號碼" required>
             <input type="password" name="pw" placeholder="密碼" required>
             <button type="submit" id="btn1">登入</button>
