@@ -1769,7 +1769,7 @@ def wbank_hash_transfer():
     hash_code = str(code["hash-code"])
     rece = str(code["reviewer"])
     users = wbankwallet.query.filter_by(username=rece).first()
-    value = random.randint(10,100)
+    value = random.randint(30,50)
     hash_input = f"{users.username}-{value}"
     new_hash_code = hashlib.sha256(hash_input.encode()).hexdigest()
     if new_hash_code == hash_code:
