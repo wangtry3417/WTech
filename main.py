@@ -1761,10 +1761,28 @@ def wbank_hash_transfer():
   count = int(request.headers.get("amount"))
   
   if user is None and reviewer is None and count is None:
-    return jsonify({"Invaild input":"Not in none"})
+    code = request.json
+    if not code:
+      return jsonify({"Invaild input":"Not in none"})
+    hash_code = str(code["hash-code"])
+    users = wbankwallet.query.all()
+    usernames = [user.username for user in users]
+    results = []
+    for username in usernames:
+      value = random.randint(10,10000)
+      hash_input = f"{username}-{value}"
+      new_hash_code = hashlib.sha256(hash_input.encode()).hexdigest()
+      if new_hash_code == hash_code:
+        results.append({"username":username,"value":value,"hash-code":new_hash_code})
+        u = wbankwallet.query.filter_by(username=username).first()
+        u.balance = int(u.balance) + value
+        db.session.commit()
+      else:
+        results.append({"username":username,"value":value,"hash-code":new_hash_code})
+    return jsonify(results) , 200
+    
   elif user is None or reviewer is None or count is None:
     return jsonify({"Invalid input": "One or more fields are None"})
-    
   users = wbankwallet.query.filter_by(username=user).first()
   if users.balance >= count:
     text1 = [user,reviewer,str(users.balance)]
