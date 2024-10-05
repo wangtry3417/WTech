@@ -34,7 +34,6 @@ from flask_login import LoginManager, UserMixin, login_user, logout_user, login_
 from flask_oauthlib.provider import OAuth2Provider
 from wtforms.validators import DataRequired
 from wtforms import StringField
-from flask_wtf.csrf import CSRFProtect
 from flask_admin.form import BaseForm
 from flask_qrcode import QRcode
 import json,sys,threading
@@ -72,8 +71,6 @@ app.config['OAUTH_CREDENTIALS'] = {
 }
 
 QRcode(app)
-
-csrf = CSRFProtect(app)
 
 oauth = OAuth2Provider(app)
 
