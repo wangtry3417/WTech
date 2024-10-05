@@ -5,7 +5,93 @@
   </head>
   <body>
     <script>
-      
+      const Wcode = `
+  #page-title: W Tech 數字開發商主頁
+#css {
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+  }
+  .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    padding: 20px;
+  }
+  .logo {
+    font-size: 32px;
+    font-weight: bold;
+    text-align: left;
+    flex: 1;
+  }
+  .menu {
+    background-color: #333;
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    flex: 0 0 200px;
+    position: relative;
+  }
+  .menu ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  .menu li {
+    margin: 10px 0;
+  }
+  .menu a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .menu a:hover {
+    color: #ffcc00;
+  }
+  .close-btn {
+    background-color: red;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+  .content {
+    padding: 20px;
+    flex: 1;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+}
+
+<main>
+<div class="container">
+  <div class="logo">W Tech</div>
+  <div id="menu" class="menu">
+    <button class="close-btn" onclick="closeMenu()">X</button>
+    <ul>
+      <li><a href="{{ url_for('wtechHome') }}" class="product">主頁</a></li>
+      <li><a href="{{ url_for('wtechProduct') }}" class="product">產品</a></li>
+      <li><a href="{{ url_for('wtechAbout') }}" class="about">關於</a></li>
+    </ul>
+  </div>
+</div>
+<div class="content">
+  <h2>WTech 服務及作品</h2>
+  <p>W Tech 提供網站托管服務。</p>
+  <p>WCoins（泓幣）為泓技W Tech研發的虛擬貨幣。但在第二版開始，由WBank交易所託管。</p>
+  <h2>關於</h2>
+  <p>W Tech為做遊戲起家，當然有遊戲業務啦。</p>
+</div>
+</main>
+  `;
+      const interpreter = new WInterpreter();
+      interpreter.parseW(Wcode);
+      document.body.appendChild(interpreter.renderPage());
     </script>
   </body>
 </html>
