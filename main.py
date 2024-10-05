@@ -1758,7 +1758,7 @@ def wbank_hash_order():
 def wbank_hash_transfer():
   user = request.headers.get("username")
   reviewer = request.headers.get("reviewer")
-  count = int(request.headers.get("amount"))
+  count = request.headers.get("amount")
   
   if user is None and reviewer is None and count is None:
     code = request.json
