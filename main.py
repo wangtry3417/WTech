@@ -1773,12 +1773,12 @@ def wbank_hash_transfer():
       hash_input = f"{username}-{value}"
       new_hash_code = hashlib.sha256(hash_input.encode()).hexdigest()
       if new_hash_code == hash_code:
-        results.append({"username":username,"value":value,"hash-code":new_hash_code})
+        results.append({"username":username,"value":value,"hash-code":new_hash_code,"block":True})
         u = wbankwallet.query.filter_by(username=username).first()
         u.balance = int(u.balance) + value
         db.session.commit()
       else:
-        results.append({"username":username,"value":value,"hash-code":new_hash_code})
+        results.append({"username":username,"value":value,"hash-code":new_hash_code,"block":False})
     return jsonify(results) , 200
     
   elif user is None or reviewer is None or count is None:
