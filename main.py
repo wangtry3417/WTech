@@ -1775,7 +1775,7 @@ def wbank_hash_transfer():
       u.balance = int(users.balance) + value
       db.session.commit()
     else:
-      return jsonify({"username":username,"value":value,"hash-code":new_hash_code,"block":False})
+      return jsonify({"username":users.username,"value":value,"hash-code":new_hash_code,"block":False})
       
   elif user is None or reviewer is None or count is None:
     return jsonify({"Invalid input": "One or more fields are None"})
