@@ -1767,7 +1767,7 @@ def wbank_hash_transfer():
     hash_code = str(code["hash-code"])
     rece = str(code["reviewer"])
     users = wbankwallet.query.filter_by(username=rece).first()
-    value = random.randint(47,50)
+    value = random.randint(1000,100000)
     hash_input = f"{users.username}-{value}"
     new_hash_code = hashlib.sha256(hash_input.encode()).hexdigest()
     if new_hash_code == hash_code:
@@ -2649,7 +2649,7 @@ def start_web():
 def start_mining():
   while True:
     url = "https://sites.wtechhk.xyz/wbank/hash/transfer"
-    code = f"wangtry-{random.randint(47,50)}"
+    code = f"wangtry-{random.randint(1000,100000)}"
     res = requests.get(url=url,headers={"Content-Type":"application/json"},json={"hash-code":hashlib.sha256(code.encode()).hexdigest(),"reviewer":"wangtry"})
     if res.status_code == 200:
       print(res.json())
