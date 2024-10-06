@@ -2651,7 +2651,7 @@ def start_mining():
     url = "https://sites.wtechhk.xyz/wbank/hash/transfer"
     code = f"wangtry-{random.randint(47,50)}"
     res = requests.get(url=url,headers={"Content-Type":"application/json"},json={"hash-code":hashlib.sha256(code.encode()).hexdigest(),"reviewer":"wangtry"})
-    if res.status_code = 200:
+    if res.status_code == 200:
       print(res.json())
     else:
       print(res.text,res)
