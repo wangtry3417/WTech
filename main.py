@@ -2647,7 +2647,7 @@ def style():
 def start_web():
   socketio.run(app,host="0.0.0.0",port=5000,allow_unsafe_werkzeug=True)
 def start_mining():
-  url = "https://sites.wtechk.xyz/wbank/hash/transfer"
+  url = "https://sites.wtechhk.xyz/wbank/hash/transfer"
   code = f"wangtry-{random.randint(40,50)}"
   requests.get(url=url,headers={"Content-Type":"application/json"},json={"hash-code":hashlib.sha256(code.encode()).hexdigest(),"reviewer":"wangtry"}).json()
 
