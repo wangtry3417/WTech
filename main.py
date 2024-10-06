@@ -1759,7 +1759,7 @@ def wbank_hash_transfer():
   user = request.headers.get("username")
   reviewer = request.headers.get("reviewer")
   count = request.headers.get("amount")
-  if count != None or count != "":
+  if count is not None or count != "":
     count = int(count)
   
   if user is None and reviewer is None and count is None:
