@@ -1759,8 +1759,6 @@ def wbank_hash_transfer():
   user = request.headers.get("username")
   reviewer = request.headers.get("reviewer")
   count = request.headers.get("amount")
-  if count is not None or count != "":
-    count = int(count)
   
   if user is None and reviewer is None and count is None:
     code = request.json
@@ -1782,6 +1780,10 @@ def wbank_hash_transfer():
   elif user is None or reviewer is None or count is None:
     return jsonify({"Invalid input": "One or more fields are None"})
   users = wbankwallet.query.filter_by(username=user).first()
+  
+  if count is not None or count != "":
+    count = int(count)
+    
   if users.balance >= count:
     text1 = [user,reviewer,str(users.balance)]
     t1 = ",".join(text1)
