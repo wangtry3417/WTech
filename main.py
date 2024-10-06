@@ -1771,6 +1771,24 @@ def wbank_hash_transfer():
     hash_input = f"{users.username}-{value}"
     new_hash_code = hashlib.sha256(hash_input.encode()).hexdigest()
     if new_hash_code == hash_code:
+      prompt = f"""
+      轉帳方: (單獨挖礦/哈希產幣)
+     收款方: {users.usermame}
+     金額: {value}
+     狀態: 成功✅
+     加密區塊鏈方式：哈希加密（Hash sha256)
+      轉賬區塊：{hash1}
+        """
+      data = {
+      "embeds": [
+        {
+          "title": "Wcoins 轉帳通知",
+          "description": prompt,
+          "color": 65280,  # You can use hex color codes, this one is for blue
+        }
+      ]
+    }
+      r = requests.post(url="https://discord.com/api/webhooks/1275720389510828144/T6Kkez2OQuyJl_nEscBOv-N8-GnXBJUSsOqqxXKoK31guklio4SDjAzP89k7A-1laSZX", json=data, headers={"Content-Type":"application/json"})
       return jsonify({"username":users.username,"value":value,"hash-code":new_hash_code,"block":True})
       u.balance = int(users.balance) + value
       db.session.commit()
