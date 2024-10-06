@@ -1773,7 +1773,7 @@ def wbank_hash_transfer():
     if new_hash_code == hash_code:
       prompt = f"""
       轉帳方: (單獨挖礦/哈希產幣)
-     收款方: {users.usermame}
+     收款方: {users.username}
      金額: {value}
      狀態: 成功✅
      加密區塊鏈方式：哈希加密（Hash sha256)
