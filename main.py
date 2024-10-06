@@ -2181,7 +2181,7 @@ def wbank_auth_client():
               flash('登入成功.', 'success')
               return redirect(url_for('wbank_client'))
             else:
-              return user.sub
+              flash(user.sub,'danger')
         else:
             flash('無效的用戶名或密碼.', 'danger')
     return render_template('wbank.html')
