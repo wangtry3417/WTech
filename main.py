@@ -1777,7 +1777,7 @@ def wbank_hash_transfer():
      金額: {value}
      狀態: 成功✅
      加密區塊鏈方式：哈希加密（Hash sha256)
-      轉賬區塊：{hash1}
+      轉賬區塊：{new_hash_code}
         """
       data = {
       "embeds": [
