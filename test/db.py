@@ -1,6 +1,6 @@
 from trydb import DB
 
-db = DB()
+db = DB(database="./database.tb")
 
 class User(db.Model):
   __tablename__ = "users"
