@@ -25,3 +25,4 @@ print(users.username)
 db.session.addCode("""
   using <table> , select field -> where <condition>;
 """)
+db.session.commit()
