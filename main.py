@@ -2189,7 +2189,7 @@ def wbank_auth_client():
                   flash('登入成功.', 'success')
                   return redirect(url_for('wbank_client'))
               else:
-                flash(user.sub,"error")
+                flash(user.sub,'error')
                 return redirect("/wbank")
             else:
               tryTimes += 1
@@ -2197,9 +2197,6 @@ def wbank_auth_client():
               session.permanent = True
               msg = f"密碼錯誤，嘗試次數： {tryTimes}"
               flash(msg, "error")
-              return redirect("/wbank")
-            else:
-              flash(user.sub,'error')
               return redirect("/wbank")
         else:
             flash('無效的用戶名.', 'error')
