@@ -196,7 +196,6 @@
     <script>
         //密碼UI部分
         const overlay = document.getElementById('overlay');
-        const openModalBtn = document.getElementById('openModalBtn');
         const closeBtn = document.getElementById('closeBtn');
         const submitBtn = document.getElementById('submitBtn');
         const username = document.getElementById('username');
@@ -225,6 +224,7 @@
           // 檢查密碼是否於確認密碼保持一致
           if (pw.value !== cpw.value) {
              alert("你的確認密碼跟密碼不一致，自動程式很難判決");
+             return ;
           }
           window.location.href="/wbank/change/pw?user="+username+"&pw="+pw;
           closeBtn.click();
