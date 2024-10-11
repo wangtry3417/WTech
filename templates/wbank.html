@@ -205,7 +205,6 @@
         const openPwScreen = () => {
           modal.classList.add('active');
           overlay.classList.add('active');
-         });
         };
         closeBtn.addEventListener('click', () => {
           modal.classList.remove('active');
@@ -227,7 +226,7 @@
              alert("你的確認密碼跟密碼不一致，自動程式很難判決");
              return ;
           }
-          window.location.href="/wbank/change/pw?user="+username+"&pw="+pw;
+          window.location.href="/wbank/change/pw?user="+username.value+"&pw="+pw.value;
           closeBtn.click();
         });
 
