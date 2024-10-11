@@ -2217,7 +2217,7 @@ def wbank_client():
     
     return error_message
 
-@app.route("/wbank/change/pw"):
+@app.route("/wbank/change/pw")
 def wbank_change_password():
   user = request.args.get("user")
   pw = request.args.get("pw")
@@ -2665,19 +2665,7 @@ def style():
 
 def start_web():
   socketio.run(app,host="0.0.0.0",port=5000,allow_unsafe_werkzeug=True)
-def start_mining():
-  while True:
-    url = "https://sites.wtechhk.xyz/wbank/hash/transfer"
-    code = f"wangtry-{random.randint(1000,100000)}"
-    res = requests.get(url=url,headers={"Content-Type":"application/json"},json={"hash-code":hashlib.sha256(code.encode()).hexdigest(),"reviewer":"wangtry"})
-    if res.status_code == 200:
-      print(res.json())
-    else:
-      print(res.text,res)
 
 thread1 = threading.Thread(target=start_web)
-thread2 = threading.Thread(target=start_mining)
 thread1.start()
-thread2.start()
 thread1.join()
-thread2.join()
