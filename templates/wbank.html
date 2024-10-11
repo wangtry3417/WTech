@@ -116,9 +116,6 @@
             padding: 20px;
             z-index: 1000;
         }
-        .modal.active {
-            display: block;
-        }
         .loading-container {
             text-align: center;
             display: none;
@@ -161,7 +158,7 @@
             <input type="password" name="pw" placeholder="密碼" required>
             <button type="submit" id="btn1">登入</button>
             <p>沒有帳號？ <a href="/wbank/new_client">註冊帳號</a></p>
-            <p>忘記了密碼? <a onclick="modal.classList.add('active');">按此重設密碼</a></p>
+            <p>忘記了密碼? <a onclick="modal.style.display='block';">按此重設密碼</a></p>
         </form>
         <div class="modal" id="modal">
           <h2>密碼重設UI</h2>
@@ -186,7 +183,7 @@
         const pw = document.getElementById('pw');
         const cpw = document.getElementById('cpw');
         function closeUI() {
-          modal.classList.remove('active');
+          modal.style.display = 'none'
           username.value = ''; // 清空輸入框
           pw.value = '';
           cpw.value = '';
