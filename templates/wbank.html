@@ -190,6 +190,7 @@
         const openPwScreen = () => {
           modal.classList.add('active');
         };
+        document.querySelector("a[href='javascript:void(0);']").addEventListener('click', openPwScreen);
         closeBtn.addEventListener('click', () => {
           modal.classList.remove('active');
           username.value = ''; // 清空輸入框
