@@ -2177,7 +2177,7 @@ def wbank_auth_client():
               if user.sub == None or user.sub == "":
                 tryTimes = session.get("tryTimes",0)
                 if tryTimes >= 3:
-                  user.sub = "你的帳戶被鎖定，原因：錯誤登入3次"
+                  user.sub = '你的帳戶被鎖定，原因：錯誤登入3次'
                   db.session.commit()
                   flash(user.sub,'error')
                 else:
@@ -2191,7 +2191,7 @@ def wbank_auth_client():
                 session["tryTimes"] = session["tryTimes"] + 1
                 session.permanent = True
                 msg = f"密碼錯誤，嘗試次數： {session['tryTimes']}"
-                flash(msg, 'error')
+                flash(msg, "error")
             else:
               flash(user.sub,'error')
         else:
