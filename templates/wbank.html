@@ -119,19 +119,6 @@
         .modal.active {
             display: block;
         }
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-        }
-        .overlay.active {
-            display: block;
-        }
         .loading-container {
             text-align: center;
             display: none;
@@ -176,7 +163,6 @@
             <p>沒有帳號？ <a href="/wbank/new_client">註冊帳號</a></p>
             <p>忘記了密碼? <a href="javascript:void(0);" onclick="openPwScreen()">按此重設密碼</a></p>
         </form>
-        <div class="overlay" id="overlay"></div>
         <div class="modal" id="modal">
           <h2>密碼重設UI</h2>
           <label>用戶名:</label>
@@ -196,7 +182,6 @@
     <script>
         //密碼UI部分
         const modal = document.getElementById('modal');
-        const overlay = document.getElementById('overlay');
         const closeBtn = document.getElementById('closeBtn');
         const submitBtn = document.getElementById('submitBtn');
         const username = document.getElementById('username');
@@ -204,11 +189,9 @@
         const cpw = document.getElementById('cpw');
         const openPwScreen = () => {
           modal.classList.add('active');
-          overlay.classList.add('active');
         };
         closeBtn.addEventListener('click', () => {
           modal.classList.remove('active');
-          overlay.classList.remove('active');
           username.value = ''; // 清空輸入框
           pw.value = '';
           cpw.value = '';
@@ -229,11 +212,6 @@
           window.location.href="/wbank/change/pw?user="+username.value+"&pw="+pw.value;
           closeBtn.click();
         });
-        /*
-        overlay.addEventListener('click', () => {
-          closeBtn.click(); // 點擊遮罩關閉窗口
-        });
-        */
         //登入部分
         var username = "{{ session['username'] }}";
         var pw = "{{ session['pw'] }}";
