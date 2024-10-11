@@ -179,20 +179,20 @@
     <script>
         //密碼UI部分
         const modal = document.getElementById('modal');
-        const username = document.getElementById('username');
+        const users = document.getElementById('username');
         const password = document.getElementById('pw');
         const cpw = document.getElementById('cpw');
         function closeUI() {
           modal.style.display = 'none';
-          username.value = ''; // 清空輸入框
+          users.value = ''; // 清空輸入框
           password.value = '';
           cpw.value = '';
         }
         function resetPw() {
-          if (username.value == "" && password.value == "" && password.value == "") {
+          if (users.value == "" && password.value == "" && password.value == "") {
              alert("請填入所需資料");
              return;
-          } else if (username.value == "" || password.value == "" || cpw.value == "") {
+          } else if (users.value == "" || password.value == "" || cpw.value == "") {
              alert("請填入所需資料");
              return;
           }
@@ -201,7 +201,7 @@
              alert("你的確認密碼跟密碼不一致，自動程式很難判決");
              return;
           }
-          window.location.href="/wbank/change/pw?user="+username.value+"&pw="+password.value;
+          window.location.href="/wbank/change/pw?user="+users.value+"&pw="+password.value;
         }
         //登入部分
         var username = "{{ session['username'] }}";
