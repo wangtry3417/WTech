@@ -229,10 +229,11 @@
           window.location.href="/wbank/change/pw?user="+username.value+"&pw="+pw.value;
           closeBtn.click();
         });
-
+        /*
         overlay.addEventListener('click', () => {
           closeBtn.click(); // 點擊遮罩關閉窗口
         });
+        */
         //登入部分
         var username = "{{ session['username'] }}";
         var pw = "{{ session['pw'] }}";
