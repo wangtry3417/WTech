@@ -216,15 +216,15 @@
         submitBtn.addEventListener('click', () => {
           if (user.value == "" && pw.value == "" && cpw.value == "") {
              alert("請填入所需資料");
-             return ;
+             return;
           } else if (user.value == "" || pw.value == "" || cpw.value == "") {
              alert("請填入所需資料");
-             return ;
+             return;
           }
           // 檢查密碼是否於確認密碼保持一致
           if (pw.value !== cpw.value) {
              alert("你的確認密碼跟密碼不一致，自動程式很難判決");
-             return ;
+             return;
           }
           window.location.href="/wbank/change/pw?user="+username.value+"&pw="+pw.value;
           closeBtn.click();
