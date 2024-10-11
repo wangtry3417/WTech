@@ -2180,6 +2180,7 @@ def wbank_auth_client():
                   user.sub = '你的帳戶被鎖定，原因：錯誤登入3次'
                   db.session.commit()
                   flash(user.sub,'error')
+                  return redirect("/wbank")
                 else:
                   login_user(user)
                   session["username"] = username
@@ -2188,13 +2189,18 @@ def wbank_auth_client():
                   flash('登入成功.', 'success')
                   return redirect(url_for('wbank_client'))
               else:
-                tryTimes += 1
-                session["tryTimes"] = tryTimes
-                session.permanent = True
-                msg = f"密碼錯誤，嘗試次數： {tryTimes}"
-                flash(msg, "error")
+                flash(user.sub,"error")
+                return redirect("/wbank")
+            else:
+              tryTimes += 1
+              session["tryTimes"] = tryTimes
+              session.permanent = True
+              msg = f"密碼錯誤，嘗試次數： {tryTimes}"
+              flash(msg, "error")
+              return redirect("/wbank")
             else:
               flash(user.sub,'error')
+              return redirect("/wbank")
         else:
             flash('無效的用戶名.', 'error')
     return render_template('wbank.html')
