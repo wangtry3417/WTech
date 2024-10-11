@@ -2188,14 +2188,14 @@ def wbank_auth_client():
                   flash('登入成功.', 'success')
                   return redirect(url_for('wbank_client'))
               else:
-                session["tryTimes"] = session["tryTimes"] + 1
+                session["tryTimes"] = tryTimes + 1
                 session.permanent = True
                 msg = f"密碼錯誤，嘗試次數： {session['tryTimes']}"
                 flash(msg, "error")
             else:
               flash(user.sub,'error')
         else:
-            flash('無效的用戶名.', 'danger')
+            flash('無效的用戶名.', 'error')
     return render_template('wbank.html')
 
 @app.route("/wbank/client", methods=["GET", "POST"])
