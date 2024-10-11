@@ -2172,18 +2172,29 @@ def wbank_auth_client():
         username = request.form['user']
         password = request.form['pw']
         user = wbankwallet.query.filter_by(username=username).first()
-        if user and user.password == password:
-            if user.sub == None or user.sub == "":
-              login_user(user)
-              session["username"] = username
-              session["pw"] = password
-              session.permanent = True
-              flash('登入成功.', 'success')
-              return redirect(url_for('wbank_client'))
+        if user:
+            if user.password == password:
+              if user.sub == None or user.sub == "":
+                tryTimes = session.get("tryTimes",0)
+                if session["tryTimes"] >= 3:
+                  user.sub = "你的帳戶被鎖定，原因：錯誤登入3次"
+                  db.session.commit()
+                  flash(user.sub,'danger')
+                else:
+                  login_user(user)
+                  session["username"] = username
+                  session["pw"] = password
+                  session.permanent = True
+                  flash('登入成功.', 'success')
+                  return redirect(url_for('wbank_client'))
+              else:
+                session["tryTimes"] = session["tryTimes"] + 1
+                msg = f"密碼錯誤，嘗試次數： {session['tryTimes']}"
+                flash(msg, 'danger')
             else:
               flash(user.sub,'danger')
         else:
-            flash('無效的用戶名或密碼.', 'danger')
+            flash('無效的用戶名.', 'danger')
     return render_template('wbank.html')
 
 @app.route("/wbank/client", methods=["GET", "POST"])
