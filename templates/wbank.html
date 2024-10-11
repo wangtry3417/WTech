@@ -104,6 +104,34 @@
     background-color: #cce5ff;
     color: #004085;
 }
+       .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            border: 1px solid #ccc;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            z-index: 1000;
+        }
+        .modal.active {
+            display: block;
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        .overlay.active {
+            display: block;
+        }
         .loading-container {
             text-align: center;
             display: none;
@@ -146,13 +174,63 @@
             <input type="password" name="pw" placeholder="密碼" required>
             <button type="submit" id="btn1">登入</button>
             <p>沒有帳號？ <a href="/wbank/new_client">註冊帳號</a></p>
+            <p>忘記了密碼? <a onclick="openPwScreen()">按此重設密碼</a></p>
         </form>
+        <div class="overlay" id="overlay"></div>
+        <div class="modal" id="modal">
+          <h2>密碼重設UI</h2>
+          <label>用戶名:</label>
+          <input type="text" id="username" placeholder="請輸入用戶名">
+          <label>密碼:</label>
+          <input type="text" id="pw" placeholder="請輸入密碼">
+          <label>確認密碼:</label>
+          <input type="text" id="cpw" placeholder="請再次輸入密碼">
+          <button id="submitBtn">提交</button>
+          <button id="closeBtn">關閉</button>
+      </div>
         <div id="lc" class="loading-container">
             <div class="loader"></div>
             <div class="loading-text">自動登入中...</div>
         </div>
     </div>
     <script>
+        //密碼UI部分
+        const overlay = document.getElementById('overlay');
+        const openModalBtn = document.getElementById('openModalBtn');
+        const closeBtn = document.getElementById('closeBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const username = document.getElementById('username');
+        const pw = document.getElementById('pw');
+        const cpw = document.getElementById('cpw');
+        const openPwScreen = () => {
+          modal.classList.add('active');
+          overlay.classList.add('active');
+         });
+        };
+        closeBtn.addEventListener('click', () => {
+          modal.classList.remove('active');
+          overlay.classList.remove('active');
+          username.value = ''; // 清空輸入框
+          pw.value = '';
+          cpw.value = '';
+        });
+        submitBtn.addEventListener('click', () => {
+          if (user.value == "" && pw.value == "" && cpw.value == "") {
+             alert("請填入所需資料");
+          } else if (user.value = "" || pw.value == "" || cpw.value == "") {
+             alert("請填入所需資料");
+          }
+          // 檢查密碼是否於確認密碼保持一致
+          if (pw.value !== cpw.value) {
+             alert("你的確認密碼跟密碼不一致，自動程式很難判決");
+          }
+          window.location.href="/wbank/change/pw?user="+username;
+        });
+
+        overlay.addEventListener('click', () => {
+          closeBtn.click(); // 點擊遮罩關閉窗口
+        });
+        //登入部分
         var username = "{{ session['username'] }}";
         var pw = "{{ session['pw'] }}";
         const checkSession = () => {
