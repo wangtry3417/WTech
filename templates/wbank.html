@@ -225,6 +225,7 @@
              alert("你的確認密碼跟密碼不一致，自動程式很難判決");
           }
           window.location.href="/wbank/change/pw?user="+username+"&pw="+pw;
+          closeBtn.click();
         });
 
         overlay.addEventListener('click', () => {
