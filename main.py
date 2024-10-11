@@ -2190,7 +2190,8 @@ def wbank_auth_client():
               else:
                 session["tryTimes"] = tryTimes + 1
                 session.permanent = True
-                msg = f"密碼錯誤，嘗試次數： {session['tryTimes']}"
+                tryTimes = session["tryTimes"]
+                msg = f"密碼錯誤，嘗試次數： {tryTimes}"
                 flash(msg, "error")
             else:
               flash(user.sub,'error')
