@@ -2172,10 +2172,10 @@ def wbank_auth_client():
         username = request.form['user']
         password = request.form['pw']
         user = wbankwallet.query.filter_by(username=username).first()
+        tryTimes = session.get("tryTimes",0)
         if user:
             if user.password == password:
               if user.sub == None or user.sub == "":
-                tryTimes = session.get("tryTimes",0)
                 if tryTimes >= 3:
                   user.sub = '你的帳戶被鎖定，原因：錯誤登入3次'
                   db.session.commit()
@@ -2188,9 +2188,9 @@ def wbank_auth_client():
                   flash('登入成功.', 'success')
                   return redirect(url_for('wbank_client'))
               else:
-                session["tryTimes"] = tryTimes + 1
+                tryTimes += 1
+                session["tryTimes"] = tryTimes
                 session.permanent = True
-                tryTimes = session["tryTimes"]
                 msg = f"密碼錯誤，嘗試次數： {tryTimes}"
                 flash(msg, "error")
             else:
