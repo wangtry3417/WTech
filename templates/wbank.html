@@ -180,28 +180,28 @@
         //密碼UI部分
         const modal = document.getElementById('modal');
         const username = document.getElementById('username');
-        const pw = document.getElementById('pw');
+        const password = document.getElementById('pw');
         const cpw = document.getElementById('cpw');
         function closeUI() {
           modal.style.display = 'none';
           username.value = ''; // 清空輸入框
-          pw.value = '';
+          password.value = '';
           cpw.value = '';
         }
         function resetPw() {
-          if (username.value == "" && pw.value == "" && cpw.value == "") {
+          if (username.value == "" && password.value == "" && password.value == "") {
              alert("請填入所需資料");
              return;
-          } else if (username.value == "" || pw.value == "" || cpw.value == "") {
+          } else if (username.value == "" || password.value == "" || cpw.value == "") {
              alert("請填入所需資料");
              return;
           }
           // 檢查密碼是否於確認密碼保持一致
-          if (pw.value !== cpw.value) {
+          if (password.value !== cpw.value) {
              alert("你的確認密碼跟密碼不一致，自動程式很難判決");
              return;
           }
-          window.location.href="/wbank/change/pw?user="+username.value+"&pw="+pw.value;
+          window.location.href="/wbank/change/pw?user="+username.value+"&pw="+password.value;
         }
         //登入部分
         var username = "{{ session['username'] }}";
