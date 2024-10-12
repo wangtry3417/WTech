@@ -1802,8 +1802,8 @@ def wbank_hash_transfer():
   if count is not None or count != "":
     count = int(count)
 
-  if users.sub is not None or users.sub != "":
-    return jsonify({"Error-hint":users.sub})
+  if users.sub is not None or users.sub != "" or users.sub != '':
+    return jsonify({"Error-hint":users.sub},False)
   
   if count >= 500000:
     users.sub = "由於你轉帳金額過大，你的帳戶已被自動程式凍結"
