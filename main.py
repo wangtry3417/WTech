@@ -1802,7 +1802,7 @@ def wbank_hash_transfer():
   if count is not None or count != "":
     count = int(count)
 
-  if users.sub is not None and users.sub != "" users.sub != '':
+  if users.sub is not None and users.sub != "":
     return jsonify({"Error-hint":users.sub})
   
   if count >= 500000:
