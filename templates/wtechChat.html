@@ -1,185 +1,276 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-Hant">
 <head>
-  <title>WChat 泓聊平台</title>
-  <style>
-    body {
-      font-family: sans-serif;
-    }
-    .container {
-      display: flex;
-      height: 100vh;
-    }
-    .sidebar {
-      width: 200px;
-      background-color: #f0f0f0;
-      padding: 20px;
-    }
-    .chat-area {
-      flex: 1;
-      padding: 20px;
-    }
-    .chat-messages {
-      height: 400px;
-      overflow-y: auto;
-      border: 1px solid #ccc;
-      padding: 10px;
-    }
-    .message {
-      margin-bottom: 10px;
-    }
-    .message-username {
-      font-weight: bold;
-    }
-    .message-text {
-      margin-left: 5px;
-    }
-    .input-area {
-      display: flex;
-      margin-top: 10px;
-    }
-    .input-field {
-      flex: 1;
-      padding: 10px;
-      border: 1px solid #ccc;
-    }
-    .send-button {
-      padding: 10px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WChat 泓聊平台</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #eef2f3;
+            color: #333;
+        }
+        #username-input-area {
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            margin: 20px;
+        }
+        .container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+        }
+        .channel-list {
+            margin-top: 20px;
+            width: 100%;
+            max-width: 400px;
+            background-color: #ffffff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .channel-item {
+            padding: 10px;
+            border-bottom: 1px solid #eaeaea;
+        }
+        .channel-item:last-child {
+            border-bottom: none;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #ffffff;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        .chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: #f9f9f9;
+            padding: 20px;
+        }
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #ffffff;
+        }
+        .message {
+            margin-bottom: 10px;
+        }
+        .message-username {
+            font-weight: bold;
+            color: #4CAF50;
+        }
+        .input-area {
+            display: flex;
+        }
+        .input-field {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+        .send-button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .send-button:hover {
+            background-color: #45a049;
+        }
+        button {
+            margin-top: 10px;
+            width: 100%;
+            padding: 10px;
+            border-radius: 4px;
+            border: none;
+            color: white;
+            background-color: #007BFF;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-  <div id="username-input-area">
-    <input type="text" id="username-input" placeholder="輸入你的用戶名">
-    <select id="room">
-        <option value="default">請選擇部門通訊通道</option>
-        <option value="default">----WTech部門----</option>
-        <option value="cs">客戶服務部</option>
-        <option value="ta">技術部</option>
-        <option value="ma">市場部</option>
-        <option value="default">----自選通訊通道----</option>
-        <option value="trade">wcoins交易群組</option>
-        <option value="chatOne">包廂1號</option>
-        <option value="chatTwo">包廂2號</option>
-      </select>
-    <button id="join-button">加入</button>
-    <br>
-    <input type="text" id="reviewer-input" placeholder="輸入通道名稱（只限加入）">
-    <button id="create-dm">創建通道</button>
-    <button id="join-dm">加入通道</button>
-  </div>
-
-  <div class="container" style="display: none;">
-    <div class="sidebar">
-      <h3>可加入的通道</h3>
-      <div id="channel-list"></div>
-      <button onclick="exit()">退出通道</button>
+    <div id="username-input-area">
+        <input type="text" id="username-input" placeholder="輸入你的用戶名" required>
+        <button id="submit-username">確認用戶名</button>
+        <div class="channel-list" id="active-channels" style="display: none;">
+            <h3>正在有效的通道</h3>
+            <div id="channel-list-items"></div>
+        </div>
     </div>
-    <div class="chat-area">
-      <div class="chat-messages" id="chat-messages"></div>
-      <div class="input-area">
-        <input type="text" class="input-field" id="message-input" placeholder="輸入訊息">
-        <button class="send-button" id="send-button">發送</button>
-      </div>
+
+    <div class="container">
+        <select id="room" required>
+            <option value="default">請選擇部門通訊通道</option>
+            <option value="default">----WTech部門----</option>
+            <option value="cs">客戶服務部</option>
+            <option value="ta">技術部</option>
+            <option value="ma">市場部</option>
+            <option value="default">----自選通訊通道----</option>
+            <option value="trade">wcoins交易群組</option>
+            <option value="chatOne">包廂1號</option>
+            <option value="chatTwo">包廂2號</option>
+        </select>
+        <button id="join-button">加入</button>
+        <input type="text" id="reviewer-input" placeholder="輸入通道名稱（只限加入）">
+        <button id="create-dm">創建通道</button>
+        <button id="join-dm">加入通道</button>
     </div>
-  </div>
 
-  <script src="https://cdn.socket.io/4.7.1/socket.io.min.js"></script>
-  <script>
-    const socket = io();
-    const usernameInput = document.getElementById('username-input');
-    const joinButton = document.getElementById('join-button');
-    const usernameInputArea = document.getElementById('username-input-area');
-    const userList = document.getElementById('user-list');
-    const chatMessages = document.getElementById('chat-messages');
-    const messageInput = document.getElementById('message-input');
-    const sendButton = document.getElementById('send-button');
-    const container = document.querySelector('.container');
-    const reviewerInput = document.getElementById('reviewer-input');
-    const createDM = document.getElementById('create-dm');
-    const joinDM = document.getElementById('join-dm');
-    const channelList = document.getElementById('channel-list');
-    
-    let currentTargetUsername = null;
-    let username = null;
-    let room = null;
+    <div class="container" style="display: none;">
+        <div class="sidebar">
+            <h3>可加入的通道</h3>
+            <div id="channel-list"></div>
+            <button onclick="exit()">退出通道</button>
+        </div>
+        <div class="chat-area">
+            <div class="chat-messages" id="chat-messages"></div>
+            <div class="input-area">
+                <input type="text" class="input-field" id="message-input" placeholder="輸入訊息" required>
+                <button class="send-button" id="send-button">發送</button>
+            </div>
+        </div>
+    </div>
 
-    joinButton.addEventListener('click', () => {
-      username = usernameInput.value;
-      room = document.getElementById("room").value;
-      if (room == "default") {
-        console.log("請選擇部門");
-        return;
-      }
-      socket.emit('joinChat', { username: username, room_number: room });
-      usernameInputArea.style.display = 'none';
-      container.style.display = 'flex';
-    });
+    <script src="https://cdn.socket.io/4.7.1/socket.io.min.js"></script>
+    <script>
+        const socket = io();
+        const usernameInput = document.getElementById('username-input');
+        const submitUsernameButton = document.getElementById('submit-username');
+        const usernameInputArea = document.getElementById('username-input-area');
+        const activeChannels = document.getElementById('active-channels');
+        const channelListItems = document.getElementById('channel-list-items');
+        const chatMessages = document.getElementById('chat-messages');
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-button');
+        const container = document.querySelector('.container');
+        const reviewerInput = document.getElementById('reviewer-input');
+        const createDM = document.getElementById('create-dm');
+        const joinDM = document.getElementById('join-dm');
 
-    createDM.addEventListener('click', () => {
-      username = usernameInput.value;
-      room = usernameInput.value;
-      socket.emit('joinChat', { username: username, room_number: room });
-      usernameInputArea.style.display = 'none';
-      container.style.display = 'flex';
-    });
+        let username = null;
+        let room = null;
 
-    joinDM.addEventListener('click', () => {
-      username = usernameInput.value;
-      room = reviewerInput.value;
-      socket.emit('joinChat', { username: username, room_number: room });
-      usernameInputArea.style.display = 'none';
-      container.style.display = 'flex';
-    });
-
-    socket.on('chatMessage', (data) => {
-      const message = document.createElement('div');
-      message.classList.add('message');
-      if (data.type == 'text') {
-        message.innerHTML = `
-          <span class="message-username">${data.username}:</span>
-          <span class="message-text">${data.text}</span>
-        `;
-      }
-      chatMessages.appendChild(message);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-    });
-
-    sendButton.addEventListener('click', () => {
-      const message = messageInput.value;
-      if (message) {
-        socket.emit('chatMessage', { username: username, text: message, room_number: room, type: 'text' });
-        messageInput.value = '';
-      }
-    });
-    // 偵測用戶A是否創建了與用戶B同名的通道
-    socket.on('channelCreated', (data) => {
-      if (data.channelName === username) {
-        const button = document.createElement('button');
-        button.textContent = '加入通道';
-        button.classList.add('channel-button');
-        button.addEventListener('click', () => {
-          socket.emit('joinChat', { username: username, room_number: data.channelName });
-          button.remove();
+        submitUsernameButton.addEventListener('click', () => {
+            username = usernameInput.value;
+            if (!username) {
+                alert("請輸入用戶名");
+                return;
+            }
+            usernameInputArea.style.display = 'none';
+            container.style.display = 'flex';
+            activeChannels.style.display = 'block';
+            loadActiveChannels(); // 加載有效的通道
         });
-        channelList.appendChild(button);
-      }
-    });
-    
-    const exit = () => {
-      // 離開聊天室
-      socket.emit('leaveChat', { username: username, room_number: room });
-      // 移除聊天內容
-      chatMessages.innerHTML = '';
-      // 隱藏聊天頁面
-      container.style.display = 'none';
-      // 顯示用戶名輸入欄位和按鈕
-      usernameInputArea.style.display = 'block';
-    };
-  </script>
+
+        const loadActiveChannels = () => {
+            // 假設這裡會從伺服器獲取用戶的有效通道列表
+            const channels = ["wcoins交易群組", "包廂1號"]; // 示例通道
+            channelListItems.innerHTML = ''; // 清空通道列表
+            channels.forEach(channel => {
+                const channelItem = document.createElement('div');
+                channelItem.classList.add('channel-item');
+                channelItem.textContent = channel;
+                channelItem.addEventListener('click', () => {
+                    room = channel;
+                    socket.emit('joinChat', { username, room_number: room });
+                    usernameInputArea.style.display = 'none';
+                    container.style.display = 'flex';
+                    loadMessages(); // 加載訊息
+                });
+                channelListItems.appendChild(channelItem);
+            });
+            if (channels.length === 0) {
+                activeChannels.style.display = 'none'; // 沒有通道時隱藏
+            }
+        };
+
+        const loadMessages = () => {
+            const messages = JSON.parse(sessionStorage.getItem('chatMessages')) || [];
+            messages.forEach(data => {
+                const message = document.createElement('div');
+                message.classList.add('message');
+                message.innerHTML = `<span class="message-username">${data.username}:</span> <span class="message-text">${data.text}</span>`;
+                chatMessages.appendChild(message);
+            });
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        };
+
+        const saveMessage = (data) => {
+            const messages = JSON.parse(sessionStorage.getItem('chatMessages')) || [];
+            messages.push(data);
+            sessionStorage.setItem('chatMessages', JSON.stringify(messages));
+        };
+
+        const joinChat = () => {
+            if (room) {
+                socket.emit('joinChat', { username, room_number: room });
+                loadMessages(); // 加載訊息
+            }
+        };
+
+        sendButton.addEventListener('click', () => {
+            const message = messageInput.value;
+            if (message) {
+                const messageData = { username, text: message, room_number: room, type: 'text' };
+                socket.emit('chatMessage', messageData);
+                saveMessage(messageData); // 保存訊息
+                messageInput.value = '';
+            }
+        });
+
+        socket.on('chatMessage', (data) => {
+            const message = document.createElement('div');
+            message.classList.add('message');
+            message.innerHTML = `<span class="message-username">${data.username}:</span> <span class="message-text">${data.text}</span>`;
+            chatMessages.appendChild(message);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        });
+
+        createDM.addEventListener('click', () => {
+            room = reviewerInput.value;
+            socket.emit('joinChat', { username, room_number: room });
+            usernameInputArea.style.display = 'none';
+            container.style.display = 'flex';
+            loadMessages(); // 加載訊息
+        });
+
+        joinDM.addEventListener('click', () => {
+            room = reviewerInput.value;
+            socket.emit('joinChat', { username, room_number: room });
+            usernameInputArea.style.display = 'none';
+            container.style.display = 'flex';
+            loadMessages(); // 加載訊息
+        });
+
+        const exit = () => {
+            socket.emit('leaveChat', { username, room_number: room });
+            chatMessages.innerHTML = '';
+            sessionStorage.removeItem('chatMessages'); // 清除訊息
+            container.style.display = 'none';
+            usernameInputArea.style.display = 'block';
+        };
+    </script>
 </body>
 </html>
