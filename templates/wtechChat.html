@@ -5,18 +5,83 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WChat 泓聊平台</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #eef2f3; color: #333; }
-        #username-input-area { padding: 20px; background-color: #ffffff; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); border-radius: 8px; margin: 20px; }
-        .container { display: none; flex-direction: column; align-items: center; }
-        .channel-list { margin-top: 20px; max-width: 400px; background-color: #ffffff; border: 1px solid #ccc; border-radius: 8px; padding: 10px; box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); }
-        .channel-item { padding: 10px; border-bottom: 1px solid #eaeaea; cursor: pointer; }
-        .channel-item:hover { background-color: #f0f0f0; }
-        .chat-area { flex: 1; display: flex; flex-direction: column; background-color: #f9f9f9; padding: 20px; }
-        .chat-messages { flex: 1; overflow-y: auto; border: 1px solid #ccc; border-radius: 8px; padding: 10px; margin-bottom: 10px; background-color: #ffffff; }
-        .input-area { display: flex; }
-        .input-field { flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 4px; margin-right: 10px; }
-        .send-button, button { padding: 10px; border-radius: 4px; border: none; color: white; background-color: #007BFF; cursor: pointer; transition: background-color 0.3s; }
-        .send-button:hover, button:hover { background-color: #0056b3; }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #eef2f3;
+            color: #333;
+        }
+        #username-input-area {
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            margin: 20px;
+        }
+        .container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+        }
+        .channel-list {
+            margin-top: 20px;
+            max-width: 400px;
+            background-color: #ffffff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .channel-item {
+            padding: 10px;
+            border-bottom: 1px solid #eaeaea;
+            cursor: pointer;
+        }
+        .channel-item:hover {
+            background-color: #f0f0f0;
+        }
+        .chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: #f9f9f9;
+            padding: 20px;
+            width: 100%;
+            max-width: 600px; /* 增加聊天區域的最大寬度 */
+        }
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #ffffff;
+            max-height: 400px; /* 增加最大高度以顯示更多內容 */
+        }
+        .input-area {
+            display: flex;
+        }
+        .input-field {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+        .send-button, button {
+            padding: 10px;
+            border-radius: 4px;
+            border: none;
+            color: white;
+            background-color: #007BFF;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .send-button:hover, button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -30,6 +95,7 @@
     </div>
 
     <div class="container" id="chat-container">
+        <button id="exit-button">退出通道</button>
         <select id="room" required>
             <option value="default">請選擇部門通訊通道</option>
             <option value="cs">客戶服務部</option>
@@ -60,7 +126,8 @@
         const messageInput = document.getElementById('message-input');
         const sendButton = document.getElementById('send-button');
         const chatContainer = document.getElementById('chat-container');
-        
+        const exitButton = document.getElementById('exit-button');
+
         let username = null;
         let room = null;
 
@@ -76,7 +143,7 @@
         });
 
         const loadActiveChannels = () => {
-            const channels = ["wcoins交易群組", "包廂1號"]; // 模擬的通道
+            const channels = ["淘寶VIP888 交流群", "北海大賭廳"]; // 模擬的通道
             channelListItems.innerHTML = '';
             channels.forEach(channel => {
                 const channelItem = document.createElement('div');
@@ -127,6 +194,15 @@
             messages.push(data);
             sessionStorage.setItem('chatMessages', JSON.stringify(messages));
         };
+
+        exitButton.addEventListener('click', () => {
+            socket.emit('leaveChat', { username, room_number: room });
+            chatMessages.innerHTML = '';
+            sessionStorage.removeItem('chatMessages'); // 清除訊息
+            chatContainer.style.display = 'none';
+            usernameInput.style.display = 'block';
+            activeChannels.style.display = 'none';
+        });
     </script>
 </body>
 </html>
