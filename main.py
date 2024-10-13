@@ -2247,18 +2247,18 @@ def wbank_change_password():
   user = request.args.get("user")
   pw = request.args.get("pw")
   if user == None and pw == None:
-    flash("收不到URL參數，請不要氣弄自動程式","danger")
+    flash("收不到URL參數，請不要氣弄自動程式","error")
     return redirect("/wbank")
   elif user == None or pw == None:
-    flash("URL參數不完整，請不要氣弄自動程式","danger")
+    flash("URL參數不完整，請不要氣弄自動程式","error")
     return redirect("/wbank")
   users = wbankwallet.query.filter_by(username=user).first()
   if users is None:
-    flash("找不到用戶，請不要氣弄自動程式","danger")
+    flash("找不到用戶，請不要氣弄自動程式","error")
     return redirect("/wbank")
   users.password = pw
   db.session.commit()
-  flash("密碼已更改，請記住新的密碼")
+  flash("密碼已更改，請記住新的密碼","info")
   return redirect("/wbank")
 
 @app.route("/wbank/recordPage")
