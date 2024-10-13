@@ -175,7 +175,7 @@
         sendButton.addEventListener('click', () => {
             const message = messageInput.value;
             if (message) {
-                const messageData = { username, text: message, room_number: room };
+                const messageData = { username, text: message, room_number: room, type: "text" };
                 socket.emit('chatMessage', messageData);
                 saveMessage(messageData);
                 messageInput.value = '';
