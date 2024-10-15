@@ -2244,8 +2244,8 @@ def wbank_client():
 
 @app.route("/wbank/change/pw")
 def wbank_change_password():
-  user = request.args.get("user")
-  pw = request.args.get("pw")
+  user = request.form.get("user")
+  pw = request.form.get("pw")
   if user == None and pw == None:
     flash("收不到URL參數，請不要氣弄自動程式","error")
     return redirect("/wbank")
