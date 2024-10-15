@@ -199,7 +199,26 @@
              alert("你的確認密碼跟密碼不一致，自動程式很難判決");
              return;
           }
-          window.location.href="/wbank/change/pw?user="+users.value+"&pw="+password.value;
+          var resetFormData = new FormData();
+                resetFormData.append("user", users.value);
+                resetFormData.append("pw", password);
+                fetch("/wbank/change/pw", {
+                    method: "POST",
+                    body: resetFormData
+                })
+                .then(res => {
+                    if (res.redirected) {
+                        window.location.href = res.url;
+                    } else {
+                        alert(res.text());
+                    }
+                })
+                .then(text => {
+                    alert(text);
+                })
+                .catch(error => {
+                    alert("發生錯誤: " + error);
+                });
         }
         //登入部分
         var username = "{{ session['username'] }}";
