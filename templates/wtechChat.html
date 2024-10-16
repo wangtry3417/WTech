@@ -237,7 +237,7 @@
         });
 
         socket.on('chatMessage', (data) => {
-            const messageData = { ...data, type: data.type === 'text' ? 'received' : data.type }; // 根據類型設置
+            const messageData = { username:data.username, text: data.message, type: data.type === 'text' ? 'received' : data.type }; // 根據類型設置
             chatMessages.appendChild(createMessageElement(messageData));
             saveChatHistory(messageData); // 儲存聊天歷史
             chatMessages.scrollTop = chatMessages.scrollHeight;
