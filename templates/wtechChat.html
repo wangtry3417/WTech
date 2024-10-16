@@ -198,10 +198,31 @@
             activeChannels.style.display = 'block';
             loadActiveChannels();
         });
+        const allChannels = {
+    "morning": ["財經群組", "政府事務發洩區"], // 早上顯示的頻道
+    "afternoon": ["邦金國際金融","wbank","金融經紀Ben","閒聊區"], // 下午顯示的頻道
+    "evening": ["邦金國際金融", "世遊娛樂城", "VIP888荷官", "馬會出糧區","波友區"], // 晚上顯示的頻道
+};
+
+       const getCurrentTimeSlot = () => {
+         const utcDate = new Date();
+         const localDate = new Date(utcDate.getTime() + (8 * 60 * 60 * 1000)); // UTC+8
+         const hours = localDate.getHours();
+
+         if (hours >= 6 && hours < 12) {
+            return "morning"; // 早上 6:00 - 11:59
+         } else if (hours >= 12 && hours < 18) {
+            return "afternoon"; // 下午 12:00 - 17:59
+         } else {
+            return "evening"; // 晚上 18:00 - 5:59
+         }
+    };
 
         const loadActiveChannels = () => {
-            const channels = ["邦金國際金融", "北海大賭廳", "wbank"]; // 模擬的通道
-            channelListItems.innerHTML = '';
+            const timeSlot = getCurrentTimeSlot();
+            const channels = allChannels[timeSlot];
+
+            channelListItems.innerHTML = ''; // 清空現有的頻道
             channels.forEach(channel => {
                 const channelItem = document.createElement('div');
                 channelItem.classList.add('channel-item');
