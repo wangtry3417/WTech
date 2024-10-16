@@ -205,8 +205,7 @@
 };
 
        const getCurrentTimeSlot = () => {
-         const utcDate = new Date();
-         const localDate = new Date(utcDate.getTime() + (8 * 60 * 60 * 1000)); // UTC+8
+         const localDate = new Date(); // UTC+8或本地時間
          const hours = localDate.getHours();
 
          if (hours >= 6 && hours < 12) {
