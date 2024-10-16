@@ -216,8 +216,16 @@
 
         const createMessageElement = (data) => {
             const message = document.createElement('div');
-            message.classList.add('message', data.type);
+            //message.classList.add('message', data.type);
+            message.classList.add('message');
 
+            // 根據消息來源設置類別
+            if (data.username === username) {
+                message.classList.add('sent'); // 自己的消息
+            } else {
+                message.classList.add('received'); // 對方的消息
+            }
+            
             if (data.type === 'text') {
                 message.innerHTML = `<div class="username">${data.username}</div><div class="chat-text">${data.text}</div>`;
             } else if (data.type === 'image') {
