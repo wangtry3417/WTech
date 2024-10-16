@@ -66,12 +66,11 @@
         .message {
             margin: 10px 0;
             padding: 10px;
-            border-radius: 20px;
+            border-radius: 8px;
             max-width: 80%;
-            display: inline-block;
-            position: relative;
+            display: block;
             animation: fadeIn 0.5s;
-            word-wrap: break-word; /* 允許換行 */
+            word-wrap: break-word;
         }
         .message.sent {
             background-color: #7289da;
@@ -80,6 +79,13 @@
         .message.received {
             background-color: #2c2f33;
             align-self: flex-start;
+        }
+        .username {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .chat-text {
+            white-space: pre-wrap;
         }
         @keyframes fadeIn {
             from { opacity: 0; }
@@ -108,10 +114,10 @@
         }
         .send-button:hover {
             background-color: #5b6eae;
-            transform: scale(1.05); /* 增加按鈕的縮放效果 */
+            transform: scale(1.05);
         }
         .send-button:active {
-            transform: scale(0.95); /* 按下時縮小 */
+            transform: scale(0.95);
         }
     </style>
 </head>
@@ -162,6 +168,23 @@
         let username = null;
         let room = null;
 
+        // 載入聊天歷史
+        const loadChatHistory = () => {
+            const messages = JSON.parse(sessionStorage.getItem('chatMessages')) || [];
+            messages.forEach(data => {
+                const message = createMessageElement(data);
+                chatMessages.appendChild(message);
+            });
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        };
+
+        // 儲存聊天歷史
+        const saveChatHistory = (messageData) => {
+            const messages = JSON.parse(sessionStorage.getItem('chatMessages')) || [];
+            messages.push(messageData);
+            sessionStorage.setItem('chatMessages', JSON.stringify(messages));
+        };
+
         submitUsernameButton.addEventListener('click', () => {
             username = usernameInput.value;
             if (!username) {
@@ -184,7 +207,7 @@
                     room = channel;
                     socket.emit('joinChat', { username, room_number: room });
                     chatContainer.style.display = 'flex';
-                    loadMessages();
+                    loadChatHistory(); // 載入聊天歷史
                 });
                 channelListItems.appendChild(channelItem);
             });
@@ -193,19 +216,10 @@
             }
         };
 
-        const loadMessages = () => {
-            const messages = JSON.parse(sessionStorage.getItem('chatMessages')) || [];
-            messages.forEach(data => {
-                const message = createMessageElement(data);
-                chatMessages.appendChild(message);
-            });
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        };
-
         const createMessageElement = (data) => {
             const message = document.createElement('div');
             message.classList.add('message', data.type);
-            message.innerHTML = `<strong>${data.username}:</strong> ${data.text}`;
+            message.innerHTML = `<div class="username">${data.username}</div><div class="chat-text">${data.text}</div>`;
             return message;
         };
 
@@ -215,6 +229,7 @@
                 const messageData = { username, text: message, room_number: room, type: "sent" };
                 socket.emit('chatMessage', messageData);
                 chatMessages.appendChild(createMessageElement(messageData));
+                saveChatHistory(messageData); // 儲存聊天歷史
                 messageInput.value = '';
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }
@@ -223,6 +238,7 @@
         socket.on('chatMessage', (data) => {
             const messageData = { ...data, type: "received" };
             chatMessages.appendChild(createMessageElement(messageData));
+            saveChatHistory(messageData); // 儲存聊天歷史
             chatMessages.scrollTop = chatMessages.scrollHeight;
         });
 
