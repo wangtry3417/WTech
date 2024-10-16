@@ -216,7 +216,7 @@
        const getCurrentTimeSlot = () => {
          const localDate = new Date(); // UTC+8或本地時間
          const hours = localDate.getHours();
-         timeDisplay.innerHTML = localDate.toLocaleString(); // 顯示目前時間
+         timeDisplayList.innerHTML = localDate.toLocaleString(); // 顯示目前時間
            
          if (hours >= 6 && hours < 12) {
             return "morning"; // 早上 6:00 - 11:59
