@@ -71,6 +71,7 @@
             display: inline-block;
             position: relative;
             animation: fadeIn 0.5s;
+            word-wrap: break-word; /* 允許換行 */
         }
         .message.sent {
             background-color: #7289da;
@@ -97,23 +98,27 @@
             color: #ffffff;
         }
         .send-button {
-            padding: 10px;
+            padding: 10px 15px;
             border-radius: 4px;
             border: none;
             color: white;
             background-color: #7289da;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.2s;
         }
         .send-button:hover {
             background-color: #5b6eae;
+            transform: scale(1.05); /* 增加按鈕的縮放效果 */
+        }
+        .send-button:active {
+            transform: scale(0.95); /* 按下時縮小 */
         }
     </style>
 </head>
 <body>
     <div id="username-input-area">
         <input type="text" id="username-input" placeholder="輸入你的用戶名" required style="padding: 10px; border: 1px solid #555; border-radius: 4px; width: calc(100% - 22px);">
-        <button id="submit-username">確認用戶名</button>
+        <button id="submit-username" class="send-button">確認用戶名</button>
         <div class="channel-list" id="active-channels" style="display: none;">
             <h3>正在有效的通道</h3>
             <div id="channel-list-items"></div>
@@ -121,7 +126,7 @@
     </div>
 
     <div class="container" id="chat-container">
-        <button id="exit-button">退出通道</button>
+        <button id="exit-button" class="send-button">退出通道</button>
         <select id="room" required>
             <option value="default">請選擇部門通訊通道</option>
             <option value="cs">客戶服務部</option>
@@ -131,7 +136,7 @@
             <option value="chatOne">包廂1號</option>
             <option value="chatTwo">包廂2號</option>
         </select>
-        <button id="join-button">加入</button>
+        <button id="join-button" class="send-button">加入</button>
         <div class="chat-area">
             <div class="chat-messages" id="chat-messages"></div>
             <div class="input-area">
