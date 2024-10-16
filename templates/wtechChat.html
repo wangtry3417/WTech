@@ -131,6 +131,8 @@
         <input type="text" id="username-input" placeholder="輸入你的用戶名" required style="padding: 10px; border: 1px solid #555; border-radius: 4px; width: calc(100% - 22px);">
         <button id="submit-username" class="send-button">確認用戶名</button>
         <div class="channel-list" id="active-channels" style="display: none;">
+            <div id="timeList"></div>
+            <br>
             <h3>正在有效的通道</h3>
             <div id="channel-list-items"></div>
         </div>
@@ -169,6 +171,7 @@
         const sendButton = document.getElementById('send-button');
         const chatContainer = document.getElementById('chat-container');
         const exitButton = document.getElementById('exit-button');
+        const timeDisplayList = document.getElementById('timeList');
 
         let username = null;
         let room = null;
@@ -207,7 +210,8 @@
        const getCurrentTimeSlot = () => {
          const localDate = new Date(); // UTC+8或本地時間
          const hours = localDate.getHours();
-
+         timeDisplayList.innerHTML=localDate;
+           
          if (hours >= 6 && hours < 12) {
             return "morning"; // 早上 6:00 - 11:59
          } else if (hours >= 12 && hours < 18) {
