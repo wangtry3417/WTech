@@ -82,8 +82,8 @@
             color: #ffffff; /* 白色文字 */
             align-self: flex-start;
         }
-        .system-message {
-            background-color: #4b545c;
+        .message.sys-msg {
+            background-color: #FF0000;
             text-align: center;
             color: #ffffff;
         }
@@ -222,6 +222,9 @@
             // 根據消息來源設置類別
             if (data.username === username) {
                 message.classList.add('sent'); // 自己的消息
+            } 
+            else if (data.username == "系統（自動程式）") {
+                message.classList('sys-msg');
             } else {
                 message.classList.add('received'); // 對方的消息
             }
