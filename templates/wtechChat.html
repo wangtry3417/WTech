@@ -226,7 +226,7 @@
         sendButton.addEventListener('click', () => {
             const message = messageInput.value;
             if (message) {
-                const messageData = { username, text: message, room_number: room, type: "sent" };
+                const messageData = { username, text: message, room_number: room, type: "text" };
                 socket.emit('chatMessage', messageData);
                 chatMessages.appendChild(createMessageElement(messageData));
                 saveChatHistory(messageData); // 儲存聊天歷史
@@ -236,7 +236,7 @@
         });
 
         socket.on('chatMessage', (data) => {
-            const messageData = { ...data, type: "received" };
+            const messageData = data;
             chatMessages.appendChild(createMessageElement(messageData));
             saveChatHistory(messageData); // 儲存聊天歷史
             chatMessages.scrollTop = chatMessages.scrollHeight;
