@@ -236,7 +236,7 @@
         });
 
         socket.on('chatMessage', (data) => {
-            const messageData = data;
+            const messageData = { data };
             chatMessages.appendChild(createMessageElement(messageData));
             saveChatHistory(messageData); // 儲存聊天歷史
             chatMessages.scrollTop = chatMessages.scrollHeight;
