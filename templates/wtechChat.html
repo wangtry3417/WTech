@@ -238,8 +238,10 @@
 
         socket.on('chatMessage', (data) => {
             const messageData = { username:data.username, text: data.text, type: data.type }; // 根據類型設置
-            chatMessages.appendChild(createMessageElement(messageData));
-            saveChatHistory(messageData); // 儲存聊天歷史
+            if (data.username !== username) {
+              chatMessages.appendChild(createMessageElement(messageData));
+              saveChatHistory(messageData); // 儲存聊天歷史
+            }
             chatMessages.scrollTop = chatMessages.scrollHeight;
         });
 
