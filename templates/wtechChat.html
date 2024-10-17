@@ -214,10 +214,10 @@
 };
 
        const getCurrentTimeSlot = () => {
-         //const localDate = new Date(); // UTC+8或本地時間
+         let localDate = new Date(); // UTC+8或本地時間
          const hours = localDate.getHours();
          setInterval(()=>{
-         const localDate = new Date();
+         let localDate = new Date();
          timeDisplayList.innerHTML = localDate.toLocaleString(); // 顯示目前時間
          },1000);
            
