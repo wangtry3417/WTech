@@ -17,6 +17,7 @@ func main() {
     \*content*\
   """);
    screen.list(template.content,listOne=screen.list.add(text="High-Jump",color=RGB(255,255,255),callback=Jump()));
+   fm.save(filename="robloxMod.w",perfer=screen.main());
 };
 
 func Jump(screen,player) {
