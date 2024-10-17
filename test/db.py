@@ -22,7 +22,8 @@ users = User.query.filter_by(username="Ben").find_first()
 print(users.username)
 
 # Complier command
-db.session.addCode("""
+query1 = db.session.addCode("""
   using <table> , select field -> where <condition>;
 """)
 db.session.commit()
+print(query.toResult())
