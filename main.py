@@ -528,9 +528,9 @@ def handle_chat_message(data):
     # 處理文字類型的 data
     elif data['type'] == 'text':
       if "fuck" in data["text"]:
-        emit("chatMessage",{"username":"自動程式（系統）","text":f"{data["usermame"]} 警告⚠️：言詞不當"},room=data['room_number'])
+        emit("chatMessage",{"username":"自動程式（系統）","text":f"{data['usermame']} 警告⚠️：言詞不當"},room=data['room_number'])
       elif "屌" in data["text"]:
-        emit("chatMessage",{"username":"自動程式（系統）","text":f"{data["usermame"]} 警告⚠️：言詞不當"},room=data['room_number'])
+        emit("chatMessage",{"username":"自動程式（系統）","text":f"{data['usermame']} 警告⚠️：言詞不當"},room=data['room_number'])
       emit('chatMessage', data, room=data['room_number'])
 
 @socketio.on('leaveChat')
