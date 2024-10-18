@@ -37,7 +37,7 @@ from wtforms import StringField
 from flask_admin.form import BaseForm
 from flask_qrcode import QRcode
 import json,sys,threading
-from socketio import AdminUI
+from socketio import Server
 from DDos import checkUrl, DDos
 #from nltk.stem import WordNetLemmatizer
 #from nltk.book import *
@@ -90,7 +90,14 @@ def verify_password(username, password):
 
 socketio = SocketIO(app)
 
-admin_ui = AdminUI(socketio)
+sio = socketio.Server(
+    async_mode=async_mode,
+    cors_allowed_origins=None if not instrument else [
+        'https://sites.wtechhk.xyz',
+        'https://admin.socket.io',  # edit the allowed origins if necessary
+    ])
+if instrument:
+    sio.instrument(auth={"username":"admin","password":"WTech1234#")
 
 @app.route("/socket/admin")
 def socket_admin_managment():
