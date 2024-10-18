@@ -97,7 +97,7 @@ sio = socketio.Server(
         'https://admin.socket.io',  # edit the allowed origins if necessary
     ])
 if instrument:
-    sio.instrument(auth={"username":"admin","password":"WTech1234#")
+    sio.instrument(auth={"username":"admin","password":"WTech1234#"})
 
 @app.route("/socket/admin")
 def socket_admin_managment():
