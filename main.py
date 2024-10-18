@@ -91,7 +91,7 @@ def verify_password(username, password):
 socketio = SocketIO(app)
 
 sio = Server(
-    async_mode=async_mode,
+    async_mode="eventlet",
     cors_allowed_origins=None if not instrument else [
         'https://sites.wtechhk.xyz',
         'https://admin.socket.io',  # edit the allowed origins if necessary
