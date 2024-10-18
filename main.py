@@ -88,6 +88,7 @@ def verify_password(username, password):
     return False
 
 socketio = SocketIO(app,cors_allowed_origins=[
+        'https://0.0.0.0:5000',
         'https://admin.socket.io',  # 允許 Socket.IO Admin UI
     ])
 
