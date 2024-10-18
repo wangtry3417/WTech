@@ -37,7 +37,7 @@ from wtforms import StringField
 from flask_admin.form import BaseForm
 from flask_qrcode import QRcode
 import json,sys,threading
-from socketio import Server
+from socketio import Server,init_app
 from DDos import checkUrl, DDos
 #from nltk.stem import WordNetLemmatizer
 #from nltk.book import *
@@ -93,17 +93,14 @@ socketio = SocketIO(app,cors_allowed_origins=[
         'https://admin.socket.io'
     ])
 
-instrument=True
+instrument="eventlet"
 
-sio = Server(
-    async_mode=None,
+if instrument:
+    init_app(app,async_mode=instrument,
     cors_allowed_origins=[
         'https://sites.wtechhk.xyz:5000',
         'https://admin.socket.io'
-    ]
-)
-if instrument:
-    sio.instrument(auth={"username":"admin","password":"WTech1234#"})
+    ])
 
 #CORS(app,resources={r"/*": {"origins": "*"}})
 CORS(app, resources=r'/*')
