@@ -89,17 +89,8 @@ def verify_password(username, password):
     return False
 
 socketio = SocketIO(app,cors_allowed_origins=[
-        'https://sites.wtechhk.xyz',
-        'https://admin.socket.io'
-    ])
-
-instrument="eventlet"
-
-if instrument:
-    init_app(app,async_mode=instrument,
-    cors_allowed_origins=[
-        'https://sites.wtechhk.xyz:5000',
-        'https://admin.socket.io'
+        'https://admin.socket.io',  # 允許 Socket.IO Admin UI
+        'https://sites.wtechhk.xyz'  # 你的應用網址
     ])
 
 #CORS(app,resources={r"/*": {"origins": "*"}})
