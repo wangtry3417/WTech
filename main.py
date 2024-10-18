@@ -93,10 +93,10 @@ socketio = SocketIO(app,cors_allowed_origins=[
         'https://admin.socket.io'
     ])
 
-instrument="eventlet"
+instrument=True
 
 sio = Server(
-    async_mode=instrument,
+    async_mode=None,
     cors_allowed_origins=[
         'https://sites.wtechhk.xyz',
         'https://admin.socket.io'
