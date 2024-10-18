@@ -95,12 +95,13 @@ instrument="eventlet"
 sio = Server(
     async_mode=instrument,
     cors_allowed_origins=[
-      'https://sites.wtechhk.xyz',
-      'https://admin.socket.io'
+        'https://sites.wtechhk.xyz',
+        'https://admin.socket.io'
     ] if not instrument else [
         'https://sites.wtechhk.xyz',
-        'https://admin.socket.io',  # edit the allowed origins if necessary
-    ])
+        'https://admin.socket.io',
+    ]
+)
 if instrument:
     sio.instrument(auth={"username":"admin","password":"WTech1234#"})
 
