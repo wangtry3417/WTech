@@ -87,11 +87,11 @@ def verify_password(username, password):
         return hashed_password == hashed_password
     return False
 
-socketio = SocketIO(app,cors_allowed_origins="*")
-socketio.server.instrument(auth=False)
+socketio = SocketIO(app)
 
-sio = socketio.Server(cors_allowed_origins=["https://sites.wtechhk.xyz","https://admin.socket.io"])
-sio.instrument(auth={"username":"admin","password":"WTech1234#"})
+@app.route("/socket/admin")
+def socket_admin_managment():
+  return render_template("wchat/wtechAdmin.html")
 
 #CORS(app,resources={r"/*": {"origins": "*"}})
 CORS(app, resources=r'/*')
