@@ -97,17 +97,10 @@ sio = Server(
     cors_allowed_origins=[
         'https://sites.wtechhk.xyz',
         'https://admin.socket.io'
-    ] if not instrument else [
-        'https://sites.wtechhk.xyz',
-        'https://admin.socket.io',
     ]
 )
 if instrument:
     sio.instrument(auth={"username":"admin","password":"WTech1234#"})
-
-@app.route("/socket/admin")
-def socket_admin_managment():
-  return admin_ui.get()
 
 #CORS(app,resources={r"/*": {"origins": "*"}})
 CORS(app, resources=r'/*')
