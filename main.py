@@ -2696,7 +2696,7 @@ def style():
   return render_template("style.css")
 
 def start_web():
-  socketio.run(app,host="0.0.0.0",port=5000,allow_unsafe_werkzeug=True)
+  socketio.run(app,host="0.0.0.0",port=5000,allow_unsafe_werkzeug=True,allow_admin=True)
 
 thread1 = threading.Thread(target=start_web)
 thread1.start()
