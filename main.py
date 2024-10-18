@@ -90,7 +90,7 @@ def verify_password(username, password):
 
 socketio = SocketIO(app)
 
-sio = socketio.Server(
+sio = Server(
     async_mode=async_mode,
     cors_allowed_origins=None if not instrument else [
         'https://sites.wtechhk.xyz',
