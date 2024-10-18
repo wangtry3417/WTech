@@ -98,7 +98,7 @@ instrument=True
 sio = Server(
     async_mode=None,
     cors_allowed_origins=[
-        'https://sites.wtechhk.xyz',
+        'http://sites.wtechhk.xyz',
         'https://admin.socket.io'
     ]
 )
