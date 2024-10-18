@@ -37,6 +37,7 @@ from wtforms import StringField
 from flask_admin.form import BaseForm
 from flask_qrcode import QRcode
 import json,sys,threading
+from socketio import AdminUI
 from DDos import checkUrl, DDos
 #from nltk.stem import WordNetLemmatizer
 #from nltk.book import *
@@ -89,9 +90,11 @@ def verify_password(username, password):
 
 socketio = SocketIO(app)
 
+admin_ui = AdminUI(socketio)
+
 @app.route("/socket/admin")
 def socket_admin_managment():
-  return render_template("wchat/wtechAdmin.html")
+  return admin_ui.get()
 
 #CORS(app,resources={r"/*": {"origins": "*"}})
 CORS(app, resources=r'/*')
