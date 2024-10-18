@@ -37,7 +37,6 @@ from wtforms import StringField
 from flask_admin.form import BaseForm
 from flask_qrcode import QRcode
 import json,sys,threading
-from socketio import Server,init_app
 from DDos import checkUrl, DDos
 #from nltk.stem import WordNetLemmatizer
 #from nltk.book import *
