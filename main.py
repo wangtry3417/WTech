@@ -366,6 +366,7 @@ def not_found(e):
 @app.route("/wbank/auth/v1")
 def wbank_v1_auth_login():
   redirect_url = request.args.get("url")
+  url = str(redirect_url)
   return render_template("wbank/login.html",url=url)
 
 @app.route("/wbank/auth/v1/session",methods=["GET","POST"])
