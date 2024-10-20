@@ -363,6 +363,31 @@ def unauthorized(error):
 def not_found(e):
   return render_template('404.html'), 404
 
+@app.route("/wbank/auth/v1")
+def wbank_v1_auth_login():
+  redirect_url = request.args.get("url")
+  return render_template("wbank/login.html",url=url)
+
+@app.route("/wbank/auth/v1/session",methods=["GET","POST"])
+def wbank_v1_auth_session():
+  username = request.form['user']
+  password = request.form['pw']
+  url = request.form['url']
+  user = wbankwallet.query.filter_by(username=username).first()
+  if user and url:
+    if user.password == password:
+        if user.sub == None or user.sub == "":
+          login_user(user)
+          flash('登入成功.', 'success')
+          urll = url+"?username="+user.username+"?intent=login"
+          return redirect(urll)
+        else:
+          flash(user.sub,'error')
+          return redirect("/wbank")
+    else:
+       flash('無效的用戶名.', 'error')
+       return render_template('wbank.html')
+
 @socketio.on('connect')
 def handle_connect():
   print("connected websocket!.")
