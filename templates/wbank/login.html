@@ -155,7 +155,9 @@
             <input type="text" name="user" placeholder="用戶名稱或號碼" required>
             <input type="password" name="pw" placeholder="密碼" required>
             <button type="submit" id="btn1">授權登入</button>
+            <input type="hidden" name="url" value="{{ url }}">
             <br>
+            <p>按下授權登入後，會自動重定向至 {{ url }} 。</p> <br>
             <p>按下授權登入後，如果出現一些未經授權操作，WBank一概不負責。</p>
         </form>
     </div>
