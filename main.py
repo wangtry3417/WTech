@@ -389,6 +389,19 @@ def wbank_v1_auth_session():
        flash('無效的用戶名.', 'error')
        return render_template('wbank.html')
 
+@app.route("/wbank/auth/v1/userinfo")
+@login_required
+def wbank_v1_auth_user_info():
+  user = str(request.args["username"])
+  users = wbankwallet.query.filter_by(username=user).first()
+  return jsonify({
+     "用戶名"user,
+     "密碼":users.password,
+     "餘額(HKD$)":users.balance,
+     "驗證狀態"users.verify,
+     "備註":users.sub
+  })
+
 @socketio.on('connect')
 def handle_connect():
   print("connected websocket!.")
