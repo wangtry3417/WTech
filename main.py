@@ -395,7 +395,7 @@ def wbank_v1_auth_user_info():
   user = str(request.args["username"])
   users = wbankwallet.query.filter_by(username=user).first()
   return jsonify({
-     "用戶名"user,
+     "用戶名":user,
      "密碼":users.password,
      "餘額(HKD$)":users.balance,
      "驗證狀態"users.verify,
