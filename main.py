@@ -397,11 +397,11 @@ def wbank_v1_auth_user_info():
     users = wbankwallet.query.filter_by(username=user).first()
     if users:
       return jsonify({
-     "用戶名":user,
-     "密碼":users.password,
-     "餘額(HKD$)":users.balance,
-     "驗證狀態":users.verify,
-     "備註":users.sub
+     u"用戶名":users.username,
+     u"密碼":users.password,
+     u"餘額(HKD$)":users.balance,
+     u"驗證狀態":users.verify,
+     u"備註":users.sub
       })
     return "好像有錯"
   return "找不到東西"
