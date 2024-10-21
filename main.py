@@ -263,7 +263,7 @@ class User(UserMixin):
         return True
 
     def is_anonymous(self):
-        return False
+        return True
 
     def get_id(self):
         return self.username
