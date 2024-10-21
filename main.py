@@ -380,7 +380,7 @@ def wbank_v1_auth_session():
         if user.sub == None or user.sub == "":
           login_user(user)
           flash('登入成功.', 'success')
-          urll = url+"?username="+user.username+"?intent=login"
+          urll = url+"?username="+user.username+"&intent=login"
           return redirect(urll)
         else:
           flash(user.sub,'error')
@@ -403,6 +403,7 @@ def wbank_v1_auth_user_info():
      "驗證狀態":users.verify,
      "備註":users.sub
       })
+    return "好像有錯"
   return "找不到東西"
 
 @socketio.on('connect')
