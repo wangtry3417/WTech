@@ -393,14 +393,17 @@ def wbank_v1_auth_session():
 @login_required
 def wbank_v1_auth_user_info():
   user = str(request.args["username"])
-  users = wbankwallet.query.filter_by(username=user).first()
-  return jsonify({
+  if user:
+    users = wbankwallet.query.filter_by(username=user).first()
+    if users:
+      return jsonify({
      "用戶名":user,
      "密碼":users.password,
      "餘額(HKD$)":users.balance,
      "驗證狀態":users.verify,
      "備註":users.sub
-  })
+      })
+  return "找不到東西"
 
 @socketio.on('connect')
 def handle_connect():
