@@ -96,10 +96,7 @@ SOCKET_CONFIG = {
     'ping_interval':120
 }
 
-socketio = SocketIO(app,cors_allowed_origins=[
-        'https://0.0.0.0:5000',
-        'https://admin.socket.io',  # 允許 Socket.IO Admin UI
-    ],**SOCKET_CONFIG)
+socketio = SocketIO(app,**SOCKET_CONFIG)
 
 socketio.init_app(app)
 socketio.server.instrument(auth=False)
