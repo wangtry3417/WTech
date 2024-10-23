@@ -99,7 +99,7 @@ SOCKET_CONFIG = {
 socketio = SocketIO(app,**SOCKET_CONFIG)
 
 socketio.init_app(app)
-socketio.server.instrument(auth=False)
+socketio.server.instrument(auth=False,namespace="/admin")
 
 #CORS(app,resources={r"/*": {"origins": "*"}})
 CORS(app, resources=r'/*')
