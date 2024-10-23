@@ -87,10 +87,22 @@ def verify_password(username, password):
         return hashed_password == hashed_password
     return False
 
+SOCKET_CONFIG = {
+    'async_mode': 'threading',
+    'cors_allowed_origins': "*",
+    'manage_session': True,
+    'logger': True,
+    'ping_timeout':60,
+    'ping_interval':120
+}
+
 socketio = SocketIO(app,cors_allowed_origins=[
         'https://0.0.0.0:5000',
         'https://admin.socket.io',  # 允許 Socket.IO Admin UI
-    ])
+    ],**SOCKET_CONFIG)
+
+socketio.init_app(app)
+socketio.server.instrument(auth=False)
 
 #CORS(app,resources={r"/*": {"origins": "*"}})
 CORS(app, resources=r'/*')
