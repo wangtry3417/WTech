@@ -201,7 +201,7 @@
           }
           var resetFormData = new FormData();
                 resetFormData.append("user", users.value);
-                resetFormData.append("pw", password);
+                resetFormData.append("pw", password.value);
                 fetch("/wbank/change/pw", {
                     method: "POST",
                     body: resetFormData
