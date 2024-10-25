@@ -2301,7 +2301,7 @@ def wbank_client():
     
     return error_message
 
-@app.route("/wbank/change/pw")
+@app.route("/wbank/change/pw",methods=["GET","POST"])
 def wbank_change_password():
   user = request.form.get("user")
   pw = request.form.get("pw")
