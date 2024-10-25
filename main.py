@@ -2357,7 +2357,8 @@ def user_balance():
     try:
       return jsonify({
          "Username" : users.username,
-         "Balance" : int(users.balance)
+         "Balance" : int(users.balance),
+         "Remark" : users.sub
       })
     except:
       return "找不到該用戶!."
