@@ -1862,6 +1862,8 @@ def wbank_hash_transfer():
     count = int(count)
 
   if users.sub is not None and users.sub != "":
+    if "銀行" in users.sub:
+      return jsonify({"Error-hint":"其他銀行不能接受"})
     return jsonify({"Error-hint":users.sub})
   
   if count >= 500000:
@@ -2251,6 +2253,9 @@ def wbank_auth_client():
                   flash('登入成功.', 'success')
                   return redirect(url_for('wbank_client'))
               else:
+                if "銀行" in user.sub:
+                  flash("抱歉，非泓財銀行帳戶不能登入","error")
+                  return redirect("/wbank")
                 flash(user.sub,'error')
                 return redirect("/wbank")
             else:
