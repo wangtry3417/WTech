@@ -1588,6 +1588,10 @@ def bet_all():
       #game.bet(game.player_chips)  # 將所有籌碼下注
       return jsonify({'bet': game.bet, 'balance': int(row[1]) - int(row[1])})
 
+@app.route("/wbank/home")
+def wbank_home():
+  return render_template("wbank/home.html")
+
 @app.route("/wbank")
 def wbank():
   x_forwarded_for = request.headers.get('X-Forwarded-For')
