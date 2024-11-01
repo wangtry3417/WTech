@@ -163,8 +163,6 @@ class wbankRecordView(ModelView):
   column_list = ('username','action','time')
   can_export = True
   export_types = ['csv','html']
-  can_edit = False
-  can_create = False
   column_searchable_list = ('username',)
   column_display_pk=True
   column_labels = {
