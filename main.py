@@ -212,11 +212,11 @@ class walletView(ModelView):
   column_display_pk=True
   column_searchable_list = ('username', 'sub')
   column_labels = {
-        'username': u'用戶名或帳戶號碼',
-        'balance': u'餘額',
-        'password': u'密碼',
-        'verify': u'驗證狀態',
-        'sub':u'備註'
+        'username': '用戶名或帳戶號碼',
+        'balance': '餘額',
+        'password': '密碼',
+        'verify': '驗證狀態',
+        'sub':'備註'
     }
   edit_modal=True
   form = IDBrandForm
@@ -244,11 +244,11 @@ class kycView(ModelView):
   column_display_pk=True
   edit_modal=True
   column_labels = {
-        'username': u'用戶名或帳戶號碼',
-        'fname': u'全名',
-        'id_number': u'身份證或證件號碼',
-        'address': u'地址',
-        'career':u'職業'
+        'username': '用戶名或帳戶號碼',
+        'fname': '全名',
+        'id_number': '身份證或證件號碼',
+        'address': '地址',
+        'career':'職業'
     }
 
 """
