@@ -166,9 +166,9 @@ class wbankRecordView(ModelView):
   column_searchable_list = ('username')
   column_display_pk=True
   column_labels = {
-        'username': u'帳戶名',
-        'action': u'動作',
-        'time': u'時間'
+        'username': '帳戶名',
+        'action': '動作',
+        'time': '時間'
     }
   edit_modal=True
 
