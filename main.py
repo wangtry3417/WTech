@@ -162,12 +162,16 @@ class oauth_client_view(ModelView):
 class wbankRecordView(ModelView):
   column_list = ('username','action','time')
   can_export = True
-  can_view_details = True
   export_types = ['csv','html']
   can_edit = False
   can_create = False
   column_searchable_list = ('username',)
   column_display_pk=True
+  column_labels = {
+        'username': u'帳戶名',
+        'action': u'動作',
+        'time': u'時間'
+    }
   edit_modal=True
 
 class wbankkyc(db.Model):
@@ -293,7 +297,7 @@ admin = Admin(app, name='泓財銀行--管理介面', template_mode='bootstrap4'
 admin.add_view(walletView(wbankwallet, db.session, name="泓財銀行用戶"))
 admin.add_view(wbankRecordView(wbankrecord, db.session, name="交易或轉帳紀錄"))
 admin.add_view(kycView(wbankkyc, db.session, name="KYC(防洗錢)驗證紀錄"))
-admin.add_view(oauth_client_view(oauth_client, db.session, name="OAuth2 儲存紀錄"))
+#admin.add_view(oauth_client_view(oauth_client, db.session, name="OAuth2 儲存紀錄"))
 
 @app.after_request
 def after_request(response):
