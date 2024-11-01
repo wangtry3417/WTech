@@ -171,6 +171,11 @@ class wbankRecordView(ModelView):
         'time': u'時間'
     }
   edit_modal=True
+  def get_page(self, page=1, per_page=None):
+    return super(wbankRecordView, self).get_page(page, per_page=1000)
+  # 禁用分頁
+  def is_paginated(self):
+    return False
 
 class wbankkyc(db.Model):
     __tablename__ = 'wbankkyc'
