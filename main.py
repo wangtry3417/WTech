@@ -256,6 +256,7 @@ class kycView(ModelView):
         'career':u'職業'
     }
 
+"""
 class CustomModelView(ModelView):
     column_display_all_fields = True
     page_size = sys.maxsize
@@ -269,6 +270,7 @@ class CustomModelView(ModelView):
                               search, filters, page_size=None):
       objects = query.all()
       return len(objects), objects
+"""
 
 # 定義用戶類
 class User(UserMixin):
