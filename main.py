@@ -163,7 +163,7 @@ class wbankRecordView(ModelView):
   column_list = ('username','action','time')
   can_export = True
   export_types = ['csv','html']
-  column_searchable_list = ('username',)
+  column_searchable_list = ('username')
   column_display_pk=True
   column_labels = {
         'username': u'帳戶名',
@@ -171,11 +171,6 @@ class wbankRecordView(ModelView):
         'time': u'時間'
     }
   edit_modal=True
-  def get_page(self, page=1, per_page=None):
-    return super(wbankRecordView, self).get_page(page, per_page=1000)
-  # 禁用分頁
-  def is_paginated(self):
-    return False
 
 class wbankkyc(db.Model):
     __tablename__ = 'wbankkyc'
