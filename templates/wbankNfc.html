@@ -39,8 +39,8 @@
         // 當NFC裝置感應到卡片時,發送 'nfc_detected' 事件
         // 並傳遞收款帳戶、金額和用戶名
         socket.emit('nfc_detected', {
-            username: '{{ user }}',
-            reviewer: 'wbank',
+            useracc: '{{ user }}',
+            revacc: '015-150-82400797',
             amount: amount
         });
         } else if (route == 2) {
@@ -66,8 +66,8 @@
         // 當NFC裝置感應到卡片時,發送 'nfc_detected' 事件
         // 並傳遞收款帳戶、金額和用戶名
         socket.emit('nfc_detected', {
-            username: '{{ user }}',
-            reviewer: re,
+            useracc: '{{ user }}',
+            revacc: re,
             amount: amount
         });
         } else {
