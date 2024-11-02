@@ -148,57 +148,14 @@
 
         <div id="tradeChart" class="page">
             <div class="card">
-                <h2>交易圖表</h2>
-                <div id="candleChart" style="height: 370px; width: 100%;"></div>
-                <script>
-                    var dataPoints1 = [], dataPoints2 = [];
-                    var chart = new CanvasJS.StockChart("candleChart", {
-                        theme: "light2",
-                        exportEnabled: true,
-                        title: {
-                            text: "WCoins Market"
-                        },
-                        charts: [{
-                            axisY: {
-                                prefix: "WTC$"
-                            },
-                            data: [{
-                                type: "candlestick",
-                                dataPoints: dataPoints1
-                            }]
-                        }],
-                        navigator: {
-                            data: [{
-                                color: "#6D78AD",
-                                dataPoints: dataPoints2
-                            }]
-                        }
-                    });
-
-                    setInterval(() => {
-                        $.getJSON("/wcoins/data", function(data) {
-                            dataPoints1.length = 0;
-                            dataPoints2.length = 0;
-                            for (var i = 0; i < data.length; i++) {
-                                dataPoints1.push({
-                                    x: new Date(data[i].date),
-                                    y: [Number(data[i].open), Number(data[i].high), Number(data[i].low), Number(data[i].close)]
-                                });
-                                dataPoints2.push({
-                                    x: new Date(data[i].date),
-                                    y: Number(data[i].close)
-                                });
-                            }
-                            chart.render();
-                        });
-                    }, 2000);
-                </script>
+                <h2>N/A</h2>
+                
             </div>
         </div>
 
         <div id="trade" class="page">
             <div class="card">
-                <h2>交易</h2>
+                <h2>功能區</h2>
                 <div id="fuc1">
                     <p id="pp" class="paypal"><img src="{{ url_for('static',filename='IMG_9742.jpeg') }}" alt="paypal" width="30" height="35"><br>用Paypal買入</p>
                     <p id="so" class="spend-out"><img src="{{ url_for('static',filename='IMG_9744.png') }}" alt="spend-out" width="30" height="35"><br>查看錢包地址</p>
@@ -216,6 +173,7 @@
             <div class="card">
                 <h2>我的</h2>
                 <p>用戶名: {{user}}</p>
+                <p>帳戶號碼: {{acc_number}}</p>
                 <p>餘額: WTC${{balance}}</p>
                 <br>
                 <h3>掃描區</h3>
@@ -276,8 +234,8 @@
 
     <div class="nav">
         <div class="nav-item" onclick="showPage('home')">首頁</div>
-        <div class="nav-item" onclick="showPage('tradeChart')">交易圖表</div>
-        <div class="nav-item" onclick="showPage('trade')">交易</div>
+        <div class="nav-item" onclick="showPage('tradeChart')">未知N/A</div>
+        <div class="nav-item" onclick="showPage('trade')">轉帳及功能</div>
         <div class="nav-item" onclick="showPage('myPage')">我的</div>
     </div>
 
