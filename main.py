@@ -437,14 +437,14 @@ def handle_connect():
 @socketio.on('transfer')
 def handle_transfer(data):
   """處理轉帳請求"""
-  user = data['username']  # 取得轉帳方帳戶名稱
+  user = data['useracc']  # 取得轉帳方帳戶名稱
   amount = int(data['amount'])  # 取得轉帳金額
-  reviewer = data['reviewer']  # 取得收款方帳戶名稱
+  reviewer = data['revacc']  # 取得收款方帳戶名稱
   # cur = conn.cursor()  # 取得資料庫游標
 
   try:
     # 查詢轉帳方餘額
-    user = wbankwallet.query.filter_by(username=user).first()
+    user = wbankwallet.query.filter_by(accnumber=user).first()
     if not user:
       emit('error_msg', '轉帳方不存在')  # 發送錯誤訊息到客戶端
       send_error_to_discord('轉帳方不存在', user, amount, reviewer)  # 發送錯誤訊息到 Discord
@@ -483,7 +483,7 @@ def handle_transfer(data):
     db.session.commit()
 
     # 查詢收款方餘額
-    rece = wbankwallet.query.filter_by(username=reviewer).first()
+    rece = wbankwallet.query.filter_by(accnumber=reviewer).first()
     if not rece:
       emit('error_msg', '收款方不存在')  # 發送錯誤訊息到客戶端
       send_error_to_discord('收款方不存在', user, amount, reviewer)  # 發送錯誤訊息到 Discord
