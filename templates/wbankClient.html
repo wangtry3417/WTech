@@ -250,6 +250,7 @@
     <script>
         var socket = io();
         var bot_status = 'no';
+        var accnumber = "{{ acc_number }}"
 
         // 顯示指定頁面
         function showPage(pageId) {
@@ -313,10 +314,10 @@
         window.location.href="/wbank/recordPage?user=" + "{{ user }}";
       });
       document.getElementById("loan").addEventListener("click",() => {
-        window.location.href="/wbank/loan?user=" + "{{ user }}";
+        window.location.href="/wbank/loan?user=" + accnumber;
       });
       document.getElementById("nfc").addEventListener("click",() => {
-        window.location.href="/wbank/nfc?user=" + "{{ user }}";
+        window.location.href="/wbank/nfc?user=" + accnumber;
       });
       document.getElementById("so").addEventListener("click",() => {
         window.location.href="/wbank/sellCoins?user=" + "{{ user }}";
