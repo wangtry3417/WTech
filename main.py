@@ -541,16 +541,85 @@ def send_error_to_discord(error_message, user, amount, reviewer, detail=None):
 
 @socketio.on('nfc_detected')
 def handle_nfc_detected(data):
-  user = data['username']
-  amount = data['amount']
-  reviewer = data['reviewer']
-  headers = {
-   "username":user,
-    "reviewer":reviewer,
-    "amount":amount
-  }
-  result = requests.get(url="https://sites.wtechhk.xyz/wbank/hash/transfer",headers=headers).json()
-  emit('payment_result',{'success':'ok'})
+  user = data['useracc']  # 取得轉帳方帳戶名稱
+  amount = int(data['amount'])  # 取得轉帳金額
+  reviewer = data['revacc']  # 取得收款方帳戶名稱
+  # cur = conn.cursor()  # 取得資料庫游標
+
+  try:
+    # 查詢轉帳方餘額
+    user = wbankwallet.query.filter_by(accnumber=user).first()
+    if not user:
+      emit('error_msg', '轉帳方不存在')  # 發送錯誤訊息到客戶端
+      send_error_to_discord('轉帳方不存在', user, amount, reviewer)  # 發送錯誤訊息到 Discord
+      return
+
+    balance = int(user.balance)  # 取得轉帳方餘額
+
+    if balance < 0:
+      emit('error_msg', '轉帳方餘額不足')  # 發送錯誤訊息到客戶端
+      send_error_to_discord('轉帳方餘額不足', user, amount, reviewer)  # 發送錯誤訊息到 Discord
+      return
+    elif balance < amount:
+      emit('error_msg', '轉帳方餘額不足')  # 發送錯誤訊息到客戶端
+      send_error_to_discord('轉帳方餘額不足', user, amount, reviewer)  # 發送錯誤訊息到 Discord
+      return
+
+    # 更新轉帳方餘額
+    #cur.execute(f"UPDATE wbankwallet
+    #SET balance={balance-amount}
+   # WHERE username='{user}')
+    #conn.commit()  # 提交資料庫更新
+
+    user.balance = balance-amount
+    db.session.commit()
+    
+    # 記錄轉帳記錄
+    bl = f"由 {user} 轉帳 {amount} 給 {reviewer}"
+    tz = pytz.timezone('Asia/Taipei')  # 設定時區為台北時間
+    utc_time = datetime.datetime.now(pytz.timezone('UTC'))  # 取得目前 UTC 時間
+    local_time = utc_time.astimezone(tz)  # 將 UTC 時間轉換為台北時間
+    """
+    cur.execute(f"INSERT INTO wbankrecord (username, action, time) VALUES ('{reviewer}', '{bl}', '{local_time}');")
+    conn.commit()  # 提交資料庫更新
+    """
+    db.session.add(wbankrecord(username=user.username,action=bl,time=local_time))
+    db.session.commit()
+
+    # 查詢收款方餘額
+    rece = wbankwallet.query.filter_by(accnumber=reviewer).first()
+    if not rece:
+      emit('error_msg', '收款方不存在')  # 發送錯誤訊息到客戶端
+      send_error_to_discord('收款方不存在', user, amount, reviewer)  # 發送錯誤訊息到 Discord
+      return
+
+    # 更新收款方餘額
+    rece.balance = rece.balance+amount
+    db.session.commit()
+
+    # 發送成功訊息到 Discord
+    prompt = f"""
+     轉帳方： {user}
+     收款方： {reviewer}
+     金額: {amount}
+     狀態：成功✅
+     使用協定：Websocket/SocketIO
+    """
+    data = {
+      "embeds": [
+        {
+          "title": "Wcoins 轉帳通知",
+          "description": prompt,
+          "color": 65280,  # You can use hex color codes, this one is for blue
+        }
+      ]
+    }
+    r = requests.post(url="https://discord.com/api/webhooks/1275720389510828144/T6Kkez2OQuyJl_nEscBOv-N8-GnXBJUSsOqqxXKoK31guklio4SDjAzP89k7A-1laSZX", json=data)
+    emit("paymentSuccess", {"success": "成功轉帳"})  # 發送成功訊息到客戶端
+
+  except Exception as e:
+    emit('error_msg', '轉帳失敗')  # 發送錯誤訊息到客戶端
+    send_error_to_discord('轉帳失敗', user, amount, reviewer, str(e))  # 發送錯誤訊息到 Discord
 
 @socketio.on('newOrder')
 def create_new_order(data):
