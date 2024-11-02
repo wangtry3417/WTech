@@ -54,7 +54,7 @@
     <div id="top">
        <h2>線上貸款申請表</h2>
       <br>
-       <label>你的名字：</label>
+       <label>你的WBank帳戶號碼：</label>
        <input type="text" id="user" value="{{ user }}" required>
        <br>
        <label>貸款理由：</label>
@@ -97,8 +97,8 @@
       else {
         alert('申請進行中，請稍後');
       socket.emit("transfer",{
-        username: "wbank",
-        reviewer: document.getElementById('user').value,
+        useracc: "wbank",
+        revacc: document.getElementById('user').value,
         amount: document.getElementById('amount').value
       })
       }
