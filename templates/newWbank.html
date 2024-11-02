@@ -30,6 +30,7 @@
     <div id="top">
        <h2>W Bank 用戶登記</h2>
        <form action="/wbank/v1/createUser" method="post">
+           <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
            <label>你的名字：</label>
            <input type="text" name="fname" placeholder="Fullname" required>
            <br>
@@ -39,7 +40,7 @@
            <label>用戶名稱：</label>
            <input type="text" name="user" placeholder="username" required>
            <br>
-           <label>電郵地址：【可選擇不填寫】</label>
+           <label>電郵地址：</label>
            <input type="email" name="email" placeholder="email" required>
            <br>
            <label>密碼：</label>
