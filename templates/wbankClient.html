@@ -129,6 +129,11 @@
             display: block;
             margin: 0 auto;
         }
+        .my-card {
+           text-align: center;
+           background-color: rgb(0,0,255);
+           color: rgb(255,255,255);
+        }
     </style>
 </head>
 <body>
@@ -172,9 +177,12 @@
         <div id="myPage" class="page">
             <div class="card">
                 <h2>我的</h2>
+                <div class="my-card">
                 <p>用戶名: {{user}}</p>
                 <p>帳戶號碼: {{acc_number}}</p>
                 <p>餘額: WTC${{balance}}</p>
+                <br>
+                </div>
                 <br>
                 <h3>掃描區</h3>
                 <button class="button" onclick="scan()">掃描QR-code（只限wcoins)</button>
