@@ -175,7 +175,7 @@ class wbankRecordView(ModelView):
         'action': '動作',
         'time': '時間'
     }
-  edit_modal=True
+  details_modal = True
   
 class wbankkyc(db.Model):
     __tablename__ = 'wbankkyc'
