@@ -175,6 +175,7 @@
                 </div>
                 <div class="form-navigation">
                     <button type="button" class="prev" onclick="prevStep()">上一步</button>
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                     <button type="submit">提交!</button>
                 </div>
             </form>
