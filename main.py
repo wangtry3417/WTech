@@ -122,12 +122,14 @@ class wbankwallet(db.Model,UserMixin):
     password = db.Column(db.String(120), nullable=False)
     verify = db.Column(db.String(64), nullable=False, default='no')
     sub = db.Column(db.String(64), nullable=True)
-    def __init__(self,username,balance,password,verify,sub):
+    accnumber = db.Column(db.String(60), nullable=True)
+    def __init__(self,username,balance,password,verify,sub,accnumber):
       self.username = username
       self.balance = balance
       self.password = password
       self.verify = verify
       self.sub = sub
+      self.accnumber = accnumber
     def get_id(self):
         return self.username
 
@@ -2179,7 +2181,8 @@ def wbank_into_user():
   pw = request.form.get("pw")
   email = request.form.get("email")
   id = request.form.get("id")
-  db.session.add(wbankwallet(username=user,balance="0",password=pw,verify="no",sub=None))
+  an = f"015-150-{random.randint(10000000,99999999)}"
+  db.session.add(wbankwallet(username=user,balance="0",password=pw,verify="no",sub=None,accnumber=an))
   db.session.commit()
   return render_template("wbankVerify.html",user=user,id=id)
   return "Cannot do that!."
@@ -2314,7 +2317,8 @@ def wbank_client():
             qr.svg(temp, scale=8)
             qr_bytes = temp.getvalue()
             qr_b64 = base64.b64encode(qr_bytes).decode('ascii')
-            return render_template("wbankClient.html", user=user, balance=balance, HK_Value=HK_Value, tw_value=tw_value, US_value=US_value, img=qr_b64)
+            acc_number = user_data.accnumber
+            return render_template("wbankClient.html", user=user, balance=balance, HK_Value=HK_Value, tw_value=tw_value, US_value=US_value, img=qr_b64, acc_number=acc_number)
     else:
         error_message = "找不到該用戶"
     
