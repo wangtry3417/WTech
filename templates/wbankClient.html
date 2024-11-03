@@ -422,7 +422,7 @@
     function randomPriceChange(stockSymbol) {
         const currentPrice = stockPrices[stockSymbol];
         const change = (Math.random() * 2 - 1) * 0.05; // 隨機變動 -5% 到 +5%
-        const newPrice = (currentPrice * (1 + change)).toFixed(2);
+        const newPrice = Math.max(0, (currentPrice * (1 + change)).toFixed(2));
         stockPrices[stockSymbol] = newPrice;
 
         const priceElement = document.querySelector(`#availableStocks tr:has(td:contains(${stockSymbol})) .price`);
