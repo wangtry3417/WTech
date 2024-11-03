@@ -1228,7 +1228,7 @@ def wbank_read_record():
     for u in users:
       if u.username == user:
         record = {
-            "user" : user,
+            "user" : u.username,
             "action" : u.action,
             "time" : u.time
         }
