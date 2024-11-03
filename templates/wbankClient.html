@@ -409,6 +409,8 @@ function updateBalance() {
 }
 
 function renderPortfolio() {
+    alert(user);
+    alert(balance);
     const portfolioTable = document.getElementById('portfolio');
     portfolioTable.innerHTML = ''; // 清空之前的內容
     portfolio.forEach((stock) => {
@@ -445,7 +447,7 @@ function buyStock(stockSymbol) {
         alert('餘額不足！');
         return;
     }
-
+    alert("Ok "+ stockSymbol);
     balance -= totalCost;
     updateBalance();
 
@@ -459,6 +461,7 @@ function buyStock(stockSymbol) {
     })
     .then(res => res.json())
     .then(data => {
+        alert(data);
         if (data.success) {
             alert("購買成功");
             const stock = { symbol: stockSymbol, price: stockPrice, quantity: quantity };
