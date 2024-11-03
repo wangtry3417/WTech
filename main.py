@@ -1237,7 +1237,7 @@ def wbank_read_record():
         if u.time:  # 確保時間不為 None
             # 假設 u.time 是字符串，去掉時區部分
             time_str = u.time.split('+')[0]  # 去掉 +00 及後面的部分
-            time_obj = datetime.strptime(time_str, "%Y-%m-%d %H:%M:%S.%f")  # 轉換為 datetime 對象
+            time_obj = datetime.datetime.strptime(time_str, "%Y-%m-%d %H:%M:%S.%f")  # 轉換為 datetime 對象
             formatted_time = time_obj.strftime("%Y/%m/%d,%H:%M:%S")  # 格式化為 YYYY/MM/DD,HH:MM:SS
         else:
             formatted_time = None
