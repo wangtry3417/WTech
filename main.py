@@ -1227,7 +1227,8 @@ def wbank_read_record():
         return jsonify({"error": "User header is required"}), 400
 
     # 根據用戶名過濾記錄
-    users = db.session.query(wbankrecord).filter(wbankrecord.username==user).all()
+    res = db.session.execute("SELECT * FROM wbankrecord WHERE username=:username", {'username': user})
+    users = res.fetchall()  # 獲取所有結果
     result = []
 
     if not users:
