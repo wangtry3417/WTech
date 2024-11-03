@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>WBank -- 用戶流水</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+<div class="container mt-4">
+    <h1>查詢 WBankRecord</h1>
+    <form id="queryForm" class="form-inline mb-3">
+        <input type="text" class="form-control mr-2" id="username" placeholder="用戶名" required>
+        <button type="submit" class="btn btn-primary">查詢</button>
+        <a href="{{ url_for('wbankrecord.export_data') }}" class="btn btn-success ml-2">導出 CSV</a>
+    </form>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>用戶名</th>
+                <th>事件</th>
+                <th>時間 <button id="sortAsc" class="btn btn-link">↑</button> <button id="sortDesc" class="btn btn-link">↓</button></th>
+            </tr>
+        </thead>
+        <tbody id="results"></tbody>
+    </table>
+</div>
+
+<script>
+    $('#queryForm').submit(function(event) {
+        event.preventDefault();
+        const username = $('#username').val();
+        
+        $.post('/admin/wbankrecord/execute_query', { username: username }, function(data) {
+            let resultsHtml = '';
+            data.forEach(record => {
+                resultsHtml += `<tr>
+                    <td>${record.username}</td>
+                    <td>${record.action}</td>
+                    <td>${new Date(record.time).toLocaleString()}</td>
+                </tr>`;
+            });
+            $('#results').html(resultsHtml);
+        });
+    });
+
+    function sortResults(order) {
+        const rows = $('#results tr').get();
+        rows.sort(function(a, b) {
+            const keyA = new Date($(a).children('td').eq(3).text()).getTime();
+            const keyB = new Date($(b).children('td').eq(3).text()).getTime();
+            return order === 'asc' ? keyA - keyB : keyB - keyA;
+        });
+        $.each(rows, function(index, row) {
+            $('#results').append(row);
+        });
+    }
+
+    $('#sortAsc').click(function() {
+        sortResults('asc');
+    });
+
+    $('#sortDesc').click(function() {
+        sortResults('desc');
+    });
+</script>
+
+</body>
+</html>
