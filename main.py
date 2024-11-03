@@ -1225,7 +1225,6 @@ def wbank_read_record():
     user = request.headers.get("user")  # 獲取請求中的用戶名
     users = wbankrecord.query.filter_by(username=user).all()  # 根據用戶名過濾記錄
     result = []
-    times = len(users)
     for u in users:
         # 假設 u.time 是字符串，去掉時區部分
         time_str = u.time.split('+')[0]  # 去掉 +00 及後面的部分
@@ -1236,7 +1235,7 @@ def wbank_read_record():
             "user": u.username,
             "action": u.action,
             "time": formatted_time, # 使用格式化後的時間
-            "times":times
+            "times":users
         }
         result.append(record)
     
