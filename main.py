@@ -1234,8 +1234,7 @@ def wbank_read_record():
         record = {
             "user": u.username,
             "action": u.action,
-            "time": formatted_time, # 使用格式化後的時間
-            "times":u
+            "time": formatted_time # 使用格式化後的時間
         }
         result.append(record)
     
