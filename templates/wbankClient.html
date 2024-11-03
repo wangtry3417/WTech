@@ -409,8 +409,6 @@ function updateBalance() {
 }
 
 function renderPortfolio() {
-    alert(user);
-    alert(balance);
     const portfolioTable = document.getElementById('portfolio');
     portfolioTable.innerHTML = ''; // 清空之前的內容
     portfolio.forEach((stock) => {
@@ -442,7 +440,11 @@ function buyStock(stockSymbol) {
     const stockPrice = parseFloat(priceElement.innerText);
     const quantity = 1; // 假設每次購買1股
     const totalCost = stockPrice * quantity;
-
+    if (!priceElement) {
+        console.error(`Price element for ${stockSymbol} not found.`);
+        alert('無法找到股票價格，請檢查網頁結構。');
+        return;
+    }
     if (totalCost > balance) {
         alert('餘額不足！');
         return;
