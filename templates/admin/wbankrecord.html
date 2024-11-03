@@ -34,7 +34,7 @@
         event.preventDefault();
         const username = $('#username').val();
         
-        $.post('/admin/wbankrecordview/execute_query', { username: username, csrf_token: $('input[name="csrf_token"]').val()  // 添加 CSRF 令牌 }, function(data) {
+        $.post('/admin/wbankrecordview/execute_query', { username: username, csrf_token: $('input[name="csrf_token"]').val()  /* 添加 CSRF 令牌*/ }, function(data) {
             let resultsHtml = '';
             data.forEach(record => {
                 resultsHtml += `<tr>
