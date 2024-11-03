@@ -195,7 +195,7 @@ class WBankRecordView(BaseView):
         res = db.session.execute(query, {'username': user})
         records = res.fetchall()
 
-        result = [{'id': record[0], 'username': record[1], 'action': record[2], 'time': record[3]} for record in records]
+        result = [{'username': record[0], 'action': record[1], 'time': record[2]} for record in records]
         return jsonify(result)
 
     @expose('/export', methods=['GET'])
