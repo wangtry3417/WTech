@@ -1223,15 +1223,16 @@ def wtech_wcoins_card():
 @app.route("/wbank/v1/record")
 def wbank_read_record():
     user = request.headers.get("user")
-    users = wbankrecord.query.filter_by(username=user).all()
+    users = wbankrecord.query.all()
     result = []
     for u in users:
-      record = {
+      if u.username == user:
+        record = {
             "user" : user,
             "action" : u.action,
             "time" : u.time
         }
-      result.append(record)
+        result.append(record)
     return jsonify(result)
 
 @app.route("/wtech/v2/transfer")
