@@ -1231,6 +1231,7 @@ def wbank_read_record():
     result = []
 
     for u in users:
+        record = None
         if u.time:  # 確保時間不為 None
             # 假設 u.time 是字符串，去掉時區部分
             time_str = u.time.split('+')[0]  # 去掉 +00 及後面的部分
