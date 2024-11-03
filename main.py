@@ -1,4 +1,4 @@
-from flask import Flask,render_template,jsonify,request,abort,url_for,redirect,make_response,send_file,flash,session
+from flask import Flask,render_template,jsonify,request,abort,url_for,redirect,make_response,send_file,flash,session,Response
 from flask_cors import CORS
 from cryptography.fernet import Fernet
 import hashlib
@@ -26,7 +26,7 @@ import pytz
 from discord import Bot,Embed,Option
 import discord
 from flask_socketio import SocketIO,emit,join_room,leave_room
-from flask_admin import Admin
+from flask_admin import Admin,expose, BaseView
 from flask_admin.contrib.sqla import ModelView
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
@@ -40,6 +40,7 @@ from flask_admin.form import BaseForm
 from flask_qrcode import QRcode
 import json,sys,threading
 from DDos import checkUrl, DDos
+import pandas as pd
 #from nltk.stem import WordNetLemmatizer
 #from nltk.book import *
 
@@ -162,6 +163,7 @@ class oauth_client_view(ModelView):
         'scrope': u'scrope'
     }
 
+"""
 class wbankRecordView(ModelView):
   column_list = ('username','action','time')
   can_export = True
@@ -179,7 +181,40 @@ class wbankRecordView(ModelView):
         'time': '時間'
     }
   details_modal = True
-  
+"""
+
+class WBankRecordView(BaseView):
+    @expose('/')
+    def index(self):
+        return self.render('admin/wbankrecord.html')
+
+    @expose('/execute_query', methods=['POST'])
+    def execute_query(self):
+        user = request.form.get('username')
+        query = text("SELECT * FROM wbankrecord WHERE username=:username ORDER BY time DESC")
+        res = db.session.execute(query, {'username': user})
+        records = res.fetchall()
+
+        result = [{'id': record[0], 'username': record[1], 'action': record[2], 'time': record[3]} for record in records]
+        return jsonify(result)
+
+    @expose('/export', methods=['GET'])
+    def export_data(self):
+        query = text("SELECT * FROM wbankrecord")
+        res = db.session.execute(query)
+        records = res.fetchall()
+
+        # 將數據轉換為 DataFrame 並導出為 CSV
+        df = pd.DataFrame(records, columns=['username', 'action', 'time'])
+        csv = df.to_csv(index=False)
+
+        return Response(
+            csv,
+            mimetype='text/csv',
+            headers={"Content-disposition": "attachment; filename=wbankrecord.csv"}
+        )
+
+
 class wbankkyc(db.Model):
     __tablename__ = 'wbankkyc'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -303,7 +338,7 @@ admin = Admin(app, name='泓財銀行--管理介面', template_mode='bootstrap4'
 
 # 添加 SQLAlchemy 模型管理視圖
 admin.add_view(walletView(wbankwallet, db.session, name="泓財銀行用戶"))
-admin.add_view(wbankRecordView(wbankrecord, db.session, name="交易或轉帳紀錄"))
+admin.add_view(WBankRecordView(wbankrecord))
 admin.add_view(kycView(wbankkyc, db.session, name="KYC(防洗錢)驗證紀錄"))
 #admin.add_view(oauth_client_view(oauth_client, db.session, name="OAuth2 儲存紀錄"))
 
