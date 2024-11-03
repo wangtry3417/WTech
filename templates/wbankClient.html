@@ -448,7 +448,7 @@
 
         balance -= totalCost;
         updateBalance();
-        fetch ("/wbank/hash/transfer",{ headers: { username: user,reviewer: "wbank", amount: totalCost}})
+        fetch ("/wbank/hash/transfer",{ headers: { username: user,reviewer: "wbank", amount: totalCost.toString()}})
             .then (res => res.json())
             .then (data => {
                 if (data.success) {
@@ -485,7 +485,7 @@
         headers: {
             username: "wbank",
             reviewer: user,
-            amount: totalGain
+            amount: totalGain.toString()
         }
     })
     .then(response => response.json())
