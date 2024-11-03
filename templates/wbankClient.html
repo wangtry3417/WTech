@@ -504,9 +504,9 @@ function sellStock(stockSymbol) {
     fetch("/wbank/hash/transfer", {
         method: "GET",
         headers: {
-            "username": user,
-            "reviewer": "wbank",
-            "amount": (-totalGain).toString() // 確保是字符串
+            "username": "wbank",
+            "reviewer": user,
+            "amount": totalGain.toString() // 確保是字符串
         }
     })
     .then(response => response.json())
