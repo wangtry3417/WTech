@@ -1223,24 +1223,29 @@ def wtech_wcoins_card():
 @app.route("/wbank/v1/record")
 def wbank_read_record():
     user = request.headers.get("user")  # 獲取請求中的用戶名
-    users = wbankrecord.query.all()  # 根據用戶名過濾記錄
+    if not user:
+        return jsonify({"error": "User header is required"}), 400
+
+    # 根據用戶名過濾記錄
+    users = wbankrecord.query.filter_by(username=user).all()
     result = []
-    if not users:
-      return jsonify(result)
+
     for u in users:
-        if u.username == user:
-          # 假設 u.time 是字符串，去掉時區部分
-          time_str = u.time.split('+')[0]  # 去掉 +00 及後面的部分
-          time_obj = datetime.datetime.strptime(time_str, "%Y-%m-%d %H:%M:%S.%f")  # 轉換為 datetime 對象
-          formatted_time = time_obj.strftime("%Y/%m/%d,%H:%M:%S")  # 格式化為 YYYY/MM/DD,HH:MM:SS
-        
-          record = {
+        if u.time:  # 確保時間不為 None
+            # 假設 u.time 是字符串，去掉時區部分
+            time_str = u.time.split('+')[0]  # 去掉 +00 及後面的部分
+            time_obj = datetime.strptime(time_str, "%Y-%m-%d %H:%M:%S.%f")  # 轉換為 datetime 對象
+            formatted_time = time_obj.strftime("%Y/%m/%d,%H:%M:%S")  # 格式化為 YYYY/MM/DD,HH:MM:SS
+        else:
+            formatted_time = None
+
+        record = {
             "user": u.username,
             "action": u.action,
-            "time": formatted_time # 使用格式化後的時間
+            "time": formatted_time  # 使用格式化後的時間
         }
         result.append(record)
-    
+
     return jsonify(result)
 
 @app.route("/wtech/v2/transfer")
