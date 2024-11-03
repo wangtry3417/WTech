@@ -1230,21 +1230,25 @@ def wbank_read_record():
     users = wbankrecord.query.filter_by(username=user).all()
     result = []
 
+    if not users:
+        return jsonify(result)  # 如果沒有找到記錄，返回空列表
+
     for u in users:
-        record = None
         if u.time:  # 確保時間不為 None
             # 假設 u.time 是字符串，去掉時區部分
             time_str = u.time.split('+')[0]  # 去掉 +00 及後面的部分
-            time_obj = datetime.datetime.strptime(time_str, "%Y-%m-%d %H:%M:%S.%f")  # 轉換為 datetime 對象
+            time_obj = datetime.strptime(time_str, "%Y-%m-%d %H:%M:%S.%f")  # 轉換為 datetime 對象
             formatted_time = time_obj.strftime("%Y/%m/%d,%H:%M:%S")  # 格式化為 YYYY/MM/DD,HH:MM:SS
         else:
             formatted_time = None
 
+        # 構建記錄字典
         record = {
             "user": u.username,
             "action": u.action,
             "time": formatted_time  # 使用格式化後的時間
         }
+        
         result.append(record)
 
     return jsonify(result)
