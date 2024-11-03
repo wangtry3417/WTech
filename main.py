@@ -1222,17 +1222,21 @@ def wtech_wcoins_card():
 
 @app.route("/wbank/v1/record")
 def wbank_read_record():
-    user = request.headers.get("user")
-    users = wbankrecord.query.all()
+    user = request.headers.get("user")  # 獲取請求中的用戶名
+    users = wbankrecord.query.filter_by(username=user).all()  # 根據用戶名過濾記錄
     result = []
+    
     for u in users:
-      if u.username == user:
+        # 將時間格式化為 YYYY/MM/DD,HH:MM:SS
+        formatted_time = u.time.strftime("%Y/%m/%d,%H:%M:%S")
+        
         record = {
-            "user" : u.username,
-            "action" : u.action,
-            "time" : u.time
+            "user": u.username,
+            "action": u.action,
+            "time": formatted_time  # 使用格式化後的時間
         }
         result.append(record)
+    
     return jsonify(result)
 
 @app.route("/wtech/v2/transfer")
