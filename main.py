@@ -1223,15 +1223,16 @@ def wtech_wcoins_card():
 @app.route("/wbank/v1/record")
 def wbank_read_record():
     user = request.headers.get("user")  # 獲取請求中的用戶名
-    users = wbankrecord.query.filter_by(username=user).all()  # 根據用戶名過濾記錄
+    users = wbankrecord.query.all()  # 根據用戶名過濾記錄
     result = []
     for u in users:
-        # 假設 u.time 是字符串，去掉時區部分
-        time_str = u.time.split('+')[0]  # 去掉 +00 及後面的部分
-        time_obj = datetime.datetime.strptime(time_str, "%Y-%m-%d %H:%M:%S.%f")  # 轉換為 datetime 對象
-        formatted_time = time_obj.strftime("%Y/%m/%d,%H:%M:%S")  # 格式化為 YYYY/MM/DD,HH:MM:SS
+        if u.username == user:
+          # 假設 u.time 是字符串，去掉時區部分
+          time_str = u.time.split('+')[0]  # 去掉 +00 及後面的部分
+          time_obj = datetime.datetime.strptime(time_str, "%Y-%m-%d %H:%M:%S.%f")  # 轉換為 datetime 對象
+          formatted_time = time_obj.strftime("%Y/%m/%d,%H:%M:%S")  # 格式化為 YYYY/MM/DD,HH:MM:SS
         
-        record = {
+          record = {
             "user": u.username,
             "action": u.action,
             "time": formatted_time # 使用格式化後的時間
