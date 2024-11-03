@@ -1225,6 +1225,8 @@ def wbank_read_record():
     user = request.headers.get("user")  # 獲取請求中的用戶名
     users = wbankrecord.query.all()  # 根據用戶名過濾記錄
     result = []
+    if not users:
+      return jsonify(result)
     for u in users:
         if u.username == user:
           # 假設 u.time 是字符串，去掉時區部分
