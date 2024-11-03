@@ -433,10 +433,12 @@ function randomPriceChange(stockSymbol) {
     priceElement.innerText = newPrice; // 更新價格
 
     // 更新價格變動指示器（如果有的話）
+    /*
     const priceChangeIndicator = priceElement.nextElementSibling;
     if (priceChangeIndicator) {
         priceChangeIndicator.className = 'price-change ' + (change >= 0 ? 'up' : 'down');
     }
+    */
 }
 
 function buyStock(stockSymbol) {
