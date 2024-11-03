@@ -226,7 +226,7 @@
                 <div class="my-card">
                 <p>用戶名: {{user}}</p>
                 <p>帳戶號碼: {{acc_number}}</p>
-                <p>餘額: WTC${{balance}}</p>
+                <p>餘額: WTC$<span id="balance">{{balance}}</span></p>
                 <br>
                 </div>
                 <br>
@@ -402,9 +402,6 @@ const stockPrices = {
     AMZN: 3400.00,
     BA: 2100.00
 };
-
-// 初始餘額，請確保它是從後端獲取的
-let balance = parseFloat("{{ balance }}"); // 確保餘額為數字
 
 function updateBalance() {
     // 假設有一個元素顯示餘額
