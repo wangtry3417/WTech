@@ -395,7 +395,8 @@
             */
         }
         //Stock place
-        const portfolio = JSON.parse(sessionStorage.getItem('portfolio')) || [];
+
+const portfolio = JSON.parse(sessionStorage.getItem('portfolio')) || [];
 const stockPrices = {
     AAPL: 150.00,
     GOOGL: 2800.00,
@@ -404,8 +405,7 @@ const stockPrices = {
 };
 
 function updateBalance() {
-    // 假設有一個元素顯示餘額
-    document.getElementById('balance').innerText = balance.toFixed(2);
+    document.getElementById('balance').innerText = balance.toFixed(2); // 更新餘額顯示
 }
 
 function renderPortfolio() {
@@ -430,15 +430,9 @@ function randomPriceChange(stockSymbol) {
     stockPrices[stockSymbol] = newPrice;
 
     const priceElement = document.querySelector(`#availableStocks tr:has(td:contains(${stockSymbol})) .price`);
-    priceElement.innerText = newPrice; // 更新價格
-
-    // 更新價格變動指示器（如果有的話）
-    /*
-    const priceChangeIndicator = priceElement.nextElementSibling;
-    if (priceChangeIndicator) {
-        priceChangeIndicator.className = 'price-change ' + (change >= 0 ? 'up' : 'down');
+    if (priceElement) {
+        priceElement.innerText = newPrice; // 更新價格
     }
-    */
 }
 
 function buyStock(stockSymbol) {
@@ -494,9 +488,9 @@ function sellStock(stockSymbol) {
     fetch("/wbank/hash/transfer", {
         method: "GET",
         headers: {
-            "username": "wbank",
-            "reviewer": user,
-            "amount": totalGain.toString() // 確保是字符串
+            "username": user,
+            "reviewer": "wbank",
+            "amount": (-totalGain).toString() // 確保是字符串
         }
     })
     .then(response => response.json())
