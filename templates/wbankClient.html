@@ -440,8 +440,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const buyButtons = document.querySelectorAll('#availableStocks button');
     buyButtons.forEach(button => {
         button.addEventListener('click', function() {
-            alert(button);
             const stockSymbol = this.closest('tr').querySelector('td:first-child').innerText;
+            alert(stockSymbol);
             buyStock(stockSymbol);
         });
     });
