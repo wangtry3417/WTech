@@ -494,7 +494,7 @@ function sellStock(stockSymbol) {
         headers: {
             "username": "wbank",
             "reviewer": user,
-            "amount": -totalGain.toString() // 確保是字符串
+            "amount": totalGain.toString() // 確保是字符串
         }
     })
     .then(response => response.json())
