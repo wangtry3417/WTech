@@ -29,6 +29,7 @@ from flask_socketio import SocketIO,emit,join_room,leave_room
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import text
 from flask_babel import Babel
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from flask_oauthlib.provider import OAuth2Provider
@@ -1227,7 +1228,8 @@ def wbank_read_record():
         return jsonify({"error": "User header is required"}), 400
 
     # 根據用戶名過濾記錄
-    res = db.session.execute("SELECT * FROM wbankrecord WHERE username=:username", {'username': user})
+    query = text("SELECT * FROM wbankrecord WHERE username=:username")
+    res = db.session.execute(query, {'username': user})
     users = res.fetchall()  # 獲取所有結果
     result = []
 
