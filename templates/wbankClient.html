@@ -297,7 +297,7 @@
         var socket = io();
         var bot_status = 'no';
         var accnumber = "{{ acc_number }}";
-        var balance = "{{ balance }}";
+        var balance = parseFloat("{{ balance }}");
         var user = "{{ user }}";
 
         // 顯示指定頁面
@@ -515,7 +515,7 @@
     setInterval(() => {
         const availableStocks = Object.keys(stockPrices);
         availableStocks.forEach(stock => randomPriceChange(stock));
-    }, 3000); // 每5秒更新一次價格
+    }, 3000); // 每3秒更新一次價格
 
     // 初始化畫面
     updateBalance();
