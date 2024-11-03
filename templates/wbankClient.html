@@ -448,7 +448,6 @@ document.addEventListener('DOMContentLoaded', function() {
         
 function buyStock(stockSymbol) {
     const priceElement = document.querySelector(`#availableStocks tr:has(td:contains(${stockSymbol})) .price`);
-    alert(priceElement);
     const stockPrice = parseFloat(priceElement.innerText);
     const quantity = 1; // 假設每次購買1股
     const totalCost = stockPrice * quantity;
