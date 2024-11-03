@@ -396,105 +396,116 @@
         }
         //Stock place
         const portfolio = JSON.parse(sessionStorage.getItem('portfolio')) || [];
-    const stockPrices = {
-        AAPL: 150.00,
-        GOOGL: 2800.00,
-        AMZN: 3400.00,
-        BA: 2100.00
-    };
+const stockPrices = {
+    AAPL: 150.00,
+    GOOGL: 2800.00,
+    AMZN: 3400.00,
+    BA: 2100.00
+};
 
-    function renderPortfolio() {
-        const portfolioTable = document.getElementById('portfolio');
-        portfolioTable.innerHTML = '';
-        portfolio.forEach((stock) => {
-            const row = `<tr>
-                <td>${stock.symbol}</td>
-                <td>${stock.price.toFixed(2)}</td>
-                <td>${stock.quantity}</td>
-                <td>${(stock.price * stock.quantity).toFixed(2)}</td>
-                <td><button class="btn btn-danger" onclick="sellStock('${stock.symbol}')">賣出</button></td>
-            </tr>`;
-            portfolioTable.innerHTML += row;
-        });
-    }
+// 初始餘額，請確保它是從後端獲取的
+let balance = parseFloat("{{ balance }}"); // 確保餘額為數字
 
-    // 隨機價格變動
-    function randomPriceChange(stockSymbol) {
-        const currentPrice = stockPrices[stockSymbol];
-        const change = (Math.random() * 2 - 1) * 0.05; // 隨機變動 -5% 到 +5%
-        const newPrice = Math.max(0, (currentPrice * (1 + change)).toFixed(2));
-        stockPrices[stockSymbol] = newPrice;
+function updateBalance() {
+    // 假設有一個元素顯示餘額
+    document.getElementById('balance').innerText = balance.toFixed(2);
+}
 
-        const priceElement = document.querySelector(`#availableStocks tr:has(td:contains(${stockSymbol})) .price`);
-        priceElement.innerText = newPrice;
+function renderPortfolio() {
+    const portfolioTable = document.getElementById('portfolio');
+    portfolioTable.innerHTML = ''; // 清空之前的內容
+    portfolio.forEach((stock) => {
+        const row = `<tr>
+            <td>${stock.symbol}</td>
+            <td>${stock.price.toFixed(2)}</td>
+            <td>${stock.quantity}</td>
+            <td>${(stock.price * stock.quantity).toFixed(2)}</td>
+            <td><button class="btn btn-danger" onclick="sellStock('${stock.symbol}')">賣出</button></td>
+        </tr>`;
+        portfolioTable.innerHTML += row; // 添加每一行的數據
+    });
+}
 
-        // 更新價格變動指示器
-        const priceChangeIndicator = priceElement.nextElementSibling;
+function randomPriceChange(stockSymbol) {
+    const currentPrice = stockPrices[stockSymbol];
+    const change = (Math.random() * 2 - 1) * 0.05; // 隨機變動 -5% 到 +5%
+    const newPrice = Math.max(0, (currentPrice * (1 + change)).toFixed(2)); // 確保價格不低於 0
+    stockPrices[stockSymbol] = newPrice;
+
+    const priceElement = document.querySelector(`#availableStocks tr:has(td:contains(${stockSymbol})) .price`);
+    priceElement.innerText = newPrice; // 更新價格
+
+    // 更新價格變動指示器（如果有的話）
+    const priceChangeIndicator = priceElement.nextElementSibling;
+    if (priceChangeIndicator) {
         priceChangeIndicator.className = 'price-change ' + (change >= 0 ? 'up' : 'down');
     }
+}
 
-    // 買入股票（註解部分，您可以根據需要來編寫邏輯）
-    function buyStock(stockSymbol) {
-        // 這裡可以寫入買入邏輯
-        const priceElement = document.querySelector(`#availableStocks tr:has(td:contains(${stockSymbol})) .price`);
-        const stockPrice = parseFloat(priceElement.innerText);
-        const quantity = 1;
-        const totalCost = stockPrice * quantity;
+function buyStock(stockSymbol) {
+    const priceElement = document.querySelector(`#availableStocks tr:has(td:contains(${stockSymbol})) .price`);
+    const stockPrice = parseFloat(priceElement.innerText);
+    const quantity = 1; // 假設每次購買1股
+    const totalCost = stockPrice * quantity;
 
-        if (totalCost > balance) {
-            alert('餘額不足！');
-            return;
-        }
-
-        balance -= totalCost;
-        updateBalance();
-        fetch ("/wbank/hash/transfer",{ headers: { username: user,reviewer: "wbank", amount: totalCost.toString()}})
-            .then (res => res.json())
-            .then (data => {
-                if (data.success) {
-                   alert("購買成功");
-                   const stock = { symbol: stockSymbol, price: stockPrice, quantity: quantity };
-                   portfolio.push(stock);
-                   sessionStorage.setItem('portfolio', JSON.stringify(portfolio));
-                   renderPortfolio();
-                } else {
-                   alert('購買失敗，請稍後再試！');
-                }
-            })
-            .catch (error => {
-               console.error('錯誤:', error);
-               alert('購買過程中發生錯誤。');
-            });
+    if (totalCost > balance) {
+        alert('餘額不足！');
+        return;
     }
 
-    // 賣出股票（註解部分，您可以根據需要來編寫邏輯）
-    function sellStock(stockSymbol) {
-        // 這裡可以寫入賣出邏輯
-        const stockIndex = portfolio.findIndex(stock => stock.symbol === stockSymbol);
+    balance -= totalCost;
+    updateBalance();
+
+    fetch("/wbank/hash/transfer", {
+        method: "GET",
+        headers: {
+            "username": user,
+            "reviewer": "wbank",
+            "amount": totalCost.toString() // 確保是字符串
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            alert("購買成功");
+            const stock = { symbol: stockSymbol, price: stockPrice, quantity: quantity };
+            portfolio.push(stock);
+            sessionStorage.setItem('portfolio', JSON.stringify(portfolio));
+            renderPortfolio(); // 更新已購買股票的顯示
+        } else {
+            alert('購買失敗，請稍後再試！');
+        }
+    })
+    .catch(error => {
+        console.error('錯誤:', error);
+        alert('購買過程中發生錯誤。');
+    });
+}
+
+function sellStock(stockSymbol) {
+    const stockIndex = portfolio.findIndex(stock => stock.symbol === stockSymbol);
     if (stockIndex === -1) return;
 
     const stock = portfolio[stockIndex];
     const totalGain = stock.price * stock.quantity;
 
-    // 更新餘額
     balance += totalGain;
+    updateBalance();
 
-    // 假設用戶名在全局變量 user 中
     fetch("/wbank/hash/transfer", {
-        method: "POST",
+        method: "GET",
         headers: {
-            username: "wbank",
-            reviewer: user,
-            amount: totalGain.toString()
+            "username": user,
+            "reviewer": "wbank",
+            "amount": (-totalGain).toString() // 確保是字符串
         }
     })
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            // 移除股票
-            portfolio.splice(stockIndex, 1);
+            portfolio.splice(stockIndex, 1); // 移除已賣出的股票
             sessionStorage.setItem('portfolio', JSON.stringify(portfolio));
-            renderPortfolio();
+            renderPortfolio(); // 更新已購買股票的顯示
         } else {
             alert('賣出失敗，請稍後再試！');
         }
@@ -503,16 +514,16 @@
         console.error('錯誤:', error);
         alert('賣出過程中發生錯誤。');
     });
-    }
+}
 
-    // 隨機更新價格
-    setInterval(() => {
-        const availableStocks = Object.keys(stockPrices);
-        availableStocks.forEach(stock => randomPriceChange(stock));
-    }, 3000); // 每3秒更新一次價格
+// 隨機更新價格
+setInterval(() => {
+    Object.keys(stockPrices).forEach(stock => randomPriceChange(stock));
+}, 3000); // 每3秒更新一次價格
 
-    // 初始化畫面
-    renderPortfolio();
+// 初始化畫面
+updateBalance();
+renderPortfolio();
     </script>
 </body>
 </html>
