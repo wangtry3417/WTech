@@ -33,7 +33,7 @@
         event.preventDefault();
         const username = $('#username').val();
         
-        $.post('/admin/wbankrecord/execute_query', { username: username }, function(data) {
+        $.post('/admin/wbankrecordview/execute_query', { username: username }, function(data) {
             let resultsHtml = '';
             data.forEach(record => {
                 resultsHtml += `<tr>
