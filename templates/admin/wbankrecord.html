@@ -11,6 +11,7 @@
 <div class="container mt-4">
     <h1>查詢 WBankRecord</h1>
     <form id="queryForm" class="form-inline mb-3">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         <input type="text" class="form-control mr-2" id="username" placeholder="用戶名" required>
         <button type="submit" class="btn btn-primary">查詢</button>
         <a href="{{ url_for('wbankrecordview.export_data') }}" class="btn btn-success ml-2">導出 CSV</a>
@@ -33,7 +34,7 @@
         event.preventDefault();
         const username = $('#username').val();
         
-        $.post('/admin/wbankrecordview/execute_query', { username: username }, function(data) {
+        $.post('/admin/wbankrecordview/execute_query', { username: username, csrf_token: $('input[name="csrf_token"]').val()  // 添加 CSRF 令牌 }, function(data) {
             let resultsHtml = '';
             data.forEach(record => {
                 resultsHtml += `<tr>
