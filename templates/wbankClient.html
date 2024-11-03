@@ -434,14 +434,13 @@ function randomPriceChange(stockSymbol) {
         priceElement.innerText = newPrice; // 更新價格
     }
 }
-
-alert(document.querySelectorAll('#availableStocks button'));
         
 document.addEventListener('DOMContentLoaded', function() {
     // 假設您有多個按鈕
     const buyButtons = document.querySelectorAll('#availableStocks button');
     buyButtons.forEach(button => {
         button.addEventListener('click', function() {
+            alert(button);
             const stockSymbol = this.closest('tr').querySelector('td:first-child').innerText;
             buyStock(stockSymbol);
         });
