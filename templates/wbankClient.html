@@ -478,7 +478,6 @@
 
     // 更新餘額
     balance += totalGain;
-    updateBalance();
 
     // 假設用戶名在全局變量 user 中
     fetch("/wbank/hash/transfer", {
@@ -513,7 +512,6 @@
     }, 3000); // 每3秒更新一次價格
 
     // 初始化畫面
-    updateBalance();
     renderPortfolio();
     </script>
 </body>
