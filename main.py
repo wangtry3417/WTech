@@ -1227,8 +1227,9 @@ def wbank_read_record():
     result = []
     
     for u in users:
-        # 將時間格式化為 YYYY/MM/DD,HH:MM:SS
-        formatted_time = u.time.strftime("%Y/%m/%d,%H:%M:%S")
+        # 假設 u.time 是字符串，轉換它為 datetime 對象
+        time_obj = datetime.datetime.strptime(u.time, "%Y-%m-%d %H:%M:%S.%f")  # 根據實際格式調整
+        formatted_time = time_obj.strftime("%Y/%m/%d,%H:%M:%S")  # 格式化為 YYYY/MM/DD,HH:MM:SS
         
         record = {
             "user": u.username,
