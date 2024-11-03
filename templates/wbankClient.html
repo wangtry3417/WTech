@@ -435,6 +435,17 @@ function randomPriceChange(stockSymbol) {
     }
 }
 
+document.addEventListener('DOMContentLoaded', function() {
+    // 假設您有多個按鈕
+    const buyButtons = document.querySelectorAll('#availableStocks button');
+    buyButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const stockSymbol = this.closest('tr').querySelector('td:first-child').innerText;
+            buyStock(stockSymbol);
+        });
+    });
+});
+        
 function buyStock(stockSymbol) {
     const priceElement = document.querySelector(`#availableStocks tr:has(td:contains(${stockSymbol})) .price`);
     const stockPrice = parseFloat(priceElement.innerText);
