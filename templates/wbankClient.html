@@ -447,58 +447,61 @@ document.addEventListener('DOMContentLoaded', function() {
 });
         
 function buyStock(stockSymbol) {
-    try {
-        const priceElement = Array.from(document.querySelectorAll('#availableStocks tr')).find(row => {
-            return row.querySelector('td:first-child').innerText === stockSymbol;
-        }).querySelector('.price');
-        
-        if (!priceElement) {
-            console.error(`Price element for ${stockSymbol} not found.`);
-            alert('無法找到股票價格，請檢查網頁結構。');
-            return;
+    // 查找所有行並找到對應的行
+    const rows = document.querySelectorAll('#availableStocks tr');
+    let priceElement = null;
+
+    for (const row of rows) {
+        const symbolCell = row.querySelector('td:first-child');
+        if (symbolCell && symbolCell.innerText === stockSymbol) {
+            priceElement = row.querySelector('.price'); // 獲取價格元素
+            break; // 找到後退出循環
         }
-
-        const stockPrice = parseFloat(priceElement.innerText);
-        const quantity = 1; // 假設每次購買1股
-        const totalCost = stockPrice * quantity;
-
-        if (totalCost > balance) {
-            alert('餘額不足！');
-            return;
-        }
-
-        alert("Ok " + stockSymbol);
-        balance -= totalCost;
-        updateBalance();
-
-        fetch("/wbank/hash/transfer", {
-            method: "GET",
-            headers: {
-                "username": user,
-                "reviewer": "wbank",
-                "amount": totalCost.toString() // 確保是字符串
-            }
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) {
-                alert("購買成功");
-                const stock = { symbol: stockSymbol, price: stockPrice, quantity: quantity };
-                portfolio.push(stock);
-                sessionStorage.setItem('portfolio', JSON.stringify(portfolio));
-                renderPortfolio(); // 更新已購買股票的顯示
-            } else {
-                alert('購買失敗，請稍後再試！');
-            }
-        })
-        .catch(error => {
-            console.error('錯誤:', error);
-            alert('購買過程中發生錯誤。');
-        });
-    } catch (error) {
-        alert(error);
-        console.error('Error in buyStock:', error);
     }
+
+    if (!priceElement) {
+        console.error(`Price element for ${stockSymbol} not found.`);
+        alert('無法找到股票價格，請檢查網頁結構。');
+        return;
+    }
+
+    const stockPrice = parseFloat(priceElement.innerText);
+    const quantity = 1; // 假設每次購買1股
+    const totalCost = stockPrice * quantity;
+
+    if (totalCost > balance) {
+        alert('餘額不足！');
+        return;
+    }
+
+    alert("Ok " + stockSymbol);
+    balance -= totalCost;
+    updateBalance();
+
+    fetch("/wbank/hash/transfer", {
+        method: "GET",
+        headers: {
+            "username": user,
+            "reviewer": "wbank",
+            "amount": totalCost.toString() // 確保是字符串
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            alert("購買成功");
+            const stock = { symbol: stockSymbol, price: stockPrice, quantity: quantity };
+            portfolio.push(stock);
+            sessionStorage.setItem('portfolio', JSON.stringify(portfolio));
+            renderPortfolio(); // 更新已購買股票的顯示
+        } else {
+            alert('購買失敗，請稍後再試！');
+        }
+    })
+    .catch(error => {
+        console.error('錯誤:', error);
+        alert('購買過程中發生錯誤。');
+    });
 }
         
 function sellStock(stockSymbol) {
