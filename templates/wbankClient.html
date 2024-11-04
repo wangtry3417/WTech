@@ -604,6 +604,34 @@ function sellStock(stockSymbol) {
     });
 }
 
+ // 更新持倉區域
+    const portfolioRows = document.querySelectorAll('#portfolio tr');
+    for (const row of portfolioRows) {
+        const symbolCell = row.querySelector('td:first-child');
+        if (symbolCell && symbolCell.innerText === stockSymbol) {
+            const portfolioPriceElement = row.querySelector('.price'); // 獲取持倉中的價格元素
+            const portfolioPercentageElement = row.querySelector('.percentage'); // 獲取持倉中的百分比元素
+            
+            if (portfolioPriceElement) {
+                portfolioPriceElement.innerText = newPrice; // 更新持倉價格
+            }
+
+            // 計算持倉的百分比變化
+            const originalPrice = parseFloat(portfolioPriceElement.innerText); // 取得原始價格
+            const portfolioChange = ((newPrice - originalPrice) / originalPrice) * 100; // 計算百分比變化
+            if (portfolioPercentageElement) {
+                portfolioPercentageElement.innerText = `${portfolioChange.toFixed(2)}%`; // 更新百分比顯示
+            }
+
+            // 檢查是否需要平倉
+            if (portfolioChange < -3) {
+                alert(`股價跌幅超過 3%，自動平倉 ${stockSymbol}`); // 提示用戶
+                row.remove(); // 移除該持倉行
+            }
+            break; // 找到後退出循環
+        }
+    }
+        
 // 隨機更新價格
 setInterval(() => {
     Object.keys(stockPrices).forEach(stock => randomPriceChange(stock));
