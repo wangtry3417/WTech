@@ -410,7 +410,7 @@
             */
         }
         //Stock place
-let portfolio = JSON.parse(sessionStorage.getItem('portfolio')) || [];
+let portfolio = JSON.parse(localStorage.getItem('portfolio')) || [];
 const stockPrices = {
     AAPL: 150.00,
     GOOGL: 2800.00,
@@ -575,7 +575,7 @@ function buyStock(stockSymbol) {
             alert("購買成功");
             const stock = { symbol: stockSymbol, price: stockPrice, quantity: quantity, originalPrice:stockPrice };
             portfolio.push(stock);
-            sessionStorage.setItem('portfolio', JSON.stringify(portfolio));
+            localStorage.setItem('portfolio', JSON.stringify(portfolio));
             renderPortfolio(); // 更新已購買股票的顯示
         } else {
             alert('購買失敗，請稍後再試！');
@@ -627,8 +627,9 @@ function sellStock(stockSymbol) {
     .then(data => {
         if (data.success) {
             portfolio = portfolio.filter(item => item.symbol !== stockSymbol); // 移除已賣出的股票
-            sessionStorage.setItem('portfolio', JSON.stringify(portfolio));
+            localStorage.setItem('portfolio', JSON.stringify(portfolio));
             renderPortfolio(); // 更新已購買股票的顯示
+            localStorage.clear();
             alert('賣出成功');
         } else {
             alert(data["Error-hint"]);
