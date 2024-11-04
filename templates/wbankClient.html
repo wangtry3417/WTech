@@ -442,19 +442,16 @@ function renderPortfolio() {
 }
 
 function fetchStockPrice(stockSymbol) {
-    const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=AAPL&apikey=Q67XHC24XWN5CAAR`;
+    const url = `https://query1.finance.yahoo.com/v8/finance/chart/${stockSymbol}`;
 
     return fetch(url)
         .then(response => response.json())
         .then(data => {
-            const timeSeries = data['Time Series (Daily)'];
-            if (!timeSeries) {
-               alert("未找到時間序列數據");
+            if (!data.chart.result[0]) {
+               alert("未找到序列數據");
                throw new Error("未找到時間序列數據");
             }
-            const latestDate = Object.keys(timeSeries)[0]; // 獲取最新日期
-            const latestData = timeSeries[latestDate];
-            const currentPrice = parseFloat(latestData['4. close']); // 獲取最新收盤價
+            let currentPrice = parseFloat(data.chart.result[0].meta.regularMarketPrice);
             return currentPrice;
         });
 }
