@@ -458,9 +458,8 @@ function fetchStockPrice(stockSymbol) {
 function randomPriceChange(stockSymbol) {
     fetchStockPrice(stockSymbol)
         .then(currentPrice => {
-            const change = (Math.random() * 2 - 1) * 0.05; // 隨機變動 -5% 到 +5%
-            const newPrice = Math.max(0, (currentPrice * (1 + change)).toFixed(2)); // 確保價格不低於 0
-            stockPrices[stockSymbol] = newPrice;
+            const previousPrice = stockPrices[stockSymbol] || currentPrice; // 獲取之前的價格或當前價格
+            stockPrices[stockSymbol] = currentPrice; // 更新股票價格
 
             // 更新可用股票區域
             const rows = document.querySelectorAll('#availableStocks tr');
@@ -479,18 +478,16 @@ function randomPriceChange(stockSymbol) {
             }
 
             if (priceElement) {
-                priceElement.innerText = newPrice; // 更新價格
+                priceElement.innerText = currentPrice.toFixed(2); // 更新價格
                 
-                // 計算並顯示變動百分比
-                const percentageChange = ((newPrice - currentPrice) / currentPrice * 100).toFixed(2);
+                // 計算並顯示可用股票的變動百分比
+                const percentageChange = ((currentPrice - previousPrice) / previousPrice * 100).toFixed(2);
                 if (percentageElement) {
-                    percentageElement.innerText = `${percentageChange}%`;
+                    percentageElement.innerText = `${percentageChange}%`; // 更新百分比
                 }
                 
                 // 更新三角形顏色
-                if (triangleElement) {
-                    triangleElement.style.borderBottom = change > 0 ? "10px solid green" : "10px solid red"; // 根據變動顏色
-                }
+                triangleElement.style.borderBottom = percentageChange > 0 ? "10px solid green" : "10px solid red"; // 根據變動顏色
             }
 
             // 更新持倉區域
@@ -499,13 +496,14 @@ function randomPriceChange(stockSymbol) {
                 const symbolCell = row.querySelector('td:first-child');
                 if (symbolCell && symbolCell.innerText === stockSymbol) {
                     const portfolioPriceElement = row.querySelector('.price'); // 獲取持倉中的價格元素
-                    const portfolioPercentageElement = row.querySelector('.percentage'); // 獲取持倉中的百分比元素
-                    
+
                     if (portfolioPriceElement) {
-                        portfolioPriceElement.innerText = newPrice; // 更新持倉價格
+                        portfolioPriceElement.innerText = currentPrice.toFixed(2); // 更新持倉價格
                     }
 
                     // 檢查是否需要平倉
+                    const originalPrice = parseFloat(portfolioPriceElement.innerText); // 取得原始價格
+                    const portfolioChange = ((currentPrice - originalPrice) / originalPrice) * 100; // 計算百分比變化
                     if (portfolioChange < -3) {
                         alert(`股價跌幅超過 3%，自動平倉 ${stockSymbol}`); // 提示用戶
                         row.remove(); // 移除該持倉行
@@ -516,7 +514,7 @@ function randomPriceChange(stockSymbol) {
         })
         .catch(error => {
             console.error('獲取股價時出錯:', error);
-            alert("獲取股價時出錯: "+error);
+            alert("獲取股價時出錯: " + error.message);
         });
 }
         
