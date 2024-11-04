@@ -426,14 +426,20 @@ function updateBalance() {
 function renderPortfolio() {
     const portfolioTable = document.getElementById('portfolio');
     portfolioTable.innerHTML = ''; // 清空之前的內容
+
     portfolio.forEach((stock) => {
+        const originalPrice = stock.originalPrice || stock.price; // 使用原始價格來計算百分比
+        const priceChangePercentage = ((stock.price - originalPrice) / originalPrice * 100).toFixed(2);
+
         const row = `<tr>
             <td>${stock.symbol}</td>
-            <td>${stock.price.toFixed(2)}</td>
+            <td class="price">${stock.price.toFixed(2)}</td>
             <td>${stock.quantity}</td>
             <td>${(stock.price * stock.quantity).toFixed(2)}</td>
+            <td class="percentage">${priceChangePercentage}%</td>
             <td><button class="btn btn-danger" onclick="sellStock('${stock.symbol}')">賣出</button></td>
         </tr>`;
+        
         portfolioTable.innerHTML += row; // 添加每一行的數據
     });
 }
