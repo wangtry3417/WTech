@@ -451,7 +451,7 @@ function fetchStockPrice(stockSymbol) {
             const latestDate = Object.keys(timeSeries)[0]; // 獲取最新日期
             const latestData = timeSeries[latestDate];
         
-            const currentPrice = latestData['4. close']; // 獲取最新收盤價
+            const currentPrice = parseFloat(latestData['4. close']); // 獲取最新收盤價
             return currentPrice;
         });
 }
