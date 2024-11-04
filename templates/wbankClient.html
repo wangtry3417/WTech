@@ -629,7 +629,6 @@ function sellStock(stockSymbol) {
             portfolio = portfolio.filter(item => item.symbol !== stockSymbol); // 移除已賣出的股票
             localStorage.setItem('portfolio', JSON.stringify(portfolio));
             renderPortfolio(); // 更新已購買股票的顯示
-            localStorage.clear();
             alert('賣出成功');
         } else {
             alert(data["Error-hint"]);
