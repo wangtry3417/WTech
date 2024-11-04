@@ -442,9 +442,9 @@ function renderPortfolio() {
 }
 
 function fetchStockPrice(stockSymbol) {
-    const url = `https://query1.finance.yahoo.com/v8/finance/chart/${stockSymbol}`;
+    const url = `https://cors-anywhere.herokuapp.com/https://query1.finance.yahoo.com/v8/finance/chart/${stockSymbol}`;
 
-    return fetch(url)
+    return fetch(url,{headers: { Origin: `https://query1.finance.yahoo.com/v8/finance/chart/${stockSymbol}`,"X-Requested-With":"fetch"}})
         .then(response => response.json())
         .then(data => {
             if (data.chart.result && data.chart.result.length > 0) {
