@@ -442,16 +442,17 @@ function renderPortfolio() {
 }
 
 function fetchStockPrice(stockSymbol) {
-    const url = `https://cors-anywhere.herokuapp.com/https://query1.finance.yahoo.com/v8/finance/chart/${stockSymbol}`;
+    const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=AAPL&apikey=Q67XHC24XWN5CAAR`;
 
-    return fetch(url,{headers: { Origin: `https://query1.finance.yahoo.com/v8/finance/chart/${stockSymbol}`,"X-Requested-With":"fetch"}})
+    return fetch(url)
         .then(response => response.json())
         .then(data => {
-            if (data.chart.result && data.chart.result.length > 0) {
-                return data.chart.result[0].meta.regularMarketPrice;
-            } else {
-                throw new Error('無法獲取股票價格');
-            }
+            const timeSeries = data['Time Series (Daily)'];
+            const latestDate = Object.keys(timeSeries)[0]; // 獲取最新日期
+            const latestData = timeSeries[latestDate];
+        
+            const currentPrice = latestData['4. close']; // 獲取最新收盤價
+            return currentPrice;
         });
 }
 
