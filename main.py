@@ -2004,7 +2004,7 @@ def wbank_hash_transfer():
   users = wbankwallet.query.filter_by(username=user).first()
   
   if count is not None or count != "":
-    count = int(count)
+    count = float(count)
 
   if users.sub is not None and users.sub != "":
     if "銀行" in users.sub:
@@ -2012,7 +2012,7 @@ def wbank_hash_transfer():
     elif users.sub != "為WBank帳戶,Not access to login":
       return jsonify({"Error-hint":users.sub})
   
-  if count >= 5000000:
+  if count >= 5000000.00:
     users.sub = "由於你轉帳金額過大，你的帳戶已被自動程式凍結"
     db.session.commit()
     return jsonify({"Error-hint":"由於你轉帳金額過大，不能用api/自動程式轉帳"})
