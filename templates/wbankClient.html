@@ -644,7 +644,7 @@ function sellStock(stockSymbol) {
 // 隨機更新價格
 setInterval(() => {
     Object.keys(stockPrices).forEach(stock => randomPriceChange(stock));
-}, 3000); // 每3秒更新一次價格
+}, 10000); // 每10秒更新一次價格
 
 // 初始化畫面
 updateBalance();
