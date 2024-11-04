@@ -449,6 +449,7 @@ function fetchStockPrice(stockSymbol) {
         .then(data => {
             const timeSeries = data['Time Series (Daily)'];
             if (!timeSeries) {
+               alert("未找到時間序列數據");
                throw new Error("未找到時間序列數據");
             }
             const latestDate = Object.keys(timeSeries)[0]; // 獲取最新日期
