@@ -448,9 +448,11 @@ function fetchStockPrice(stockSymbol) {
         .then(response => response.json())
         .then(data => {
             const timeSeries = data['Time Series (Daily)'];
+            if (!timeSeries) {
+               throw new Error("未找到時間序列數據");
+            }
             const latestDate = Object.keys(timeSeries)[0]; // 獲取最新日期
             const latestData = timeSeries[latestDate];
-        
             const currentPrice = parseFloat(latestData['4. close']); // 獲取最新收盤價
             return currentPrice;
         });
@@ -645,7 +647,7 @@ function sellStock(stockSymbol) {
 // 隨機更新價格
 setInterval(() => {
     Object.keys(stockPrices).forEach(stock => randomPriceChange(stock));
-}, 10000); // 每10秒更新一次價格
+}, 5000); // 每5秒更新一次價格
 
 // 初始化畫面
 updateBalance();
