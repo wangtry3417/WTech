@@ -515,7 +515,7 @@ function randomPriceChange(stockSymbol) {
         .catch(error => {
             console.error('獲取股價時出錯:', error);
             alert("獲取股價時出錯: " + error.message);
-            alert(currentPrice);
+            alert(currentPrice+stockSymbol);
         });
 }
         
