@@ -566,7 +566,7 @@ function buyStock(stockSymbol) {
     .then(data => {
         if (data.success) {
             alert("購買成功");
-            const stock = { symbol: stockSymbol, price: stockPrice, quantity: quantity };
+            const stock = { symbol: stockSymbol, price: stockPrice, quantity: quantity, originalPrice:stockPrice };
             portfolio.push(stock);
             sessionStorage.setItem('portfolio', JSON.stringify(portfolio));
             renderPortfolio(); // 更新已購買股票的顯示
