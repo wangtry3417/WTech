@@ -166,6 +166,8 @@
             <tr>
                 <th>股票代碼</th>
                 <th>當前價格</th>
+                <th>升降情況</th>
+                <th>百分比%</th>
                 <th>操作</th>
             </tr>
         </thead>
@@ -463,6 +465,8 @@ function randomPriceChange(stockSymbol) {
         if (percentageElement) {
             percentageElement.innerText = `${percentageChange}%`;
         }
+    } else {
+      alert("找不到priceElement");
     }
 }
         
