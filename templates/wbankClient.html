@@ -436,8 +436,8 @@ function renderPortfolio() {
             <td>${stock.symbol}</td>
             <td class="price">${stock.price.toFixed(2)}</td>
             <td>${stock.quantity}</td>
-            <td>${(stock.price * stock.quantity).toFixed(2)}</td>
             <td class="percentage">${priceChangePercentage}%</td>
+            <td>${(stock.price * stock.quantity).toFixed(2)}</td>
             <td><button class="btn btn-danger" onclick="sellStock('${stock.symbol}')">賣出</button></td>
         </tr>`;
         
