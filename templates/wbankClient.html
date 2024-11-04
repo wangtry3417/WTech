@@ -209,9 +209,8 @@
             <tr>
                 <th>股票代碼</th>
                 <th>價格</th>
-                <th>數量</th>
-                <th>升跌百分比</th>
-                <th>總計</th>
+                <th>數量</th
+                <th>總計（買價)</th>
                 <th>操作</th>
             </tr>
         </thead>
@@ -430,13 +429,11 @@ function renderPortfolio() {
 
     portfolio.forEach((stock) => {
         const originalPrice = stock.originalPrice || stock.price; // 使用原始價格來計算百分比
-        const priceChangePercentage = ((stock.price - originalPrice) / originalPrice * 100).toFixed(2);
 
         const row = `<tr>
             <td>${stock.symbol}</td>
             <td class="price">${stock.price.toFixed(2)}</td>
             <td>${stock.quantity}</td>
-            <td class="percentage">${priceChangePercentage}%</td>
             <td>${(stock.price * stock.quantity).toFixed(2)}</td>
             <td><button class="btn btn-danger" onclick="sellStock('${stock.symbol}')">賣出</button></td>
         </tr>`;
