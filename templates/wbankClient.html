@@ -499,6 +499,7 @@ function buyStock(stockSymbol) {
         }
     })
     .catch(error => {
+        alert(error);
         console.error('錯誤:', error);
         alert('購買過程中發生錯誤。');
     });
