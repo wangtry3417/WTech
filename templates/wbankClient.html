@@ -554,7 +554,7 @@ function sellStock(stockSymbol) {
     })
     .catch(error => {
         console.error('錯誤:', error);
-        alert('賣出過程中發生錯誤。');
+        alert('賣出過程中發生錯誤。'+error);
     });
 }
 
