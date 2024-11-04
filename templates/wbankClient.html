@@ -396,7 +396,7 @@
         }
         //Stock place
 
-const portfolio = JSON.parse(sessionStorage.getItem('portfolio')) || [];
+let portfolio = JSON.parse(sessionStorage.getItem('portfolio')) || [];
 const stockPrices = {
     AAPL: 150.00,
     GOOGL: 2800.00,
