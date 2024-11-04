@@ -499,19 +499,36 @@ function buyStock(stockSymbol) {
         }
     })
     .catch(error => {
-        alert(error);
         console.error('錯誤:', error);
         alert('購買過程中發生錯誤。');
     });
 }
         
 function sellStock(stockSymbol) {
-    const stockIndex = portfolio.findIndex(stock => stock.symbol === stockSymbol);
-    if (stockIndex === -1) return;
+    // 查找所有行並找到對應的行
+    const rows = document.querySelectorAll('#portfolio tr');
+    let stock = null;
 
-    const stock = portfolio[stockIndex];
+    for (const row of rows) {
+        const symbolCell = row.querySelector('td:first-child');
+        if (symbolCell && symbolCell.innerText === stockSymbol) {
+            stock = {
+                price: parseFloat(row.querySelector('td:nth-child(2)').innerText),
+                quantity: parseInt(row.querySelector('td:nth-child(3)').innerText)
+            };
+            break; // 找到後退出循環
+        }
+    }
+
+    if (!stock) {
+        console.error(`Stock ${stockSymbol} not found in portfolio.`);
+        alert('未找到該股票，請檢查您的投資組合。');
+        return;
+    }
+
     const totalGain = stock.price * stock.quantity;
 
+    // 更新餘額
     balance += totalGain;
     updateBalance();
 
@@ -526,9 +543,10 @@ function sellStock(stockSymbol) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            portfolio.splice(stockIndex, 1); // 移除已賣出的股票
+            portfolio = portfolio.filter(item => item.symbol !== stockSymbol); // 移除已賣出的股票
             sessionStorage.setItem('portfolio', JSON.stringify(portfolio));
             renderPortfolio(); // 更新已購買股票的顯示
+            alert('賣出成功');
         } else {
             alert('賣出失敗，請稍後再試！');
         }
