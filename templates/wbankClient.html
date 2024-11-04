@@ -135,6 +135,11 @@
            background-color: rgb(0,0,255);
            color: rgb(255,255,255);
         }
+        .triangle {
+          width: 0;
+          height: 0;
+          display: inline-block;
+       }
     </style>
 </head>
 <body>
@@ -168,21 +173,29 @@
             <tr>
                 <td>AAPL</td>
                 <td class="price">150.00</td>
+                <td class="triangle" style="border-left: 10px solid transparent; border-right: 10px solid transparent; border-bottom: 10px solid gray;"></td>
+                <td class="percentage">0%</td>
                 <td><button class="btn btn-primary">買入</button></td>
             </tr>
             <tr>
                 <td>GOOGL</td>
                 <td class="price">2800.00</td>
+                <td class="triangle" style="border-left: 10px solid transparent; border-right: 10px solid transparent; border-bottom: 10px solid gray;"></td>
+                <td class="percentage">0%</td>
                 <td><button class="btn btn-primary">買入</button></td>
             </tr>
             <tr>
                 <td>AMZN</td>
                 <td class="price">3400.00</td>
+                <td class="triangle" style="border-left: 10px solid transparent; border-right: 10px solid transparent; border-bottom: 10px solid gray;"></td>
+                <td class="percentage">0%</td>
                 <td><button class="btn btn-primary">買入</button></td>
             </tr>
             <tr>
                 <td>BA</td>
                 <td class="price">2100.00</td>
+                <td class="triangle" style="border-left: 10px solid transparent; border-right: 10px solid transparent; border-bottom: 10px solid gray;"></td>
+                <td class="percentage">0%</td>
                 <td><button class="btn btn-primary">買入</button></td>
             </tr>
         </tbody>
@@ -430,8 +443,26 @@ function randomPriceChange(stockSymbol) {
     stockPrices[stockSymbol] = newPrice;
 
     const priceElement = document.querySelector(`#availableStocks tr:has(td:contains(${stockSymbol})) .price`);
+    const percentageChange = (change * 100).toFixed(2); // 計算百分比變動
+    const triangleElement = document.querySelector(`#availableStocks tr:has(td:contains(${stockSymbol})) .triangle`);
+
     if (priceElement) {
         priceElement.innerText = newPrice; // 更新價格
+        
+        // 更新三角形顏色
+        if (change > 0) {
+            triangleElement.style.borderBottom = "10px solid green"; // 上升顏色
+            triangleElement.style.borderTop = ""; // 清除下降顏色
+        } else {
+            triangleElement.style.borderBottom = "10px solid red"; // 下降顏色
+            triangleElement.style.borderTop = ""; // 清除上升顏色
+        }
+        
+        // 更新百分比顯示
+        const percentageElement = document.querySelector(`#availableStocks tr:has(td:contains(${stockSymbol})) .percentage`);
+        if (percentageElement) {
+            percentageElement.innerText = `${percentageChange}%`;
+        }
     }
 }
         
