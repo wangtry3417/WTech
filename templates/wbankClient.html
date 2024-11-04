@@ -174,28 +174,28 @@
         <tbody>
             <tr>
                 <td>AAPL</td>
-                <td class="price">150.00</td>
+                <td class="price"></td>
                 <td class="triangle" style="border-left: 10px solid transparent; border-right: 10px solid transparent; border-bottom: 10px solid gray;"></td>
                 <td class="percentage">0%</td>
                 <td><button class="btn btn-primary">買入</button></td>
             </tr>
             <tr>
                 <td>GOOGL</td>
-                <td class="price">2800.00</td>
+                <td class="price"></td>
                 <td class="triangle" style="border-left: 10px solid transparent; border-right: 10px solid transparent; border-bottom: 10px solid gray;"></td>
                 <td class="percentage">0%</td>
                 <td><button class="btn btn-primary">買入</button></td>
             </tr>
             <tr>
                 <td>AMZN</td>
-                <td class="price">3400.00</td>
+                <td class="price"></td>
                 <td class="triangle" style="border-left: 10px solid transparent; border-right: 10px solid transparent; border-bottom: 10px solid gray;"></td>
                 <td class="percentage">0%</td>
                 <td><button class="btn btn-primary">買入</button></td>
             </tr>
             <tr>
                 <td>BA</td>
-                <td class="price">2100.00</td>
+                <td class="price"></td>
                 <td class="triangle" style="border-left: 10px solid transparent; border-right: 10px solid transparent; border-bottom: 10px solid gray;"></td>
                 <td class="percentage">0%</td>
                 <td><button class="btn btn-primary">買入</button></td>
@@ -410,7 +410,6 @@
             */
         }
         //Stock place
-
 let portfolio = JSON.parse(sessionStorage.getItem('portfolio')) || [];
 const stockPrices = {
     AAPL: 150.00,
@@ -442,70 +441,83 @@ function renderPortfolio() {
     });
 }
 
+function fetchStockPrice(stockSymbol) {
+    const url = `https://query1.finance.yahoo.com/v8/finance/chart/${stockSymbol}`;
+
+    return fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            if (data.chart.result && data.chart.result.length > 0) {
+                return data.chart.result[0].meta.regularMarketPrice;
+            } else {
+                throw new Error('無法獲取股票價格');
+            }
+        });
+}
+
 function randomPriceChange(stockSymbol) {
-    const currentPrice = stockPrices[stockSymbol];
-    const change = (Math.random() * 2 - 1) * 0.05; // 隨機變動 -5% 到 +5%
-    const newPrice = Math.max(0, (currentPrice * (1 + change)).toFixed(2)); // 確保價格不低於 0
-    stockPrices[stockSymbol] = newPrice;
+    fetchStockPrice(stockSymbol)
+        .then(currentPrice => {
+            const change = (Math.random() * 2 - 1) * 0.05; // 隨機變動 -5% 到 +5%
+            const newPrice = Math.max(0, (currentPrice * (1 + change)).toFixed(2)); // 確保價格不低於 0
+            stockPrices[stockSymbol] = newPrice;
 
-    // 更新可用股票區域
-    const rows = document.querySelectorAll('#availableStocks tr');
-    let priceElement = null;
-    let triangleElement = null;
-    let percentageElement = null;
+            // 更新可用股票區域
+            const rows = document.querySelectorAll('#availableStocks tr');
+            let priceElement = null;
+            let triangleElement = null;
+            let percentageElement = null;
 
-    for (const row of rows) {
-        const symbolCell = row.querySelector('td:first-child');
-        if (symbolCell && symbolCell.innerText === stockSymbol) {
-            priceElement = row.querySelector('.price'); // 獲取價格元素
-            triangleElement = row.querySelector('.triangle'); // 獲取三角形元素
-            percentageElement = row.querySelector('.percentage'); // 獲取百分比元素
-            break; // 找到後退出循環
-        }
-    }
-
-    if (priceElement) {
-        priceElement.innerText = newPrice; // 更新價格
-        
-        // 計算並顯示變動百分比
-        const percentageChange = (change * 100).toFixed(2);
-        if (percentageElement) {
-            percentageElement.innerText = `${percentageChange}%`;
-        }
-        
-        // 更新三角形顏色
-        if (triangleElement) {
-            triangleElement.style.borderBottom = change > 0 ? "10px solid green" : "10px solid red"; // 根據變動顏色
-        }
-    }
-
-    // 更新持倉區域
-    const portfolioRows = document.querySelectorAll('#portfolio tr');
-    for (const row of portfolioRows) {
-        const symbolCell = row.querySelector('td:first-child');
-        if (symbolCell && symbolCell.innerText === stockSymbol) {
-            const portfolioPriceElement = row.querySelector('.price'); // 獲取持倉中的價格元素
-            const portfolioPercentageElement = row.querySelector('.percentage'); // 獲取持倉中的百分比元素
-            
-            if (portfolioPriceElement) {
-                portfolioPriceElement.innerText = newPrice; // 更新持倉價格
+            for (const row of rows) {
+                const symbolCell = row.querySelector('td:first-child');
+                if (symbolCell && symbolCell.innerText === stockSymbol) {
+                    priceElement = row.querySelector('.price'); // 獲取價格元素
+                    triangleElement = row.querySelector('.triangle'); // 獲取三角形元素
+                    percentageElement = row.querySelector('.percentage'); // 獲取百分比元素
+                    break; // 找到後退出循環
+                }
             }
 
-            // 計算持倉的百分比變化
-            const originalPrice = parseFloat(portfolioPriceElement.innerText); // 取得原始價格
-            const portfolioChange = ((newPrice - originalPrice) / originalPrice) * 100; // 計算百分比變化
-            if (portfolioPercentageElement) {
-                portfolioPercentageElement.innerText = `${portfolioChange.toFixed(2)}%`; // 更新百分比顯示
+            if (priceElement) {
+                priceElement.innerText = newPrice; // 更新價格
+                
+                // 計算並顯示變動百分比
+                const percentageChange = ((newPrice - currentPrice) / currentPrice * 100).toFixed(2);
+                if (percentageElement) {
+                    percentageElement.innerText = `${percentageChange}%`;
+                }
+                
+                // 更新三角形顏色
+                if (triangleElement) {
+                    triangleElement.style.borderBottom = change > 0 ? "10px solid green" : "10px solid red"; // 根據變動顏色
+                }
             }
 
-            // 檢查是否需要平倉
-            if (portfolioChange < -3) {
-                alert(`股價跌幅超過 3%，自動平倉 ${stockSymbol}`); // 提示用戶
-                row.remove(); // 移除該持倉行
+            // 更新持倉區域
+            const portfolioRows = document.querySelectorAll('#portfolio tr');
+            for (const row of portfolioRows) {
+                const symbolCell = row.querySelector('td:first-child');
+                if (symbolCell && symbolCell.innerText === stockSymbol) {
+                    const portfolioPriceElement = row.querySelector('.price'); // 獲取持倉中的價格元素
+                    const portfolioPercentageElement = row.querySelector('.percentage'); // 獲取持倉中的百分比元素
+                    
+                    if (portfolioPriceElement) {
+                        portfolioPriceElement.innerText = newPrice; // 更新持倉價格
+                    }
+
+                    // 檢查是否需要平倉
+                    if (portfolioChange < -3) {
+                        alert(`股價跌幅超過 3%，自動平倉 ${stockSymbol}`); // 提示用戶
+                        row.remove(); // 移除該持倉行
+                    }
+                    break; // 找到後退出循環
+                }
             }
-            break; // 找到後退出循環
-        }
-    }
+        })
+        .catch(error => {
+            console.error('獲取股價時出錯:', error);
+            alert("獲取股價時出錯: "+error);
+        });
 }
         
 document.addEventListener('DOMContentLoaded', function() {
