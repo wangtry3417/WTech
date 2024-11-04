@@ -2009,9 +2009,10 @@ def wbank_hash_transfer():
   if users.sub is not None and users.sub != "":
     if "銀行" in users.sub:
       return jsonify({"Error-hint":"其他銀行不能接受"})
-    return jsonify({"Error-hint":users.sub})
+    elif users.sub != "為WBank帳戶,Not access to login":
+      return jsonify({"Error-hint":users.sub})
   
-  if count >= 500000:
+  if count >= 5000000:
     users.sub = "由於你轉帳金額過大，你的帳戶已被自動程式凍結"
     db.session.commit()
     return jsonify({"Error-hint":"由於你轉帳金額過大，不能用api/自動程式轉帳"})
