@@ -63,7 +63,7 @@ class AIModules:
 
 app = Flask("WTech")
 #app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://default:Gd2MsST3QYWF@ep-hidden-salad-a1a7pob9-pooler.ap-southeast-1.aws.neon.tech:5432/verceldb?sslmode=require'
+app.config['SQLALCHEMY_DATABASE_URI'] = str(os.environ.get("dataurl"))
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
 app.config['SECRET_KEY'] = hashlib.sha256("WTech2225556".encode()).hexdigest()
@@ -309,6 +309,9 @@ class CustomModelView(ModelView):
       objects = query.all()
       return len(objects), objects
 """
+
+with app.app_context():
+  db.create_all()
 
 # 定義用戶類
 class User(UserMixin):
