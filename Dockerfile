@@ -16,4 +16,4 @@ COPY . .
 EXPOSE 5000
 
 # 啟動 Flask 應用
-CMD ["flask", "run", "--host=0.0.0.0"]
+CMD ["python", "main.py"]
