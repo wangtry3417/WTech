@@ -2385,39 +2385,48 @@ def wbank_auth_client():
     if request.method == 'POST':
         username = request.form['user']
         password = request.form['pw']
-        user = wbankwallet.query.filter_by(username=username).first()
-        tryTimes = session.get("tryTimes",0)
-        if user:
-            if user.password == password:
-              if user.sub == None or user.sub == "":
-                  login_user(user)
-                  session.pop("tryTimes",None)
-                  session["username"] = username
-                  session["pw"] = password
-                  session.permanent = True
-                  flash('登入成功.', 'success')
-                  return redirect(url_for('wbank_client'))
-              else:
-                if "銀行" in user.sub:
-                  flash("抱歉，非泓財銀行帳戶不能登入","error")
-                  return redirect("/wbank")
-                flash(user.sub,'error')
-                return redirect("/wbank")
+        try:
+            user = wbankwallet.query.filter_by(username=username).first()  # 查詢用戶
+            
+            tryTimes = session.get("tryTimes", 0)
+            
+            if user:
+                if user.password == password:
+                    if user.sub is None or user.sub == "":
+                        login_user(user)
+                        session.pop("tryTimes", None)
+                        session["username"] = username
+                        session["pw"] = password
+                        session.permanent = True
+                        flash('登入成功.', 'success')
+                        return redirect(url_for('wbank_client'))
+                    else:
+                        if "銀行" in user.sub:
+                            flash("抱歉，非泓財銀行帳戶不能登入", "error")
+                            return redirect("/wbank")
+                        flash(user.sub, 'error')
+                        return redirect("/wbank")
+                else:
+                    tryTimes += 1
+                    session["tryTimes"] = tryTimes
+                    session.permanent = True
+                    if tryTimes >= 3:
+                        user.sub = '你的帳戶被鎖定，原因：錯誤登入3次'
+                        db.session.commit()  # 提交更改
+                        flash(user.sub, 'error')
+                        return redirect("/wbank")
+                    else:
+                        msg = f"密碼錯誤，嘗試次數：{tryTimes}"
+                        flash(msg, "error")
+                        return redirect("/wbank")
             else:
-              tryTimes += 1
-              session["tryTimes"] = tryTimes
-              session.permanent = True
-              if tryTimes >= 3:
-                  user.sub = '你的帳戶被鎖定，原因：錯誤登入3次'
-                  db.session.commit()
-                  flash(user.sub,'error')
-                  return redirect("/wbank")
-              else:
-                msg = f"密碼錯誤，嘗試次數： {tryTimes}"
-                flash(msg, "error")
-                return redirect("/wbank")
-        else:
-            flash('無效的用戶名.', 'error')
+                flash('無效的用戶名.', 'error')
+        
+        except Exception as e:
+            db.session.rollback()  # 在查詢或提交時發生錯誤時回滾
+            flash('系統錯誤，請稍後再試。', 'error')
+            return redirect("/wbank")
+    
     return render_template('wbank.html')
 
 @app.route("/wbank/client", methods=["GET", "POST"])
