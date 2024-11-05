@@ -7,6 +7,7 @@ services:
       - "5000:5000"
     environment:
       FLASK_ENV: development  # 設定 Flask 環境
+      dataurl: ${dataurl}
     volumes:
       - .:/app  # 將當前目錄掛載到容器內
 
