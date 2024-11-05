@@ -469,8 +469,8 @@ function randomPriceChange(stockSymbol) {
     const change = (Math.random() * 2 - 1) * 0.05; // 隨機變動 -5% 到 +5%
     let newPrice = Math.max(0, (currentPrice * (1 + change)).toFixed(2)); // 確保價格不低於 0
     if (stockSymbol == "BEn-stock") {
-        if (currentPrice >= 10000) {
-            newPrice = (currentPrice - 1000).toFixed(2);
+        if (currentPrice >= 20000) {
+            newPrice = 3.00
         } else {
             newPrice = (currentPrice * 3).toFixed(2);
         }
