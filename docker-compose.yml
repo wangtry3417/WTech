@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  wbank:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      FLASK_ENV: development  # 設定 Flask 環境
+    volumes:
+      - .:/app  # 將當前目錄掛載到容器內
+
+  db:
+    image: postgres:latest  # 使用 Postgres 作為數據庫
+    environment:
+      POSTGRES_DB: ${database}
+      POSTGRES_USER: ${username}
+      POSTGRES_PASSWORD: ${Pw}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
