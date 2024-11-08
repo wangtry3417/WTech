@@ -120,6 +120,16 @@
             border: 2px solid #007bff;
             border-radius: 5px;
         }
+        .user-message {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 16px;
+            color: #555;
+        }
+        .error-message {
+            color: red;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -158,6 +168,7 @@
                     <img id="photo" src="" alt="身份證照片"/>
                 </div>
             </div>
+            <div class="error-message" id="errorMessage" style="display:none;">無法啟動攝像頭。請檢查您的設備和瀏覽器設置。</div>
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         </div>
 
@@ -232,7 +243,9 @@
                 video.srcObject = stream;
             })
             .catch(err => {
+                alert(err);
                 console.error("無法訪問攝像頭:", err);
+                errorMessage.style.display = 'block';
             });
 
         // 捕捉身份證照片
