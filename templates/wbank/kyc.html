@@ -161,7 +161,7 @@
         <div class="step" id="step2">
             <h2>第二步：身份證</h2>
             <div class="camera">
-                <video id="video" width="320" height="240" autoplay></video>
+                <video id="video" autoplay></video>
                 <button id="captureButton">拍攝身份證</button>
                 <canvas id="canvas" style="display:none;"></canvas>
                 <div class="photo-preview" id="photoPreview">
@@ -238,7 +238,7 @@
         };
 
         // 啟動攝像頭
-        navigator.mediaDevices.getUserMedia({ video: true })
+        navigator.mediaDevices.getUserMedia({ video: true, video: { width: 1280, height: 720 } })
             .then(stream => {
                 video.srcObject = stream;
             })
