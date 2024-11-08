@@ -129,6 +129,9 @@
         <div class="step active" id="step1">
             <h2>第一步：基本信息</h2>
             <form id="form1">
+                <label for="us">username</label>
+                <input type="text" id="user" name="user" required>
+                
                 <label for="fullName">全名</label>
                 <input type="text" id="fullName" name="fname" required>
 
@@ -212,6 +215,7 @@
 
         // 用於儲存用戶數據
         const sessionStage = {
+            user: '',
             fname: '',
             id: '',
             email: '',
@@ -268,6 +272,7 @@
             if (currentStep < steps.length - 1) {
                 // 儲存當前步驟的數據
                 if (currentStep === 0) {
+                    sessionStage.user = document.getElementById('user').value;
                     sessionStage.fname = document.getElementById('fullName').value;
                     sessionStage.email = document.getElementById('email').value;
                     sessionStage.phone = document.getElementById('phone').value;
@@ -281,7 +286,7 @@
                 // 在這裡處理提交邏輯
                 // 收集需要傳遞的數據
             const dataToSend = {
-                user: "{{user}}",
+                user: sessionStorage.getItem('user'),
                 id: sessionStorage.getItem('id'),
                 fname: sessionStorage.getItem('fname'),
                 address: sessionStorage.getItem('address'),
