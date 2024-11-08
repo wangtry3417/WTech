@@ -2315,7 +2315,7 @@ def wbank_into_user():
   an = f"015-150-{random.randint(10000000,99999999)}"
   db.session.add(wbankwallet(username=user,balance="0",password=pw,verify="no",sub=None,accnumber=an))
   db.session.commit()
-  return render_template("wbankVerify.html",user=user,id=id)
+  return render_template("wbank/kyc.html",user=user,id=id)
   return "Cannot do that!."
 
 @app.route("/wbank/verify")
