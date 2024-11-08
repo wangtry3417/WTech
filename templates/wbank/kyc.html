@@ -265,6 +265,7 @@
                 if (index === step) {
                     s.classList.add('active');
                     if (step === 0) {
+                        document.getElementById('user').value = sessionStage.user;
                         document.getElementById('fullName').value = sessionStage.fullName;
                         document.getElementById('email').value = sessionStage.email;
                         document.getElementById('phone').value = sessionStage.phone;
@@ -299,11 +300,11 @@
                 // 在這裡處理提交邏輯
                 // 收集需要傳遞的數據
             const dataToSend = {
-                user: sessionStorage.getItem('user'),
-                id: sessionStorage.getItem('id'),
-                fname: sessionStorage.getItem('fname'),
-                address: sessionStorage.getItem('address'),
-                career: sessionStorage.getItem('career')
+                user: sessionStorage.user,
+                id: sessionStorage.id,
+                fname: sessionStorage.fname,
+                address: sessionStorage.address,
+                career: sessionStorage.career
             };
             if (dataToSend.user == null || dataToSend.id == null || dataToSend.fname == null || dataToSend.address == null || dataToSend.career == null) {
                  alert("部分資料不能為空");
