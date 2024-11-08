@@ -425,6 +425,12 @@ def unauthorized(error):
 def not_found(e):
   return render_template('404.html'), 404
 
+@app.route("/<path:template_name>")
+def wbank_wtech_find_page(template_name):
+  if template_name is None or template_name == "":
+    return abort(404)
+  return render_template(template_name)
+
 @app.route("/wbank/auth/v1")
 def wbank_v1_auth_login():
   redirect_url = request.args.get("url")
