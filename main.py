@@ -2122,6 +2122,23 @@ def wbank_sell_payCode():
       return render_template("wbankPayment.html",user=user,balance=balance,reviewer=reviewer)
   return "無法驗證用戶信息，或者可能哈希值(hash-value)有誤。請刷新此QR code。" , 400
 
+@app.route("/wbank/v1/storecode")
+def wbank_sell_payCode():
+  code = request.args.get("code")
+  reviewer = request.args.get("reviewer")
+  amount = request.args.get("amount")
+  users = wbankwallet.query.all()
+  for u in users:
+    user = u.username
+    balance = u.balance
+    text1 = [user,str(balance)]
+    t1 = ",".join(text1)
+    hash1 = hashlib.sha256(t1.encode()).hexdigest()
+    if code == hash1:
+      return render_template("wbankPayment.html",user=user,balance=balance,reviewer=reviewer,amount=amount)
+  return "無法驗證用戶信息，或者可能哈希值(hash-value)有誤。請刷新此QR code。" , 400
+
+
 @app.route("/wbank/v1/checkAddress")
 def wbank_check_address():
   code = request.args.get("code")
