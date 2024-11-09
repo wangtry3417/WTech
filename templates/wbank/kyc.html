@@ -150,6 +150,20 @@
         </form>
     </div>
 
+    <div class="step" id="step4">
+        <h2>第三四：條款同意</h2>
+        <form id="form4">
+            <input type="checkbox" required>
+            <label>本人已相信wbank自動程式。</label>
+            <br>
+            <input type="checkbox" required>
+            <label>本人已授權wbank管理本人的戶口。</label>
+            <br>
+
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        </form>
+    </div>
+
     <div class="navigation">
         <button id="prevButton" style="display: none;">上一步</button>
         <button id="nextButton">下一步</button>
