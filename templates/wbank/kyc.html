@@ -186,6 +186,7 @@
     // 進入下一步驟
     nextButton.addEventListener('click', () => {
         if (currentStep < steps.length - 1) {
+            alert("Clicked "+currentStep);
             // 儲存當前步驟的數據
             if (currentStep === 0) {
                 // 驗證並儲存基本信息
