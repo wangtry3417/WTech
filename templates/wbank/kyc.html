@@ -161,89 +161,95 @@
 </div>
 
 <script>
-    let currentStep = 0;
-    const steps = document.querySelectorAll('.step');
-    const nextButton = document.getElementById('nextButton');
-    const prevButton = document.getElementById('prevButton');
-    const progressBar = document.getElementById('progressBar');
+    const sessionStage = {
+        user: '',
+        fname: '',
+        email: '',
+        phone: '',
+        id: '',
+        photo: '',
+        address: '',
+        dob: '',
+        career: ''
+    };
 
-    // 顯示當前步驟
-    function showStep(step) {
-        steps.forEach((s, index) => {
-            s.classList.remove('active');
-            if (index === step) {
-                s.classList.add('active');
+    document.addEventListener('DOMContentLoaded', () => {
+        let currentStep = 0;
+        const steps = document.querySelectorAll('.step');
+        const nextButton = document.getElementById('nextButton');
+        const prevButton = document.getElementById('prevButton');
+        const progressBar = document.getElementById('progressBar');
+
+        function showStep(step) {
+            console.log("顯示步驟:", step);
+            steps.forEach((s, index) => {
+                s.classList.remove('active');
+                if (index === step) {
+                    s.classList.add('active');
+                }
+            });
+            prevButton.style.display = step === 0 ? 'none' : 'inline-block';
+            nextButton.textContent = step === steps.length - 1 ? '提交' : '下一步';
+            const progressPercentage = ((step + 1) / steps.length) * 100;
+            progressBar.style.width = progressPercentage + '%';
+        }
+
+        nextButton.addEventListener('click', () => {
+            //alert("Clicked " + currentStep);
+            if (currentStep < steps.length - 1) {
+                // 儲存當前步驟的數據
+                if (currentStep === 0) {
+                    sessionStage.user = document.getElementById('user').value;
+                    sessionStage.fname = document.getElementById('fullName').value;
+                    sessionStage.email = document.getElementById('email').value;
+                    sessionStage.phone = document.getElementById('phone').value;
+                    sessionStage.id = document.getElementById('id').value;
+                } else if (currentStep === 1) {
+                    const fileInput = document.getElementById('idCardUpload');
+                    if (!fileInput.files.length) {
+                        alert('請上傳身份證照片');
+                        return;
+                    }
+                    sessionStage.photo = fileInput.files[0]; // 儲存照片
+                } else if (currentStep === 2) {
+                    sessionStage.address = document.getElementById('address').value;
+                    sessionStage.dob = document.getElementById('dob').value;
+                    sessionStage.career = document.getElementById('career').value;
+                }
+                currentStep++; // 更新步驟
+                showStep(currentStep); // 顯示下一步
+            } else {
+                // 提交邏輯
+                const formData = new FormData();
+                for (const key in sessionStage) {
+                    formData.append(key, sessionStage[key]);
+                }
+                formData.append("csrf_token", document.querySelector('input[name="csrf_token"]').value);
+
+                fetch('/wbank/v1/kyc', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert('資料提交成功！');
+                    window.location.href = "/wbank";
+                })
+                .catch(error => {
+                    alert('提交錯誤: ' + error.message);
+                });
             }
         });
-        prevButton.style.display = step === 0 ? 'none' : 'inline-block';
-        nextButton.textContent = step === steps.length - 1 ? '提交' : '下一步';
-        
-        // 更新進度條
-        const progressPercentage = ((step + 1) / steps.length) * 100;
-        progressBar.style.width = progressPercentage + '%';
-    }
 
-    // 進入下一步驟
-    nextButton.addEventListener('click', () => {
-        if (currentStep < steps.length - 1) {
-            alert("Clicked "+currentStep);
-            // 儲存當前步驟的數據
-            if (currentStep === 0) {
-                // 驗證並儲存基本信息
-                sessionStage.user = document.getElementById('user').value;
-                sessionStage.fname = document.getElementById('fullName').value;
-                sessionStage.email = document.getElementById('email').value;
-                sessionStage.phone = document.getElementById('phone').value;
-                sessionStage.id = document.getElementById('id').value;
-            } else if (currentStep === 1) {
-                // 驗證是否上傳身份證
-                const fileInput = document.getElementById('idCardUpload');
-                if (!fileInput.files.length) {
-                    alert('請上傳身份證照片');
-                    return;
-                }
-                sessionStage.photo = fileInput.files[0]; // 儲存照片
-            } else if (currentStep === 2) {
-                // 驗證並儲存詳細資料
-                sessionStage.address = document.getElementById('address').value;
-                sessionStage.dob = document.getElementById('dob').value;
-                sessionStage.career = document.getElementById('career').value;
+        prevButton.addEventListener('click', () => {
+            if (currentStep > 0) {
+                currentStep--;
+                showStep(currentStep);
             }
-            currentStep++;
-            showStep(currentStep);
-        } else {
-            // 提交邏輯
-            const formData = new FormData();
-            for (const key in sessionStage) {
-                formData.append(key, sessionStage[key]);
-            }
-            formData.append("csrf_token", document.querySelector('input[name="csrf_token"]').value);
+        });
 
-            fetch('/wbank/v1/kyc', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                alert('資料提交成功！');
-                window.location.href = "/wbank";
-            })
-            .catch(error => {
-                alert('提交錯誤: ' + error.message);
-            });
-        }
+        showStep(currentStep);
     });
-
-    // 返回上一個步驟
-    prevButton.addEventListener('click', () => {
-        if (currentStep > 0) {
-            currentStep--;
-            showStep(currentStep);
-        }
-    });
-
-    // 初始化顯示第一步
-    showStep(currentStep);
 </script>
 
 </body>
