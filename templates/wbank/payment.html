@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商家付款介面</title>
+    <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7f8;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            max-width: 400px;
+            width: 100%;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1em;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s, transform 0.2s;
+        }
+        button:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+        }
+        .video-container {
+            display: none;
+            margin-top: 20px;
+            text-align: center;
+        }
+        #reader {
+            width: 100%;
+            height: 300px;
+            border: 2px dashed #007bff;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        p {
+            color: #555;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>商家付款介面</h1>
+    <input type="text" id="usermame" placeholder="輸入商家名字" required>
+    <input type="number" id="amount" placeholder="輸入金額" min="0" step="0.01" required>
+    <button onclick="startCapture()">付款</button>
+
+    <div class="video-container" id="videoContainer">
+        <h2>掃描用戶的 QR Code</h2>
+        <div id="reader"></div>
+        <p>請將攝像頭對準用戶的 QR Code 進行支付</p>
+    </div>
+</div>
+
+<script>
+    function startCapture() {
+        const amount = document.getElementById('amount').value;
+        if (amount > 0) {
+            document.getElementById('videoContainer').style.display = 'block';
+            startVideo();
+        } else {
+            alert('請輸入有效的金額');
+        }
+    }
+
+    function startVideo() {
+        const html5QrCode = new Html5Qrcode("reader");
+
+        // 開始掃描
+        html5QrCode.start(
+            { facingMode: "environment" }, // 使用環境攝像頭
+            {
+                fps: 10, // 每秒幀數
+                qrbox: 250 // QR Code 掃描框大小
+            },
+            (decodedText, decodedResult) => {
+                // 當掃描到 QR Code 時的回調
+                console.log(`掃描到 QR Code: ${decodedText}`);
+                alert(`掃描到 QR Code: ${decodedText}`);
+                // 停止掃描
+                html5QrCode.stop().then(ignore => {
+                    document.getElementById('videoContainer').style.display = 'none';
+                }).catch(err => {
+                    console.error('停止掃描時發生錯誤:', err);
+                });
+            },
+            (errorMessage) => {
+                // 掃描失敗的回調
+                console.warn(`掃描失敗: ${errorMessage}`);
+            })
+            .catch(err => {
+                console.error('啟動掃描時發生錯誤:', err);
+            });
+    }
+</script>
+
+</body>
+</html>
