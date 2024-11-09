@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>KYC 介面 - WBank</title>
     <style>
         body {
@@ -305,7 +306,8 @@
                 id: sessionStorage.id,
                 fname: sessionStorage.fname,
                 address: sessionStorage.address,
-                career: sessionStorage.career
+                career: sessionStorage.career,
+                csrf_token: $('input[name="csrf_token"]').val()
             };
             if (dataToSend.user == null || dataToSend.id == null || dataToSend.fname == null || dataToSend.address == null || dataToSend.career == null) {
                  alert("部分資料不能為空");
