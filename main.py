@@ -2123,7 +2123,7 @@ def wbank_sell_payCode():
   return "無法驗證用戶信息，或者可能哈希值(hash-value)有誤。請刷新此QR code。" , 400
 
 @app.route("/wbank/v1/storecode")
-def wbank_sell_payCode():
+def wbank_store_receCode():
   code = request.args.get("code")
   reviewer = request.args.get("reviewer")
   amount = request.args.get("amount")
