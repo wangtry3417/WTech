@@ -236,7 +236,7 @@
                     window.location.href = "/wbank";
                 })
                 .catch(error => {
-                    alert('提交錯誤: ' + error.message);
+                    alert('提交錯誤: ' + error.message + Array.from(formData.entries()));
                 });
             }
         });
