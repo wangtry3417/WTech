@@ -105,18 +105,17 @@
 </div>
 
 <script>
-    const amount = parseFloat(document.getElementById('amount').value);
     function startCapture() {
+        const amount = parseFloat(document.getElementById('amount').value);
         if (amount <= 0 || isNaN(amount)) {
             alert('請輸入有效的金額');
         } else {
             document.getElementById('videoContainer').style.display = 'block';
-            startVideo();
+            startVideo(amount);
         }
     }
 
-    function startVideo() {
-        const html5QrCode = new Html5Qrcode("reader");
+    function startVideo(amount) {
 
         // 開始掃描
         function onScanSuccess(decodedText, decodedResult) {
