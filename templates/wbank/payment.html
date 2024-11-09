@@ -95,7 +95,14 @@
 
     <div class="video-container" id="videoContainer">
         <h2>掃描用戶的 QR Code</h2>
-        <div id="reader"></div>
+        <div id="reader">
+            <div id="qr-reader-dashboard">
+            <div id="qr-reader-dashboard-msg" style="color: #fff">掃描中...</div>
+            <div id="qr-reader-dashboard-btn-container">
+                <button id="qr-reader-dashboard-btn" style="display: none;">暫停掃描</button>
+            </div>
+        </div>
+        </div>
         <p>請將攝像頭對準用戶的 QR Code 進行支付</p>
         <div class="loading" id="loading">
             <img src="https://i.imgur.com/3y6V7Zk.gif" alt="Loading..."> <!-- Loading GIF -->
