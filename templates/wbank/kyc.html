@@ -3,355 +3,247 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <title>KYC 介面 - WBank</title>
+    <title>WBank KYC 介面</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             margin: 0;
-            padding: 0;
+            padding: 20px;
         }
         .container {
-            width: 90%;
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 20px;
+            max-width: 600px;
+            margin: auto;
             background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         h1 {
             text-align: center;
             color: #333;
-            margin-bottom: 20px;
         }
         .step {
             display: none;
         }
-        .active {
+        .step.active {
             display: block;
         }
+        .progress {
+            width: 100%;
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .progress-bar {
+            height: 100%;
+            background: #28a745;
+            width: 0;
+            transition: width 0.3s;
+        }
         label {
-            font-weight: bold;
             margin-top: 10px;
             display: block;
-            color: #555;
+            font-weight: bold;
         }
         input[type="text"],
         input[type="email"],
         input[type="tel"],
-        input[type="date"] {
+        input[type="date"],
+        input[type="file"] {
             width: 100%;
-            padding: 12px;
-            margin: 8px 0 20px;
-            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
             border-radius: 5px;
-            font-size: 16px;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
             transition: border-color 0.3s;
         }
         input[type="text"]:focus,
         input[type="email"]:focus,
         input[type="tel"]:focus,
         input[type="date"]:focus {
-            border-color: #007bff;
+            border-color: #28a745;
             outline: none;
+            box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+        }
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            background: #007bff;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        button:disabled {
+            background: #ccc;
         }
         .navigation {
-            margin-top: 20px;
             display: flex;
             justify-content: space-between;
         }
-        button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        .loading {
-            display: none;
-            text-align: center;
-            margin-top: 20px;
-        }
-        .loader {
-            border: 8px solid #f3f3f3; /* Light grey */
-            border-top: 8px solid #007bff; /* Blue */
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
         footer {
             text-align: center;
-            margin-top: 30px;
-            font-size: 14px;
+            margin-top: 20px;
             color: #777;
-        }
-        video, canvas {
-            width: 100%;
-            max-width: 300px;
-            border: 2px solid #007bff;
-            border-radius: 5px;
-            margin: 20px 0;
-        }
-        .camera {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            max-width: 300px;
-        }
-        .photo-preview {
-            margin-top: 10px;
-            display: none;
-        }
-        .photo-preview img {
-            width: 100%;
-            max-width: 300px;
-            border: 2px solid #007bff;
-            border-radius: 5px;
-        }
-        .user-message {
-            text-align: center;
-            margin: 20px 0;
-            font-size: 16px;
-            color: #555;
-        }
-        .error-message {
-            color: red;
-            text-align: center;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>WBank KYC 介面</h1>
-        <h4>你好👋，{{user}}！請完成以下步驟以確保你的帳戶安全,並且符合相關規定。</h4>
-        <div class="step active" id="step1">
-            <h2>第一步：基本信息</h2>
-            <form id="form1">
-                <label for="us">username</label>
-                <input type="text" id="user" name="user" required>
-                
-                <label for="fullName">全名</label>
-                <input type="text" id="fullName" name="fname" required>
 
-                <label for="email">電子郵件</label>
-                <input type="email" id="email" name="email" required>
-
-                <label for="phone">電話號碼</label>
-                <input type="tel" id="phone" name="phone" required>
-
-                <label for="id">身份證號碼</label>
-                <input type="text" id="id" name="id" required>
-
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            </form>
-        </div>
-
-        <div class="step" id="step2">
-            <h2>第二步：身份證</h2>
-            <div class="camera">
-                <video id="video" autoplay></video>
-                <button id="captureButton">拍攝身份證</button>
-                <canvas id="canvas" style="display:none;"></canvas>
-                <div class="photo-preview" id="photoPreview">
-                    <img id="photo" src="" alt="身份證照片"/>
-                </div>
-            </div>
-            <div class="error-message" id="errorMessage" style="display:none;">無法啟動攝像頭。請檢查您的設備和瀏覽器設置。</div>
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        </div>
-
-        <div class="step" id="step3">
-            <h2>第三步：詳細資料</h2>
-            <form id="form3">
-                <label for="address">地址</label>
-                <input type="text" id="address" name="address" required>
-
-                <label for="dob">出生日期</label>
-                <input type="date" id="dob" name="dob" required>
-
-                <label for="career">職業</label>
-                <input type="text" id="career" name="career" required>
-
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            </form>
-        </div>
-
-        <div class="step" id="step4">
-            <h2>第四步：條款及確認資料</h2>
-            <p>請確認您提供的資料正確無誤。</p>
-            <p>本人已了解wbank相關的自動程式將會處理本人的資料。</p>
-            <p>本人已同意如果開戶後，即代表已經授權wbank自動程式管理。</p>
-            <p>本人已同意所有條款和條件。</p>
-            <input type="checkbox" id="terms" required> <label for="terms">我同意</label>
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        </div>
-
-        <div class="navigation">
-            <button id="prevButton" style="display: none;">上一步</button>
-            <button id="nextButton">下一步</button>
-        </div>
-
-        <div class="loading" id="loading">
-            <p>資料處理中...</p>
-            <div class="loader"></div>
-        </div>
-
-        <footer>
-            <p>&copy; 2024 WBank. 保留所有權利。</p>
-        </footer>
+<div class="container">
+    <h1>WBank KYC 介面</h1>
+    <div class="progress">
+        <div class="progress-bar" id="progressBar"></div>
     </div>
-    <script>
-        let currentStep = 0;
-        const steps = document.querySelectorAll('.step');
-        const nextButton = document.getElementById('nextButton');
-        const prevButton = document.getElementById('prevButton');
-        const loading = document.getElementById('loading');
-        const video = document.getElementById('video');
-        const canvas = document.getElementById('canvas');
-        const photo = document.getElementById('photo');
-        const photoPreview = document.getElementById('photoPreview');
-        const captureButton = document.getElementById('captureButton');
+    <h4>你好👋，{{user}}！請完成以下步驟以確保你的帳戶安全，並且符合相關規定。</h4>
 
-        // 用於儲存用戶數據
-        const sessionStage = {
-            user: '',
-            fname: '',
-            id: '',
-            email: '',
-            phone: '',
-            address: '',
-            dob: '',
-            photo: '',
-            career: ''
-        };
+    <div class="step active" id="step1">
+        <h2>第一步：基本信息</h2>
+        <form id="form1">
+            <label for="user">使用者名稱</label>
+            <input type="text" id="user" name="user" required>
 
-        // 啟動攝像頭
-        navigator.mediaDevices.getUserMedia({ video: true, video: { width: 1280, height: 720 }, facingMode: { exact: "environment" } })
-            .then(stream => {
-                video.srcObject = stream;
-            })
-            .catch(err => 
-                alert(err);
-                console.error("無法訪問攝像頭:", err);
-                errorMessage.style.display = 'block';
-            });
+            <label for="fullName">全名</label>
+            <input type="text" id="fullName" name="fname" required>
 
-        // 捕捉身份證照片
-        captureButton.addEventListener('click', () => {
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            canvas.getContext('2d').drawImage(video, 0, 0);
-            photo.src = canvas.toDataURL('image/png');
-            photoPreview.style.display = 'block';
-            sessionStage.photo = photo.src; // 儲存照片
-        });
+            <label for="email">電子郵件</label>
+            <input type="email" id="email" name="email" required>
 
-        // 顯示當前步驟
-        function showStep(step) {
-            steps.forEach((s, index) => {
-                s.classList.remove('active');
-                if (index === step) {
-                    s.classList.add('active');
-                    if (step === 0) {
-                        document.getElementById('user').value = sessionStage.user;
-                        document.getElementById('fullName').value = sessionStage.fullName;
-                        document.getElementById('email').value = sessionStage.email;
-                        document.getElementById('phone').value = sessionStage.phone;
-                        document.getElementById('id').value = sessionStage.id;
-                    } else if (step === 2) {
-                        document.getElementById('address').value = sessionStage.address;
-                        document.getElementById('dob').value = sessionStage.dob;
-                        document.getElementById('career').value = sessionStage.career;
-                    }
-                }
-            });
-            prevButton.style.display = step === 0 ? 'none' : 'inline-block';
-            nextButton.textContent = step === steps.length - 1 ? '提交' : '下一步';
-        }
+            <label for="phone">電話號碼</label>
+            <input type="tel" id="phone" name="phone" required>
 
-        // 進入下一步驟
-        nextButton.addEventListener('click', () => {
-            alert("Clicked");
-            if (currentStep < steps.length - 1) {
-                // 儲存當前步驟的數據
-                if (currentStep === 0) {
-                    sessionStage.user = document.getElementById('user').value;
-                    sessionStage.fname = document.getElementById('fullName').value;
-                    sessionStage.email = document.getElementById('email').value;
-                    sessionStage.phone = document.getElementById('phone').value;
-                } else if (currentStep === 2) {
-                    sessionStage.address = document.getElementById('address').value;
-                    sessionStage.dob = document.getElementById('dob').value;
-                }
-                currentStep++;
-                showStep(currentStep);
-            } else {
-                // 在這裡處理提交邏輯
-                // 收集需要傳遞的數據
-            const dataToSend = {
-                user: sessionStorage.user,
-                id: sessionStorage.id,
-                fname: sessionStorage.fname,
-                address: sessionStorage.address,
-                career: sessionStorage.career,
-                csrf_token: $('input[name="csrf_token"]').val()
-            };
-            if (dataToSend.user == null || dataToSend.id == null || dataToSend.fname == null || dataToSend.address == null || dataToSend.career == null) {
-                 alert("部分資料不能為空");
-            } else if (dataToSend.user == null && dataToSend.id == null && dataToSend.fname == null && dataToSend.address == null && dataToSend.career == null) {
-                 alert("資料不能為空");
+            <label for="id">身份證號碼</label>
+            <input type="text" id="id" name="id" required>
+
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        </form>
+    </div>
+
+    <div class="step" id="step2">
+        <h2>第二步：身份證</h2>
+        <p>請上傳您的身份證照片。</p>
+        <input type="file" id="idCardUpload" accept="image/*" required>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    </div>
+
+    <div class="step" id="step3">
+        <h2>第三步：詳細資料</h2>
+        <form id="form3">
+            <label for="address">地址</label>
+            <input type="text" id="address" name="address" required>
+
+            <label for="dob">出生日期</label>
+            <input type="date" id="dob" name="dob" required>
+
+            <label for="career">職業</label>
+            <input type="text" id="career" name="career" required>
+
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        </form>
+    </div>
+
+    <div class="navigation">
+        <button id="prevButton" style="display: none;">上一步</button>
+        <button id="nextButton">下一步</button>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 WBank. 保留所有權利。</p>
+    </footer>
+</div>
+
+<script>
+    let currentStep = 0;
+    const steps = document.querySelectorAll('.step');
+    const nextButton = document.getElementById('nextButton');
+    const prevButton = document.getElementById('prevButton');
+    const progressBar = document.getElementById('progressBar');
+
+    // 顯示當前步驟
+    function showStep(step) {
+        steps.forEach((s, index) => {
+            s.classList.remove('active');
+            if (index === step) {
+                s.classList.add('active');
             }
-            var formData = new FormData();
-            formData.append("user",dataToSend.user);
-            formData.append("id",dataToSend.id);
-            formData.append("fname",dataToSend.fname);
-            formData.append("address",dataToSend.address);
-            formData.append("career",dataToSend.career);
-            // 使用 fetch 發送數據到後端
+        });
+        prevButton.style.display = step === 0 ? 'none' : 'inline-block';
+        nextButton.textContent = step === steps.length - 1 ? '提交' : '下一步';
+        
+        // 更新進度條
+        const progressPercentage = ((step + 1) / steps.length) * 100;
+        progressBar.style.width = progressPercentage + '%';
+    }
+
+    // 進入下一步驟
+    nextButton.addEventListener('click', () => {
+        if (currentStep < steps.length - 1) {
+            // 儲存當前步驟的數據
+            if (currentStep === 0) {
+                // 驗證並儲存基本信息
+                sessionStage.user = document.getElementById('user').value;
+                sessionStage.fname = document.getElementById('fullName').value;
+                sessionStage.email = document.getElementById('email').value;
+                sessionStage.phone = document.getElementById('phone').value;
+                sessionStage.id = document.getElementById('id').value;
+            } else if (currentStep === 1) {
+                // 驗證是否上傳身份證
+                const fileInput = document.getElementById('idCardUpload');
+                if (!fileInput.files.length) {
+                    alert('請上傳身份證照片');
+                    return;
+                }
+                sessionStage.photo = fileInput.files[0]; // 儲存照片
+            } else if (currentStep === 2) {
+                // 驗證並儲存詳細資料
+                sessionStage.address = document.getElementById('address').value;
+                sessionStage.dob = document.getElementById('dob').value;
+                sessionStage.career = document.getElementById('career').value;
+            }
+            currentStep++;
+            showStep(currentStep);
+        } else {
+            // 提交邏輯
+            const formData = new FormData();
+            for (const key in sessionStage) {
+                formData.append(key, sessionStage[key]);
+            }
+            formData.append("csrf_token", document.querySelector('input[name="csrf_token"]').value);
+
             fetch('/wbank/v1/kyc', {
                 method: 'POST',
                 body: formData
             })
-            .then((res) => {
-               sessionStorage.clear();
-               window.location.href="/wbank";
+            .then(response => response.json())
+            .then(data => {
+                alert('資料提交成功！');
+                window.location.href = "/wbank";
             })
-            .catch((error) => {
-                // 處理錯誤
-                alert('Error:', error);
+            .catch(error => {
+                alert('提交錯誤: ' + error.message);
             });
-                loading.style.display = 'block';
-                setTimeout(() => {
-                    loading.style.display = 'none';
-                    alert('資料提交成功！');
-                }, 2000);
-            }
-        });
+        }
+    });
 
-        // 返回上一個步驟
-        prevButton.addEventListener('click', () => {
-            if (currentStep > 0) {
-                currentStep--;
-                showStep(currentStep);
-            }
-        });
+    // 返回上一個步驟
+    prevButton.addEventListener('click', () => {
+        if (currentStep > 0) {
+            currentStep--;
+            showStep(currentStep);
+        }
+    });
 
-        // 初始化顯示第一步
-        showStep(currentStep);
-    </script>
+    // 初始化顯示第一步
+    showStep(currentStep);
+</script>
+
 </body>
 </html>
