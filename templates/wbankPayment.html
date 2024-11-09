@@ -98,7 +98,11 @@
        <input type="text" id="reviewer" value="{{ reviewer }}" disabled>
        <br>
        <label>金額(WTC$)：</label>
+       {% if amount %}
+       <input type="number" id="amount" value="{{ amount }}" required>
+       {% else %}
        <input type="number" id="amount" required>
+       {% endif %}
       <br>
       <button class="btn1" onclick="pay()">點擊支付</button>
       <br>
