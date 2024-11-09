@@ -156,6 +156,7 @@
             <input type="password" name="pw" placeholder="密碼" required>
             <button type="submit" id="btn1">授權登入</button>
             <input type="hidden" name="url" value="{{ url }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <br>
             <p>按下授權登入後，會自動重定向至 {{ url }} 。</p> <br>
             <p>按下授權登入後，如果出現一些未經授權操作，WBank一概不負責。</p>
