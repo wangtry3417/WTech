@@ -89,8 +89,8 @@
 </div>
 
 <script>
+    const amount = document.getElementById('amount').value;
     function startCapture() {
-        const amount = document.getElementById('amount').value;
         if (amount > 0) {
             document.getElementById('videoContainer').style.display = 'block';
             startVideo();
@@ -103,30 +103,31 @@
         const html5QrCode = new Html5Qrcode("reader");
 
         // 開始掃描
-        html5QrCode.start(
-            { facingMode: "environment" }, // 使用環境攝像頭
-            {
-                fps: 10, // 每秒幀數
-                qrbox: 250 // QR Code 掃描框大小
+        function onScanSuccess(decodedText, decodedResult) {
+            // 在這里處理掃描到的二維碼數據
+            window.location.href="/wbank/v1/storecode?reviewer=" + document.getElementById('username').value + "&code=" + decodedText + "&amount="+amount;
+            // console.log(`Scan result: ${decodedText}`, decodedResult);
+
+            // 將掃描到的結果繪製到 Canvas 上
+            // const canvas = document.getElementById('qr-canvas');
+            // const context = canvas.getContext('2d');
+            // context.drawImage(decodedResult.video, 0, 0, canvas.width, canvas.height);
+            // canvas.style.display = 'block';
+
+            // 這里可以添加跳轉到另一個頁面的邏輯
+            // window.location.href="https://wtech-5o6t.onrender.com/wbank/paycode?user=" + "{{user}}" + "&code=" + decodedText;
+        }
+
+        const html5QrcodeScanner = new Html5QrcodeScanner(
+            'qr-reader', {
+                fps: 10,
+                qrbox: {
+                    width: 250,
+                    height: 250
+                }
             },
-            (decodedText, decodedResult) => {
-                // 當掃描到 QR Code 時的回調
-                console.log(`掃描到 QR Code: ${decodedText}`);
-                alert(`掃描到 QR Code: ${decodedText}`);
-                // 停止掃描
-                html5QrCode.stop().then(ignore => {
-                    document.getElementById('videoContainer').style.display = 'none';
-                }).catch(err => {
-                    console.error('停止掃描時發生錯誤:', err);
-                });
-            },
-            (errorMessage) => {
-                // 掃描失敗的回調
-                console.warn(`掃描失敗: ${errorMessage}`);
-            })
-            .catch(err => {
-                console.error('啟動掃描時發生錯誤:', err);
-            });
+            /* verbose= */ false);
+        html5QrcodeScanner.render(onScanSuccess);
     }
 </script>
 
