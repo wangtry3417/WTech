@@ -2018,7 +2018,7 @@ def wbank_hash_transfer():
   if users.sub is not None and users.sub != "":
     if "銀行" in users.sub:
       return jsonify({"Error-hint":"其他銀行不能接受"})
-    elif users.sub != "為WBank帳戶,Not access to login":
+    elif users.sub != "此為WBank帳戶,Not access to login":
       return jsonify({"Error-hint":users.sub})
   
   if count >= 5000000.00:
