@@ -223,6 +223,13 @@ class wbankkyc(db.Model):
     address = db.Column(db.String(255), nullable=False)
     career = db.Column(db.String(120), nullable=False)
     username = db.Column(db.String(64), db.ForeignKey('wbankwallet.username'), nullable=False)
+    @auth.login_required
+    def is_accessible(self):
+        return True  # 只要通過認證，就可以訪問
+
+    @auth.login_required
+    def inaccessible_callback(self, name, **kwargs):
+        return unauthorized()  # 使用自定義的未授權響應
 
 class IDBrandForm(BaseForm):
     username = StringField()
@@ -263,6 +270,13 @@ class walletView(ModelView):
     }
   edit_modal=True
   form = IDBrandForm
+  @auth.login_required
+  def is_accessible(self):
+    return True  # 只要通過認證，就可以訪問
+
+  @auth.login_required
+  def inaccessible_callback(self, name, **kwargs):
+    return unauthorized()  # 使用自定義的未授權響應
 
 class kycView(ModelView):
   column_list = ('username','fname','id_number','address','career')
@@ -293,6 +307,13 @@ class kycView(ModelView):
         'address': '地址',
         'career':'職業'
     }
+  @auth.login_required
+  def is_accessible(self):
+    return True  # 只要通過認證，就可以訪問
+
+  @auth.login_required
+  def inaccessible_callback(self, name, **kwargs):
+    return unauthorized()  # 使用自定義的未授權響應
 
 """
 class CustomModelView(ModelView):
