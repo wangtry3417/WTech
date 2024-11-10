@@ -25,7 +25,7 @@
             height: 100%;
             background: #28a745;
             width: 0;
-            transition: width 0.3s;
+            transition: width 0.5s;
         }
         #demo {
             margin: 20px 0;
@@ -40,7 +40,7 @@
 
     <script>
         let currentStep = 1;
-        const totalSteps = 6;
+        const totalSteps = 5;
         const hint = document.getElementById('demo');
         const progressBar = document.getElementById('progressBar');
 
@@ -59,25 +59,30 @@
                     hint.innerHTML = "複製用戶Device ID中...";
                     break;
                 case 5:
-                    hint.innerHTML = "驗證完成✅...";
+                    hint.innerHTML = "驗證完成✅，正在跳轉到WBank";
+                    window.location.href="/wbank";
                     break;
-                case 6:
-                    hint.innerHTML = "正跳轉到WBank。";
-                    window.location.href="/wbank/home";
                 default:
+                    hint.innerHTML = "已完成所有步驟。";
                     break;
             }
+        };
 
-            // 更新進度條
-            const progressPercentage = (step / totalSteps) * 100;
-            progressBar.style.width = progressPercentage + '%';
+        const fillProgressBar = (callback) => {
+            progressBar.style.width = '100%'; // 填滿進度條
+            setTimeout(() => {
+                callback(); // 填滿後調用回調函數
+            }, 4000); // 填滿時間改為 4 秒
         };
 
         const nextStep = () => {
             if (currentStep <= totalSteps) {
                 changeStep(currentStep);
-                currentStep++;
-                setTimeout(nextStep, 1000); // 每秒更新一次
+                fillProgressBar(() => {
+                    currentStep++;
+                    progressBar.style.width = '0'; // 清空進度條
+                    setTimeout(nextStep, 1000); // 等待 1 秒後開始下一步
+                });
             }
         };
 
