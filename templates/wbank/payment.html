@@ -122,13 +122,33 @@
     function startVideo(amount) {
         function onScanSuccess(decodedText, decodedResult) {
             document.getElementById('loading').style.display = 'block';
-            window.location.href = "/wbank/v1/storecode?reviewer=" + document.getElementById('username').value + "&code=" + decodedText + "&amount=" + amount;
+            let url = "/wbank/v1/storecode?code="+decodedText+"&reviewer="document.getElementById("username").value+"&amount="+amount;
+            fetch (url)
+             .then (res=>res.json())
+             .then (data => {
+                return startPayment(payer=data.payer,reviewer=data.reviewer,amount=data.amount);
+             });
         }
 
         var html5QrcodeScanner = new Html5QrcodeScanner(
             "qr-reader", { fps: 10, qrbox: 250 }, { supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA] }
         );
         html5QrcodeScanner.render(onScanSuccess);
+    }
+    function startPayment(payer,reviewer,amount) {
+       fetch ("/wbank/hash/transfer",{ headers: { username: payer,reviewer: reviewer,amount: amount}})
+        .then (res => res.json())
+        .then (data => {
+           if (!data["Error-hint"]) {
+              if (data["System-record"]) {
+                  alert("這筆交易成功，並且已經被系統紀錄");
+              } else {
+                  alert("這筆交易成功，並且尚未被系統紀錄");
+              }
+           } else {
+               alert(data["Error-hint"]);
+           }
+        });
     }
 </script>
 
