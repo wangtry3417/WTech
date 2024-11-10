@@ -40,7 +40,7 @@
 
     <script>
         let currentStep = 1;
-        const totalSteps = 5;
+        const totalSteps = 6;
         const hint = document.getElementById('demo');
         const progressBar = document.getElementById('progressBar');
 
@@ -53,7 +53,7 @@
                     hint.innerHTML = "查驗用戶IP中...";
                     break;
                 case 3:
-                    hint.innerHTML = "下載套件到用戶裝置中...";
+                    hint.innerHTML = "複製用戶裝置中...";
                     break;
                 case 4:
                     hint.innerHTML = "複製用戶Device ID中...";
@@ -61,9 +61,10 @@
                 case 5:
                     hint.innerHTML = "驗證完成✅...";
                     break;
-                default:
+                case 6:
                     hint.innerHTML = "正跳轉到WBank。";
                     window.location.href="/wbank/home";
+                default:
                     break;
             }
 
