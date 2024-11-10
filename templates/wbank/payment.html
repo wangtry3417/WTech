@@ -108,6 +108,7 @@
 <script>
     var resultContainer = document.getElementById('qr-reader-results');
     var lastResult, countResults = 0;
+    let isProgress = false;
 
     function startCapture() {
         const amount = parseFloat(document.getElementById('amount').value);
@@ -121,6 +122,8 @@
 
     function startVideo(amount) {
         function onScanSuccess(decodedText, decodedResult) {
+            if (isProgressing) return;
+            isProgressing = true;
             document.getElementById('loading').style.display = 'block';
             let url = "/wbank/v1/storecode?code="+decodedText+"&reviewer="+document.getElementById("username").value+"&amount="+amount;
             fetch (url)
@@ -143,13 +146,16 @@
               if (data["System-record"]) {
                   alert("這筆交易成功，並且已經被系統紀錄");
                   document.getElementById('loading').style.display = 'none';
+                  isProgress = false;
               } else {
                   alert("這筆交易成功，並且尚未被系統紀錄");
                   document.getElementById('loading').style.display = 'none';
+                  isProgress = false;
               }
            } else {
                alert(data["Error-hint"]);
                document.getElementById('loading').style.display = 'none';
+               isProgress = false;
            }
         });
     }
