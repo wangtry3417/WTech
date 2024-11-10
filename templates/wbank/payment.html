@@ -142,11 +142,14 @@
            if (!data["Error-hint"]) {
               if (data["System-record"]) {
                   alert("這筆交易成功，並且已經被系統紀錄");
+                  document.getElementById('loading').style.display = 'none';
               } else {
                   alert("這筆交易成功，並且尚未被系統紀錄");
+                  document.getElementById('loading').style.display = 'none';
               }
            } else {
                alert(data["Error-hint"]);
+               document.getElementById('loading').style.display = 'none';
            }
         });
     }
