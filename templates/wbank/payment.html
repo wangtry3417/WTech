@@ -95,12 +95,8 @@
 
     <div class="video-container" id="videoContainer">
         <h2>掃描用戶的 QR Code</h2>
-        <div id="reader">
-            <div id="qr-reader-dashboard">
-            <div id="qr-reader-dashboard-msg" style="color: #fff">掃描中...</div>
-            <div id="qr-reader-dashboard-btn-container">
-                <button id="qr-reader-dashboard-btn" style="display: none;">暫停掃描</button>
-            </div>
+        <div id="qr-reader" style="width:500px"></div>
+        <div id="qr-reader-results"></div>
         </div>
         </div>
         <p>請將攝像頭對準用戶的 QR Code 進行支付</p>
@@ -112,6 +108,8 @@
 </div>
 
 <script>
+    var resultContainer = document.getElementById('qr-reader-results');
+    var lastResult, countResults = 0;
     function startCapture() {
         const amount = parseFloat(document.getElementById('amount').value);
         if (amount <= 0 || isNaN(amount)) {
@@ -141,17 +139,10 @@
             // window.location.href="https://wtech-5o6t.onrender.com/wbank/paycode?user=" + "{{user}}" + "&code=" + decodedText;
         }
 
-        const html5QrcodeScanner = new Html5QrcodeScanner(
-            'render', {
-                fps: 10,
-                qrbox: {
-                    width: 250,
-                    height: 250
-                }
-            },
-            /* verbose= */ false);
-        html5QrcodeScanner.render(onScanSuccess);
+        var html5QrcodeScanner = new Html5QrcodeScanner(
+    "qr-reader", { fps: 10, qrbox: 250 },supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA]);
     }
+    html5QrcodeScanner.render(onScanSuccess);
 </script>
 
 </body>
