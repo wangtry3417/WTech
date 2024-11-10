@@ -2135,7 +2135,7 @@ def wbank_store_receCode():
     t1 = ",".join(text1)
     hash1 = hashlib.sha256(t1.encode()).hexdigest()
     if code == hash1:
-      return render_template("wbankPayment.html",user=user,balance=balance,reviewer=reviewer,amount=amount)
+      return jsonify({"payer":user,"balance":balance,"reviewer":reviewer,"amount":amount})
   return "無法驗證用戶信息，或者可能哈希值(hash-value)有誤。請刷新此QR code。" , 400
 
 
