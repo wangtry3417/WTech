@@ -122,8 +122,8 @@
 
     function startVideo(amount) {
         function onScanSuccess(decodedText, decodedResult) {
-            if (isProgressing) return;
-            isProgressing = true;
+            if (isProgress) return;
+            isProgress = true;
             document.getElementById('loading').style.display = 'block';
             let url = "/wbank/v1/storecode?code="+decodedText+"&reviewer="+document.getElementById("username").value+"&amount="+amount;
             fetch (url)
