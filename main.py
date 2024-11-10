@@ -77,6 +77,28 @@ QRcode(app)
 
 csrf = CSRFProtect(app)
 
+auth = HTTPBasicAuth()
+
+users = {
+    "wangtry": generate_password_hash("Chan1234#"),
+    "wtech": generate_password_hash("wtechStaff1234#"),
+    "wtechpass001": generate_password_hash("Asswfcx24166456#"),
+    "wtechpass002": generate_password_hash("Assxct656654#")
+}
+
+
+@auth.verify_password
+def verify_pw(username, password):
+    if username in users and \
+            check_password_hash(users.get(username), password):
+        return username
+
+@auth.error_handler
+def unauthorized():
+    # return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+    return make_response("沒有授權訪問",401)
+
+
 oauth = OAuth2Provider(app)
 
 # 初始化 OAuth 伺服器
@@ -373,26 +395,6 @@ def after_request(response):
     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
     return response
 
-auth = HTTPBasicAuth()
-
-users = {
-    "wangtry": generate_password_hash("Chan1234#"),
-    "wtech": generate_password_hash("wtechStaff1234#"),
-    "wtechpass001": generate_password_hash("Asswfcx24166456#"),
-    "wtechpass002": generate_password_hash("Assxct656654#")
-}
-
-
-@auth.verify_password
-def verify_pw(username, password):
-    if username in users and \
-            check_password_hash(users.get(username), password):
-        return username
-
-@auth.error_handler
-def unauthorized():
-    # return make_response(jsonify({'error': 'Unauthorized access'}), 401)
-    return make_response("沒有授權訪問",401)
 
 conn = psycopg2.connect(database="verceldb", user="default", 
 password="Gd2MsST3QYWF", host="ep-hidden-salad-a1a7pob9-pooler.ap-southeast-1.aws.neon.tech", 
