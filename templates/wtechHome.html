@@ -1,141 +1,87 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>W Tech 數字開發商主頁</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <title>WTech</title>
     <style>
         body {
-            margin: 0;
             font-family: Arial, sans-serif;
-            background-color: #1a1a1a;
-            color: white;
-            opacity: 0; /* 先隱藏內容 */
-            transition: opacity 0.5s ease-in; /* 過渡效果 */
-        }
-
-        .app {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            background-color: rgb(0, 0, 0);
+            margin: 0;
             padding: 20px;
-            background-color: #333;
-            position: relative;
+            color: rgb(255, 255, 255);
+            text-align: center;
         }
-
-        .logo {
-            font-size: 32px;
-            font-weight: bold;
-        }
-
-        .menu {
-            position: relative;
-        }
-
-        .menu ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        .menu-link {
-            color: white;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        .menu-link:hover {
-            color: #ffcc00;
-        }
-
-        .close-btn {
-            background-color: red;
-            color: white;
-            border: none;
-            cursor: pointer;
-            padding: 5px 10px;
-            position: absolute;
-            top: 10px;
-            right: 10px;
-        }
-
-        .content {
-            padding: 20px;
-            flex: 1;
-            background-color: #2c2c2c;
+        .progress {
+            width: 100%;
+            height: 20px;
+            background: #e0e0e0;
             border-radius: 5px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-            animation: fadeIn 0.5s forwards;
+            overflow: hidden;
+            margin-bottom: 20px;
         }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
+        .progress-bar {
+            height: 100%;
+            background: #28a745;
+            width: 0;
+            transition: width 0.3s;
         }
-
-        .highlight {
-            color: #ffcc00; /* 局部字體顏色變化 */
-        }
-
-        /* Responsive Styles */
-        @media (max-width: 600px) {
-            .header {
-                flex-direction: column;
-            }
-            .menu {
-                margin-top: 10px;
-            }
+        #demo {
+            margin: 20px 0;
         }
     </style>
 </head>
 <body>
-    <div id="root"></div>
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <p id="demo">正在初始化...</p>
+    <div class="progress">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
     <script>
-        const { useEffect } = React;
+        let currentStep = 1;
+        const totalSteps = 5;
+        const hint = document.getElementById('demo');
+        const progressBar = document.getElementById('progressBar');
 
-        function App() {
-            useEffect(() => {
-                document.body.style.opacity = 1; // 載入動畫
-            }, []);
+        const changeStep = (step) => {
+            switch (step) {
+                case 1:
+                    hint.innerHTML = "檢查中...";
+                    break;
+                case 2:
+                    hint.innerHTML = "查驗用戶IP中...";
+                    break;
+                case 3:
+                    hint.innerHTML = "下載套件到用戶裝置中...";
+                    break;
+                case 4:
+                    hint.innerHTML = "複製用戶Device ID中...";
+                    break;
+                case 5:
+                    hint.innerHTML = "驗證完成✅...";
+                    break;
+                default:
+                    hint.innerHTML = "正跳轉到WBank。";
+                    window.location.href="/wbank/home";
+                    break;
+            }
 
-            return (
-                <div className="app">
-                    <header className="header">
-                        <div className="logo">W Tech</div>
-                        <nav className="menu">
-                            <button className="close-btn" onClick={() => alert('Menu closed!')}>X</button>
-                            <ul>
-                                <li><a href="/home" className="menu-link">主頁</a></li>
-                                <li><a href="/product" className="menu-link">產品</a></li>
-                                <li><a href="/about" className="menu-link">關於</a></li>
-                            </ul>
-                        </nav>
-                    </header>
-                    <main className="content">
-                        <h2>WTech 服務及作品</h2>
-                        <p>W Tech 提供網站托管服務。</p>
-                        <p>WCoins（泓幣）為泓技W Tech研發的虛擬貨幣。但在第二版開始，由WBank交易所託管。</p>
-                        <h2>關於</h2>
-                        <p>W Tech為做遊戲起家，當然有遊戲業務啦。</p>
-                        <p className="highlight">支持WTech！</p>
-                    </main>
-                </div>
-            );
-        }
+            // 更新進度條
+            const progressPercentage = (step / totalSteps) * 100;
+            progressBar.style.width = progressPercentage + '%';
+        };
 
-        ReactDOM.render(<App />, document.getElementById('root'));
+        const nextStep = () => {
+            if (currentStep <= totalSteps) {
+                changeStep(currentStep);
+                currentStep++;
+                setTimeout(nextStep, 1000); // 每秒更新一次
+            }
+        };
+
+        // 開始自動更新步驟
+        nextStep();
     </script>
 </body>
 </html>
