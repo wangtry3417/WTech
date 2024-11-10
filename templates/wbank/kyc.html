@@ -244,8 +244,7 @@
                     method: 'POST',
                     body: formData
                 })
-                .then(response => response.json())
-                .then(data => {
+                .then(res => {
                     alert('資料提交成功！');
                     window.location.href = "/wbank";
                 })
