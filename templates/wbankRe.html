@@ -70,20 +70,17 @@
       setTimeout(() => {
        text.innerHTML = "Transfer wcoins to you...";
        spinner.style.animation = "spin 6s linear infinite";
-       fetch('https://wtech-5o6t.onrender.com/wtech/v2/createOrder', {
+       fetch('/wbank/hash/transfer', {
     headers: {
-      Username: 'wbank',
+      username: 'wbank',
       reviewer: '{{ user }}',
-      Value: {{ count }}
+      amount: {{ count }}
     }
  })
   .then(response => response.json())
   .then(data => {
-    token = data.code; // 從第一個請求的響應中取得 "code"
-    return fetch(`https://wtech-5o6t.onrender.com/wtech/v2/transfer?code=${token}`);
+    alert(data.success);
   })
-  .then(response => response.json())
-  //.then(data => alert('轉賬成功'))
   .catch(error => alert(error));
     },8000);
       setTimeout(() => {
