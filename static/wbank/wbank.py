@@ -1,20 +1,13 @@
-from wbank import Controller,Intents
+from wbank import Controller
 
-con = Controller(apiKey="key",intents=Intents.TRADE.all())
+app = Controller(apiKey="Key")
+app._set_scropes = ["AllActions"]
 
-@con.on
-async def on_ready():
-  print("Is ready")
-
-@con.on(type="create-order")
-async def start_tab(bot,data):
-  payment_data = {
-    "name":"wtech",
-    "reviewer":"Ben",
-    "current":"hkd/wtc",
-    "amount":"3000"
-  }
-  pd = await data.insert(payment_data)
-  await bot.send(type="payment",data=pd)
-
-con.wait()
+result = app._request(target="transfer/hash",args={"username":app._refer_username,"reviewer":"ben","amount":"100"}).toRequest()
+if result._status_code == 200:
+  if result.toJson()["success"]:
+    print("轉帳成功")
+  else:
+    print(result.toJson()["Error-hint"])
+else:
+  print("不行")
