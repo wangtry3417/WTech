@@ -15,8 +15,8 @@ class User(db.Model):
   Insert <table.name> -> field1,field2... -> "value1","value2"...;
 """
 user1 = User(username="Ben",email="ben@gmail.com",pw="1234")
-user1.session.add(user1)
-user1.session.commit()
+db.session.add(user1)
+db.session.commit()
 
 users = User.query.filter_by(username="Ben").find_first()
 print(users.username)
