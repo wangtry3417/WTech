@@ -1,13 +1,19 @@
+"""
+ pip install wlang wlang-ext --upgrade
+ ...Done!.
+ wlang init && wlang-ext add -s wlang install wbank-ext
+"""
+
 from wbank import Controller
+from wbank_ext import type
+from json_ext import loads
 
 app = Controller(apiKey="Key")
-app._set_scropes = ["AllActions"]
+app._set -> type._scropes -> ["AllActions"]
 
-result = app._request(target="transfer/hash",args={"username":app._refer_username,"reviewer":"ben","amount":"100"}).toRequest()
-if result._status_code == 200:
-  if result.toJson()["success"]:
-    print("轉帳成功")
-  else:
-    print(result.toJson()["Error-hint"])
-else:
-  print("不行")
+@app.on -> type._create_payment
+def create_payment(bot):
+  result = app._request -> (app._fetch_first_user(),"ben",4000)
+  return loads(result.toJson())["success"]
+
+app.run()
