@@ -281,6 +281,9 @@ class walletView(ModelView):
     'sub' : {
       'validators' : [],
     },
+    'openpay' : {
+      'validators' : [],
+    }
   }
   """
   column_display_pk=True
@@ -290,7 +293,8 @@ class walletView(ModelView):
         'balance': '餘額',
         'password': '密碼',
         'verify': '驗證狀態',
-        'sub':'備註'
+        'sub':'備註',
+        'openpay':'是否開啟Pay mode"
     }
   edit_modal=True
   form = IDBrandForm
