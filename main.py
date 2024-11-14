@@ -294,8 +294,8 @@ class walletView(ModelView):
         'password': '密碼',
         'verify': '驗證狀態',
         'sub':'備註',
-        'openpay':'是否開啟Pay mode"
-    }
+        'openpay':'是否開啟Pay mode'
+    
   edit_modal=True
   form = IDBrandForm
   @auth.login_required
