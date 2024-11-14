@@ -2492,6 +2492,7 @@ def wbank_client():
         elif user_data.password != current_user.password:
             error_message = "密碼不正確"
         else:
+            openpay = user_data.openpay
             balance = user_data.balance
             HK_Value = int(balance) / 10
             tw_value = HK_Value * 4
@@ -2506,7 +2507,7 @@ def wbank_client():
             qr_bytes = temp.getvalue()
             qr_b64 = base64.b64encode(qr_bytes).decode('ascii')
             acc_number = user_data.accnumber
-            return render_template("wbankClient.html", user=user, balance=balance, HK_Value=HK_Value, tw_value=tw_value, US_value=US_value, img=qr_b64, acc_number=acc_number)
+            return render_template("wbankClient.html", user=user, balance=balance, HK_Value=HK_Value, tw_value=tw_value, US_value=US_value, img=qr_b64, acc_number=acc_number, openpay=openpay)
     else:
         error_message = "找不到該用戶"
     
