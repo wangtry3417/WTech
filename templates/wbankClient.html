@@ -334,8 +334,9 @@
             <button class="button" onclick="removeAcc()">註銷</button>
             <label>開啟交易功能：</label>
             <label class="switch">
-            <input type="checkbox" id="toggleSwitch" {{ "checked" if openpay else ""}} onchange="paymentChange()">
-           <span class="slider"></span>
+            <input type="checkbox" id="toggleSwitch" 
+        {% if openpay %} checked {% endif %} 
+        onchange="paymentChange()">
            </label>
             <br>
             <button class="button" onclick="closeScreenScreen()">關閉</button>
