@@ -2532,6 +2532,30 @@ def wbank_change_password():
   flash("密碼已更改，請記住新的密碼","info")
   return redirect("/wbank")
 
+@app.route("/wbank/v1/openpay")
+def wbank_v1_openpay():
+  user = request.headers.get("user")
+  if users is None:
+    return "找不到用戶"
+  user_data = wbankwallet.query.filter_by(username=user).first()
+  if user_data:
+    user_data.openpay = True
+    db.session.commit()
+    return "成功開啟"
+  return "找不到用戶"
+
+@app.route("/wbank/v1/closepay")
+def wbank_v1_closepay():
+  user = request.headers.get("user")
+  if users is None:
+    return "找不到用戶"
+  user_data = wbankwallet.query.filter_by(username=user).first()
+  if user_data:
+    user_data.openpay = False
+    db.session.commit()
+    return "成功關閉"
+  return "找不到用戶"
+
 @app.route("/wbank/recordPage")
 @login_required
 def wbank_record_page_v2():
