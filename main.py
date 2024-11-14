@@ -147,13 +147,15 @@ class wbankwallet(db.Model,UserMixin):
     verify = db.Column(db.String(64), nullable=False, default='no')
     sub = db.Column(db.String(64), nullable=True)
     accnumber = db.Column(db.String(60), nullable=True)
-    def __init__(self,username,balance,password,verify,sub,accnumber):
+    openpay = db.Column(db.Boolean, nullable=True)
+    def __init__(self,username,balance,password,verify,sub,accnumber,openpay):
       self.username = username
       self.balance = balance
       self.password = password
       self.verify = verify
       self.sub = sub
       self.accnumber = accnumber
+      self.openpay = openpay
     def get_id(self):
         return self.username
 
@@ -2359,7 +2361,7 @@ def wbank_into_user():
   email = request.form.get("email")
   id = request.form.get("id")
   an = f"015-150-{random.randint(10000000,99999999)}"
-  db.session.add(wbankwallet(username=user,balance="0",password=pw,verify="no",sub=None,accnumber=an))
+  db.session.add(wbankwallet(username=user,balance="0",password=pw,verify="no",sub=None,accnumber=an,openpay=False))
   db.session.commit()
   return render_template("wbank/kyc.html",user=user,id=id)
   return "Cannot do that!."
