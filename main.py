@@ -295,6 +295,7 @@ class walletView(ModelView):
         'verify': '驗證狀態',
         'sub':'備註',
         'openpay':'是否開啟Pay mode'
+  }
     
   edit_modal=True
   form = IDBrandForm
