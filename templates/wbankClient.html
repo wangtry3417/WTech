@@ -420,6 +420,23 @@
       });
     };
 
+    //可以控制交易
+    function paymentChange() {
+      const toggleSwitch = document.getElementById('toggleSwitch');
+      if (toggleSwitch.checked) {
+        // 這裡可以添加開啟時的其他操作
+        fetch ("/wbank/v1/openpay",{headers: {user:"{{user}}"})
+          .then (res => res.text())
+          .then (data => alert(data));
+      } else {
+        console.log("開關已關閉");
+        fetch ("/wbank/v1/closepay",{headers: {user:"{{user}}"})
+          .then (res => res.text())
+          .then (data => alert(data));
+        // 這裡可以添加關閉時的其他操作
+      }
+    }
+
         const scan = () => {
             window.location.href = "/wbank/scan?user=" + "{{user}}";
         };
@@ -703,23 +720,6 @@ setInterval(() => {
 // 初始化畫面
 updateBalance();
 renderPortfolio();
-
-    //可以控制交易
-    function paymentChange() {
-      const toggleSwitch = document.getElementById('toggleSwitch');
-      if (toggleSwitch.checked) {
-        // 這裡可以添加開啟時的其他操作
-        fetch ("/wbank/v1/openpay",{headers: {user:"{{user}}"})
-          .then (res => res.text())
-          .then (data => alert(data));
-      } else {
-        console.log("開關已關閉");
-        fetch ("/wbank/v1/closepay",{headers: {user:"{{user}}"})
-          .then (res => res.text())
-          .then (data => alert(data));
-        // 這裡可以添加關閉時的其他操作
-      }
-    }
     </script>
 </body>
 </html>
