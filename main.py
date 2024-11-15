@@ -34,7 +34,7 @@ from flask_babel import Babel
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from flask_oauthlib.provider import OAuth2Provider
 from wtforms.validators import DataRequired
-from wtforms import StringField
+from wtforms import StringField,BooleanField
 from flask_wtf.csrf import CSRFProtect
 from flask_admin.form import BaseForm
 from flask_qrcode import QRcode
@@ -147,7 +147,7 @@ class wbankwallet(db.Model,UserMixin):
     verify = db.Column(db.String(64), nullable=False, default='no')
     sub = db.Column(db.String(64), nullable=True)
     accnumber = db.Column(db.String(60), nullable=True)
-    openpay = db.Column(db.Boolean, nullable=True)
+    openpay = db.Column(db.Boolean, nullable=True, default=False)
     def __init__(self,username,balance,password,verify,sub,accnumber,openpay):
       self.username = username
       self.balance = balance
@@ -261,6 +261,7 @@ class IDBrandForm(BaseForm):
     password = StringField()
     verify = StringField()
     sub = StringField()
+    openpay = BooleanField()
 
 class walletView(ModelView):
   #column_list = ('username','balance','password','verify','sub')
