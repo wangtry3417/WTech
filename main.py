@@ -629,6 +629,11 @@ def handle_nfc_detected(data):
       send_error_to_discord('轉帳方不存在', user, amount, reviewer)  # 發送錯誤訊息到 Discord
       return
 
+    if user.openpay == False:
+      emit('error_msg', '轉帳方尚未開啟支付模式')  # 發送錯誤訊息到客戶端
+      send_error_to_discord('轉帳方尚未開啟支付模式', user, amount, reviewer)  # 發送錯誤訊息到 Discord
+      return
+    
     balance = int(user.balance)  # 取得轉帳方餘額
 
     if balance < 0:
@@ -2045,6 +2050,9 @@ def wbank_hash_transfer():
   if count is not None or count != "":
     count = float(count)
 
+  if users.openpay == False:
+    return jsonify({"Error-hint":"轉賬方尚未開啟支付模式"})
+  
   if users.sub is not None and users.sub != "":
     if "銀行" in users.sub:
       return jsonify({"Error-hint":"其他銀行不能接受"})
