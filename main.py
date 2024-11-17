@@ -270,7 +270,7 @@ class IDBrandForm(BaseForm):
 
     def get_dynamic_choices(self):
         # 根據需要返回選項列表
-        return [('option1', ''), ('option2', '由於閣下的資料存在問題，因此將會被暫時凍結'), ('option3', '由於閣下的帳戶存在洗錢，因此將被暫時凍結'), ('option4','可能存在不明原因，建議尋找WBank分行解決此問題')]
+        return [('', ''), ('由於閣下的資料存在問題，因此將會被暫時凍結', 'freeze001'), ('由於閣下的帳戶存在洗錢，因此將被暫時凍結', 'freeze002'), ('可能存在不明原因，建議尋找WBank分行解決此問題','freeze002')]
       
 class walletView(ModelView):
   #column_list = ('username','balance','password','verify','sub')
