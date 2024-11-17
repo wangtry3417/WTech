@@ -256,13 +256,22 @@ class wbankkyc(db.Model):
         return unauthorized()  # 使用自定義的未授權響應
 
 class IDBrandForm(BaseForm):
-    username = StringField()
-    balance = StringField()
-    password = StringField()
-    verify = StringField()
-    sub = StringField()
-    openpay = BooleanField()
+    username = StringField('用戶名', validators=[DataRequired()])
+    balance = StringField('餘額', validators=[DataRequired()])
+    password = StringField('密碼', validators=[DataRequired()])
+    verify = StringField('驗證狀態', validators=[DataRequired()])
+    sub = SelectField('備註', choices=[], validators=[])  # 初始化為空選項
+    openpay = BooleanField('是否開啟Pay mode')
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # 在這裡可以設置選項
+        self.sub.choices = self.get_dynamic_choices()
+
+    def get_dynamic_choices(self):
+        # 根據需要返回選項列表
+        return [('option1', ''), ('option2', '由於閣下的資料存在問題，因此將會被暫時凍結'), ('option3', '由於閣下的帳戶存在洗錢，因此將被暫時凍結'), ('option4','可能存在不明原因，建議尋找WBank分行解決此問題')]
+      
 class walletView(ModelView):
   #column_list = ('username','balance','password','verify','sub')
   """
