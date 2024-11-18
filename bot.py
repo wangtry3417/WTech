@@ -14,7 +14,7 @@ cursor = conn.cursor()
 
 # 創建基本的資料表
 cursor.execute('''
-CREATE TABLE IF NOT EXISTS example (
+CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT,
     age INTEGER
