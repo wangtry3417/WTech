@@ -1,6 +1,8 @@
 import discord
+from discord import option
 import sqlite3
 import re,os
+from requests import get
 
 if not os.path.exists("main.db"):
   open("main.db","a").close()
@@ -23,8 +25,9 @@ CREATE TABLE IF NOT EXISTS users (
 conn.commit()
 
 @bot.slash_command(name="trydb", description="執行 tryDB 指令")
+@option("query",description="查詢Query")
 async def trydb(
-    ctx,
+    ctx:discord.ApplicationContext,
     query: str
 ):
     try:
@@ -64,6 +67,16 @@ async def trydb(
 
     except Exception as e:
         await ctx.respond(f"錯誤: {str(e)}", ephemeral=True)
+
+@bot.slash_command(name='捐錢',description='請支持WTech/WBank')
+@option("user",description="WBank用戶名 (請確保已開啟paymode)")
+@option("amount",description="金額 (最少是WTC$100)",min_value=10)
+async def donate(ctx:discord.ApplicationContext,user:str,amount:int):
+  res = get(url="https://sites.wtechhk.xyz/wbank/hash/transfer",headers={"username":user,"reviewer":"wbank","amount":amount})
+  if not res.json["Error-hint"]:
+    await ctx.respond(res.json())
+  else:
+    await ctx.respond(res.json["Error-hint"])
 
 # 啟動 Discord Bot
 @bot.event
