@@ -72,4 +72,4 @@ async def on_ready():
 
 # 啟動 Bot
 def run_bot():
-  bot.run('MTMwODA1Mjc3MTYyNjQyMjMwNA.GjLAhS.6yYTloGVv85LDUBcPvZMWXRiWSlHnfohT8BOwo')  # 替換為您的 Discord Bot Token
+  bot.run(os.envrion.get('discordToken'))  # 替換為您的 Discord Bot Token
