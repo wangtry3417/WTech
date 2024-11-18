@@ -73,10 +73,13 @@ async def trydb(
 @option("amount",description="金額 (最少是WTC$100)",min_value=10)
 async def donate(ctx:discord.ApplicationContext,user:str,amount:int):
   res = get(url="https://sites.wtechhk.xyz/wbank/hash/transfer",headers={"username":user,"reviewer":"wbank","amount":str(amount)})
-  if not res.json["Error-hint"]:
-    await ctx.respond(res.json())
-  else:
-    await ctx.respond(res.json()["Error-hint"])
+  try:
+    if not res.json["Error-hint"]:
+      await ctx.respond(res.json())
+    else:
+      await ctx.respond(res.json()["Error-hint"])
+  except Exception as e:
+    await ctx.respond(f"錯誤: {str(e)}")
 
 # 啟動 Discord Bot
 @bot.event
