@@ -76,7 +76,7 @@ async def donate(ctx:discord.ApplicationContext,user:str,amount:int):
   if not res.json["Error-hint"]:
     await ctx.respond(res.json())
   else:
-    await ctx.respond(res.json["Error-hint"])
+    await ctx.respond(res.json()["Error-hint"])
 
 # 啟動 Discord Bot
 @bot.event
