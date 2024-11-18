@@ -74,12 +74,12 @@ async def trydb(
 async def donate(ctx:discord.ApplicationContext,user:str,amount:int):
   res = get(url="https://sites.wtechhk.xyz/wbank/hash/transfer",headers={"username":user,"reviewer":"wbank","amount":str(amount)})
   try:
-    if not res.json()["Error-hint"]:
-      await ctx.respond(res.json())
-    else:
+    if "Error-hint" in res.json():
       await ctx.respond(res.json()["Error-hint"])
+    else:
+      await ctx.respond(res.json())
   except Exception as e:
-    await ctx.respond(f"錯誤: {str(e)}")
+    await ctx.respond(f"錯誤: {str(e)}",ephemeral=True)
 
 # 啟動 Discord Bot
 @bot.event
