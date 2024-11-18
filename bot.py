@@ -24,7 +24,7 @@ conn.commit()
 
 @bot.slash_command(name="trydb", description="執行 tryDB 指令")
 async def trydb(
-    ctx: discord.ApplicationContext,
+    ctx,
     query: str
 ):
     try:
