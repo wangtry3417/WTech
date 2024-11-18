@@ -41,6 +41,8 @@ from flask_qrcode import QRcode
 import json,sys,threading
 from DDos import checkUrl, DDos
 import pandas as pd
+from bot import run_bot
+import threading
 #from nltk.stem import WordNetLemmatizer
 #from nltk.book import *
 
@@ -3011,5 +3013,8 @@ def start_web():
   socketio.run(app,host="0.0.0.0",port=5000,allow_unsafe_werkzeug=True)
 
 thread1 = threading.Thread(target=start_web)
+thread2 = threading.Thread(target=run_bot)
 thread1.start()
+thread2.start()
 thread1.join()
+thread2.join()
