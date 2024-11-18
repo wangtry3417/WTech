@@ -75,7 +75,10 @@ async def donate(ctx:discord.ApplicationContext,user:str,amount:int):
   res = get(url="https://sites.wtechhk.xyz/wbank/hash/transfer",headers={"username":user,"reviewer":"wbank","amount":str(amount)})
   try:
     if "Error-hint" in res.json():
-      await ctx.respond(res.json()["Error-hint"])
+      if res.json()["Error-hint"] == "轉賬方尚未開啟支付模式":
+        await ctx.respond("你尚未開啟支付模式，請登入WBank後，按我的->按設定開啟交易功能->確保值為true即可。")
+      else:
+        await ctx.respond(res.json()["Error-hint"])
     else:
       await ctx.respond(res.json())
   except Exception as e:
