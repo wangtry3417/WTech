@@ -74,7 +74,7 @@ async def trydb(
 async def donate(ctx:discord.ApplicationContext,user:str,amount:int):
   res = get(url="https://sites.wtechhk.xyz/wbank/hash/transfer",headers={"username":user,"reviewer":"wbank","amount":str(amount)})
   try:
-    if not res.json["Error-hint"]:
+    if not res.json()["Error-hint"]:
       await ctx.respond(res.json())
     else:
       await ctx.respond(res.json()["Error-hint"])
