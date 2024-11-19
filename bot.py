@@ -4,9 +4,6 @@ import psycopg2
 import re,os
 from requests import get
 
-if not os.path.exists("main.db"):
-  open("main.db","a").close()
-
 # Discord Bot 設定
 bot = discord.Bot()
 
