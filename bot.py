@@ -34,13 +34,13 @@ async def trydb(
                 fields = re.findall(pattern, fields_str)
 
                 if not fields:
-                    await ctx.respond("字段格式不正確，應該是元組列表。", ephemeral=True)
+                    await ctx.respond("字段格式不正確，應該是元組列表。")
                     return
 
                 field_definitions = ", ".join([f"{field} {field_type}" for field, field_type in fields])
                 cursor.execute(f"CREATE TABLE IF NOT EXISTS {table_name} ({field_definitions})")
                 conn.commit()
-                await ctx.respond(f"資料表 '{table_name}' 已經建立。", ephemeral=True)
+                await ctx.respond(f"資料表 '{table_name}' 已經建立。")
 
         # 處理 INSERT
         elif "insert" in query:
@@ -55,7 +55,7 @@ async def trydb(
 
                 cursor.execute(f"INSERT INTO {table_name} ({', '.join(fields)}) VALUES ({', '.join(['%s' for _ in values])})", values)
                 conn.commit()
-                await ctx.respond("記錄已插入成功", ephemeral=True)
+                await ctx.respond("記錄已插入成功")
 
         # 處理 SELECT
         elif "using" in query:
@@ -86,7 +86,7 @@ async def trydb(
                 # 格式化結果
                 output = [{fields[i]: row[i] for i in range(len(fields))} for row in results] if fields_part != "*" else [{column.name: row[i] for i, column in enumerate(cursor.description)} for row in results]
 
-                await ctx.respond(output, ephemeral=True)
+                await ctx.respond(output)
 
         cursor.close()
         conn.close()
