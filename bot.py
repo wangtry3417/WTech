@@ -69,6 +69,7 @@ async def trydb(
                 # 構建查詢
                 if fields_part == "*":
                     cursor.execute(f"SELECT * FROM {table_name}")
+                    fields = [column[0] for column in cursor.description]  # 獲取所有字段名
                 else:
                     fields = [field.strip() for field in fields_part.split(",")]
                     cursor.execute(f"SELECT {', '.join(fields)} FROM {table_name}")
@@ -82,8 +83,10 @@ async def trydb(
                 results = cursor.fetchall()
 
                 # 格式化結果
-                output = [{fields[i]: row[i] for i in range(len(fields))} for row in results] if fields_part != "*" else [{column.name: row[i] for i, column in enumerate(cursor.description)} for row in results]
-                strOutput = "\n".join(str(o) for o in output)
+                output = [{fields[i]: row[i] for i in range(len(fields))} for row in results] if fields_part != "*" else [{column[0]: row[i] for i, column in enumerate(cursor.description)} for row in results]
+
+                # 將輸出格式化為字符串
+                output_str = "\n".join(str(o) for o in output)
                 await ctx.respond(strOutput)
 
         cursor.close()
