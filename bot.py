@@ -1,6 +1,6 @@
 import discord
 from discord import option
-import sqlite3
+import psycopg2
 import re,os
 from requests import get
 
@@ -10,27 +10,20 @@ if not os.path.exists("main.db"):
 # Discord Bot 設定
 bot = discord.Bot()
 
-# 資料庫連接
-conn = sqlite3.connect('main.db')
-cursor = conn.cursor()
-
-# 創建基本的資料表
-cursor.execute('''
-CREATE TABLE IF NOT EXISTS users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT,
-    age INTEGER
-)
-''')
-conn.commit()
+# 連接到 PostgreSQL 資料庫
+def get_db_connection():
+    return psycopg2.connect("postgres://default:Gd2MsST3QYWF@ep-hidden-salad-a1a7pob9.ap-southeast-1.aws.neon.tech:5432/verceldb?sslmode=require")
 
 @bot.slash_command(name="trydb", description="執行 tryDB 指令")
-@option("query",description="查詢Query")
+@option("query", description="查詢Query")
 async def trydb(
-    ctx:discord.ApplicationContext,
+    ctx: discord.ApplicationContext,
     query: str
 ):
     try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
         if "create table" in query:
             parts = query.split("->")
             if len(parts) == 2:
@@ -61,9 +54,12 @@ async def trydb(
                 values = [value.strip().strip("'") for value in values]
 
                 # 插入資料
-                cursor.execute(f"INSERT INTO {table_name} ({', '.join(fields)}) VALUES ({', '.join(['?' for _ in values])})", values)
+                cursor.execute(f"INSERT INTO {table_name} ({', '.join(fields)}) VALUES ({', '.join(['%s' for _ in values])})", values)
                 conn.commit()
                 await ctx.respond("記錄已插入成功", ephemeral=True)
+
+        cursor.close()
+        conn.close()
 
     except Exception as e:
         await ctx.respond(f"錯誤: {str(e)}", ephemeral=True)
