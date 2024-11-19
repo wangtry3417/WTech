@@ -75,6 +75,7 @@ async def trydb(
 
                 # 添加條件
                 if condition_part:
+                    condition_part = condition_part.replace("‘", "'").replace("’", "'")
                     cursor.execute(f"SELECT {', '.join(fields)} FROM {table_name} WHERE {condition_part}")
 
                 # 獲取查詢結果
