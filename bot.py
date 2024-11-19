@@ -83,8 +83,8 @@ async def trydb(
 
                 # 格式化結果
                 output = [{fields[i]: row[i] for i in range(len(fields))} for row in results] if fields_part != "*" else [{column.name: row[i] for i, column in enumerate(cursor.description)} for row in results]
-
-                await ctx.respond(output)
+                strOutput = "\n".join(str(o) for o in output)
+                await ctx.respond(strOutput)
 
         cursor.close()
         conn.close()
