@@ -87,7 +87,7 @@ async def trydb(
 
                 # 將輸出格式化為字符串
                 output_str = "\n".join(str(o) for o in output)
-                await ctx.respond(strOutput)
+                await ctx.respond(output_str)
 
         cursor.close()
         conn.close()
