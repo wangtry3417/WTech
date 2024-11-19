@@ -9,7 +9,7 @@ bot = discord.Bot()
 
 # 連接到 PostgreSQL 資料庫
 def get_db_connection():
-    return psycopg2.connect("postgres://default:Gd2MsST3QYWF@ep-hidden-salad-a1a7pob9.ap-southeast-1.aws.neon.tech:5432/verceldb?sslmode=require")
+    return psycopg2.connect(str(os.environ.get("dataurl")))
 
 @bot.slash_command(name="trydb", description="執行 tryDB 指令")
 @option("query", description="查詢Query")
