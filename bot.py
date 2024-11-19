@@ -24,12 +24,12 @@ async def trydb(
         conn = get_db_connection()
         cursor = conn.cursor()
 
+        # 處理 CREATE TABLE
         if "create table" in query:
             parts = query.split("->")
             if len(parts) == 2:
                 table_name = parts[0].split()[2].strip()
                 fields_str = parts[1].strip()
-
                 pattern = r"\('([^']+)',\s*'([^']+)'\)"
                 fields = re.findall(pattern, fields_str)
 
@@ -37,12 +37,12 @@ async def trydb(
                     await ctx.respond("字段格式不正確，應該是元組列表。", ephemeral=True)
                     return
 
-                # 創建資料表
                 field_definitions = ", ".join([f"{field} {field_type}" for field, field_type in fields])
                 cursor.execute(f"CREATE TABLE IF NOT EXISTS {table_name} ({field_definitions})")
                 conn.commit()
                 await ctx.respond(f"資料表 '{table_name}' 已經建立。", ephemeral=True)
 
+        # 處理 INSERT
         elif "insert" in query:
             parts = query.split("->")
             if len(parts) == 3:
@@ -53,10 +53,40 @@ async def trydb(
                 fields = [field.strip() for field in fields]
                 values = [value.strip().strip("'") for value in values]
 
-                # 插入資料
                 cursor.execute(f"INSERT INTO {table_name} ({', '.join(fields)}) VALUES ({', '.join(['%s' for _ in values])})", values)
                 conn.commit()
                 await ctx.respond("記錄已插入成功", ephemeral=True)
+
+        # 處理 SELECT
+        elif "using" in query:
+            parts = query.split(",")
+            if len(parts) == 2:
+                table_name = parts[0].split()[1].strip()
+                select_part = parts[1].strip()
+
+                # 解析 SELECT 部分
+                select_parts = select_part.split("where")
+                fields_part = select_parts[0].replace("select", "").strip()
+                condition_part = select_parts[1].strip() if len(select_parts) > 1 else None
+
+                # 構建查詢
+                if fields_part == "*":
+                    cursor.execute(f"SELECT * FROM {table_name}")
+                else:
+                    fields = [field.strip() for field in fields_part.split(",")]
+                    cursor.execute(f"SELECT {', '.join(fields)} FROM {table_name}")
+
+                # 添加條件
+                if condition_part:
+                    cursor.execute(f"SELECT {', '.join(fields)} FROM {table_name} WHERE {condition_part}")
+
+                # 獲取查詢結果
+                results = cursor.fetchall()
+
+                # 格式化結果
+                output = [{fields[i]: row[i] for i in range(len(fields))} for row in results] if fields_part != "*" else [{column.name: row[i] for i, column in enumerate(cursor.description)} for row in results]
+
+                await ctx.respond(output, ephemeral=True)
 
         cursor.close()
         conn.close()
