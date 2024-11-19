@@ -70,7 +70,7 @@ async def trydb(
 
 @bot.slash_command(name='捐錢',description='請支持WTech/WBank')
 @option("user",description="WBank用戶名 (請確保已開啟paymode)")
-@option("amount",description="金額 (最少是WTC$100)",min_value=10)
+@option("amount",description="金額 (最少是WTC$100)",min_value=100)
 async def donate(ctx:discord.ApplicationContext,user:str,amount:int):
   res = get(url="https://sites.wtechhk.xyz/wbank/hash/transfer",headers={"username":user,"reviewer":"wbank","amount":str(amount)})
   try:
