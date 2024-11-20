@@ -88,6 +88,31 @@ async def trydb(
                 # 將輸出格式化為字符串
                 output_str = "\n".join(str(o) for o in output)
                 await ctx.respond(output_str)
+        # 處理 UPDATE
+        if "using" in query:
+            parts = query.split("->")
+            if len(parts) == 2:
+                table_name = parts[0].split()[1].strip()
+                action_part = parts[1].strip()
+
+                if "with" in action_part:
+                    set_part, condition_part = action_part.split("with")
+                    set_field, set_value = set_part.split("=")
+                    set_field = set_field.strip()
+                    set_value = set_value.strip().strip("'")
+                    condition_field, condition_value = condition_part.split("=")  # 改為單等號
+                    condition_field = condition_field.strip()
+                    condition_value = condition_value.strip().strip("'")
+
+                    # 更新操作
+                    update_query = f"UPDATE {table_name} SET {set_field} = %s WHERE {condition_field} = %s"
+                    cursor.execute(update_query, (set_value, condition_value))
+                    conn.commit()
+
+                    if cursor.rowcount > 0:
+                        await ctx.respond(f"資料表 '{table_name}' 中滿足條件的記錄已被更新。")
+                    else:
+                        await ctx.respond("沒有找到滿足條件的記錄。")
 
         cursor.close()
         conn.close()
