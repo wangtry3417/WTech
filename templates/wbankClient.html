@@ -141,43 +141,43 @@
           display: inline-block;
        }
        .switch {
-            position: relative;
-            display: inline-block;
-            width: 60px;
-            height: 34px;
-        }
-        .switch input {
-            display: block;
-        }
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: background-color 0.4s; /* 背景顏色變化 */
-            border-radius: 34px;
-        }
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 26px;
-            width: 26px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: transform 0.4s; /* 動畫效果 */
-            border-radius: 50%;
-        }
-        /* 當 input 被選中時的樣式 */
-        .switch input:checked + .slider {
-            background-color: #2196F3;
-        }
-        .switch input:checked + .slider:before {
-            transform: translateX(26px); /* 滑動效果 */
-        }
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+    .switch input {
+        display: none; /* 隱藏原始checkbox */
+    }
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        border-radius: 34px;
+        transition: background-color 0.4s; /* 背景顏色變化 */
+    }
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        border-radius: 50%;
+        transition: transform 0.4s; /* 動畫效果 */
+    }
+    /* 當 input 被選中時的樣式 */
+    .switch input:checked + .slider {
+        background-color: #2196F3;
+    }
+    .switch input:checked + .slider:before {
+        transform: translateX(26px); /* 滑動效果 */
+    }
     </style>
 </head>
 <body>
@@ -316,11 +316,8 @@
             <button class="button" onclick="removeAcc()">註銷</button>
             <label>開啟交易功能：</label>
             <label class="switch">
-            {% if openpay %}
-            <input type="checkbox" id="toggleSwitch" checked onchange="paymentChange()">
-            {% else %}
-            <input type="checkbox" id="toggleSwitch" onchange="paymentChange()">
-            {% endif %}
+            <input type="checkbox" id="toggleSwitch" {% if openpay %}checked{% endif %} onchange="paymentChange()">
+            <span class="slider"></span>
            </label>
             <br>
             <button class="button" onclick="closeScreenScreen()">關閉</button>
