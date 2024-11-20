@@ -308,23 +308,6 @@
             <button class="button" onclick="closeMoneyScreen()">關閉</button>
         </div>
 
-        <div id="botScreen" class="card" style="display:none;">
-            <h3>交易機器人功能</h3>
-            <label>啟動bot</label>
-            <button class="button" onclick="startBot()">開始自動交易</button>
-            <br>
-            <label>關閉bot</label>
-            <button class="button" onclick="stopBot()">關閉自動交易</button>
-            <br>
-            <label>選擇投資模式：</label>
-            <select id="tradeModeSelect">
-                <option value="normalMode">普通模式（預設模式）</option>
-                <option value="hardMode">暴力模式</option>
-                <option value="fried">炒幣Bot</option>
-            </select>
-            <button class="button" onclick="closeBotScreen()">關閉</button>
-        </div>
-
         <div id="settingScreen" class="card" style="display:none;">
             <h3>設定</h3>
             <label>平台名稱： WBank -- 泓幣官方認可交易平台</label><br>
@@ -403,13 +386,6 @@
             document.getElementById("moneyScreen").style.display = "none";
         };
 
-        const botscreen = () => {
-            document.getElementById("botScreen").style.display = "block";
-        };
-
-        const closeBotScreen = () => {
-            document.getElementById("botScreen").style.display = "none";
-        };
         const openSettingScreen = () => {
       document.getElementById("settingScreen").style.display = "block";
     };
