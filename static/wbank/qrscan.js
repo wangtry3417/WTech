@@ -24,7 +24,8 @@ function startScanning() {
         },
         (decodedText, decodedResult) => {
             // 當掃描到 QR 碼時的處理
-            window.location.href="/wbank/v1/paycode?reviewer=" + "{{user}}" + "&code=" + decodedText;
+            window.location.href="/wbank/v1/paycode?reviewer=" + username + "&code=" + decodedText;
+            sessionStage.clear();
             stopScanning(); // 停止掃描
         },
         (errorMessage) => {
