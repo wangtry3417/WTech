@@ -1,8 +1,9 @@
 let html5QrCode;
 let scanning = false;
-let username = sessionStage.getItem("username");
+let username = null;
 function scan() {
     document.getElementById('qrScanner').style.display = 'flex'; // 顯示掃描框
+    username = sessionStage.getItem("username");
     startScanning(); // 自動開始掃描
 }
 
