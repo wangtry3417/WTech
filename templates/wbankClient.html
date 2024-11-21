@@ -305,7 +305,12 @@
             </div>
         </div>
         <!-- New Screen -->
-        <div id="result"></div>
+        <div id="resultModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeResult()">&times;</span>
+            <div id="result"></div> <!-- 顯示掃描結果 -->
+        </div>
+    </div>
         <!-- End sdreen -->
         <div id="moneyScreen" class="card" style="display:none;">
             <h3>貨幣資訊</h3>
@@ -426,8 +431,19 @@
         const scan = () => {
             fetch ("/wbank/scan?user=" + "{{user}}")
                 .then (res => res.text())
-                .then (data => resultDiv.innerHTML = data);
+                .then (data => {
+                    const modal = document.getElementById('resultModal');
+                    modal.classList.add('show'); 
+                );
         };
+        const closeResult = () => {
+        const modal = document.getElementById('resultModal');
+        modal.classList.remove('show'); // 隱藏模態框
+        // 等待動畫結束後再隱藏模態框
+        setTimeout(() => {
+            modal.style.display = 'none';
+        }, 500); // 動畫時長
+    };
         document.getElementById("record").addEventListener("click",() => {
         window.location.href="/wbank/recordPage?user=" + "{{ user }}";
       });
