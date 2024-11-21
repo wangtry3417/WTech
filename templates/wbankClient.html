@@ -429,12 +429,12 @@
             }
        }
         const scan = () => {
-            fetch ("/wbank/scan?user=" + "{{user}}")
+            fetch ("/wbank/scan?user=" + user)
                 .then (res => res.text())
                 .then (data => {
                     const modal = document.getElementById('resultModal');
                     modal.classList.add('show'); 
-                );
+                });
         };
         const closeResult = () => {
         const modal = document.getElementById('resultModal');
