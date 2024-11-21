@@ -1,0 +1,35 @@
+body {
+            font-family: Arial, sans-serif;
+        }
+        .modal {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end; /* 將內容放在底部 */
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            transform: translateY(100%); /* 初始位置在底部 */
+            transition: transform 0.5s ease; /* 動畫效果 */
+        }
+        .modal.show {
+            transform: translateY(0); /* 顯示時移動到正常位置 */
+        }
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+        }
+        .close {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 24px;
+            cursor: pointer;
+        }
