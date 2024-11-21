@@ -1,7 +1,4 @@
-body {
-            font-family: Arial, sans-serif;
-        }
-        .modal {
+         .modal {
             display: flex;
             justify-content: center;
             align-items: flex-end; /* 將內容放在底部 */
