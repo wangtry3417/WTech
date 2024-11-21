@@ -9,6 +9,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/wbank/scan.css">
+    <link rel="stylesheet" href="/static/wbank/modals.css">
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -180,8 +181,12 @@
         transform: translateX(26px); /* 滑動效果 */
     }
     #result {
-            margin-top: 20px;
-            display: none; /* 初始隱藏 */
+        margin-top: 20px;
+        display: none; /* 初始隱藏 */
+    }
+    #qrCode {
+        margin-top: 10px;
+        /* 此處可根據需求設置 QR 碼的樣式 */
     }
     </style>
 </head>
@@ -284,7 +289,18 @@
                 </div>
             </div>
         </div>
-
+        <!-- QR screen-->
+       <div id="qrModal" class="models">
+    <div class="models-content">
+        <span class="close" onclick="closeQRCode()">&times;</span>
+        <h3>錢包地址 QR 碼</h3>
+        <div id="qrCode">
+            <!-- 此處放置生成的 QR 碼 -->
+            <img src="data:image/svg+xml;base64,{{ img }}" alt="QR Code" width="250" height="250"> <!-- 替換為實際的 QR 碼 -->
+        </div>
+    </div>
+</div>
+        <!-- End qr screen-->
         <div id="myPage" class="page">
             <div class="card">
                 <h2>我的</h2>
@@ -454,7 +470,8 @@
         window.location.href="/wbank/nfc?user=" + accnumber;
       });
       document.getElementById("so").addEventListener("click",() => {
-        window.location.href="/wbank/sellCoins?user=" + "{{ user }}";
+        //window.location.href="/wbank/sellCoins?user=" + "{{ user }}";
+        document.getElementById('qrModal').style.display = 'flex'; 
       });
       document.getElementById("pp").addEventListener("click",() => {
         let amount = prompt("How much do you wanna buy in?");
@@ -481,6 +498,9 @@
                 }, 1000);
             }
             */
+        }
+        function closeQRCode() {
+        document.getElementById('qrModal').style.display = 'none'; // 隱藏模態框
         }
         //Stock place
 let portfolio = JSON.parse(localStorage.getItem('portfolio')) || [];
