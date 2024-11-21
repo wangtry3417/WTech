@@ -7,7 +7,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js"></script>
     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="/static/wbank/qrscan.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/wbank/scan.css">
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -291,7 +293,7 @@
                 </div>
                 <br>
                 <h3>掃描區</h3>
-                <button class="button" onclick="scan()">掃描QR-code（只限wcoins)</button>
+                <button class="button" onclick="scan()">掃描QR-code</button>
                 <br>
                 <button class="button" onclick="openSettingScreen()">設定</button>
                 <br>
@@ -299,7 +301,15 @@
                 <button class="button" onclick="window.location.href='/wbank/logout';">登出</button>
             </div>
         </div>
-
+        <!-- QR Scanner -->
+        <div id="qrScanner" class="modal" style="display:none;">
+    <div class="modal-content">
+        <span class="close" onclick="closeScanner()">&times;</span>
+        <h3>掃描 QR 碼</h3>
+        <div id="qr-reader" style="width: 100%;"></div>
+    </div>
+</div>
+        <!-- End scan -->
         <div id="moneyScreen" class="card" style="display:none;">
             <h3>貨幣資訊</h3>
             <label>港幣HKD: {{HK_Value}}</label><br>
@@ -348,7 +358,7 @@
         var accnumber = "{{ acc_number }}";
         var balance = parseFloat("{{ balance }}");
         var user = "{{ user }}";
-
+        sessionStage.setItem("username",user);
         // 顯示指定頁面
         function showPage(pageId) {
             // 隱藏所有頁面
