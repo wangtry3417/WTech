@@ -458,7 +458,8 @@ def error_server(e):
 def unauthorized(error):
     if not current_user.is_authenticated:
         # 如果使用者沒有登入,渲染401錯誤頁面
-        return render_template('401.html'), 401
+        flash("登入會話(session)逾時，請再次登入","error")
+        return redirect("/wbank")
     else:
         # 如果使用者已登入,但沒有權限訪問該頁面,則重定向到首頁
         return redirect('/')
