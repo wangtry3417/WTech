@@ -470,7 +470,7 @@ def unauthorized(error):
         return redirect("/wbank")
     else:
         # 如果使用者已登入,但沒有權限訪問該頁面,則重定向到首頁
-        flash("可能沒有權限。 如果role是NonVerify,表示你沒有做身分驗證","info")
+        flash("可能沒有權限,因此你們被禁止訪問。 ","info")
         return redirect('/wbank')
 
 @app.errorhandler(404)
@@ -2519,11 +2519,11 @@ def wbank_auth_client():
 
 @app.route("/wbank/client", methods=["GET", "POST"])
 @login_required
-@roles_required('user')
 def wbank_client():
     user = current_user.username
     user_data = wbankwallet.query.filter_by(username=user).first()
-    
+    if current_user.role != 'user':
+        return render_template("wbank/kyc.html",user=user)
     if user_data:
         if user_data.verify == "no":
             return render_template("wbank/kyc.html",user=user)
