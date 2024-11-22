@@ -38,7 +38,6 @@ from wtforms import StringField,BooleanField,SelectField
 from flask_wtf.csrf import CSRFProtect
 from flask_admin.form import BaseForm
 from flask_qrcode import QRcode
-from flask_user import UserManager, roles_required
 import json,sys,threading
 from DDos import checkUrl, DDos
 import pandas as pd
@@ -75,8 +74,6 @@ app.config['OAUTH_CREDENTIALS'] = {
     'client_id': 'WC00001',  # 你的 OAuth 應用程式 ID
     'client_secret': 'Wt0001'  # 你的 OAuth 應用程式密鑰
 }
-app.config['USER_ENABLE_EMAIL'] = False  # 禁用電子郵件
-app.config['USER_APP_NAME'] = 'WBank'  # 應用名稱
 
 QRcode(app)
 
@@ -141,9 +138,6 @@ db = SQLAlchemy(app)
 # 創建 Flask-Login 管理器
 login_manager = LoginManager()
 login_manager.init_app(app)
-
-# 初始化 UserManager
-user_manager = UserManager(app, db, wbankwallet)
 
 babel = Babel(app)
 
