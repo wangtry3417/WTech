@@ -34,7 +34,7 @@ from flask_babel import Babel
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from flask_oauthlib.provider import OAuth2Provider
 from wtforms.validators import DataRequired
-from wtforms import StringField,BooleanField,SelectField
+from wtforms import StringField,BooleanField,SelectField,FloatField
 from flask_wtf.csrf import CSRFProtect
 from flask_admin.form import BaseForm
 from flask_qrcode import QRcode
@@ -377,6 +377,40 @@ class CustomModelView(ModelView):
 with app.app_context():
   db.create_all()
 
+class cashout(db.Model):
+    __tablename__ = "cashout"
+    id = db.Column(db.Integer, primary_key=True,autoincrement=True)
+    name = db.Column(db.String(100), nullable=False)
+    amount = db.Column(db.Float, nullable=False)
+    status = db.Column(db.String(20), default='待處理Pending')  # 初始化狀態
+
+class cashView(ModelView):
+  column_display_pk=True
+  column_searchable_list = ('id', 'name')
+  column_labels = {
+        'id': '序號',
+        'name': '用戶名稱',
+        'amount': '金額(WTC$)',
+        'status': '狀態'
+  }
+    
+  edit_modal=True
+  form = cashForm
+
+class cashForm(BaseForm):
+    name = StringField('用戶名稱', validators=[DataRequired()])
+    amount = FloatField('金額(WTC$)', validators=[DataRequired()])
+    status = SelectField('狀態', validators=[DataRequired()])
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # 在這裡可以設置選項
+        self.sub.choices = self.get_dynamic_choices()
+
+    def get_dynamic_choices(self):
+        # 根據需要返回選項列表
+        return [("待處理Pending","Pending"),("成功","Done"),("失敗","Fail")]
+      
+
 # 定義用戶類
 class User(UserMixin):
     def __init__(self, username, password):
@@ -407,6 +441,7 @@ admin = Admin(app, name='泓財銀行--管理介面', template_mode='bootstrap4'
 admin.add_view(walletView(wbankwallet, db.session, name="泓財銀行用戶"))
 admin.add_view(WBankRecordView(wbankrecord))
 admin.add_view(kycView(wbankkyc, db.session, name="KYC(防洗錢)驗證紀錄"))
+admin.add_view(cashView(cashout, db.session, name="Cast-Out"))
 #admin.add_view(oauth_client_view(oauth_client, db.session, name="OAuth2 儲存紀錄"))
 
 @app.after_request
