@@ -38,6 +38,7 @@ from wtforms import StringField,BooleanField,SelectField
 from flask_wtf.csrf import CSRFProtect
 from flask_admin.form import BaseForm
 from flask_qrcode import QRcode
+from flask_user import UserManager, roles_required
 import json,sys,threading
 from DDos import checkUrl, DDos
 import pandas as pd
@@ -74,6 +75,8 @@ app.config['OAUTH_CREDENTIALS'] = {
     'client_id': 'WC00001',  # 你的 OAuth 應用程式 ID
     'client_secret': 'Wt0001'  # 你的 OAuth 應用程式密鑰
 }
+app.config['USER_ENABLE_EMAIL'] = False  # 禁用電子郵件
+app.config['USER_APP_NAME'] = 'WBank'  # 應用名稱
 
 QRcode(app)
 
@@ -139,6 +142,9 @@ db = SQLAlchemy(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+# 初始化 UserManager
+user_manager = UserManager(app, db, wbankwallet)
+
 babel = Babel(app)
 
 # 定義 SQLAlchemy 模型
@@ -150,7 +156,8 @@ class wbankwallet(db.Model,UserMixin):
     sub = db.Column(db.String(64), nullable=True)
     accnumber = db.Column(db.String(60), nullable=True)
     openpay = db.Column(db.Boolean, nullable=True, default=False)
-    def __init__(self,username,balance,password,verify,sub,accnumber,openpay):
+    role = db.Column(db.String(60),nullable=False,default='NonVerify')
+    def __init__(self,username,balance,password,verify,sub,accnumber,openpay,role):
       self.username = username
       self.balance = balance
       self.password = password
@@ -158,6 +165,7 @@ class wbankwallet(db.Model,UserMixin):
       self.sub = sub
       self.accnumber = accnumber
       self.openpay = openpay
+      self.role = role
     def get_id(self):
         return self.username
 
@@ -462,7 +470,8 @@ def unauthorized(error):
         return redirect("/wbank")
     else:
         # 如果使用者已登入,但沒有權限訪問該頁面,則重定向到首頁
-        return redirect('/')
+        flash("可能沒有權限。 如果role是NonVerify,表示你沒有做身分驗證","info")
+        return redirect('/wbank')
 
 @app.errorhandler(404)
 def not_found(e):
@@ -2295,6 +2304,7 @@ def wbank_nfc_page():
 
 @app.route("/wbank/loan")
 @login_required
+@roles_required('user')
 def wbank_loan_page():
   user = request.args.get("user")
   return render_template("wbankLoan.html",user=user)
@@ -2387,7 +2397,7 @@ def wbank_into_user():
   email = request.form.get("email")
   id = request.form.get("id")
   an = f"015-150-{random.randint(10000000,99999999)}"
-  db.session.add(wbankwallet(username=user,balance="0",password=pw,verify="no",sub=None,accnumber=an,openpay=False))
+  db.session.add(wbankwallet(username=user,balance="0",password=pw,verify="no",sub=None,accnumber=an,openpay=False,role='NonVerify'))
   db.session.commit()
   return render_template("wbank/kyc.html",user=user,id=id)
   return "Cannot do that!."
@@ -2508,6 +2518,7 @@ def wbank_auth_client():
 
 @app.route("/wbank/client", methods=["GET", "POST"])
 @login_required
+@roles_required('user')
 def wbank_client():
     user = current_user.username
     user_data = wbankwallet.query.filter_by(username=user).first()
