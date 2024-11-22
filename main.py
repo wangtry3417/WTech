@@ -2621,6 +2621,24 @@ def wbank_v1_closepay():
     return "成功關閉"
   return "找不到用戶"
 
+@app.route("/wbank/v1/cashout")
+def wbank_v1_cash_out():
+  if request.args.get("user"):
+    applications = cashout.query.all()
+    return render_template("wbank/cash.html",user=user,applications=applications)
+  else:
+    return "No user find"
+
+@app.route('/cash_out', methods=['POST'])
+def wbank_v1_post_cash_out():
+    name = request.form.get('username')
+    amount = float(request.form.get('amount'))
+    new_application = CashOut(name=name, amount=amount)  # 創建新申請
+    db.session.add(new_application)  # 添加到會話
+    db.session.commit()  # 提交到數據庫
+    flash("出金申請已提交","success")
+    return redirect("/wbank/client")
+
 @app.route("/wbank/recordPage")
 @login_required
 def wbank_record_page_v2():
