@@ -2298,7 +2298,6 @@ def wbank_nfc_page():
 
 @app.route("/wbank/loan")
 @login_required
-@roles_required('user')
 def wbank_loan_page():
   user = request.args.get("user")
   return render_template("wbankLoan.html",user=user)
