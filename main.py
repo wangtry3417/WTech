@@ -2450,6 +2450,7 @@ def wbank_kyc_verify():
     user_data = wbankwallet.query.get(user)
     if user_data:
         user_data.verify = 'yes'
+        user_data.role = 'user'
         db.session.commit()
     else:
         return "用戶不存在"
