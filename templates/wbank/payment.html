@@ -91,6 +91,7 @@
     <h1>商家付款介面</h1>
     <input type="text" id="username" placeholder="輸入商家名字" required>
     <input type="number" id="amount" placeholder="輸入金額" min="0" step="0.01" required>
+    <input type="text" id="isLoop" placeholder="會否連續">
     <button onclick="startCapture()">付款</button>
 
     <div class="video-container" id="videoContainer">
@@ -109,6 +110,7 @@
     var resultContainer = document.getElementById('qr-reader-results');
     var lastResult, countResults = 0;
     let isProgress = false;
+    var isLoop = document.getElementById("isLoop").value;
 
     function startCapture() {
         const amount = parseFloat(document.getElementById('amount').value);
@@ -147,10 +149,20 @@
                   alert("這筆交易成功，並且已經被系統紀錄");
                   document.getElementById('loading').style.display = 'none';
                   isProgress = false;
+                  if (isLoop == "yes") {
+                     return startVideo(amount);
+                  } else {
+                     return;
+                  }
               } else {
                   alert("這筆交易成功，並且尚未被系統紀錄");
                   document.getElementById('loading').style.display = 'none';
                   isProgress = false;
+                  if (isLoop == "yes") {
+                     return startVideo(amount);
+                  } else {
+                     return;
+                  }
               }
            } else {
                alert(data["Error-hint"]);
