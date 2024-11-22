@@ -25,4 +25,4 @@ Ddos
 eventlet
 WTForms==2.3.3
 pandas
-Flask-User
+git+https://github.com/lingthio/Flask-User.git
