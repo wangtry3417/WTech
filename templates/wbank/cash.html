@@ -67,10 +67,10 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" action="{{ url_for('cash_out') }}">
+                    <form method="post" action="/wbank/v1/applie/cash">
                         <div class="form-group">
-                            <label for="name">姓名</label>
-                            <input type="text" class="form-control" id="name" name="name" required>
+                            <label for="name">用戶名</label>
+                            <input type="text" class="form-control" id="name" name="username" required>
                         </div>
                         <div class="form-group">
                             <label for="amount">金額</label>
