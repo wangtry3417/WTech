@@ -2387,7 +2387,6 @@ def wbank_paypal_done():
 def wbank_into_user():
   user = request.form.get("user")
   pw = request.form.get("pw")
-  email = request.form.get("email")
   id = request.form.get("id")
   an = f"015-150-{random.randint(10000000,99999999)}"
   db.session.add(wbankwallet(username=user,balance="0",password=pw,verify="no",sub=None,accnumber=an,openpay=False,role='NonVerify'))
