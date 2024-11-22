@@ -56,38 +56,41 @@ async def trydb(
 
         # 處理 SELECT
         elif "using" in query:
-            parts = query.split(",")
-            if len(parts) == 2:
-                table_name = parts[0].split()[1].strip()
-                select_part = parts[1].strip()
+          parts = query.split(",")
+          if len(parts) == 2:
+            table_name = parts[0].split()[1].strip()
+            select_part = parts[1].strip()
 
-                # 解析 SELECT 部分
-                select_parts = select_part.split("where")
-                fields_part = select_parts[0].replace("select", "").strip()
-                condition_part = select_parts[1].strip() if len(select_parts) > 1 else None
+            # 解析 SELECT 部分
+            select_parts = select_part.split("where")
+            fields_part = select_parts[0].replace("select", "").strip()
+            condition_part = select_parts[1].strip() if len(select_parts) > 1 else None
 
-                # 構建查詢
-                if fields_part == "*":
-                    cursor.execute(f"SELECT * FROM {table_name}")
-                    fields = [column[0] for column in cursor.description]  # 獲取所有字段名
-                else:
-                    fields = [field.strip() for field in fields_part.split(",")]
-                    cursor.execute(f"SELECT {', '.join(fields)} FROM {table_name}")
+            # 構建查詢
+            if fields_part == "*":
+              cursor.execute(f"SELECT * FROM {table_name}")
+              fields = [column[0] for column in cursor.description]  # 獲取所有字段名
+            else:
+              fields = [field.strip() for field in fields_part.split(",")]
+              cursor.execute(f"SELECT {', '.join(fields)} FROM {table_name}")
 
-                # 添加條件
-                if condition_part:
-                    condition_part = condition_part.replace("‘", "'").replace("’", "'")
-                    cursor.execute(f"SELECT {', '.join(fields)} FROM {table_name} WHERE {condition_part}")
+            # 添加條件
+            if condition_part:
+              condition_part = condition_part.replace("‘", "'").replace("’", "'")
+              cursor.execute(f"SELECT {', '.join(fields)} FROM {table_name} WHERE {condition_part}")
 
-                # 獲取查詢結果
-                results = cursor.fetchall()
+            # 獲取查詢結果
+            results = cursor.fetchall()
 
-                # 格式化結果
-                output = [{fields[i]: row[i] for i in range(len(fields))} for row in results] if fields_part != "*" else [{column[0]: row[i] for i, column in enumerate(cursor.description)} for row in results]
+            # 格式化結果
+            if fields_part == "*":
+              output = [{column[0]: row[i] for i, column in enumerate(cursor.description)} for row in results]
+            else:
+              output = [{fields[i]: row[i] for i in range(len(fields))} for row in results]
 
-                # 將輸出格式化為字符串
-                output_str = "\n".join(str(o) for o in output)
-                await ctx.respond(output_str)
+            # 將輸出格式化為字符串
+            output_str = "\n".join(str(o) for o in output)
+            await ctx.respond(output_str)
         # 處理 UPDATE
         if "using" in query:
             parts = query.split("->")
