@@ -7,6 +7,7 @@
     <link rel="icon" href="{{ url_for('static',filename='IMG_7428.ico') }}" />
     <link rel="apple-touch-icon" href="{{ url_for('static',filename='IMG_7428.ico') }}" />
     <link rel="manifest" href="{{ url_for('static',filename='wbank.json') }}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -159,17 +160,33 @@
             <p>沒有帳號？ <a href="/wbank/new_client">註冊帳號</a></p>
             <p>忘記了密碼? <a href="javascript:void(0);" onclick="modal.style.display='block';">按此重設密碼</a></p>
         </form>
-        <div class="modal" id="modal">
-          <h2>密碼重設UI</h2>
-          <label>用戶名:</label>
-          <input type="text" id="username" placeholder="請輸入用戶名">
-          <label>密碼:</label>
-          <input type="text" id="pw" placeholder="請輸入密碼">
-          <label>確認密碼:</label>
-          <input type="text" id="cpw" placeholder="請再次輸入密碼">
-          <button onclick="resetPw()">提交</button>
-          <button onclick="closeUI()">關閉</button>
-      </div>
+        <div class="modal fade" id="resetPwModal" tabindex="-1" role="dialog" aria-labelledby="cashOutModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="resetPwModalLabel">更改密碼</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="/wbank/change/pw">
+                        <div class="form-group">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                            <label for="name">用戶名</label>
+                            <input type="text" class="form-control" id="name" name="user" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">密碼</label>
+                            <input type="number" class="form-control" id="pw" name="pw" required>
+                        </div>
+                        <button type="submit" class="btn btn-success btn-block">提交申請</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
         <div id="lc" class="loading-container">
             <div class="loader"></div>
             <div class="loading-text">自動登入中...</div>
