@@ -399,7 +399,7 @@ class cashForm(BaseForm):
 
 class cashView(ModelView):
   column_display_pk=True
-  column_searchable_list = ('id', 'name')
+  column_searchable_list = ('id', 'name','status')
   column_labels = {
         'id': '序號',
         'name': '用戶名稱',
