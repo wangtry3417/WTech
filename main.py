@@ -391,7 +391,7 @@ class cashForm(BaseForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # 在這裡可以設置選項
-        self.sub.choices = self.get_dynamic_choices()
+        self.status.choices = self.get_dynamic_choices()
 
     def get_dynamic_choices(self):
         # 根據需要返回選項列表
