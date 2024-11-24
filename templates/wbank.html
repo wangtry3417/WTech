@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-Hang">
+<html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -78,16 +78,6 @@
             background-color: #f8d7da;
             color: #721c24;
         }
-        .flashes {
-    list-style-type: none;
-    padding: 0;
-}
-
-.flashes li {
-    padding: 10px;
-    margin: 5px 0;
-    border-radius: 5px;
-}
 
 .success {
     background-color: #d4edda;
@@ -158,9 +148,9 @@
             <input type="password" name="pw" placeholder="密碼" required>
             <button type="submit" id="btn1">登入</button>
             <p>沒有帳號？ <a href="/wbank/new_client">註冊帳號</a></p>
-            <p>忘記了密碼? <a href="javascript:void(0);" onclick="document.getElementById('resetPwModal').style.display='block';">按此重設密碼</a></p>
+            <p>忘記了密碼? <a href="#" data-toggle="modal" data-target="#resetPwModal">按此重設密碼</a></p>
         </form>
-        <div class="modal fade" id="resetPwModal" tabindex="-1" role="dialog" aria-labelledby="cashOutModalLabel" aria-hidden="true">
+        <div class="modal fade" id="resetPwModal" tabindex="-1" role="dialog" aria-labelledby="resetPwModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -178,9 +168,9 @@
                         </div>
                         <div class="form-group">
                             <label for="password">密碼</label>
-                            <input type="number" class="form-control" id="pw" name="pw" required>
+                            <input type="password" class="form-control" id="pw" name="pw" required>
                         </div>
-                        <button type="submit" class="btn btn-success btn-block">提交申請</button>
+                        <button type="submit" class="btn btn-success btn-block">提交!</button>
                     </form>
                 </div>
             </div>
