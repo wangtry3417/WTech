@@ -384,19 +384,6 @@ class cashout(db.Model):
     amount = db.Column(db.Float, nullable=False)
     status = db.Column(db.String(20), default='待處理Pending')  # 初始化狀態
 
-class cashView(ModelView):
-  column_display_pk=True
-  column_searchable_list = ('id', 'name')
-  column_labels = {
-        'id': '序號',
-        'name': '用戶名稱',
-        'amount': '金額(WTC$)',
-        'status': '狀態'
-  }
-    
-  edit_modal=True
-  form = cashForm
-
 class cashForm(BaseForm):
     name = StringField('用戶名稱', validators=[DataRequired()])
     amount = FloatField('金額(WTC$)', validators=[DataRequired()])
@@ -409,6 +396,19 @@ class cashForm(BaseForm):
     def get_dynamic_choices(self):
         # 根據需要返回選項列表
         return [("待處理Pending","Pending"),("成功","Done"),("失敗","Fail")]
+
+class cashView(ModelView):
+  column_display_pk=True
+  column_searchable_list = ('id', 'name')
+  column_labels = {
+        'id': '序號',
+        'name': '用戶名稱',
+        'amount': '金額(WTC$)',
+        'status': '狀態'
+  }
+    
+  edit_modal=True
+  form = cashForm
       
 
 # 定義用戶類
