@@ -2625,7 +2625,7 @@ def wbank_v1_closepay():
 def wbank_v1_cash_out():
   user = request.args.get("user")
   if user:
-    applications = cashout.query.all()
+    applications = cashout.query.filter_by(name=user).all()
     return render_template("wbank/cash.html",user=user,applications=applications)
   else:
     return "No user find"
