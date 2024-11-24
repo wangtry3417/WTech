@@ -2623,7 +2623,8 @@ def wbank_v1_closepay():
 
 @app.route("/wbank/v1/cashout")
 def wbank_v1_cash_out():
-  if request.args.get("user"):
+  user = request.args.get("user")
+  if user:
     applications = cashout.query.all()
     return render_template("wbank/cash.html",user=user,applications=applications)
   else:
