@@ -84,12 +84,12 @@ async def trydb(
             # 獲取查詢結果
             results = cursor.fetchall()
 
-           # 格式化結果
-           output = [{fields[i]: row[i] for i in range(len(fields))} for row in results]
+            # 格式化結果
+            output = [{fields[i]: row[i] for i in range(len(fields))} for row in results]
 
-           # 將輸出格式化為字符串
-           output_str = "\n".join(str(o) for o in output)
-           await ctx.respond(output_str)
+            # 將輸出格式化為字符串
+            output_str = "\n".join(str(o) for o in output)
+            await ctx.respond(output_str)
         # 處理 UPDATE
         if "using" in query:
             parts = query.split("->")
