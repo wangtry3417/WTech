@@ -404,7 +404,7 @@
         const paymentDetails = document.getElementById('paymentDetails');
         const slider = document.getElementById('authorizationSlider');
         const notification = document.getElementById('paymentNotification');
-        const userRoom = user;
+        const userRoom = user + "-payroom";
         socket.emit('authPayInit', userRoom);
         function auth_payment_check() {
         socket.on('paymentAuth', (data) => {
@@ -439,7 +439,7 @@
             });
         });
         }
-        setInterval(paymentAuth,1000);
+        setInterval(auth_payment_check,1000);
         function handleTransfer(username, reviewer, amount) {
             fetch ("/wbank/hash/transfer",{headers: {username:username,reviewer:reviewer,amount:amount}})
               .then (res => res.json())
