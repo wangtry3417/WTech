@@ -404,7 +404,7 @@
         const paymentDetails = document.getElementById('paymentDetails');
         const slider = document.getElementById('authorizationSlider');
         const notification = document.getElementById('paymentNotification');
-        const userRoom = user + "-payroom";
+        const userRoom = user;
         socket.emit('authPayInit', userRoom);
         function auth_payment_check() {
         socket.on('paymentAuth', (data) => {
