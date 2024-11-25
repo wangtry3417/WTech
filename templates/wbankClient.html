@@ -315,10 +315,10 @@
                 <br>
                 </div>
                 <br>
-                <h3>掃描區</h3>
+                <h3>掃描及用戶設置區</h3>
                 <button class="button" onclick="scan()">掃描QR-code</button>
                 <br>
-                <button class="button" onclick="openSettingScreen()">設定</button>
+                <button class="button" data-toggle="modal" data-target="#settingModal">設定</button>
                 <br>
                 <br>
                 <button class="button" onclick="window.location.href='/wbank/logout';">登出</button>
@@ -339,11 +339,11 @@
             <label>美金USD: {{US_value}}</label><br>
             <button class="button" onclick="closeMoneyScreen()">關閉</button>
         </div>
-        <div class="modal fade" id="cashOutModal" tabindex="-1" role="dialog" aria-labelledby="cashOutModalLabel" aria-hidden="true">
+        <div class="modal fade" id="settingModal" tabindex="-1" role="dialog" aria-labelledby="settingModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="cashOutModalLabel">提交出金申請</h5>
+                    <h5 class="modal-title" id="settingModalLabel">設定</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
