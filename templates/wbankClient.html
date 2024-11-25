@@ -10,6 +10,9 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/wbank/scan.css">
     <link rel="stylesheet" href="/static/wbank/modals.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -336,21 +339,31 @@
             <label>美金USD: {{US_value}}</label><br>
             <button class="button" onclick="closeMoneyScreen()">關閉</button>
         </div>
-
-        <div id="settingScreen" class="card" style="display:none;">
-            <h3>設定</h3>
-            <label>平台名稱： WBank -- 泓幣官方認可交易平台</label><br>
-            <label>版本： ~v2（按泓幣wcoins版本結算）</label><br>
-            <label>註銷帳號：</label>
-            <button class="button" onclick="removeAcc()">註銷</button>
-            <label>開啟交易功能：</label>
-            <label class="switch">
-            <input type="checkbox" id="toggleSwitch" {% if openpay %}checked{% endif %} onchange="paymentChange()">
-            <span class="slider"></span>
+        <div class="modal fade" id="cashOutModal" tabindex="-1" role="dialog" aria-labelledby="cashOutModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cashOutModalLabel">提交出金申請</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h3>設定</h3>
+                    <label>平台名稱： WBank -- 泓財銀行</label><br>
+                    <label>版本： ~v2（按泓幣wcoins版本結算）</label><br>
+                    <label>註銷帳號：</label>
+                    <button class="button" onclick="removeAcc()">註銷</button>
+                    <label>開啟交易功能：</label>
+                    <label class="switch">
+                    <input type="checkbox" id="toggleSwitch" {% if openpay %}checked{% endif %} onchange="paymentChange()">
+                    <span class="slider"></span>
            </label>
-            <br>
-            <button class="button" onclick="closeScreenScreen()">關閉</button>
+                </div>
+            </div>
         </div>
+    </div>
+</div>
 
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
