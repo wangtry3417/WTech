@@ -938,6 +938,10 @@ def trade_wcoins_bot(data):
 def auth_open_payment_init(room):
   join_room(room)
 
+@socketio.on("authPayStop")
+def auth_open_payment_init(room):
+  leave_room(room)
+
 @socketio.on("reqPayment")
 def auth_req_payment(data):
   emit("paymentAuth",{username:data["username"],reviewer:data["reviewer"],amount:data["amount"]},room=data["room"])
