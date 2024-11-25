@@ -333,7 +333,7 @@
                 <button class="button" data-toggle="modal" data-target="#settingModal">設定</button>
                 <br>
                 <br>
-                <button class="button" onclick="window.location.href='/wbank/logout';">登出</button>
+                <button class="button" onclick="wbankLogout()">登出</button>
             </div>
         </div>
         <!-- New Screen -->
@@ -406,7 +406,7 @@
         const slider = document.getElementById('authorizationSlider');
         const notification = document.getElementById('paymentNotification');
         const userRoom = user + "-payroom";
-        socket.emit('joinRoom', userRoom);
+        socket.emit('authPayInit', userRoom);
         function auth_payment_check() {
         socket.on('paymentAuth', (data) => {
             const { username, reviewer, amount } = data;
@@ -472,7 +472,10 @@
             // 顯示選定的頁面
             document.getElementById(pageId).classList.add('active');
         }
-
+        function wbankLogout() {
+           socket.emit("authPayStop",userRoom);
+           window.location.href="/wbank/logout";
+        }
         const transfer = () => {
             window.location.href = "/wbank/transfer";
         };
