@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/wbank/scan.css">
     <link rel="stylesheet" href="/static/wbank/modals.css">
+    <link rel="stylesheet" href="/static/wbank/authpayment.css">
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -197,7 +198,15 @@
     </style>
 </head>
 <body>
+  <body class="custom-body">
 
+    <!-- 通知區域 -->
+    <div id="paymentNotification" class="custom-payment-notification">
+        <p id="paymentDetails">等待付款憑據...</p>
+        <div class="custom-slider-container">
+            <input type="range" id="authorizationSlider" min="0" max="100" value="0" class="custom-slider">
+        </div>
+    </div>
     <header>WBank - 數字銀行</header>
 
     <div id="container">
@@ -393,6 +402,65 @@
         var accnumber = "{{ acc_number }}";
         var balance = parseFloat("{{ balance }}");
         var user = "{{ user }}";
+        const paymentDetails = document.getElementById('paymentDetails');
+        const slider = document.getElementById('authorizationSlider');
+        const notification = document.getElementById('paymentNotification');
+        const userRoom = user + "-payroom";
+        socket.emit('joinRoom', userRoom);
+        function auth_payment_check() {
+        socket.on('paymentAuth', (data) => {
+            const { username, reviewer, amount } = data;
+
+            // 格式化付款憑據
+            paymentDetails.innerHTML = `
+                <strong>轉帳方：</strong> ${username} <br>
+                <strong>收款方：</strong> ${reviewer} <br>
+                <strong>金額：</strong> ${amount} 
+            `;
+
+            // 顯示通知並啟動畫面
+            notification.style.display = 'block'; // 顯示通知
+            setTimeout(() => {
+                notification.style.bottom = '0'; // 動畫顯示
+            }, 10); // 等待顯示後再開始動畫
+
+            // 重置滑動桿
+            slider.value = 0;
+
+            // 更新滑動桿進度
+            slider.addEventListener('input', function() {
+                const value = this.value;
+                if (value > 0) {
+                    this.classList.add('active'); // 添加類以改變滑塊顏色
+                }
+                if (value >= 100) {
+                    // 當滑動到100%時，觸發轉帳
+                    handleTransfer(username, reviewer, amount);
+                }
+            });
+        });
+        }
+        setInterval(paymentAuth,1000);
+        function handleTransfer(username, reviewer, amount) {
+            fetch ("/wbank/hash/transfer",{headers: {username:username,reviewer:reviewer,amount:amount}})
+              .then (res => res.json())
+              .then (msg => {
+                 if (msg.success) {
+                    alert("付款成功");
+                 } else {
+                    alert(msg);
+                 }
+              })
+              .catch (err => alert("err"));
+
+            // 隱藏通知並啟動畫面
+            notification.style.bottom = '-200px'; // 動畫隱藏
+            setTimeout(() => {
+                notification.style.display = 'none'; // 隱藏通知
+            }, 500); // 等待動畫結束後再隱藏
+            slider.value = 0; // 重置滑動桿
+        }
+
         // 顯示指定頁面
         function showPage(pageId) {
             // 隱藏所有頁面
