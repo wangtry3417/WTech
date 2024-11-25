@@ -934,6 +934,14 @@ def trade_wcoins_bot(data):
   elif run_status == "no":
     return
 
+@socketio.on("authPayInit")
+def auth_open_payment_init(room):
+  join_room(room)
+
+@socketio.on("reqPayment")
+def auth_req_payment(data):
+  emit("paymentAuth",{username:data["username"],reviewer:data["reviewer"],amount:data["amount"]},room=data["room"])
+
 @app.route("/wtech/v2/chat")
 def wtech_wchat_page():
   return render_template("wtechChat.html")
