@@ -112,6 +112,30 @@
 <div class="container" id="home">
     <h2>關於我們</h2>
     <p>泓財數字銀行 WBank 旗下有泓幣 wcoins。</p>
+
+    <!-- Modal -->
+    <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ModalLabel">公告</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <b><h3>注意⚠️</h3></b>
+                    <br>
+                    <b><p>WBank系統將會更新為2.5版本，其後wcoins中心化系統及頁面將不會進行大更新。</p></b>
+                    <br>
+                    <b><p>WBank將會在 <span id="date"></span> 天後轉為維修模式。</p></b>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- 以下為內容 -->
     
     <div class="feature">
         <img src="https://cdn-icons-png.flaticon.com/512/888/888871.png" alt="QR Payment Icon">
@@ -155,6 +179,14 @@
 
 <script>
     // 這裡可以添加更多的 JavaScript 代碼
+    let datePlace = document.getElementById("date");
+    let dateNow = new Date();
+    let dateTaget = new Date("2024-12-20T21:00:00");
+    // 計算差異（毫秒）
+    const differenceInMilliseconds = dateTaget - dateNow;
+    // 將毫秒轉換為天
+    const differenceInDays = Math.ceil(differenceInMilliseconds / (1000 * 60 * 60 * 24));
+    datePlace.innerHTML = differenceInDays;
 </script>
 
 </body>
