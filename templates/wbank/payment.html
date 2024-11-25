@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>商家付款介面</title>
     <script src="https://unpkg.com/html5-qrcode"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js"></script>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -110,6 +111,7 @@
     var resultContainer = document.getElementById('qr-reader-results');
     var lastResult, countResults = 0;
     let isProgress = false;
+    let socket = io();
 
     function startCapture() {
         const amount = parseFloat(document.getElementById('amount').value);
@@ -131,7 +133,9 @@
             fetch(url)
                 .then(res => res.json())
                 .then(data => {
-                    return startPayment(data.payer, data.reviewer, data.amount, isLoop);
+                    let payroom = data.payer + "-payroom"
+                    socket.emit("reqPayment",{username:data.payer,reviewer:data.reviewer,amount:data.amount,room:payroom})
+                    alert("請檢查用戶介面");
                 });
         }
 
