@@ -937,14 +937,28 @@ def trade_wcoins_bot(data):
 @socketio.on("authPayInit")
 def auth_open_payment_init(room):
   join_room(room)
+  session[room] = None
 
 @socketio.on("authPayStop")
 def auth_open_payment_init(room):
   leave_room(room)
+  session.pop(room, None)
 
 @socketio.on("reqPayment")
 def auth_req_payment(data):
-  emit("paymentAuth",{username:data["username"],reviewer:data["reviewer"],amount:data["amount"]},room=data["room"])
+  room = data["room"]
+  session[room] = {
+      "username": data["username"],
+      "reviewer": data["reviewer"],
+      "amount": data["amount"]
+  }
+  emit("paymentAuth", session[room], room=room)
+
+@app.route('/wbank/checkPaymentStatus')
+def wbank_payment_status():
+    room = request.args.get('room')
+    status = session.get(room)
+    return jsonify(paymentAuth=status)
 
 @app.route("/wtech/v2/chat")
 def wtech_wchat_page():
