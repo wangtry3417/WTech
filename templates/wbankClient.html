@@ -412,6 +412,9 @@
         .then(data => {
             if (data.paymentAuth) {
                 const { username, reviewer, amount } = data.paymentAuth;
+                alert(username);
+                alert(reviewer);
+                alert(amount);
                 handlePaymentAuth(username, reviewer, amount);
             }
         })
