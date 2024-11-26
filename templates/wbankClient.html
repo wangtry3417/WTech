@@ -406,40 +406,46 @@
         const notification = document.getElementById('paymentNotification');
         const userRoom = `${user}-payroom`;
         socket.emit('authPayInit', userRoom);
-        function auth_payment_check() {
-        socket.on('paymentAuth', (data) => {
-            const { username, reviewer, amount } = data;
+        setInterval(() => {
+       fetch(`/checkPaymentStatus?room=${userRoom}`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.paymentAuth) {
+                const { username, reviewer, amount } = data.paymentAuth;
+                handlePaymentAuth(username, reviewer, amount);
+            }
+        })
+        .catch(err => console.error('Error fetching payment status:', err));
+}, 1000);
+        function handlePaymentAuth(username, reviewer, amount) {
+    // 格式化付款憑據
+    paymentDetails.innerHTML = `
+        <strong>轉帳方：</strong> ${username} <br>
+        <strong>收款方：</strong> ${reviewer} <br>
+        <strong>金額：</strong> ${amount} 
+    `;
 
-            // 格式化付款憑據
-            paymentDetails.innerHTML = `
-                <strong>轉帳方：</strong> ${username} <br>
-                <strong>收款方：</strong> ${reviewer} <br>
-                <strong>金額：</strong> ${amount} 
-            `;
+    // 顯示通知並啟動畫面
+    notification.style.display = 'block'; // 顯示通知
+    setTimeout(() => {
+        notification.style.bottom = '0'; // 動畫顯示
+    }, 10); // 等待顯示後再開始動畫
 
-            // 顯示通知並啟動畫面
-            notification.style.display = 'block'; // 顯示通知
-            setTimeout(() => {
-                notification.style.bottom = '0'; // 動畫顯示
-            }, 10); // 等待顯示後再開始動畫
+    // 重置滑動桿
+    slider.value = 0;
 
-            // 重置滑動桿
-            slider.value = 0;
-
-            // 更新滑動桿進度
-            slider.addEventListener('input', function() {
-                const value = this.value;
-                if (value > 0) {
-                    this.classList.add('active'); // 添加類以改變滑塊顏色
-                }
-                if (value >= 100) {
-                    // 當滑動到100%時，觸發轉帳
-                    handleTransfer(username, reviewer, amount);
-                }
-            });
-        });
+    // 更新滑動桿進度
+    slider.addEventListener('input', function() {
+        const value = this.value;
+        if (value > 0) {
+            this.classList.add('active'); // 添加類以改變滑塊顏色
         }
-        setInterval(auth_payment_check,1000);
+        if (value >= 100) {
+            // 當滑動到100%時，觸發轉帳
+            handleTransfer(username, reviewer, amount);
+        }
+    });
+}
         function handleTransfer(username, reviewer, amount) {
             fetch ("/wbank/hash/transfer",{headers: {username:username,reviewer:reviewer,amount:amount}})
               .then (res => res.json())
