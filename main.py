@@ -958,7 +958,16 @@ def auth_req_payment(data):
 def wbank_payment_status():
     room = request.args.get('room')
     status = session.get(room)
-    return jsonify(paymentAuth=status)
+    if status:
+        return jsonify({
+            "paymentAuth": {
+                "username": status["username"],
+                "reviewer": status["reviewer"],
+                "amount": status["amount"]
+            }
+        })
+    else:
+        return jsonify({"paymentAuth": None})
 
 @app.route("/wtech/v2/chat")
 def wtech_wchat_page():
