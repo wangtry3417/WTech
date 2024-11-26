@@ -427,10 +427,12 @@
 
     // 顯示通知並啟動畫面
     notification.style.display = 'block'; // 顯示通知
+    notification.style.bottom = '0';
+    /*
     setTimeout(() => {
         notification.style.bottom = '0'; // 動畫顯示
     }, 10); // 等待顯示後再開始動畫
-
+    */
     // 重置滑動桿
     slider.value = 0;
 
