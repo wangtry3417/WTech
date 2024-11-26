@@ -407,7 +407,7 @@
         const userRoom = `${user}-payroom`;
         socket.emit('authPayInit', userRoom);
         setInterval(() => {
-       fetch(`/checkPaymentStatus?room=${userRoom}`)
+       fetch(`/wbank/checkPaymentStatus?room=${userRoom}`)
         .then(res => res.json())
         .then(data => {
             if (data.paymentAuth) {
