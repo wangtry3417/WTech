@@ -411,6 +411,7 @@
         .then(res => res.json())
         .then(data => {
             if (data.paymentAuth) {
+                document.getElementById('qrModal').style.display = 'none'; // 隱藏模態框
                 const { username, reviewer, amount } = data.paymentAuth;
                 alert(username);
                 alert(reviewer);
