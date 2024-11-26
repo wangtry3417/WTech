@@ -113,6 +113,9 @@
     let isProgress = false;
     let socket = io();
 
+    const userRoom = `${user}-payroom`;
+    socket.emit('authPayInit', userRoom);
+
     function startCapture() {
         const amount = parseFloat(document.getElementById('amount').value);
         const isLoop = document.getElementById("isLoop").value.toLowerCase(); // Get loop status
