@@ -958,8 +958,8 @@ def auth_req_payment(data):
 def wbank_open_payment_order():
   room = request.args.get("room")
   if room:
-    if not session[room]:
-      session[room] = None
+    if room not in session:
+      session[room] = {}
     payer = request.args.get("payer")
     reviewer = request.args.get("reviewer")
     amount = request.args.get("amount")
