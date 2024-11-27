@@ -952,7 +952,7 @@ def auth_req_payment(data):
       "reviewer": data["reviewer"],
       "amount": data["amount"]
   }
-  emit("paymentAuth", session[room], room=room)
+  emit("paymentAuth", session[room])
 
 @app.route('/wbank/checkPaymentStatus')
 def wbank_payment_status():
