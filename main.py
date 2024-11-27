@@ -954,6 +954,19 @@ def auth_req_payment(data):
   }
   emit("paymentAuth", session[room])
 
+@app.route("/wbank/openorder",methods=["POST","GET"])
+def wbank_open_payment_order():
+  room = request.json.get("room")
+  if room:
+    session[room] = {
+      "username": data["username"],
+      "reviewer": data["reviewer"],
+      "amount": data["amount"]
+  }
+    return jsonify({"success":"已成功開單","session":session["room"]})
+  else:
+    return "No"
+
 @app.route('/wbank/checkPaymentStatus')
 def wbank_payment_status():
     room = request.args.get('room')
