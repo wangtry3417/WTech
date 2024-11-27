@@ -936,12 +936,12 @@ def trade_wcoins_bot(data):
 
 @socketio.on("authPayInit")
 def auth_open_payment_init(room):
-  join_room(room)
+  #join_room(room)
   session[room] = None
 
 @socketio.on("authPayStop")
 def auth_open_payment_init(room):
-  leave_room(room)
+  #leave_room(room)
   session.pop(room, None)
 
 @socketio.on("reqPayment")
