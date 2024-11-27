@@ -137,7 +137,7 @@
                 .then(res => res.json())
                 .then(data => {
                     let payroom = `${data.payer}-payroom`;
-                    socket.emit("reqPayment",{username:data.payer,reviewer:data.reviewer,amount:data.amount,room:payroom})
+                    socket.emit("reqPayment",{username:data.payer,reviewer:data.reviewer,amount:data.amount,room:payroom});
                     alert("請檢查用戶介面");
                     alert(userRoom);
                     socket.emit("authPayStop",userRoom);
