@@ -139,8 +139,7 @@
                     let payroom = `${data.payer}-payroom`;
                     socket.emit("reqPayment",{username:data.payer,reviewer:data.reviewer,amount:data.amount,room:payroom});
                     alert("請檢查用戶介面");
-                    alert(userRoom);
-                    socket.emit("authPayStop",userRoom);
+                    alert(payroom);
                     document.getElementById('loading').style.display = 'none';
                     isProgress = false;
                 });
