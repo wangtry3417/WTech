@@ -495,7 +495,7 @@ def error_server(e):
 def unauthorized(error):
     if not current_user.is_authenticated:
         # 如果使用者沒有登入,渲染401錯誤頁面
-        flash("登入會話(session)逾時，請再次登入","error")
+        flash("登入會話(session)逾時或無效，請再次登入","error")
         return redirect("/wbank")
     else:
         # 如果使用者已登入,但沒有權限訪問該頁面,則重定向到首頁
@@ -956,7 +956,7 @@ def auth_req_payment(data):
 
 @app.route("/wbank/openorder",methods=["POST","GET"])
 def wbank_open_payment_order():
-  room = request.json.get("room")
+  room = request.args.get("room")
   if room:
     session[room] = {
       "username": data["username"],
