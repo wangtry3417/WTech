@@ -958,10 +958,19 @@ def auth_req_payment(data):
 def wbank_open_payment_order():
   room = request.args.get("room")
   if room:
+    payer = request.args.get("payer")
+    reviewer = request.args.get("reviewer")
+    amount = request.args.get("amount")
+    if payer is None:
+      return "No"
+    if reviewer is None:
+      return "No"
+    if amount is None:
+      return "No"
     session[room] = {
-      "username": data["username"],
-      "reviewer": data["reviewer"],
-      "amount": data["amount"]
+      "username": payer,
+      "reviewer": reviewer,
+      "amount": amount
   }
     return jsonify({"success":"已成功開單","session":session["room"]})
   else:
