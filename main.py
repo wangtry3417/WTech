@@ -982,7 +982,7 @@ def wbank_open_payment_order():
 @app.route('/wbank/checkPaymentStatus')
 def wbank_payment_status():
     room = request.args.get('room')
-    status = session.get(room)
+    status = session[room]
     if status:
         return jsonify({
             "paymentAuth": {
