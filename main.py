@@ -151,8 +151,8 @@ class wbankwallet(db.Model,UserMixin):
     accnumber = db.Column(db.String(60), nullable=True)
     openpay = db.Column(db.Boolean, nullable=True, default=False)
     role = db.Column(db.String(60),nullable=False,default='NonVerify')
-    setAmount = db.Column(db.Integer,nullable=False,default=20000)
-    nowAmount = db.Column(db.Integer,nullable=False,default=0)
+    setamount = db.Column(db.Integer,nullable=False,default=20000)
+    nowamount = db.Column(db.Integer,nullable=False,default=0)
     def __init__(self,username,balance,password,verify,sub,accnumber,openpay,role,setAmount,nowAmount):
       self.username = username
       self.balance = balance
@@ -162,8 +162,8 @@ class wbankwallet(db.Model,UserMixin):
       self.accnumber = accnumber
       self.openpay = openpay
       self.role = role
-      self.setAmount = setAmount
-      self.nowAmount = nowAmount
+      self.setamount = setamount
+      self.nowamount = nowamount
     def get_id(self):
         return self.username
 
@@ -313,8 +313,8 @@ class walletView(ModelView):
         'verify': '驗證狀態',
         'sub':'備註',
         'openpay':'是否開啟Pay mode',
-        'setAmount':'設置交易限額',
-        'nowAmount':'目前交易額'
+        'setamount':'設置交易限額',
+        'nowamount':'目前交易額'
   }
     
   edit_modal=True
@@ -2180,7 +2180,7 @@ def wbank_hash_transfer():
     users.sub = "由於你轉帳金額過大，你的帳戶已被自動程式凍結"
     db.session.commit()
     return jsonify({"Error-hint":"由於你轉帳金額過大，不能用api/自動程式轉帳"})
-  if int(users.setAmount) >= int(users.nowAmount):
+  if int(users.setamount) >= int(users.nowamount):
     return jsonify({"Error-hint":"你設置的交易限額已到限制"})
     
   if users.balance >= count:
@@ -2209,7 +2209,7 @@ def wbank_hash_transfer():
       #conn.commit()  # 提交資料庫更新
 
       users.balance = balance-amount
-      users.nowAmount = int(users.nowAmount)+amount
+      users.nowsamount = int(users.nowamount)+amount
       db.session.commit()
 
       # 記錄轉帳記錄
@@ -2493,7 +2493,7 @@ def wbank_into_user():
   pw = request.form.get("pw")
   id = request.form.get("id")
   an = f"015-150-{random.randint(10000000,99999999)}"
-  db.session.add(wbankwallet(username=user,balance="0",password=pw,verify="no",sub=None,accnumber=an,openpay=False,role='NonVerify',setAmount=20000,nowsAmount=0))
+  db.session.add(wbankwallet(username=user,balance="0",password=pw,verify="no",sub=None,accnumber=an,openpay=False,role='NonVerify',setamount=20000,nowamount=0))
   db.session.commit()
   return render_template("wbank/kyc.html",user=user,id=id)
   return "Cannot do that!."
@@ -2702,7 +2702,7 @@ def wbank_v1_set_amount():
     return "沒有限額"
   user_data = wbankwallet.query.filter_by(username=user).first()
   if user_data:
-    user_data.setAmount = int(amount)
+    user_data.setamount = int(amount)
     db.session.commit()
     return "成功設置"
   return "找不到用戶"
