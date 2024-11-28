@@ -151,7 +151,9 @@ class wbankwallet(db.Model,UserMixin):
     accnumber = db.Column(db.String(60), nullable=True)
     openpay = db.Column(db.Boolean, nullable=True, default=False)
     role = db.Column(db.String(60),nullable=False,default='NonVerify')
-    def __init__(self,username,balance,password,verify,sub,accnumber,openpay,role):
+    setAmount = db.Column(db.Integer,nullable=False,default=0)
+    nowAmount = db.Column(db.Integer,nullable=False,default=0)
+    def __init__(self,username,balance,password,verify,sub,accnumber,openpay,role,setAmount,nowAmount):
       self.username = username
       self.balance = balance
       self.password = password
@@ -160,6 +162,8 @@ class wbankwallet(db.Model,UserMixin):
       self.accnumber = accnumber
       self.openpay = openpay
       self.role = role
+      self.setAmount = setAmount
+      self.nowAmount = nowAmount
     def get_id(self):
         return self.username
 
@@ -2484,7 +2488,7 @@ def wbank_into_user():
   pw = request.form.get("pw")
   id = request.form.get("id")
   an = f"015-150-{random.randint(10000000,99999999)}"
-  db.session.add(wbankwallet(username=user,balance="0",password=pw,verify="no",sub=None,accnumber=an,openpay=False,role='NonVerify'))
+  db.session.add(wbankwallet(username=user,balance="0",password=pw,verify="no",sub=None,accnumber=an,openpay=False,role='NonVerify',setAmount=20000,nowsAmount=0))
   db.session.commit()
   return render_template("wbank/kyc.html",user=user,id=id)
   return "Cannot do that!."
@@ -2632,7 +2636,9 @@ def wbank_client():
             qr_bytes = temp.getvalue()
             qr_b64 = base64.b64encode(qr_bytes).decode('ascii')
             acc_number = user_data.accnumber
-            return render_template("wbankClient.html", user=user, balance=balance, HK_Value=HK_Value, tw_value=tw_value, US_value=US_value, img=qr_b64, acc_number=acc_number, openpay=openpay)
+            setAmount = user_data.setAmount
+            nowAmount = user_data.nowAmount
+            return render_template("wbankClient.html", user=user, balance=balance, HK_Value=HK_Value, tw_value=tw_value, US_value=US_value, img=qr_b64, acc_number=acc_number, openpay=openpay, setAmount=setAmount, nowAmount=nowAmount)
     else:
         error_message = "找不到該用戶"
     
@@ -2679,6 +2685,21 @@ def wbank_v1_closepay():
     user_data.openpay = False
     db.session.commit()
     return "成功關閉"
+  return "找不到用戶"
+
+@app.route("/wbank/v1/setamount")
+def wbank_v1_set_amount():
+  user = request.headers.get("user")
+  amount = request.headers.get("amount")
+  if users is None:
+    return "找不到用戶"
+  if amount is None:
+    return "沒有限額"
+  user_data = wbankwallet.query.filter_by(username=user).first()
+  if user_data:
+    user_data.setAmount = int(amount)
+    db.session.commit()
+    return "成功設置"
   return "找不到用戶"
 
 @app.route("/wbank/v1/cashout")
