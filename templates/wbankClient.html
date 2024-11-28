@@ -409,6 +409,13 @@
         let setAmountOfTrade = document.getElementById('setAmountOfTrade');
         const userRoom = `${user}-payroom`;
         socket.emit('authPayInit', userRoom);
+        setAmountOfTrade.addEventListener('keypress',(event) => {
+          if (event.key === "Enter") {
+           fetch("/wbank/v1/setamount",{headers:{user:"{{user}}",amount:setAmountOfTrade.value})
+             .then (res=>res.text())
+             .then (data=>alert(data));
+        }
+      });
         setInterval(() => {
        fetch(`/wbank/checkPaymentStatus?room=${userRoom}`)
         .then(res => res.json())
@@ -440,14 +447,6 @@
     }, 10); // 等待顯示後再開始動畫
     // 重置滑動桿
     slider.value = 0;
-
-    setAmountOfTrade.addEventListener('keypress',(event) => {
-       if (event.key === "Enter") {
-           fetch("/wbank/v1/setamount",{headers:{user:"{{user}}",amount:setAmountOfTrade.value})
-             .then (res=>res.text())
-             .then (data=>alert(data));
-       }
-    });
             
     // 更新滑動桿進度
     slider.addEventListener('input', function() {
