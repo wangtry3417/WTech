@@ -312,7 +312,9 @@ class walletView(ModelView):
         'password': '密碼',
         'verify': '驗證狀態',
         'sub':'備註',
-        'openpay':'是否開啟Pay mode'
+        'openpay':'是否開啟Pay mode',
+        'setAmount':'設置交易限額',
+        'nowAmount':'目前交易額'
   }
     
   edit_modal=True
