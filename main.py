@@ -151,7 +151,7 @@ class wbankwallet(db.Model,UserMixin):
     accnumber = db.Column(db.String(60), nullable=True)
     openpay = db.Column(db.Boolean, nullable=True, default=False)
     role = db.Column(db.String(60),nullable=False,default='NonVerify')
-    setAmount = db.Column(db.Integer,nullable=False,default=0)
+    setAmount = db.Column(db.Integer,nullable=False,default=20000)
     nowAmount = db.Column(db.Integer,nullable=False,default=0)
     def __init__(self,username,balance,password,verify,sub,accnumber,openpay,role,setAmount,nowAmount):
       self.username = username
@@ -2178,7 +2178,9 @@ def wbank_hash_transfer():
     users.sub = "由於你轉帳金額過大，你的帳戶已被自動程式凍結"
     db.session.commit()
     return jsonify({"Error-hint":"由於你轉帳金額過大，不能用api/自動程式轉帳"})
-  
+  if int(users.setAmount) >= int(users.nowAmount):
+    return jsonify({"Error-hint":"你設置的交易限額已到限制"})
+    
   if users.balance >= count:
     text1 = [user,reviewer,str(users.balance)]
     t1 = ",".join(text1)
@@ -2205,6 +2207,7 @@ def wbank_hash_transfer():
       #conn.commit()  # 提交資料庫更新
 
       users.balance = balance-amount
+      users.nowAmount = int(users.nowAmount)+amount
       db.session.commit()
 
       # 記錄轉帳記錄
