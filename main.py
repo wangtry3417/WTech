@@ -972,7 +972,8 @@ def wbank_open_payment_order():
     session[room] = {
       "username": payer,
       "reviewer": reviewer,
-      "amount": amount
+      "amount": amount,
+      "Payment-place": room
   }
     return jsonify({"success":"已成功開單","session":session[room]})
   else:
