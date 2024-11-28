@@ -137,11 +137,14 @@
                 .then(res => res.json())
                 .then(data => {
                     let payroom = `${data.payer}-payroom`;
+                    startPayment(data.payer,data.reviewer,data.amount);
+                    /*
                     socket.emit("reqPayment",{username:data.payer,reviewer:data.reviewer,amount:data.amount,room:payroom});
                     alert("請檢查用戶介面");
                     alert(payroom);
                     document.getElementById('loading').style.display = 'none';
                     isProgress = false;
+                    */
                 });
         }
 
