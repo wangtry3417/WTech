@@ -369,7 +369,9 @@
                     <label class="switch">
                     <input type="checkbox" id="toggleSwitch" {% if openpay %}checked{% endif %} onchange="paymentChange()">
                     <span class="slider"></span>
-           </label>
+                    </label> 
+                    <label>設置交易限額 (WTC$):</label>
+                    <input type="number" id="setAmountOfTrade" value="{{ setAmount }}">
                 </div>
             </div>
         </div>
@@ -404,6 +406,7 @@
         const paymentDetails = document.getElementById('paymentDetails');
         const slider = document.getElementById('authorizationSlider');
         const notification = document.getElementById('paymentNotification');
+        let setAmountOfTrade = document.getElementById('setAmountOfTrade');
         const userRoom = `${user}-payroom`;
         socket.emit('authPayInit', userRoom);
         setInterval(() => {
@@ -438,6 +441,14 @@
     // 重置滑動桿
     slider.value = 0;
 
+    setAmountOfTrade.addEventListener('keypress',(event) => {
+       if (event.key === "Enter") {
+           fetch("/wbank/v1/setamount",{headers:{user:"{{user}}",amount:setAmountOfTrade.value})
+             .then (res=>res.text())
+             .then (data=>alert(data));
+       }
+    });
+            
     // 更新滑動桿進度
     slider.addEventListener('input', function() {
         const value = this.value;
