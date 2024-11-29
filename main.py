@@ -2209,7 +2209,7 @@ def wbank_hash_transfer():
       #conn.commit()  # 提交資料庫更新
 
       users.balance = balance-amount
-      users.nowsamount = int(users.nowamount)+amount
+      users.nowamount = int(users.nowamount)+amount
       db.session.commit()
 
       # 記錄轉帳記錄
