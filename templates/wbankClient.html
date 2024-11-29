@@ -411,7 +411,7 @@
         socket.emit('authPayInit', userRoom);
         setAmountOfTrade.addEventListener('keypress',(event) => {
           if (event.key === "Enter") {
-           fetch("/wbank/v1/setamount",{headers:{user:"{{user}}",amount:setAmountOfTrade.value})
+           fetch("/wbank/v1/setamount",{headers:{user:"{{user}}",amount:setAmountOfTrade.value}})
              .then (res=>res.text())
              .then (data=>alert(data));
         }
