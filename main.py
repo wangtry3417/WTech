@@ -270,7 +270,7 @@ class IDBrandForm(BaseForm):
     verify = StringField('驗證狀態', validators=[DataRequired()])
     sub = SelectField('備註', choices=[], validators=[])  # 初始化為空選項
     openpay = BooleanField('是否開啟Pay mode')
-    nowamount = IntegerField("總共轉帳金額", validators=[DataRequired(), NumberRange(min=0)])
+    nowamount = IntegerField("總共轉帳金額", validators=[NumberRange(min=0)])
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -279,7 +279,7 @@ class IDBrandForm(BaseForm):
 
     def get_dynamic_choices(self):
         # 根據需要返回選項列表
-        return [('', ''), ('由於閣下的資料存在問題，因此將會被暫時凍結', 'freeze001'), ('由於閣下的帳戶存在洗錢，因此將被暫時凍結', 'freeze002'), ('可能存在不明原因，建議尋找WBank分行解決此問題','freeze002')]
+        return [('', ''), ('由於閣下的資料存在問題，因此將會被暫時凍結', 'freeze001'), ('由於閣下的帳戶存在洗錢，因此將被暫時凍結', 'freeze002'), ('可能存在不明原因，建議尋找WBank分行解決此問題','freeze003')]
       
 class walletView(ModelView):
   #column_list = ('username','balance','password','verify','sub')
