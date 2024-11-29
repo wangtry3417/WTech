@@ -2180,7 +2180,7 @@ def wbank_hash_transfer():
     users.sub = "由於你轉帳金額過大，你的帳戶已被自動程式凍結"
     db.session.commit()
     return jsonify({"Error-hint":"由於你轉帳金額過大，不能用api/自動程式轉帳"})
-  if int(users.setamount) >= int(users.nowamount):
+  if int(users.nowamount) >= int(users.setamount):
     return jsonify({"Error-hint":"你設置的交易限額已到限制"})
     
   if users.balance >= count:
