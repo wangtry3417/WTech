@@ -270,7 +270,7 @@ class IDBrandForm(BaseForm):
     verify = StringField('驗證狀態', validators=[DataRequired()])
     sub = SelectField('備註', choices=[], validators=[])  # 初始化為空選項
     openpay = BooleanField('是否開啟Pay mode')
-    nowamount = IntegerField("總共轉帳額度", validators=[DataRequired(), NumberRange(min=0)])
+    nowamount = IntegerField("總共轉帳金額", validators=[DataRequired(), NumberRange(min=0)])
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
