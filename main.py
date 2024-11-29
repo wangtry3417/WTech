@@ -33,7 +33,7 @@ from sqlalchemy import text
 from flask_babel import Babel
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from flask_oauthlib.provider import OAuth2Provider
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired,NumberRange
 from wtforms import StringField,BooleanField,SelectField,FloatField,IntegerField
 from flask_wtf.csrf import CSRFProtect
 from flask_admin.form import BaseForm
@@ -270,7 +270,7 @@ class IDBrandForm(BaseForm):
     verify = StringField('驗證狀態', validators=[DataRequired()])
     sub = SelectField('備註', choices=[], validators=[])  # 初始化為空選項
     openpay = BooleanField('是否開啟Pay mode')
-    nowamount = IntegerField("總共轉帳額度", validators=[DataRequired()])
+    nowamount = IntegerField("總共轉帳額度", validators=[DataRequired(), NumberRange(min=0)])
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -308,7 +308,7 @@ class walletView(ModelView):
   column_display_pk=True
   column_searchable_list = ('username', 'sub')
   column_labels = {
-        'username': '用戶名或帳戶號碼',
+        'username': '用戶名',
         'balance': '餘額',
         'password': '密碼',
         'verify': '驗證狀態',
