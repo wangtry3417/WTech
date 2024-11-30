@@ -583,14 +583,8 @@
     
     session.onvalidatemerchant = async event => {
         // Call your own server to request a new merchant session.
-    fetch(event.validationURL)
-      .then(res => res.json()) // Parse the response as JSON.
-      .then(merchantSession => {
+        const merchantSession = await validateMerchant();
         session.completeMerchantValidation(merchantSession);
-      })
-      .catch(err => {
-        console.error("Error fetching merchant session", err);
-      });
     };
     
     session.onpaymentmethodselected = event => {
