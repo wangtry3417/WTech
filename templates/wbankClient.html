@@ -617,19 +617,21 @@
         // Define ApplePayPaymentAuthorizationResult
         alert("支付處理中");
         const result = {
-            "status": ApplePaySession.STATUS_SUCCESS
+            "status": ApplePaySession.STATUS_FAILURE
         };
         // Define wbank recevied success
         fetch ("/wbank/hash/transfer", {headers:{username: "wbank",reviewer: "{{user}}",amount: document.getElementById('ap-amount').value}})
           .then (res=>res.json())
           .then (data => {
              if (data.success) {
+               result.status = ApplePaySession.STATUS_SUCCESS; // 支付成功
                alert(data.success);
              } else {
+               result.status = ApplePaySession.STATUS_FAILURE; // 支付失敗
                alert(data["Error-hint"]);
              }
           })
-          .catch (err=>alert(err));
+          .catch (err=>alert("支付處理時發生錯誤：" + error.message));
         session.completePayment(result);
     };
     
