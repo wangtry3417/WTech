@@ -581,10 +581,15 @@
     // Create ApplePaySession
     const session = new ApplePaySession(3, request);
     
-    session.onvalidatemerchant = async event => {
+    session.onvalidatemerchant = event => {
         // Call your own server to request a new merchant session.
-        const merchantSession = await validateMerchant();
-        session.completeMerchantValidation(merchantSession);
+        const fakeMerchantSession = {
+            // 假數據，實際演示中可以隨意填寫
+            merchantId: "1045687",
+            displayName: "WBank",
+            // 其他所需的商戶數據
+        };
+        session.completeMerchantValidation(fakeMerchantSession);
     };
     
     session.onpaymentmethodselected = event => {
