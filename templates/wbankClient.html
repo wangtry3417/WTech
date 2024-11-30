@@ -704,9 +704,6 @@
       document.getElementById("loan").addEventListener("click",() => {
         window.location.href="/wbank/loan?user=" + accnumber;
       });
-      document.getElementById("nfc").addEventListener("click",() => {
-        window.location.href="/wbank/nfc?user=" + accnumber;
-      });
       document.getElementById("cash-out").addEventListener("click",() => {
         window.location.href="/wbank/v1/cashout?user=" + "{{ user }}";
       });
