@@ -613,27 +613,42 @@
         session.completeShippingContactSelection(update);
     };
     */
-    session.onpaymentauthorized = event => {
-        // Define ApplePayPaymentAuthorizationResult
-        alert("支付處理中");
-        const result = {
-            "status": ApplePaySession.STATUS_FAILURE
-        };
-        // Define wbank recevied success
-        fetch ("/wbank/hash/transfer", {headers:{username: "wbank",reviewer: "{{user}}",amount: document.getElementById('ap-amount').value}})
-          .then (res=>res.json())
-          .then (data => {
-             if (data.success) {
-               result.status = ApplePaySession.STATUS_SUCCESS; // 支付成功
-               alert(data.success);
-             } else {
-               result.status = ApplePaySession.STATUS_FAILURE; // 支付失敗
-               alert(data["Error-hint"]);
-             }
-          })
-          .catch (err=>alert("支付處理時發生錯誤：" + error.message));
-        session.completePayment(result);
+    session.onpaymentauthorized = async event => {
+    alert("支付處理中");
+    const result = {
+        status: ApplePaySession.STATUS_FAILURE // 預設為失敗
     };
+    let apAmount = document.getElementById('ap-amount').value;
+
+    try {
+        const response = await fetch("/wbank/hash/transfer", {
+            headers: {
+                "username": "wbank",
+                "reviewer": "{{user}}",
+                "amount": apAmount
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+
+        const data = await response.json();
+        if (data.success) {
+            result.status = ApplePaySession.STATUS_SUCCESS; // 支付成功
+            alert(data.success);
+        } else {
+            result.status = ApplePaySession.STATUS_FAILURE; // 支付失敗
+            alert(data["Error-hint"]);
+        }
+    } catch (error) {
+        console.error("支付處理時發生錯誤：", error);
+        alert("支付處理時發生錯誤：" + error.message);
+    }
+
+    // 最後完成付款
+    session.completePayment(result);
+};
     /*
     session.oncouponcodechanged = event => {
         // Define ApplePayCouponCodeUpdate
