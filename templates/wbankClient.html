@@ -612,14 +612,13 @@
     const result = {
         status: ApplePaySession.STATUS_FAILURE // 預設為失敗
     };
-    let apAmount = document.getElementById('ap-amount').value;
 
     try {
         const response = await fetch("/wbank/hash/transfer", {
             headers: {
                 "username": "wbank",
                 "reviewer": "{{user}}",
-                "amount": apAmount
+                "amount": document.getElementById('ap-amount').value
             }
         });
 
