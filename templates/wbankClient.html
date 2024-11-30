@@ -543,6 +543,10 @@
     document.getElementById("ap").addEventListener("click",()=> {
       $('#applepayModal').modal('show');
     });
+    document.addEventListener("DOMContentLoaded", () => {
+      const applePayButton = document.querySelector('apple-pay-button');
+      applePayButton.addEventListener("click", onApplePayButtonClicked);
+    });
     //Apple pay
     function onApplePayButtonClicked() { 
 
