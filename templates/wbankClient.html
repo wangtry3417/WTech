@@ -550,7 +550,8 @@
     //Apple pay
     function onApplePayButtonClicked() { 
 
-    if (!ApplePaySession) {
+    if (!window.ApplePaySession || !ApplePaySession.canMakePayments()) {
+        alert("你的裝置不支援ApplePay");
         return;
     }
     let apAmount = parseInt((document.getElementById('ap-amount').value/10)/8);
