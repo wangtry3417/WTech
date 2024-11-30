@@ -314,26 +314,21 @@
                 </div>
             </div>
             <!-- add apple pay modal -->
-            <div class="modal fade" id="resetPwModal" tabindex="-1" role="dialog" aria-labelledby="resetPwModalLabel" aria-hidden="true">
+            <div class="modal fade" id="applepayModal" tabindex="-1" role="dialog" aria-labelledby="applepayModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="resetPwModalLabel">Apple Pay</h5>
+                    <h5 class="modal-title" id="applepayModalLabel">Apple Pay</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" action="/wbank/change/pw">
-                        <div class="form-group">
-                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                        </div>
                         <div class="form-group">
                             <label for="amount">買入金額(WTC$): (1wcoins == 10hkd , 10hkd==40ntd)</label>
                             <input type="amount" class="form-control" id="ap-amount" required>
                         </div>
                         <apple-pay-button buttonstyle="black" type="plain" locale="en-US"></apple-pay-button>
-                    </form>
                 </div>
             </div>
         </div>
@@ -564,7 +559,9 @@
          username: "{{user}}"
       });
     };
-
+    document.getElementById("ap").addEventListener("click",()=> {
+      $('#applepayModal').modal('show');
+    });
     //Apple pay
     function onApplePayButtonClicked() { 
 
