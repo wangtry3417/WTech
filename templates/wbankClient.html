@@ -328,7 +328,7 @@
                             <label for="amount">買入金額(WTC$): (1wcoins == 10hkd , 10hkd==40ntd)</label>
                             <input type="number" class="form-control" id="ap-amount" required>
                         </div>
-                        <apple-pay-button buttonstyle="black" type="plain" locale="en-US"></apple-pay-button>
+                        <apple-pay-button buttonstyle="black" type="plain" locale="zh-Hant"></apple-pay-button>
                 </div>
             </div>
         </div>
@@ -568,7 +568,10 @@
     if (!ApplePaySession) {
         return;
     }
-    
+    let apAmount = parseInt((document.getElementById('ap-amount').value/10)/8);
+    if (isNaN(apAmount) || apAmount <= 0) {
+       return;
+    }
     // Define ApplePayPaymentRequest
     const request = {
         "countryCode": "US",
@@ -585,7 +588,7 @@
         "total": {
             "label": "WBank存入",
             "type": "final",
-            "amount": (parseInt(document.getElementById('ap-amount').value)/10)/8
+            "amount": apAmount.toFixed(2)
         }
     };
     
