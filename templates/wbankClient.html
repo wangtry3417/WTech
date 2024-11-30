@@ -439,7 +439,6 @@
         const notification = document.getElementById('paymentNotification');
         let setAmountOfTrade = document.getElementById('setAmountOfTrade');
         const userRoom = `${user}-payroom`;
-        socket.emit('authPayInit', userRoom);
         setAmountOfTrade.addEventListener('keypress',(event) => {
           if (event.key === "Enter") {
            fetch("/wbank/v1/setamount",{headers:{user:"{{user}}",amount:setAmountOfTrade.value}})
@@ -523,7 +522,6 @@
             document.getElementById(pageId).classList.add('active');
         }
         function wbankLogout() {
-           socket.emit("authPayStop",userRoom);
            window.location.href="/wbank/logout";
         }
         const transfer = () => {
