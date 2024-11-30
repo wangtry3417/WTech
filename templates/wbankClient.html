@@ -634,7 +634,7 @@
           .catch (err=>alert("支付處理時發生錯誤：" + error.message));
         session.completePayment(result);
     };
-    
+    /*
     session.oncouponcodechanged = event => {
         // Define ApplePayCouponCodeUpdate
         const newTotal = calculateNewTotal(event.couponCode);
@@ -649,6 +649,7 @@
             errors: errors,
         });
     };
+    */
     
     session.oncancel = event => {
         // Payment canceled by WebKit
