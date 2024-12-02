@@ -1108,7 +1108,8 @@ def index():
     else:
       session["code"] = hashlib.md5("I am a developer".encode()).hexdigest()
       session["fav"] = "cheapserver"
-      return render_template("wtechHome.html")
+      #return render_template("wtechHome.html")
+      return redirect("/wbank/home")
   else:
     return abort(502)
 
