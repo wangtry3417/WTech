@@ -401,6 +401,8 @@
                     </label> 
                     <label>設置交易限額 (WTC$):</label>
                     <input type="number" id="setAmountOfTrade" value="{{ setAmount }}">
+                    <label>移除限額 : </label>
+                    <button class="button" onclick="removeAmount()">Clear</button>
                 </div>
             </div>
         </div>
@@ -507,6 +509,11 @@
         function wbankLogout() {
            window.location.href="/wbank/logout";
         }
+        function removeAmount() {
+            fetch ("/wbank/removeAmount",{headers:{"user":"{{user}}"}})
+              .then (res=>res.text())
+              .then (msg=>alert(msg));
+        }
         const transfer = () => {
             window.location.href = "/wbank/transfer";
         };
@@ -583,13 +590,13 @@
     
     session.onvalidatemerchant = event => {
         // Call your own server to request a new merchant session.
-        const fakeMerchantSession = {
+        const testMerchantSession = {
             // 假數據，實際演示中可以隨意填寫
             merchantId: "1045687",
             displayName: "WBank",
             // 其他所需的商戶數據
         };
-        session.completeMerchantValidation(fakeMerchantSession);
+        session.completeMerchantValidation(testMerchantSession);
     };
     
     session.onpaymentmethodselected = event => {
