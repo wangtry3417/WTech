@@ -1001,6 +1001,14 @@ def wbank_payment_status():
     else:
         return jsonify({"paymentAuth": None})
 
+@app.route("/wbank/removeAmount")
+def wbank_remove_amount():
+  user = request.headers.get("user")
+  users = wbankwallet.query.filter_by(username=user).first()
+  users.nowamount = 0
+  db.session.commit()
+  return "修改成功"
+
 @app.route("/wtech/v2/chat")
 def wtech_wchat_page():
   return render_template("wtechChat.html")
