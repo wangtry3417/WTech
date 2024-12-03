@@ -269,6 +269,7 @@ class IDBrandForm(BaseForm):
     password = StringField('密碼', validators=[DataRequired()])
     verify = StringField('驗證狀態', validators=[DataRequired()])
     sub = SelectField('備註', choices=[], validators=[])  # 初始化為空選項
+    role = StringField('目前身分', validators=[DataRequired()])
     openpay = BooleanField('是否開啟Pay mode')
     nowamount = IntegerField("總共轉帳金額", validators=[NumberRange(min=0)])
 
