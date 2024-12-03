@@ -1,19 +1,12 @@
-"""
- pip install wlang wlang-ext --upgrade
- ...Done!.
- wlang init && wlang-ext add -s wlang install wbank-ext
-"""
+from web4 import Provider
 
-from wbank import Controller
-from wbank_ext import type
-from json_ext import loads
+provider = Provider(url="https://gateway.wbank.net:5678")
+con = provider.connection()
 
-app = Controller(apiKey="Key")
-app._set -> type._scropes -> ["AllActions"]
+@provider.on("connect")
+def on_handle_connect(conn,msg):
+ if msg["status"] == "ok":
+  conn.emit("connected",{"payer":"Ben"})
 
-@app.on -> type._create_payment
-def create_payment(bot):
-  result = app._request -> (app._fetch_first_user(),"ben",4000)
-  return loads(result.toJson())["success"]
-
-app.run()
+if con.recv(255).toString() == "payer::Ben,reviewer::bangjin,amount::400;":
+ con.post(data=con.recv(255).toString(),havePage=True).render()
