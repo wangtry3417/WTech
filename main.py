@@ -1950,7 +1950,7 @@ def wbank_paypal():
       },
       "redirect_urls": {
           "return_url": f"/wbank/v1/paypal/done?user={user}&amount={count}",
-          "cancel_url": "/wbank"
+          "cancel_url": "/wbank/home"
       },
       "transactions": [{
           "amount": {
