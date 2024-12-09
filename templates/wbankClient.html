@@ -591,13 +591,14 @@
     
     session.onvalidatemerchant = event => {
         // Call your own server to request a new merchant session.
-        const testMerchantSession = {
-            // 假數據，實際演示中可以隨意填寫
-            merchantId: "2000132",
-            displayName: "WBank",
-            // 其他所需的商戶數據
-        };
-        session.completeMerchantValidation(testMerchantSession);
+        fetch(event.validationURL)
+      .then(res => res.json()) // Parse the response as JSON.
+      .then(merchantSession => {
+        session.completeMerchantValidation(merchantSession);
+      })
+      .catch(err => {
+        console.error("Error fetching merchant session", err);
+      });
     };
     
     session.onpaymentmethodselected = event => {
