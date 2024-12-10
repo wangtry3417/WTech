@@ -952,43 +952,46 @@ def trade_wcoins_bot(data):
 
 @app.route("/wbank/openorder",methods=["POST","GET"])
 def wbank_open_payment_order():
-  room = request.args.get("room")
-  if room:
-    if room not in session:
-      session[room] = {}
-    payer = request.args.get("payer")
+  user = request.args.get("user")
+  if user:
     reviewer = request.args.get("reviewer")
     amount = request.args.get("amount")
-    if payer is None:
-      return "No"
     if reviewer is None:
       return "No"
     if amount is None:
       return "No"
-    session[room] = {
-      "username": payer,
-      "reviewer": reviewer,
-      "amount": amount,
-      "Payment-place": room
-  }
+    users = wbankauthpay(user,reviewer,amount)
+    db.session.add(users)
+    db.session.commit()
     return jsonify({"success":"已成功開單","session":session[room]})
   else:
     return "No"
 
 @app.route('/wbank/checkPaymentStatus')
 def wbank_payment_status():
-    room = request.args.get('room')
-    status = session.get(room)
-    if status:
+    user = request.args.get('user')
+    users = wbankauthpay.query.filter_by(payer=user).first()
+    if users:
         return jsonify({
             "paymentAuth": {
-                "username": status.get("username"),
-                "reviewer": status.get("reviewer"),
-                "amount": status.get("amount")
+                "username": users.payer,
+                "reviewer": users.reviewer,
+                "amount": str(users.amount)
             }
         })
     else:
         return jsonify({"paymentAuth": None})
+
+@app.route("/wbank/remove/order")
+def wbank_remove_order():
+  user = request.args.get('user')
+  users = wbankauthpay.query.filter_by(payer=user).first()
+  if users:
+    db.session.delete(users)
+    db.session.commit()
+    return "Ok"
+  else:
+    return "Order not found"
 
 @app.route("/wbank/removeAmount")
 def wbank_remove_amount():
