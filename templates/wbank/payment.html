@@ -135,14 +135,15 @@
                 .then(res => res.json())
                 .then(data => {
                     let payroom = `${data.payer}-payroom`;
-                    let urll = `/wbank/openorder?room=${payroom}&payer=${data.payer}&reviewer=${data.reviewer}&amount=${data.amount}`
-                    //startPayment(data.payer,data.reviewer,data.amount);
+                    let urll = `/wbank/openorder?room=${payroom}&payer=${data.payer}&reviewer=${data.reviewer}&amount=${data.amount}`;
                     fetch (urll)
                      .then (res=>res.json())
                      .then (msg=>alert(msg.success))
                       .catch (err=>alert(err));
+                    })
+                    .catch (err=>alert(err));
+                    //startPayment(data.payer,data.reviewer,data.amount);
         }
-
         var html5QrcodeScanner = new Html5QrcodeScanner(
             "qr-reader", { fps: 10, qrbox: 250 }, { supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA] }
         );
