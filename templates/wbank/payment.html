@@ -134,8 +134,7 @@
             fetch(url)
                 .then(res => res.json())
                 .then(data => {
-                    let payroom = `${data.payer}-payroom`;
-                    let urll = `/wbank/openorder?room=${payroom}&payer=${data.payer}&reviewer=${data.reviewer}&amount=${data.amount}`;
+                    let urll = `/wbank/openorder?user=${data.payer}&reviewer=${data.reviewer}&amount=${data.amount}`;
                     fetch (urll)
                      .then (res=>res.json())
                      .then (msg=>alert(msg.success))
