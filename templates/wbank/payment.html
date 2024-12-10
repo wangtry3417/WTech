@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>商家付款介面</title>
     <script src="https://unpkg.com/html5-qrcode"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js"></script>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -111,7 +110,6 @@
     var resultContainer = document.getElementById('qr-reader-results');
     var lastResult, countResults = 0;
     let isProgress = false;
-    let socket = io();
 
     const userRoom = `${user}-payroom`;
     socket.emit('authPayInit', userRoom);
@@ -137,15 +135,12 @@
                 .then(res => res.json())
                 .then(data => {
                     let payroom = `${data.payer}-payroom`;
-                    startPayment(data.payer,data.reviewer,data.amount);
-                    /*
-                    socket.emit("reqPayment",{username:data.payer,reviewer:data.reviewer,amount:data.amount,room:payroom});
-                    alert("請檢查用戶介面");
-                    alert(payroom);
-                    document.getElementById('loading').style.display = 'none';
-                    isProgress = false;
-                    */
-                });
+                    let urll = `/wbank/openorder?room=${payroom}&payer=${data.payer}&reviewer=${data.reviewer}&amount=${data.amount}`
+                    //startPayment(data.payer,data.reviewer,data.amount);
+                    fetch (urll)
+                     .then (res=>res.json)
+                     .then (msg=>alert(msg.success))
+                      .catch (err=>alert(err));
         }
 
         var html5QrcodeScanner = new Html5QrcodeScanner(
