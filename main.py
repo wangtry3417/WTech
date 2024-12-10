@@ -967,7 +967,7 @@ def wbank_open_payment_order():
     users = wbankauthpay(user,reviewer,amount)
     db.session.add(users)
     db.session.commit()
-    return jsonify({"success":"已成功開單","session":session[room]})
+    return jsonify({"success":"已成功開單"})
   else:
     return "No"
 
