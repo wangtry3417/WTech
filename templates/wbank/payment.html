@@ -138,7 +138,7 @@
                     let urll = `/wbank/openorder?room=${payroom}&payer=${data.payer}&reviewer=${data.reviewer}&amount=${data.amount}`
                     //startPayment(data.payer,data.reviewer,data.amount);
                     fetch (urll)
-                     .then (res=>res.json)
+                     .then (res=>res.json())
                      .then (msg=>alert(msg.success))
                       .catch (err=>alert(err));
         }
