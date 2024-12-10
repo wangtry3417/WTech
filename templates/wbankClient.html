@@ -484,8 +484,10 @@
                      .then(res=>res.text())
                      .then(msg=>console.log(msg));
                     alert("付款成功");
+                    window.location.reload();
                  } else {
                     alert(msg);
+                    window.location.reload();
                  }
               })
               .catch (err => alert(err));
