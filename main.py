@@ -270,6 +270,10 @@ class wbankauthpay(db.Model):
   payer = db.Column(db.String(64), db.ForeignKey('wbankwallet.username'), nullable=False)
   reviewer = db.Column(db.String(64), nullable=False)
   amount = db.Column(db.Integer, nullable=False)
+  def __init__(self,payer,reviewer,amount):
+    self.payer = payer
+    self.reviewer = reviewer
+    self.amount = amount
 
 class IDBrandForm(BaseForm):
     username = StringField('用戶名', validators=[DataRequired()])
