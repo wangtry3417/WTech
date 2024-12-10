@@ -141,6 +141,7 @@ async def donate(ctx:discord.ApplicationContext,user:str,amount:int):
 # 啟動 Discord Bot
 @bot.event
 async def on_ready():
+    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="WBank的運作"))
     print(f'Logged in as {bot.user}!')
 
 # 啟動 Bot
