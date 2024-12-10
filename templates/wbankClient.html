@@ -213,6 +213,7 @@
         <div class="custom-slider-container">
             <input type="range" id="authorizationSlider" min="0" max="100" value="0" class="custom-slider">
         </div>
+        <button type="button" class="btn btn-outline-danger" onclick="removePayAuth()">取消授權</button>
     </div>
     <header>WBank - 數字銀行</header>
 
@@ -509,6 +510,14 @@
              })
             .catch (err=>console.error(err));
         },1000);
+        //取消授權PayAuth
+        function removePayAuth() {
+            fetch(`/wbank/remove/order?user=${username}`)
+             .then(res=>res.text())
+             .then(msg=>console.log(msg));
+            alert("取消成功");
+            window.location.reload();
+        }
         // 顯示指定頁面
         function showPage(pageId) {
             // 隱藏所有頁面
