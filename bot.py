@@ -126,15 +126,13 @@ async def trydb(
 @option("user",description="WBank用戶名 (請確保已開啟paymode)")
 @option("amount",description="金額 (最少是WTC$100)",min_value=100)
 async def donate(ctx:discord.ApplicationContext,user:str,amount:int):
-  res = get(url="https://sites.wtechhk.xyz/wbank/hash/transfer",headers={"username":user,"reviewer":"wbank","amount":str(amount)})
+  #res = get(url="https://sites.wtechhk.xyz/wbank/hash/transfer",headers={"username":user,"reviewer":"wbank","amount":str(amount)})
+  res = get(url=f"https://sites.wtechhk.xyz/wbank/openorder?user={user}&reviewer=wbank&amount={str(amount)}")
   try:
-    if "Error-hint" in res.json():
-      if res.json()["Error-hint"] == "轉賬方尚未開啟支付模式":
-        await ctx.respond("你尚未開啟支付模式，請登入WBank後，按我的->按設定開啟交易功能->確保值為true即可。")
-      else:
-        await ctx.respond(res.json()["Error-hint"])
+    if "success" in res.json():
+      await ctx.respond("已成功開單，請登入後，滑動授權支付即可")
     else:
-      await ctx.respond(res.json())
+      await ctx.respond(res.text())
   except Exception as e:
     await ctx.respond(f"錯誤: {str(e)}",ephemeral=True)
 
