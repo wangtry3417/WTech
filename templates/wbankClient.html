@@ -439,7 +439,6 @@
         const slider = document.getElementById('authorizationSlider');
         const notification = document.getElementById('paymentNotification');
         let setAmountOfTrade = document.getElementById('setAmountOfTrade');
-        const userRoom = `${user}-payroom`;
         setAmountOfTrade.addEventListener('keypress',(event) => {
           if (event.key === "Enter") {
            fetch("/wbank/v1/setamount",{headers:{user:"{{user}}",amount:setAmountOfTrade.value}})
@@ -481,6 +480,9 @@
               .then (res => res.json())
               .then (msg => {
                  if (msg.success) {
+                    fetch(`/wbank/remove/order?user=${username}`)
+                     .then(res=>res.text())
+                     .then(msg=>console.log(msg));
                     alert("付款成功");
                  } else {
                     alert(msg);
@@ -496,7 +498,7 @@
             slider.value = 0; // 重置滑動桿
         }
         setInterval(()=>{
-          fetch (`/wbank/checkPaymentStatus?room=${userRoom}`)
+          fetch (`/wbank/checkPaymentStatus?user=${user}`)
             .then (res=>res.json())
             .then (data=>{
                 if (data.paymentAuth) {
