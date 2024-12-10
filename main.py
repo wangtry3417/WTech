@@ -264,6 +264,13 @@ class wbankkyc(db.Model):
     def inaccessible_callback(self, name, **kwargs):
         return unauthorized()  # 使用自定義的未授權響應
 
+class wbankauthpay(db.Model):
+  __tablename__ = 'wbankauthpay'
+  id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+  payer = db.Column(db.String(64), db.ForeignKey('wbankwallet.username'), nullable=False)
+  reviewer = db.Column(db.String(64), nullable=False)
+  amount = db.Column(db.Integer, nullable=False)
+
 class IDBrandForm(BaseForm):
     username = StringField('用戶名', validators=[DataRequired()])
     balance = StringField('餘額', validators=[DataRequired()])
