@@ -496,14 +496,14 @@
             slider.value = 0; // 重置滑動桿
         }
         setInterval(()=>{
-          fetch (`wbank/checkPaymentStatus?room=userRoom`)
+          fetch (`wbank/checkPaymentStatus?room=${userRoom}`)
             .then (res=>res.json())
             .then (data=>{
                 if (data.paymentAuth) {
                     return handlePaymentAuth(data.paymentAuth.username, data.paymentAuth.reviewer, data.paymentAuth.amount);
                 }
              })
-            .catch (err=>alert(err));
+            .catch (err=>console.error(err));
         },1000);
         // 顯示指定頁面
         function showPage(pageId) {
