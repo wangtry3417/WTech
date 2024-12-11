@@ -518,9 +518,10 @@
             slider.disabled = true;
             fetch(`/wbank/remove/order?user=${username}`)
              .then(res=>res.text())
-             .then(msg=>console.log(msg));
-            alert("自動取消成功");
-            window.location.reload();
+             .then(msg=> {
+                alert("自動取消成功");
+                window.location.reload();
+                });
         }
         // 顯示指定頁面
         function showPage(pageId) {
