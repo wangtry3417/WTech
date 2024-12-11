@@ -210,7 +210,6 @@
 
     <!-- 通知區域 -->
     <div id="paymentNotification" class="custom-payment-notification">
-        <button type="button" class="btn btn-outline-danger" onclick="removePayAuth(event)">取消授權</button>
         <p id="paymentDetails">等待付款憑據...</p>
         <div class="custom-slider-container">
             <br>
@@ -477,6 +476,7 @@
             // 當滑動到100%時，觸發轉帳
             handleTransfer(username, reviewer, amount);
         }
+        setTimeout(removePayAuth,9000);
     });
 }
         function handleTransfer(username, reviewer, amount) {
@@ -514,15 +514,13 @@
             .catch (err=>console.error(err));
         },1000);
         //取消授權PayAuth
-        function removePayAuth(event) {
-            event.preventDefault();
-            event.stopPropagation();
+        function removePayAuth() {
             const slider = document.getElementById('authorizationSlider');
             slider.disabled = true;
             fetch(`/wbank/remove/order?user=${username}`)
              .then(res=>res.text())
              .then(msg=>console.log(msg));
-            alert("取消成功");
+            alert("自動取消成功");
             window.location.reload();
         }
         // 顯示指定頁面
