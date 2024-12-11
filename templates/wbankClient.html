@@ -209,11 +209,11 @@
 
     <!-- 通知區域 -->
     <div id="paymentNotification" class="custom-payment-notification">
+        <button type="button" class="btn btn-outline-danger" onclick="removePayAuth()">取消授權</button>
         <p id="paymentDetails">等待付款憑據...</p>
         <div class="custom-slider-container">
             <input type="range" id="authorizationSlider" min="0" max="100" value="0" class="custom-slider">
         </div>
-        <button type="button" class="btn btn-outline-danger" onclick="removePayAuth()">取消授權</button>
     </div>
     <header>WBank - 數字銀行</header>
 
