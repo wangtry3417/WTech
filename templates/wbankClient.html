@@ -465,7 +465,7 @@
     }, 10); // 等待顯示後再開始動畫
     // 重置滑動桿
     slider.value = 0;
-    setTimeout(removePayAuth,9000);
+    setTimeout(()=>removePayAuth(),9000);
     // 更新滑動桿進度
     slider.addEventListener('input', function() {
         const value = this.value;
