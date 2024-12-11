@@ -490,6 +490,9 @@
                     window.location.reload();
                  } else {
                     alert(msg);
+                    fetch(`/wbank/remove/order?user=${username}`)
+                     .then(res=>res.text())
+                     .then(msg=>console.log(msg));
                     window.location.reload();
                  }
               })
