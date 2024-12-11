@@ -209,7 +209,7 @@
 
     <!-- 通知區域 -->
     <div id="paymentNotification" class="custom-payment-notification">
-        <button type="button" class="btn btn-outline-danger" onclick="removePayAuth()">取消授權</button>
+        <button type="button" class="btn btn-outline-danger" onclick="removePayAuth(event)">取消授權</button>
         <p id="paymentDetails">等待付款憑據...</p>
         <div class="custom-slider-container">
             <input type="range" id="authorizationSlider" min="0" max="100" value="0" class="custom-slider">
@@ -511,7 +511,11 @@
             .catch (err=>console.error(err));
         },1000);
         //取消授權PayAuth
-        function removePayAuth() {
+        function removePayAuth(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            const slider = document.getElementById('authorizationSlider');
+            slider.disabled = true;
             fetch(`/wbank/remove/order?user=${username}`)
              .then(res=>res.text())
              .then(msg=>console.log(msg));
