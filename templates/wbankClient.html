@@ -176,7 +176,8 @@
         bottom: 4px;
         background-color: white;
         border-radius: 50%;
-        transition: transform 0.4s; /* 動畫效果 */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        transition: transform 0.4s ease; /* 動畫效果 */
     }
     /* 當 input 被選中時的樣式 */
     .switch input:checked + .slider {
@@ -212,6 +213,8 @@
         <button type="button" class="btn btn-outline-danger" onclick="removePayAuth(event)">取消授權</button>
         <p id="paymentDetails">等待付款憑據...</p>
         <div class="custom-slider-container">
+            <br>
+            <br>
             <input type="range" id="authorizationSlider" min="0" max="100" value="0" class="custom-slider">
         </div>
     </div>
