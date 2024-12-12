@@ -136,6 +136,25 @@ async def donate(ctx:discord.ApplicationContext,user:str,amount:int):
   except Exception as e:
     await ctx.respond(f"錯誤: {str(e)}",ephemeral=True)
 
+@bot.slash_command(name="查看Locker",description="查看轉帳區塊鏈")
+@option("key",description="為blockID, 即該locker的鑰匙🔑 (一定是127開頭）")
+async def check_transfer_blockchain(ctx:discord.ApplicationContext, key:str):
+    resp = get(url=f"https://bc.wtechhk.xyz/get/chain/{key}")
+    if resp.text() == "找不到該Locker":
+      await ctx.respond("不好意思，沒有或找不到該區塊")
+    else:
+      data = resp.json()
+      rawData = data["rawData"].split("--")[1]
+      fm = f"""
+      區塊ID: {data["blockID"]}
+      該區塊哈希(hash-sha256): {data["hash"]}
+      生數據(rawData, 即原數據)如下: 
+         轉帳帳戶: {rawData.split("->")[0]}
+         收款帳戶: {rawData.split("->")[1]}
+         金額: {rawData.split("->")[2]}
+      """
+      await ctx.respond(fm)
+
 # 啟動 Discord Bot
 @bot.event
 async def on_ready():
