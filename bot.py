@@ -136,8 +136,8 @@ async def donate(ctx:discord.ApplicationContext,user:str,amount:int):
   except Exception as e:
     await ctx.respond(f"錯誤: {str(e)}",ephemeral=True)
 
-@bot.slash_command(name="查看Locker",description="查看轉帳區塊鏈")
-@option("key",description="為blockID, 即該locker的鑰匙🔑 (一定是127開頭）")
+@bot.slash_command(name="查看locker",description="查看轉帳區塊鏈")
+@option("key",description="為block-id, 即該locker的鑰匙🔑 (一定是127開頭）")
 async def check_transfer_blockchain(ctx:discord.ApplicationContext, key:str):
     resp = get(url=f"https://bc.wtechhk.xyz/get/chain/{key}")
     if resp.text() == "找不到該Locker":
