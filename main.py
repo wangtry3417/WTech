@@ -2219,7 +2219,7 @@ def wbank_hash_transfer():
       db.session.commit()
       
       # 上鏈
-      ran_key = "127"+str(random.randint(10000,99999)
+      ran_key = "127"+str(random.randint(10000,99999))
       d = f"{user}->{reviewer}->{amount}"
       requests.post(url="https://bc.wtechhk.xyz/upload",data={"blockID":ran_key,"data":d})
       
