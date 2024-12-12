@@ -2217,7 +2217,12 @@ def wbank_hash_transfer():
       users.balance = balance-amount
       users.nowamount = int(users.nowamount)+amount
       db.session.commit()
-
+      
+      # 上鏈
+      ran_key = "127"+str(random.randint(10000,99999)
+      d = f"{user}->{reviewer}->{amount}"
+      requests.post(url="https://bc.wtechhk.xyz/upload",data={"blockID":ran_key,"data":d})
+      
       # 記錄轉帳記錄
       bl = f"由 {user} 轉帳 {int(amount)} 給 {reviewer}"
       tz = pytz.timezone('Asia/Taipei')  # 設定時區為台北時間
