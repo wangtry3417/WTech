@@ -140,7 +140,7 @@ async def donate(ctx:discord.ApplicationContext,user:str,amount:int):
 @option("key",description="為block-id, 即該locker的鑰匙🔑 (一定是127開頭）")
 async def check_transfer_blockchain(ctx:discord.ApplicationContext, key:str):
     resp = get(url=f"https://bc.wtechhk.xyz/get/chain/{key}")
-    if resp.text() == "找不到該Locker":
+    if resp.text == "找不到該Locker":
       await ctx.respond("不好意思，沒有或找不到該區塊")
     else:
       data = resp.json()
