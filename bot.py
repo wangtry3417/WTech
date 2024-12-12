@@ -152,6 +152,7 @@ async def check_transfer_blockchain(ctx:discord.ApplicationContext, key:str):
          轉帳帳戶: {rawData.split("->")[0]}
          收款帳戶: {rawData.split("->")[1]}
          金額: {rawData.split("->")[2]}
+         時間(UTC+8): {data["rawData"].split("--")[2]}
       """
       await ctx.respond(fm)
 
