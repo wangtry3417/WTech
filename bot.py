@@ -163,7 +163,7 @@ async def check_transfer_blockchain(ctx:discord.ApplicationContext, key:str):
         登入資訊如下：
         用戶名: {rawData[1]}
         密碼: {rawData[2]}
-        狀態: 成功/{raw[3]}
+        狀態: 成功/{rawData[3]}
         操作時間: {data["rawData"].split("--")[2]}
         """
         await ctx.respond(fm)
