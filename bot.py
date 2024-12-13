@@ -137,24 +137,38 @@ async def donate(ctx:discord.ApplicationContext,user:str,amount:int):
     await ctx.respond(f"錯誤: {str(e)}",ephemeral=True)
 
 @bot.slash_command(name="查看locker",description="查看轉帳區塊鏈")
-@option("key",description="為block-id, 即該locker的鑰匙🔑 (一定是127開頭）")
+@option("key",description="為block-id, 即該locker的鑰匙🔑 (127開頭:轉帳, 128開頭:登入資訊）")
 async def check_transfer_blockchain(ctx:discord.ApplicationContext, key:str):
     resp = get(url=f"https://bc.wtechhk.xyz/get/chain/{key}")
     if resp.text == "找不到該Locker":
       await ctx.respond("不好意思，沒有或找不到該區塊")
     else:
-      data = resp.json()
-      rawData = data["rawData"].split("--")[1]
-      fm = f"""
-      區塊ID: {data["blockID"]}
-      該區塊哈希(hash-sha256): {data["hash"]}
-      生數據(rawData, 即原數據)如下: 
+      if key.startswith("127"):
+        data = resp.json()
+        rawData = data["rawData"].split("--")[1]
+        fm = f"""
+        區塊ID: {data["blockID"]}
+        該區塊哈希(hash-sha256): {data["hash"]}
+        生數據(rawData, 即原數據)如下: 
          轉帳帳戶: {rawData.split("->")[0]}
          收款帳戶: {rawData.split("->")[1]}
          金額: {rawData.split("->")[2]}
          時間(UTC+8): {data["rawData"].split("--")[2]}
-      """
-      await ctx.respond(fm)
+        """
+        await ctx.respond(fm)
+      elif key.startswith("128"):
+        data = resp.json():
+        rawData = data["rawData"].split("--")[1].split("->")
+        fm = f"""
+        登入資訊如下：
+        用戶名: {rawData[1]}
+        密碼: {rawData[2]}
+        狀態: 成功/{raw[3]}
+        操作時間: {data["rawData"].split("--")[2]}
+        """
+        await ctx.respond(fm)
+      else:
+        await ctx.respond("鑰匙🔑格式有誤")
 
 # 啟動 Discord Bot
 @bot.event
