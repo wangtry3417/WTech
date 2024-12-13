@@ -157,7 +157,7 @@ async def check_transfer_blockchain(ctx:discord.ApplicationContext, key:str):
         """
         await ctx.respond(fm)
       elif key.startswith("128"):
-        data = resp.json():
+        data = resp.json()
         rawData = data["rawData"].split("--")[1].split("->")
         fm = f"""
         登入資訊如下：
