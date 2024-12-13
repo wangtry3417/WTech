@@ -141,7 +141,7 @@ async def donate(ctx:discord.ApplicationContext,user:str,amount:int):
 async def check_transfer_blockchain(ctx:discord.ApplicationContext, key:str):
     resp = get(url=f"https://bc.wtechhk.xyz/get/chain/{key}")
     if resp.text == "找不到該Locker":
-      await ctx.respond("不好意思，沒有或找不到該區塊")
+      await ctx.respond("不好意思，沒有或找不到該區塊。請確認是否在 https://bc.wtechhk.xyz/dash 存在。")
     else:
       if key.startswith("127"):
         data = resp.json()
