@@ -3172,7 +3172,7 @@ def start_web():
 def start_boost():
   while True:
     sleep(5)
-    requests.get(url="https://blockcloud.onrender.com",headers={"X-Forward-For":"237.45.67.78,33.45.67.89","User-Agent":"WTech/2.0"})
+    requests.get(url="https://bc.wtechhk.xyz",headers={"X-Forward-For":"237.45.67.78,33.45.67.89","User-Agent":"WTech/2.0"})
 
 thread1 = threading.Thread(target=start_web)
 thread2 = threading.Thread(target=run_bot)
