@@ -452,7 +452,7 @@
      //取消授權PayAuth
     function removePayAuth() {
             slider.disabled = true;
-            fetch(`/wbank/remove/order?user=${username}`)
+            fetch(`/wbank/remove/order?user=${user}`)
              .then(res=>res.text())
              .then(msg=> {
                 notification.style.bottom = '-200px'; // 動畫隱藏
