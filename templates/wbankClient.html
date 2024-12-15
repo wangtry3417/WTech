@@ -449,6 +449,19 @@
              .then (data=>alert(data));
         }
       });
+     //取消授權PayAuth
+    function removePayAuth() {
+            slider.disabled = true;
+            fetch(`/wbank/remove/order?user=${username}`)
+             .then(res=>res.text())
+             .then(msg=> {
+                notification.style.bottom = '-200px'; // 動畫隱藏
+                setTimeout(() => {
+                  notification.style.display = 'none'; // 隱藏通知
+                }, 500); // 等待動畫結束後再隱藏
+                slider.value = 0;
+                });
+        }
         function handlePaymentAuth(username, reviewer, amount) {
     // 格式化付款憑據
     paymentDetails.innerHTML = `
@@ -520,19 +533,6 @@
              })
             .catch (err=>console.error(err));
         },1000);
-        //取消授權PayAuth
-        function removePayAuth() {
-            slider.disabled = true;
-            fetch(`/wbank/remove/order?user=${username}`)
-             .then(res=>res.text())
-             .then(msg=> {
-                notification.style.bottom = '-200px'; // 動畫隱藏
-                setTimeout(() => {
-                  notification.style.display = 'none'; // 隱藏通知
-                }, 500); // 等待動畫結束後再隱藏
-                slider.value = 0;
-                });
-        }
         // 顯示指定頁面
         function showPage(pageId) {
             // 隱藏所有頁面
