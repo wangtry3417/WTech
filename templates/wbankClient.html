@@ -468,6 +468,10 @@
     setTimeout(()=>removePayAuth(),9000);
     // 更新滑動桿進度
     slider.addEventListener('input', function() {
+        if (slider.disabled) {
+        slider.value = 0;
+        notification.style.display = 'none'; // 隱藏通知
+        } else {
         const value = this.value;
         if (value > 0) {
             this.classList.add('active'); // 添加類以改變滑塊顏色
@@ -475,6 +479,7 @@
         if (value >= 100) {
             // 當滑動到100%時，觸發轉帳
             handleTransfer(username, reviewer, amount);
+        }
         }
     });
 }
@@ -517,13 +522,15 @@
         },1000);
         //取消授權PayAuth
         function removePayAuth() {
-            const slider = document.getElementById('authorizationSlider');
             slider.disabled = true;
             fetch(`/wbank/remove/order?user=${username}`)
              .then(res=>res.text())
              .then(msg=> {
-                alert("自動取消成功");
-                window.location.reload();
+                notification.style.bottom = '-200px'; // 動畫隱藏
+                setTimeout(() => {
+                  notification.style.display = 'none'; // 隱藏通知
+                }, 500); // 等待動畫結束後再隱藏
+                slider.value = 0;
                 });
         }
         // 顯示指定頁面
@@ -545,12 +552,6 @@
               .then (res=>res.text())
               .then (msg=>alert(msg));
         }
-        slider.addEventListener("input",()=> {
-          if (slider.disabled) {
-            slider.value = 0;
-            notification.style.display = 'none'; // 隱藏通知
-          }
-        });
         
         const transfer = () => {
             window.location.href = "/wbank/transfer";
