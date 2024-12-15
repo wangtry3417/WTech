@@ -545,6 +545,13 @@
               .then (res=>res.text())
               .then (msg=>alert(msg));
         }
+        slider.addEventListener("input",()=> {
+          if (slider.disabled) {
+            slider.value = 0;
+            notification.style.display = 'none'; // 隱藏通知
+          }
+        });
+        
         const transfer = () => {
             window.location.href = "/wbank/transfer";
         };
