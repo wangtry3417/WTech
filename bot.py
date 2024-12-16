@@ -180,8 +180,8 @@ async def check_new_block():
   while True:
     resp = get(url="https://bc.wtechhk.xyz/get/chain").json()
     for res in resp:
-      rawData = res["rawData"]["--"]
-      tradeData = rawData[1]["->"]
+      rawData = res["rawData"].split("--")
+      tradeData = rawData[1].split("->")
       username = tradeData[0]
       reviewer = tradeData[1]
       amount = tradeData[2]
