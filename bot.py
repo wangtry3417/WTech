@@ -182,6 +182,9 @@ async def check_new_block():
     for res in resp:
       rawData = res["rawData"].split("--")
       tradeData = rawData[1].split("->")
+      if len(tradeData) != 3:
+        channel = bot.get_channel(1308055112698298488)
+        await channel.send(tradeData)
       username = tradeData[0]
       reviewer = tradeData[1]
       amount = tradeData[2]
