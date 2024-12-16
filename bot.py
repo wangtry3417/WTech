@@ -181,19 +181,17 @@ async def check_new_block():
     resp = get(url="https://bc.wtechhk.xyz/get/chain").json()
     for res in resp:
       rawData = res["rawData"].split("--")
-      tradeData = rawData[1].split("->")
-      if len(tradeData) != 3:
-        channel = bot.get_channel(1308055112698298488)
-        await channel.send(tradeData)
-      username = tradeData[0]
-      reviewer = tradeData[1]
-      amount = tradeData[2]
-      times = rawData[2]
-      ftimes = datetime.datetime.strptime(times,"%Y/%m/%d, %H:%M:%S")
-      utc_8_times = datetime.datetime.utcnow() + datetime.timedelta(hours=8)
-      if ftimes == utc_8_times:
-        if reviewer == "wbank":
-          await send_transfer(username,amount)
+      if str(rawData[0]).startswith("127"):
+        tradeData = rawData[1].split("->")
+        username = tradeData[0]
+        reviewer = tradeData[1]
+        amount = tradeData[2]
+        times = rawData[2]
+        ftimes = datetime.datetime.strptime(times,"%Y/%m/%d, %H:%M:%S")
+        utc_8_times = datetime.datetime.utcnow() + datetime.timedelta(hours=8)
+        if ftimes == utc_8_times:
+          if reviewer == "wbank":
+            await send_transfer(username,amount)
     await asyncio.sleep(1)
 
 # 啟動 Discord Bot
