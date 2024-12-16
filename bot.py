@@ -1,7 +1,7 @@
 import discord
 from discord import option
 import psycopg2
-import re,os
+import re,os,datetime,asyncio
 from requests import get
 
 # Discord Bot 設定
@@ -170,11 +170,35 @@ async def check_transfer_blockchain(ctx:discord.ApplicationContext, key:str):
       else:
         await ctx.respond("鑰匙🔑格式有誤")
 
+async def send_transfer(user,amount):
+    channel = bot.get_channel(1308055112698298488)
+    fm = f"謝謝 {user} 捐 WTC${amount}, 非常感謝你🙏"
+    await channel.send(fm)
+
+
+async def check_new_block():
+  while True:
+    resp = get(url="https://bc.wtechhk.xyz/get/chain").json()
+    for res in resp:
+      rawData = res["rawData"]["--"]
+      tradeData = rawData[1]["->"]
+      username = tradeData[0]
+      reviewer = tradeData[1]
+      amount = tradeData[2]
+      times = rawData[2]
+      ftimes = datetime.datetime.strptime(times,"%Y/%m/%d, %H:%M:%S")
+      utc_8_times = datetime.datetime.utcnow() + datetime.timedelta(hours=8)
+      if ftimes == utc_8_times:
+        if reviewer == "wbank":
+          await send_transfer(username,amount)
+    await asyncio.sleep(1)
+
 # 啟動 Discord Bot
 @bot.event
 async def on_ready():
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="WBank的運作"))
     print(f'Logged in as {bot.user}!')
+    await check_new_block()
 
 # 啟動 Bot
 def run_bot():
