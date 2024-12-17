@@ -178,20 +178,23 @@ async def send_transfer(user,amount):
 
 async def check_new_block():
   while True:
-    resp = get(url="https://bc.wtechhk.xyz/get/chain").json()
-    utc_8_times = datetime.datetime.utcnow() + datetime.timedelta(hours=8)
-    for res in resp:
-      rawData = res["rawData"].split("--")
-      if str(rawData[0]).startswith("127"):
-        tradeData = rawData[1].split("->")
-        username = tradeData[0]
-        reviewer = tradeData[1]
-        amount = tradeData[2]
-        times = rawData[2]
-        ftimes = datetime.datetime.strptime(times,"%Y/%m/%d, %H:%M:%S")
-        if ftimes == utc_8_times:
-          if reviewer == "wbank":
-            await send_transfer(username,amount)
+    try:
+      resp = get(url="https://bc.wtechhk.xyz/get/chain").json()
+      utc_8_times = datetime.datetime.utcnow() + datetime.timedelta(hours=8)
+      for res in resp:
+        rawData = res["rawData"].split("--")
+        if str(rawData[0]).startswith("127"):
+          tradeData = rawData[1].split("->")
+          username = tradeData[0]
+          reviewer = tradeData[1]
+          amount = tradeData[2]
+          times = rawData[2]
+          ftimes = datetime.datetime.strptime(times,"%Y/%m/%d, %H:%M:%S")
+          if ftimes == utc_8_times:
+            if reviewer == "wbank":
+              await send_transfer(username,amount)
+    except Exception as e:
+        raise Exception(e)
     await asyncio.sleep(1)
 
 # 啟動 Discord Bot
