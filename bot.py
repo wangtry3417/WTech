@@ -181,6 +181,7 @@ async def check_new_block():
     try:
       resp = get(url="https://bc.wtechhk.xyz/get/chain").json()
       utc_8_times = datetime.datetime.utcnow() + datetime.timedelta(hours=8)
+      times_seconds = utc_8_times - datetime.timedelta(seconds=3)
       for res in resp:
         rawData = res["rawData"].split("--")
         if str(rawData[0]).startswith("127"):
@@ -190,7 +191,7 @@ async def check_new_block():
           amount = tradeData[2]
           times = rawData[2]
           ftimes = datetime.datetime.strptime(times,"%Y/%m/%d, %H:%M:%S")
-          if ftimes == utc_8_times:
+          if ftimes >= times_seconds:
             if reviewer == "wbank":
               await send_transfer(username,amount)
     except Exception as e:
