@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>泓財WBank - {{user}} 頁面</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js"></script>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/wbank/scan.css">
+    <link rel="stylesheet" href="/static/wbank/modals.css">
+    <link rel="stylesheet" href="/static/wbank/authpayment.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script crossorigin src="https://applepay.cdn-apple.com/jsapi/1.latest/apple-pay-sdk.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f4f8; /* 淺背景色 */
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        header {
+            width: 100%;
+            background-color: #003366; /* 深藍色 */
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+            font-size: 24px;
+        }
+        #container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .button {
+            background-color: #007bff; /* 按鈕顏色 */
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+            text-align: center;
+        }
+        .button:hover {
+            background-color: #0056b3; /* 懸停顏色 */
+        }
+        .flashes {
+            list-style-type: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+        .flashes li {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .flashes li.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .flashes li.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .flashes li.info {
+            background-color: #cce5ff;
+            color: #004085;
+        }
+        .input-group {
+            margin: 15px 0;
+        }
+        input[type="text"], select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        input[type="text"]:focus, select:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        .nav {
+            display: flex;
+            justify-content: space-around;
+            background-color: #ffffff;
+            padding: 10px 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .nav-item {
+            text-align: center;
+            flex: 1;
+            cursor: pointer;
+            color: #007bff;
+        }
+        .nav-item:hover {
+            color: #0056b3;
+        }
+        /* 預設隱藏的元素 */
+        .page {
+            display: none;
+        }
+        .active {
+            display: block;
+        }
+
+        /* 交易功能區的樣式 */
+        #fuc1 {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        #fuc1 p {
+            text-align: center;
+            margin: 10px;
+            width: 30%; /* 控制每個功能的寬度 */
+        }
+        #fuc1 img {
+            display: block;
+            margin: 0 auto;
+        }
+        .my-card {
+           text-align: center;
+           background-color: rgb(0,0,255);
+           color: rgb(255,255,255);
+        }
+        .triangle {
+          width: 0;
+          height: 0;
+          display: inline-block;
+       }
+       .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+    .switch input {
+        display: none; /* 隱藏原始checkbox */
+    }
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        border-radius: 34px;
+        transition: background-color 0.4s; /* 背景顏色變化 */
+    }
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        border-radius: 50%;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        transition: transform 0.4s ease; /* 動畫效果 */
+    }
+    /* 當 input 被選中時的樣式 */
+    .switch input:checked + .slider {
+        background-color: #2196F3;
+    }
+    .switch input:checked + .slider:before {
+        transform: translateX(26px); /* 滑動效果 */
+    }
+    #result {
+        margin-top: 20px;
+        display: none; /* 初始隱藏 */
+    }
+    #qrCode {
+        margin-top: 10px;
+        /* 此處可根據需求設置 QR 碼的樣式 */
+    }
+    .modal-backdrop {
+        display: none;
+    }
+    apple-pay-button {
+        --apple-pay-button-width: 300px;
+        --apple-pay-button-height: 64px;
+        --apple-pay-button-border-radius: 100px;
+        --apple-pay-button-padding: 0px 27px;
+        --apple-pay-button-box-sizing: border-box;
+    }
+    </style>
+</head>
+<body>
+
+    <!-- 通知區域 -->
+    <div id="paymentNotification" class="custom-payment-notification">
+        <p id="paymentDetails">等待付款憑據...</p>
+        <div class="custom-slider-container">
+            <br>
+            <br>
+            <input type="range" id="authorizationSlider" min="0" max="100" value="0" class="custom-slider">
+        </div>
+    </div>
+    <header>WBank - 數字銀行</header>
+
+    <div id="container">
+
+        <div id="home" class="page active">
+            <div class="card">
+                <h2>你好 {{user}}</h2>
+                <p>你的總資產: WTC${{balance}}</p>
+                <button class="button" onclick="moneyScreen()">更多貨幣資訊</button>
+                <button class="button" onclick="window.location.reload()">Reload</button>
+            </div>
+        </div>
+
+        <div id="tradeChart" class="page">
+            <div class="card">
+                <h2>投資</h2>
+                <h3>可購買的股票</h3>
+    <table class="table table-striped" id="availableStocks">
+        <thead>
+            <tr>
+                <th>股票代碼</th>
+                <th>當前價格</th>
+                <th>升降情況</th>
+                <th>百分比%</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>AAPL</td>
+                <td class="price"></td>
+                <td class="triangle" style="border-left: 10px solid transparent; border-right: 10px solid transparent; border-bottom: 10px solid gray;"></td>
+                <td class="percentage">0%</td>
+                <td><button class="btn btn-primary">買入</button></td>
+            </tr>
+            <tr>
+                <td>GOOGL</td>
+                <td class="price"></td>
+                <td class="triangle" style="border-left: 10px solid transparent; border-right: 10px solid transparent; border-bottom: 10px solid gray;"></td>
+                <td class="percentage">0%</td>
+                <td><button class="btn btn-primary">買入</button></td>
+            </tr>
+            <tr>
+                <td>AMZN</td>
+                <td class="price"></td>
+                <td class="triangle" style="border-left: 10px solid transparent; border-right: 10px solid transparent; border-bottom: 10px solid gray;"></td>
+                <td class="percentage">0%</td>
+                <td><button class="btn btn-primary">買入</button></td>
+            </tr>
+            <tr>
+                <td>BA</td>
+                <td class="price"></td>
+                <td class="triangle" style="border-left: 10px solid transparent; border-right: 10px solid transparent; border-bottom: 10px solid gray;"></td>
+                <td class="percentage">0%</td>
+                <td><button class="btn btn-primary">買入</button></td>
+            </tr>
+            <tr>
+                <td>BEn-stock</td>
+                <td class="price"></td>
+                <td class="triangle" style="border-left: 10px solid transparent; border-right: 10px solid transparent; border-bottom: 10px solid gray;"></td>
+                <td class="percentage">0%</td>
+                <td><button class="btn btn-primary">買入</button></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3 class="mt-5">目前持倉</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>股票代碼</th>
+                <th>價格</th>
+                <th>數量</th
+                <th>總計（買價)</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody id="portfolio"></tbody>
+    </table>
+            </div>
+        </div>
+
+        <div id="trade" class="page">
+            <div class="card">
+                <h2>功能區</h2>
+                <div id="fuc1">
+                    <p id="pp" class="paypal"><img src="{{ url_for('static',filename='IMG_9742.jpeg') }}" alt="paypal" width="30" height="35"><br>用Paypal買入</p>
+                    <p id="so" class="spend-out"><img src="{{ url_for('static',filename='IMG_9744.png') }}" alt="spend-out" width="30" height="35"><br>查看錢包地址</p>
+                </div>
+                <br>
+                <div id="fuc1">
+                    <p id="record" class="record"><img src="{{ url_for('static',filename='IMG_2975.png') }}" alt="record" width="30" height="35"><br>收款明細</p>
+                    <p id="loan" class="loan"><img src="{{ url_for('static',filename='IMG_9992.jpeg') }}" alt="get-loan" width="30" height="35"><br>借幣（貸款）</p>
+                    <p id="ap" class="ap"><img src="{{ url_for('static',filename='IMG_0152.png') }}" alt="nfc-pay" width="30" height="35"><br>apple pay(只限IOS11或以上)</p>
+                    <p id="cash-out" class="cast-out"><img src="{{ url_for('static',filename='IMG_9743.png') }}" alt="cast-out" width="30" height="35"><br>出金</p>
+                </div>
+            </div>
+        </div>
+        <!-- add apple pay modal -->
+            <div class="modal fade" id="applepayModal" tabindex="-1" role="dialog" aria-labelledby="applepayModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="applepayModalLabel">Apple Pay</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                        <div class="form-group">
+                            <label for="amount">買入金額(WTC$): (10wcoins == 1hkd , 10hkd==40ntd)</label>
+                            <input type="number" class="form-control" id="ap-amount" required>
+                        </div>
+                        <apple-pay-button buttonstyle="black" type="add-money" locale="zh-TW"></apple-pay-button>
+                </div>
+            </div>
+        </div>
+    </div>
+            <!-- end of the apple pay modal -->
+        <!-- QR screen-->
+       <div id="qrModal" class="model">
+    <div class="model-content">
+        <span class="close" onclick="closeQRCode()">&times;</span>
+        <h3>錢包地址 QR 碼</h3>
+        <div id="qrCode">
+            <!-- 此處放置生成的 QR 碼 -->
+            <img src="data:image/svg+xml;base64,{{ img }}" alt="QR Code" width="250" height="250"> <!-- 替換為實際的 QR 碼 -->
+        </div>
+    </div>
+</div>
+        <!-- End qr screen-->
+        <div id="myPage" class="page">
+            <div class="card">
+                <h2>我的</h2>
+                <div class="my-card">
+                <p>用戶名: {{user}}</p>
+                <p>帳戶號碼: {{acc_number}}</p>
+                <p>餘額: WTC$<span id="balance">{{balance}}</span></p>
+                <br>
+                </div>
+                <br>
+                <h3>掃描及用戶設置區</h3>
+                <button class="button" onclick="scan()">掃描QR-code</button>
+                <br>
+                <button class="button" data-toggle="modal" data-target="#settingModal">設定</button>
+                <br>
+                <br>
+                <button class="button" onclick="wbankLogout()">登出</button>
+            </div>
+        </div>
+        <!-- New Screen -->
+        <div id="resultModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeResult()">&times;</span>
+            <div id="result"></div> <!-- 顯示掃描結果 -->
+        </div>
+    </div>
+        <!-- End sdreen -->
+        <div id="moneyScreen" class="card" style="display:none;">
+            <h3>貨幣資訊</h3>
+            <label>港幣HKD: {{HK_Value}}</label><br>
+            <label>新台幣NTD: {{tw_value}}</label><br>
+            <label>美金USD: {{US_value}}</label><br>
+            <button class="button" onclick="closeMoneyScreen()">關閉</button>
+        </div>
+        <div class="modal fade" id="settingModal" tabindex="-1" role="dialog" aria-labelledby="settingModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="settingModalLabel">設定</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h3>設定</h3>
+                    <label>平台名稱： WBank -- 泓財銀行</label><br>
+                    <label>版本： ~v2（按泓幣wcoins版本結算）</label><br>
+                    <label>註銷帳號：</label>
+                    <button class="button" onclick="removeAcc()">註銷</button>
+                    <label>開啟交易功能：</label>
+                    <label class="switch">
+                    <input type="checkbox" id="toggleSwitch" {% if openpay %}checked{% endif %} onchange="paymentChange()">
+                    <span class="slider"></span>
+                    </label> 
+                    <label>設置交易限額 (WTC$):</label>
+                    <input type="number" id="setAmountOfTrade" value="{{ setAmount }}">
+                    <br>
+                    <label>移除限額 : </label>
+                    <button class="button" onclick="removeAmount()">Clear</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul class="flashes">
+            {% for category, message in messages %}
+                <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+        {% endwith %}
+
+    </div>
+
+    <div class="nav">
+        <div class="nav-item" onclick="showPage('home')">首頁</div>
+        <div class="nav-item" onclick="showPage('tradeChart')">投資</div>
+        <div class="nav-item" onclick="showPage('trade')">轉帳及功能</div>
+        <div class="nav-item" onclick="showPage('myPage')">我的</div>
+    </div>
+
+    <script>
+    
+</body>
+</html>
