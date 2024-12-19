@@ -2130,6 +2130,7 @@ def wbank_hash_transfer():
   user = request.headers.get("username")
   reviewer = request.headers.get("reviewer")
   count = request.headers.get("amount")
+  nodeURL = request.headers.get("nodeURL")
   
   if user is None and reviewer is None and count is None:
     code = request.json
@@ -2221,7 +2222,10 @@ def wbank_hash_transfer():
       # 上鏈
       ran_key = "127"+str(random.randint(10000,99999))
       d = f"{user}->{reviewer}->{amount}"
-      requests.post(url="https://bc.wtechhk.xyz/upload",data={"blockID":ran_key,"data":d})
+      if nodeURL:
+        requests.post(url=nodeURL,data={"blockID":ran_key,"data":d})
+      else:
+        requests.post(url="https://bc.wtechhk.xyz/upload",data={"blockID":ran_key,"data":d})
       
       # 記錄轉帳記錄
       bl = f"由 {user} 轉帳 {int(amount)} 給 {reviewer}"
