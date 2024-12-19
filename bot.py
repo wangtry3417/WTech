@@ -201,10 +201,9 @@ async def check_new_block():
 # 啟動 Discord Bot
 @bot.event
 async def on_ready():
-    loop = asyncio.get_event_loop()
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="WBank的運作"))
     print(f'Logged in as {bot.user}!')
-    loop.run_until_complete(check_new_block())
+    await check_new_block()
 
 # 啟動 Bot
 def run_bot():
