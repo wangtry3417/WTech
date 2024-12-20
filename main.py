@@ -3180,12 +3180,27 @@ def start_boost():
     sleep(5)
     requests.get(url="https://bc.wtechhk.xyz",headers={"X-Forward-For":"237.45.67.78,33.45.67.89","User-Agent":"WTech/2.0"})
 
+def giving_rewards():
+  while True:
+    sleep(3)
+    res = requests.get(url="https://bc.wtechhk.xyz/get/chain/latest").json()
+    if str(res["blockID"]).startswith("127"):
+      rawData = str(res["rawData"]).split("--")
+      trs = str(rawData[1]).split("->")
+      users = wbankwallet.query.filter_by(username=trs[1]).first()
+      if users:
+        users.balance += int(trs[2])
+        db.session.commit()
+
 thread1 = threading.Thread(target=start_web)
 thread2 = threading.Thread(target=run_bot)
 thread3 = threading.Thread(target=start_boost)
+thread4 = threading.Thread(target=giving_rewards)
 thread1.start()
 thread2.start()
 thread3.start()
+thread4.start()
 thread1.join()
 thread2.join()
 thread3.join()
+thread4.join()
