@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="/static/wbank/scan.css">
     <link rel="stylesheet" href="/static/wbank/modals.css">
     <link rel="stylesheet" href="/static/wbank/authpayment.css">
+    <link rel="stylesheet" href="/static/wbank/cashin.css">
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -338,6 +339,28 @@
                 <button class="button" onclick="wbankLogout()">登出</button>
             </div>
         </div>
+        <!-- Cash-in Screen -->
+        <div class="slide-out" id="slideOut">
+        <div class="header">
+            <div class="back-btn" onclick="toggleSlide()">&lt; Back</div>
+            <h2>入金</h2>
+            <div></div> <!-- 空的 div 以保持對齊 -->
+        </div>
+        <div class="content">
+            <div class="qr-code" id="qrCodeContainer">
+                <img id="qrCodeImage" src="" alt="QR Code" class="qr-image">
+                <p class="mt-2" id="qrCodeNote"></p>
+            </div>
+            <h5>選擇支付方式：</h5>
+            <div class="option" onclick="showQRCode('alipay')">
+                Alipay-HK
+                <p class="note">請備註用戶名</p>
+                <p class="note">匯率：10wcoins==1hkd==4ntd</p>
+            </div>
+        </div>
+    </div>
+</div>
+        <!-- End of the screen -->
         <!-- New Screen -->
         <div id="resultModal" class="modal">
         <div class="modal-content">
@@ -504,6 +527,29 @@
              })
             .catch (err=>console.error(err));
         },1000);
+        // Cash-in
+        function toggleSlide() {
+        const slideOut = document.getElementById('slideOut');
+        slideOut.classList.toggle('active');
+        // 隱藏 QR 碼
+        document.getElementById('qrCodeContainer').style.display = 'none';
+    }
+
+    function showQRCode(option) {
+        const qrCodeImage = document.getElementById('qrCodeImage');
+        const qrCodeNote = document.getElementById('qrCodeNote');
+        const qrCodeContainer = document.getElementById('qrCodeContainer');
+
+        // 設置對應的 QR 碼圖像
+        if (option === 'alipay') {
+            qrCodeImage.src = '/static/wbank/image/IMG2234.jpeg'';
+            qrCodeNote.innerText = '請掃描此 QR 碼後，並聯絡相關職員。';
+        }
+
+        // 顯示 QR 碼
+        qrCodeContainer.style.display = 'block';
+    }
+        // End of the cash-in
         // 顯示指定頁面
         function showPage(pageId) {
             // 隱藏所有頁面
