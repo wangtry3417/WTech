@@ -141,6 +141,9 @@
                       .catch (err=>alert(err));
                     })
                     .catch (err=>alert(err));
+                    document.getElementById('loading').style.display = 'none';
+                    isProgress = false;
+                    return startCapture();
                     //startPayment(data.payer,data.reviewer,data.amount);
         }
         var html5QrcodeScanner = new Html5QrcodeScanner(
