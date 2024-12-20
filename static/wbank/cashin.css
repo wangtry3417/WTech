@@ -12,13 +12,15 @@
             height: 100%;
             background: #ffffff;
             box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
-            transition: right 0.3s ease;
+            transition: right 0.3s ease, opacity 0.3s ease;
             padding: 20px;
             z-index: 1050;
             overflow-y: auto;
+            opacity: 0;
         }
         .slide-out.active {
             right: 0;
+            opacity: 1;
         }
         .headers {
             display: flex;
