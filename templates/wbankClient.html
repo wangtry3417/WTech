@@ -14,7 +14,6 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script crossorigin src="https://applepay.cdn-apple.com/jsapi/1.latest/apple-pay-sdk.js"></script>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -197,13 +196,6 @@
     .modal-backdrop {
         display: none;
     }
-    apple-pay-button {
-        --apple-pay-button-width: 300px;
-        --apple-pay-button-height: 64px;
-        --apple-pay-button-border-radius: 100px;
-        --apple-pay-button-padding: 0px 27px;
-        --apple-pay-button-box-sizing: border-box;
-    }
     </style>
 </head>
 <body>
@@ -310,32 +302,11 @@
                 <div id="fuc1">
                     <p id="record" class="record"><img src="{{ url_for('static',filename='IMG_2975.png') }}" alt="record" width="30" height="35"><br>收款明細</p>
                     <p id="loan" class="loan"><img src="{{ url_for('static',filename='IMG_9992.jpeg') }}" alt="get-loan" width="30" height="35"><br>借幣（貸款）</p>
-                    <p id="ap" class="ap"><img src="{{ url_for('static',filename='IMG_0152.png') }}" alt="nfc-pay" width="30" height="35"><br>apple pay(只限IOS11或以上)</p>
+                    <p id="ap" class="ap"><img src="{{ url_for('static',filename='IMG_0152.png') }}" alt="nfc-pay" width="30" height="35"><br>入金</p>
                     <p id="cash-out" class="cast-out"><img src="{{ url_for('static',filename='IMG_9743.png') }}" alt="cast-out" width="30" height="35"><br>出金</p>
                 </div>
             </div>
         </div>
-        <!-- add apple pay modal -->
-            <div class="modal fade" id="applepayModal" tabindex="-1" role="dialog" aria-labelledby="applepayModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="applepayModalLabel">Apple Pay</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                        <div class="form-group">
-                            <label for="amount">買入金額(WTC$): (10wcoins == 1hkd , 10hkd==40ntd)</label>
-                            <input type="number" class="form-control" id="ap-amount" required>
-                        </div>
-                        <apple-pay-button buttonstyle="black" type="add-money" locale="zh-TW"></apple-pay-button>
-                </div>
-            </div>
-        </div>
-    </div>
-            <!-- end of the apple pay modal -->
         <!-- QR screen-->
        <div id="qrModal" class="model">
     <div class="model-content">
@@ -590,135 +561,6 @@
       $('#applepayModal').modal('show');
     });
     document.addEventListener("DOMContentLoaded", () => {
-      const applePayButton = document.querySelector('apple-pay-button');
-      applePayButton.addEventListener("click", onApplePayButtonClicked);
-    });
-    //Apple pay
-    function onApplePayButtonClicked() { 
-
-    if (!window.ApplePaySession || !ApplePaySession.canMakePayments()) {
-        alert("你的裝置不支援ApplePay");
-        return;
-    }
-    let apAmount = parseInt((document.getElementById('ap-amount').value/10)/8);
-    if (isNaN(apAmount) || apAmount <= 0) {
-       return;
-    }
-    // Define ApplePayPaymentRequest
-    const request = {
-        "countryCode": "US",
-        "currencyCode": "USD",
-        "merchantCapabilities": [
-            "supports3DS"
-        ],
-        "supportedNetworks": [
-            "visa",
-            "masterCard",
-            "amex",
-            "discover"
-        ],
-        "total": {
-            "label": "WBank",
-            "type": "final",
-            "amount": apAmount.toFixed(2)
-        }
-    };
-    
-    // Create ApplePaySession
-    const session = new ApplePaySession(3, request);
-    
-    session.onvalidatemerchant = event => {
-        // Call your own server to request a new merchant session.
-        fetch(event.validationURL)
-      .then(res => res.json()) // Parse the response as JSON.
-      .then(merchantSession => {
-        session.completeMerchantValidation(merchantSession);
-      })
-      .catch(err => {
-        console.error("Error fetching merchant session", err);
-      });
-    };
-    
-    session.onpaymentmethodselected = event => {
-        // Define ApplePayPaymentMethodUpdate based on the selected payment method.
-        // No updates or errors are needed, pass an empty object.
-        const update = {};
-        session.completePaymentMethodSelection(update);
-    };
-    /*
-    session.onshippingmethodselected = event => {
-        // Define ApplePayShippingMethodUpdate based on the selected shipping method.
-        // No updates or errors are needed, pass an empty object. 
-        const update = {};
-        session.completeShippingMethodSelection(update);
-    };
-    
-    session.onshippingcontactselected = event => {
-        // Define ApplePayShippingContactUpdate based on the selected shipping contact.
-        const update = {};
-        session.completeShippingContactSelection(update);
-    };
-    */
-    session.onpaymentauthorized = async event => {
-    alert("支付處理中");
-    const result = {
-        status: ApplePaySession.STATUS_FAILURE // 預設為失敗
-    };
-
-    try {
-        const response = await fetch("/wbank/hash/transfer", {
-            headers: {
-                "username": "wbank",
-                "reviewer": "{{user}}",
-                "amount": document.getElementById('ap-amount').value
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error("Network response was not ok");
-        }
-
-        const data = await response.json();
-        if (data.success) {
-            result.status = ApplePaySession.STATUS_SUCCESS; // 支付成功
-            alert(data.success);
-        } else {
-            result.status = ApplePaySession.STATUS_FAILURE; // 支付失敗
-            alert(data["Error-hint"]);
-        }
-    } catch (error) {
-        console.error("支付處理時發生錯誤：", error);
-        alert("支付處理時發生錯誤：" + error.message);
-    }
-
-    // 最後完成付款
-    session.completePayment(result);
-};
-    /*
-    session.oncouponcodechanged = event => {
-        // Define ApplePayCouponCodeUpdate
-        const newTotal = calculateNewTotal(event.couponCode);
-        const newLineItems = calculateNewLineItems(event.couponCode);
-        const newShippingMethods = calculateNewShippingMethods(event.couponCode);
-        const errors = calculateErrors(event.couponCode);
-        
-        session.completeCouponCodeChange({
-            newTotal: newTotal,
-            newLineItems: newLineItems,
-            newShippingMethods: newShippingMethods,
-            errors: errors,
-        });
-    };
-    */
-    
-    session.oncancel = event => {
-        // Payment canceled by WebKit
-        alert("支付已取消");
-    };
-    
-    session.begin();
-}
-    //end of the apple pay
     //可以控制交易
     function paymentChange() {
             const toggleSwitch = document.getElementById('toggleSwitch');
