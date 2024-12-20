@@ -282,7 +282,7 @@
             <tr>
                 <th>股票代碼</th>
                 <th>價格</th>
-                <th>數量</th
+                <th>數量</th>
                 <th>總計（買價)</th>
                 <th>操作</th>
             </tr>
@@ -320,25 +320,6 @@
     </div>
 </div>
         <!-- End qr screen-->
-        <div id="myPage" class="page">
-            <div class="card">
-                <h2>我的</h2>
-                <div class="my-card">
-                <p>用戶名: {{user}}</p>
-                <p>帳戶號碼: {{acc_number}}</p>
-                <p>餘額: WTC$<span id="balance">{{balance}}</span></p>
-                <br>
-                </div>
-                <br>
-                <h3>掃描及用戶設置區</h3>
-                <button class="button" onclick="scan()">掃描QR-code</button>
-                <br>
-                <button class="button" data-toggle="modal" data-target="#settingModal">設定</button>
-                <br>
-                <br>
-                <button class="button" onclick="wbankLogout()">登出</button>
-            </div>
-        </div>
         <!-- Cash-in Screen -->
         <div class="slide-out" id="slideOut">
         <div class="header">
@@ -360,6 +341,26 @@
         </div>
    </div>
         <!-- End of the screen -->
+        <div id="myPage" class="page">
+            <div class="card">
+                <h2>我的</h2>
+                <div class="my-card">
+                <p>用戶名: {{user}}</p>
+                <p>帳戶號碼: {{acc_number}}</p>
+                <p>餘額: WTC$<span id="balance">{{balance}}</span></p>
+                <br>
+                </div>
+                <br>
+                <h3>掃描及用戶設置區</h3>
+                <button class="button" onclick="scan()">掃描QR-code</button>
+                <br>
+                <button class="button" data-toggle="modal" data-target="#settingModal">設定</button>
+                <br>
+                <br>
+                <button class="button" onclick="wbankLogout()">登出</button>
+            </div>
+        </div>
+        
         <!-- New Screen -->
         <div id="resultModal" class="modal">
         <div class="modal-content">
@@ -527,6 +528,9 @@
             .catch (err=>console.error(err));
         },1000);
         // Cash-in
+        document.getElementById("ap").addEventListener("click",()=> {
+            toggleSlide();
+        });
         function toggleSlide() {
         const slideOut = document.getElementById('slideOut');
         slideOut.classList.toggle('active');
@@ -541,7 +545,7 @@
 
         // 設置對應的 QR 碼圖像
         if (option === 'alipay') {
-            qrCodeImage.src = '/static/wbank/image/IMG2234.jpeg'';
+            qrCodeImage.src = '/static/wbank/image/IMG2234.jpeg';
             qrCodeNote.innerText = '請掃描此 QR 碼後，並聯絡相關職員。';
         }
 
