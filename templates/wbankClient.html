@@ -322,18 +322,18 @@
         <!-- End qr screen-->
         <!-- Cash-in Screen -->
         <div class="slide-out" id="slideOut">
-        <div class="header">
+        <div class="headers">
             <div class="back-btn" onclick="toggleSlide()">&lt; Back</div>
             <h2>入金</h2>
             <div></div> <!-- 空的 div 以保持對齊 -->
         </div>
-        <div class="content">
-            <div class="qr-code" id="qrCodeContainer">
-                <img id="qrCodeImage" src="" alt="QR Code" class="qr-image">
+        <div class="ctx">
+            <div class="other-qr" id="qrCodeContainer">
+                <img id="qrCodeImage" src="" alt="QR Code" class="qri">
                 <p class="mt-2" id="qrCodeNote"></p>
             </div>
             <h5>選擇支付方式：</h5>
-            <div class="option" onclick="showQRCode('alipay')">
+            <div class="opt" onclick="showQRCode('alipay')">
                 Alipay-HK
                 <p class="note">請備註用戶名</p>
                 <p class="note">匯率：10wcoins==1hkd==4ntd</p>
@@ -532,10 +532,10 @@
             toggleSlide();
         });
         function toggleSlide() {
-        const slideOut = document.getElementById('slideOut');
-        slideOut.classList.toggle('active');
-        // 隱藏 QR 碼
-        document.getElementById('qrCodeContainer').style.display = 'none';
+          const slideOut = document.getElementById('slideOut');
+          slideOut.classList.toggle('active');
+          // 隱藏 QR 碼
+          document.getElementById('qrCodeContainer').style.display = 'none';
     }
 
     function showQRCode(option) {
