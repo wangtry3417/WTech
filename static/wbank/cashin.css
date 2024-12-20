@@ -52,13 +52,13 @@
             transition: background-color 0.3s;
             text-align: center;
         }
-        .option:hover {
+        .opt:hover {
             background-color: #d0e9ff;
         }
         .note {
             color: #dc3545;
             font-weight: bold;
         }
-        .qr-image {
+        .qri {
             margin-top: 10px;
         }
