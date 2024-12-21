@@ -321,25 +321,17 @@
 </div>
         <!-- End qr screen-->
         <!-- Cash-in Screen -->
-        <div class="slide-out" id="slideOut">
-        <div class="headers">
-            <div class="back-btn" onclick="toggleSlide()">&lt; Back</div>
-            <h2>入金</h2>
-            <div></div> <!-- 空的 div 以保持對齊 -->
+        <div id="paycodeModal" class="model">
+    <div class="model-content">
+        <span class="close" onclick="closeQRCode()">&times;</span>
+        <h3>Alipay-hk </h3>
+        <p>請備注用戶名及掃描此 QR 碼後，並聯絡相關職員。
+        <div id="qrCode">
+            <!-- 此處放置生成的 QR 碼 -->
+            <img src="/static/wbank/image/IMG_2234.jpeg" alt="QR Code" width="250" height="250"> <!-- 替換為實際的 QR 碼 -->
         </div>
-        <div class="ctx">
-            <div class="other-qr" id="qrCodeContainer">
-                <img id="qrCodeImage" src="" alt="QR Code" class="qri">
-                <p class="mt-2" id="qrCodeNote"></p>
-            </div>
-            <h5>選擇支付方式：</h5>
-            <div class="opt" onclick="showQRCode('alipay')">
-                Alipay-HK
-                <p class="note">請備註用戶名</p>
-                <p class="note">匯率：10wcoins==1hkd==4ntd</p>
-            </div>
-        </div>
-   </div>
+    </div>
+</div>
         <!-- End of the screen -->
         <div id="myPage" class="page">
             <div class="card">
@@ -658,6 +650,10 @@
       document.getElementById("so").addEventListener("click",() => {
         //window.location.href="/wbank/sellCoins?user=" + "{{ user }}";
         document.getElementById('qrModal').style.display = 'flex'; 
+      });
+     document.getElementById("ap").addEventListener("click",() => {
+        //window.location.href="/wbank/sellCoins?user=" + "{{ user }}";
+        document.getElementById('paycodeModel').style.display = 'flex'; 
       });
       document.getElementById("pp").addEventListener("click",() => {
         let amount = prompt("How much do you wanna buy in?");
