@@ -320,19 +320,6 @@
     </div>
 </div>
         <!-- End qr screen-->
-        <!-- Cash-in Screen -->
-        <div id="paycodeModal" class="model">
-    <div class="model-content">
-        <span class="close" onclick="closeQRCode()">&times;</span>
-        <h3>Alipay-hk </h3>
-        <p>請備注用戶名及掃描此 QR 碼後，並聯絡相關職員。
-        <div id="qrCode">
-            <!-- 此處放置生成的 QR 碼 -->
-            <img src="/static/wbank/image/IMG_2234.jpeg" alt="QR Code" width="250" height="250"> <!-- 替換為實際的 QR 碼 -->
-        </div>
-    </div>
-</div>
-        <!-- End of the screen -->
         <div id="myPage" class="page">
             <div class="card">
                 <h2>我的</h2>
@@ -521,31 +508,8 @@
         },1000);
         // Cash-in
         document.getElementById("ap").addEventListener("click",()=> {
-            toggleSlide();
+            alert("抱歉 目前尚未開放此功能");
         });
-        function toggleSlide() {
-           const slideOut = document.getElementById('slideOut');
-           if (slideOut.style.display === 'none' || slideOut.style.display === '') {
-              slideOut.style.display = 'block';
-           } else {
-              slideOut.style.display = 'none';
-           }
-         }
-    function showQRCode(option) {
-        const qrCodeImage = document.getElementById('qrCodeImage');
-        const qrCodeNote = document.getElementById('qrCodeNote');
-        const qrCodeContainer = document.getElementById('qrCodeContainer');
-
-        // 設置對應的 QR 碼圖像
-        if (option === 'alipay') {
-            qrCodeImage.src = '/static/wbank/image/IMG_2234.jpeg';
-            qrCodeNote.innerText = '請掃描此 QR 碼後，並聯絡相關職員。';
-        }
-
-        // 顯示 QR 碼
-        qrCodeContainer.style.display = 'block';
-    }
-        // End of the cash-in
         // 顯示指定頁面
         function showPage(pageId) {
             // 隱藏所有頁面
