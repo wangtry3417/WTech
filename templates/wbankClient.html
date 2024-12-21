@@ -532,12 +532,13 @@
             toggleSlide();
         });
         function toggleSlide() {
-          const slideOut = document.getElementById('slideOut');
-          slideOut.classList.toggle('active');
-          // 隱藏 QR 碼
-          document.getElementById('qrCodeContainer').style.display = 'none';
-    }
-
+           const slideOut = document.getElementById('slideOut');
+           if (slideOut.style.display === 'none' || slideOut.style.display === '') {
+              slideOut.style.display = 'block';
+           } else {
+              slideOut.style.display = 'none';
+           }
+         }
     function showQRCode(option) {
         const qrCodeImage = document.getElementById('qrCodeImage');
         const qrCodeNote = document.getElementById('qrCodeNote');
