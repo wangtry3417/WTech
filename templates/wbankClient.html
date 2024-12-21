@@ -505,10 +505,6 @@
              })
             .catch (err=>console.error(err));
         },1000);
-        // Cash-in
-        document.getElementById("ap").addEventListener("click",()=> {
-            alert("抱歉 目前尚未開放此功能");
-        });
         // 顯示指定頁面
         function showPage(pageId) {
             // 隱藏所有頁面
@@ -614,10 +610,10 @@
         //window.location.href="/wbank/sellCoins?user=" + "{{ user }}";
         document.getElementById('qrModal').style.display = 'flex'; 
       });
-     document.getElementById("ap").addEventListener("click",() => {
-        //window.location.href="/wbank/sellCoins?user=" + "{{ user }}";
-        document.getElementById('paycodeModel').style.display = 'flex'; 
-      });
+     // Cash-in
+        document.getElementById("ap").addEventListener("click",()=> {
+            alert("抱歉 目前尚未開放此功能");
+        });
       document.getElementById("pp").addEventListener("click",() => {
         let amount = prompt("How much do you wanna buy in?");
         let value = amount*3.5;
