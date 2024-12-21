@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide Out Interface</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            position: relative;
+            padding: 20px;
+        }
+        .icon {
+            font-size: 30px;
+            cursor: pointer;
+        }
+        .slide-out {
+            position: fixed;
+            top: 0;
+            right: -300px; /* 隱藏在屏幕外 */
+            width: 300px;
+            height: 100%;
+            background: #f8f9fa;
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+            transition: right 0.3s ease;
+            padding: 20px;
+        }
+        .slide-out.active {
+            right: 0; /* 顯示 */
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header h2 {
+            text-align: center;
+            flex-grow: 1;
+        }
+        .content {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="icon" onclick="toggleSlide()">open</div>
+
+    <div class="slide-out" id="slideOut">
+        <div class="header">
+            <div class="back-btn" onclick="toggleSlide()">&lt; Back</div>
+            <h2>功能</h2>
+            <div></div> <!-- 空的 div 以保持對齊 -->
+        </div>
+        <div class="content">
+            <center>
+                <br>
+                <p>Hi</p>
+          </center>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleSlide() {
+        const slideOut = document.getElementById('slideOut');
+        slideOut.classList.toggle('active');
+    }
+</script>
+
+</body>
+</html>
