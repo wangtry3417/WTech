@@ -420,6 +420,17 @@
              .then (data=>alert(data));
         }
       });
+    // 顯示指定頁面
+    function showPage(pageId) {
+        // 隱藏所有頁面
+        const pages = document.querySelectorAll('.page');
+        pages.forEach(page => {
+            page.classList.remove('active');
+        });
+
+        // 顯示選定的頁面
+        document.getElementById(pageId).classList.add('active');
+    }
      //取消授權PayAuth
     function removePayAuth() {
             slider.disabled = true;
@@ -504,17 +515,6 @@
              })
             .catch (err=>console.error(err));
         },1000);
-        // 顯示指定頁面
-        function showPage(pageId) {
-            // 隱藏所有頁面
-            const pages = document.querySelectorAll('.page');
-            pages.forEach(page => {
-                page.classList.remove('active');
-            });
-
-            // 顯示選定的頁面
-            document.getElementById(pageId).classList.add('active');
-        }
         function wbankLogout() {
            window.location.href="/wbank/logout";
         }
@@ -884,16 +884,6 @@ setInterval(() => {
 // 初始化畫面
 updateBalance();
 renderPortfolio();
-window.showPage = function(pageId) {
-// 隱藏所有頁面
-const pages = document.querySelectorAll('.page');
-pages.forEach(page => {
-    page.classList.remove('active');
-});
-
-// 顯示選定的頁面
-document.getElementById(pageId).classList.add('active');
-  };
     </script>
 </body>
 </html>
