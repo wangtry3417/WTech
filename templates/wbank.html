@@ -235,7 +235,7 @@
                 });
         }
         let user = "{{ session['username'] }}";
-        if (user) {
+        if (user != null) {
           alert("自動登入中...");
           window.location.href="/wbank/client";
         }
