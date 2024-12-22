@@ -234,7 +234,7 @@
                     alert("發生錯誤: " + error);
                 });
         }
-        let user = "{{ session['username'] }}";
+        let user = "{{ session['username'] }}" || null;
         if (user != null) {
           alert("自動登入中...");
           window.location.href="/wbank/client";
