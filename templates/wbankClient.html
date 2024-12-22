@@ -884,7 +884,16 @@ setInterval(() => {
 // 初始化畫面
 updateBalance();
 renderPortfolio();
-window.showPage = showPage;
+window.showPage = function(pageId) {
+// 隱藏所有頁面
+const pages = document.querySelectorAll('.page');
+pages.forEach(page => {
+    page.classList.remove('active');
+});
+
+// 顯示選定的頁面
+document.getElementById(pageId).classList.add('active');
+  };
     </script>
 </body>
 </html>
