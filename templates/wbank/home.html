@@ -8,6 +8,7 @@
     <meta name="description" content="WBank是一個安全自動化數字銀行。" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="/static/bc/contract.js" ></script>
     <title>泓財數字銀行 WBank</title>
     <style>
         body {
@@ -114,7 +115,7 @@
     <h2>關於我們</h2>
     <p>泓財數字銀行 WBank 旗下有泓幣 wcoins。</p>
     <br> <p>WBank的後端主要用Flask庫，也很好用😂</p>
-
+    <p id="result"></p>
     <!-- Modal -->
     <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="false">
         <div class="modal-dialog" role="document">
@@ -184,6 +185,21 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 <script>
+    const contract = Contract.init('wbank', 'wbank', '10000');
+
+        async function processPayment() {
+            const success = await contract.processPayment();
+            const resultElement = document.getElementById('result');
+            resultElement.textContent = success ? 'Payment Successful!' : 'Payment Failed!';
+        }
+
+        function cancelPayment() {
+            contract.hideModal();
+            alert('Payment cancelled.');
+        }
+
+        // 顯示模態框
+        contract.showModal();
    /*
     // 這裡可以添加更多的 JavaScript 代碼
     $(document).ready(function() {
