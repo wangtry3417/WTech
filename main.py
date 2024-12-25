@@ -1,5 +1,5 @@
 from flask import Flask,render_template,jsonify,request,abort,url_for,redirect,make_response,send_file,flash,session,Response
-from flask_cors import CORS
+from flask_cors import CORS,cross_origin
 from cryptography.fernet import Fernet
 import hashlib
 import os
@@ -131,7 +131,7 @@ socketio = SocketIO(app,**SOCKET_CONFIG)
 socketio.init_app(app)
 socketio.server.instrument(auth=True,namespace="/admin")
 
-CORS(app,resources={r"/*": {"origins": "*"}})
+#CORS(app,resources={r"/*": {"origins": "*"}})
 #CORS(app,resources={r"/wbank/hash/transfer": {"origins": "http://223.19.115.182:5000"}})
 CORS(app)
 #CORS(app, resources={r"/*": {"origins": "https://bc.wtechhk.xyz"}})
@@ -2128,6 +2128,7 @@ def wbank_hash_order():
   return "Somethings input data is wrong!."
 
 @app.route("/wbank/hash/transfer")
+@cross_origin()
 def wbank_hash_transfer():
   user = request.headers.get("username")
   reviewer = request.headers.get("reviewer")
