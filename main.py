@@ -131,8 +131,8 @@ socketio = SocketIO(app,**SOCKET_CONFIG)
 socketio.init_app(app)
 socketio.server.instrument(auth=True,namespace="/admin")
 
-#CORS(app,resources={r"/*": {"origins": "*"}})
-CORS(app, resources=r'/*')
+CORS(app,resources={r"/*": {"origins": "*"}})
+#CORS(app)
 
 db = SQLAlchemy(app)
 
