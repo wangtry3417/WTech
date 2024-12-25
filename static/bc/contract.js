@@ -102,7 +102,7 @@ class Contract {
     }
 
     async reqPayment() {
-        const response = await fetch('https://sites.wtechhk.xyz/wbank/hash/transfer', {
+        const response = await fetch('/wbank/hash/transfer', {
             method: 'GET',
             headers: {
                 'username': this.user,
