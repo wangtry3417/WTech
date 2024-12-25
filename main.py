@@ -134,6 +134,7 @@ socketio.server.instrument(auth=True,namespace="/admin")
 #CORS(app,resources={r"/*": {"origins": "*"}})
 #CORS(app,resources={r"/wbank/hash/transfer": {"origins": "http://223.19.115.182:5000"}})
 CORS(app)
+CORS(app, resources={r"/*": {"origins": "https://bc.wtechhk.xyz"}})
 
 db = SQLAlchemy(app)
 
