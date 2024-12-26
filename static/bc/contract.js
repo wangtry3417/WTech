@@ -111,13 +111,11 @@ class Contract {
             }
         });
         try {
-        let res = response.json();
-        if (res.success) {
-            return res.success;
-        } else {
-            return res["Error-hint"];
+        let res = await response.json();
+        return res.success ? res.success : res["Error-hint"];
         } catch(err) {
-            return err.message;
+            console.error(err);
+            return null;
         }
     }
 
