@@ -110,7 +110,15 @@ class Contract {
                 'amount': this.amount,
             }
         });
-        return response.ok; // 返回是否成功
+        try {
+        let res = response.json();
+        if (res.success) {
+            return res.success;
+        } else {
+            return res["Error-hint"];
+        } catch(err) {
+            return err.message;
+        }
     }
 
     showLoading() {
@@ -126,10 +134,10 @@ class Contract {
 
     async processPayment() {
         this.showLoading();
-        const success = await this.reqPayment();
+        const statement = await this.reqPayment();
         this.hideLoading();
         this.hideModal();
-        return success;
+        return statement;
     }
 
     static init(user, reviewer, amount) {
