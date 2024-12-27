@@ -98,6 +98,7 @@
         <form id="registrationForm" action="/wbank/v1/createUser" method="POST">
             <!-- Step 1: Personal Details -->
             <div class="step active" id="step1">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 <label>你的名字：</label>
                 <input type="text" name="fname" placeholder="全名" required>
                 <label>你的身份證或證件號碼：</label>
