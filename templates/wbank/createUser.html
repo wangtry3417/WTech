@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>W Bank -- 注册帳號頁面</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f7fa;
+            margin: 0;
+            padding: 0;
+        }
+        #container {
+            max-width: 400px;
+            margin: 50px auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #2e3c4d;
+            margin-bottom: 20px;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin: 10px 0 5px;
+            color: #333;
+        }
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            border-color: #2e3c4d;
+            outline: none;
+        }
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: vertical;
+            background-color: #f0f0f0;
+            color: #333;
+            font-size: 14px;
+        }
+        .button {
+            background-color: #2e3c4d;
+            color: #ffffff;
+            padding: 12px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 48%;
+            transition: background-color 0.3s;
+            margin: 10px 1%;
+            display: inline-block;
+            text-align: center;
+        }
+        .button:hover {
+            background-color: #1c2634;
+        }
+        .step {
+            display: none;
+        }
+        .active {
+            display: block;
+        }
+        @media (max-width: 400px) {
+            #container {
+                padding: 20px;
+            }
+            h2 {
+                font-size: 20px;
+            }
+            .button {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h2>W Bank 用戶登記</h2>
+        <form id="registrationForm">
+            <!-- Step 1: Personal Details -->
+            <div class="step active" id="step1">
+                <label>你的名字：</label>
+                <input type="text" name="fname" placeholder="Fullname" required>
+                <label>你的身份證或證件號碼：</label>
+                <input type="text" name="id" placeholder="Your ID" required>
+                <label>用戶名稱：</label>
+                <input type="text" name="user" placeholder="Username" required>
+                <label>密碼：</label>
+                <input type="password" name="pw" placeholder="Password" required>
+                <button type="button" id="nextBtn1" class="button">下一步</button>
+            </div>
+
+            <!-- Step 2: Terms and Conditions -->
+            <div class="step" id="step2">
+                <label>條款及條件：</label>
+                <textarea readonly>
+                WBank誠邀您成為我們的客戶。在您申請開立帳戶時，我們需要您提供正確、完整的個人資料，包括但不限於身份證或證件號碼、姓名等。請確保所提供的資料屬實，因為不實資料可能導致開戶申請被拒絕或被終止。
+
+為確保使用者安全及遵守法律法規，請注意以下條款：
+1. 使用者必須年滿18歲，若未滿18歲，請先取得監護人同意。
+2. 使用者需自行承擔所有交易風險。
+3. 本銀行保留隨時變更條款的權利，請留意我們網站或通知上的更新資訊。
+
+若您的帳戶出現異常情況，WBank有權凍結或停止您的帳戶，並可能清空帳戶資金。我們保留這項權利以確保平台的安全及遵守法律法規。
+
+感謝您選擇WBank，我們期待與您建立良好的合作關係。如有任何疑問或需要進一步協助，請隨時與我們聯絡。
+                </textarea>
+                <div class="checkbox-container">
+                    <input type="checkbox" id="termsCheckbox" disabled>
+                    <label for="termsCheckbox">我已閱讀並同意條款及條件。</label>
+                </div>
+                <button type="button" id="prevBtn2" class="button">上一步</button>
+                <button type="button" id="nextBtn2" class="button">下一步</button>
+            </div>
+
+            <!-- Step 3: Confirmation -->
+            <div class="step" id="step3">
+                <h3>確認資料</h3>
+                <p><strong>名字：</strong><span id="confirmName"></span></p>
+                <p><strong>身份證號碼：</strong><span id="confirmId"></span></p>
+                <p><strong>用戶名稱：</strong><span id="confirmUser"></span></p>
+                <button type="submit" id="submitBtn" class="button">提交</button>
+                <button type="button" id="prevBtn3" class="button">上一步</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const nextBtn1 = document.getElementById('nextBtn1');
+        const nextBtn2 = document.getElementById('nextBtn2');
+        const prevBtn2 = document.getElementById('prevBtn2');
+        const prevBtn3 = document.getElementById('prevBtn3');
+        const submitBtn = document.getElementById('submitBtn');
+
+        const step1 = document.getElementById('step1');
+        const step2 = document.getElementById('step2');
+        const step3 = document.getElementById('step3');
+        const termsCheckbox = document.getElementById('termsCheckbox');
+        const termsTextarea = document.querySelector('textarea');
+
+        nextBtn1.addEventListener('click', () => {
+            step1.classList.remove('active');
+            step2.classList.add('active');
+            termsCheckbox.disabled = true; // Disable checkbox initially
+        });
+
+        nextBtn2.addEventListener('click', () => {
+            if (termsCheckbox.checked) {
+                const fname = document.querySelector('input[name="fname"]').value;
+                const id = document.querySelector('input[name="id"]').value;
+                const user = document.querySelector('input[name="user"]').value;
+
+                document.getElementById('confirmName').textContent = fname;
+                document.getElementById('confirmId').textContent = id;
+                document.getElementById('confirmUser').textContent = user;
+
+                step2.classList.remove('active');
+                step3.classList.add('active');
+            } else {
+                alert("請滾動條款並同意條款。");
+            }
+        });
+
+        prevBtn2.addEventListener('click', () => {
+            step2.classList.remove('active');
+            step1.classList.add('active');
+        });
+
+        prevBtn3.addEventListener('click', () => {
+            step3.classList.remove('active');
+            step2.classList.add('active');
+        });
+
+        termsTextarea.addEventListener('scroll', () => {
+            const scrollTop = termsTextarea.scrollTop;
+            const scrollHeight = termsTextarea.scrollHeight;
+            const clientHeight = termsTextarea.clientHeight;
+
+            if (scrollTop + clientHeight >= scrollHeight) {
+                termsCheckbox.disabled = false; // Enable checkbox if scrolled to the bottom
+            } else {
+                termsCheckbox.disabled = true; // Disable checkbox if not scrolled to the bottom
+            }
+        });
+
+        submitBtn.addEventListener('click', () => {
+            document.getElementById('registrationForm').submit();
+        });
+    </script>
+</body>
+</html>
