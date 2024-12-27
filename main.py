@@ -1934,7 +1934,7 @@ def wbank_transfer():
 
 @app.route("/wbank/new_client")
 def wbank_new_client():
-  return render_template("newWbank.html")
+  return render_template("wbank/createUser.html")
 
 @app.route("/wbank/v1/paypal")
 def wbank_paypal():
