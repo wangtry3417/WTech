@@ -115,9 +115,14 @@
                 </select>
                 <button type="button" id="nextBtn1" class="button">下一步</button>
             </div>
-
-            <!-- Step 2: Terms and Conditions -->
+            <!-- Step 2: Information detail -->
             <div class="step" id="step2">
+                <span id="optionPlace"></span>
+                <button type="button" id="prevBtn2" class="button">上一步</button>
+                <button type="button" id="nextBtn2" class="button">下一步</button>
+            </div>
+            <!-- Step 3: Terms and Conditions -->
+            <div class="step" id="step3">
                 <label>條款及條件：</label>
                 <textarea readonly>
                 WBank誠邀您成為我們的客戶。在您申請開立帳戶時，我們需要您提供正確、完整的個人資料，包括但不限於身份證或證件號碼、姓名等。請確保所提供的資料屬實，因為不實資料可能導致開戶申請被拒絕或被終止。
@@ -139,8 +144,8 @@
                 <button type="button" id="nextBtn2" class="button">下一步</button>
             </div>
 
-            <!-- Step 3: Confirmation -->
-            <div class="step" id="step3">
+            <!-- Step 4:  Confirmation -->
+            <div class="step" id="step4">
                 <h3>確認資料</h3>
                 <p><strong>名字：</strong><span id="confirmName"></span></p>
                 <p><strong>身份證號碼：</strong><span id="confirmId"></span></p>
@@ -161,14 +166,53 @@
         const step1 = document.getElementById('step1');
         const step2 = document.getElementById('step2');
         const step3 = document.getElementById('step3');
+        const step4 = document.getElementById('step4');
         const termsCheckbox = document.getElementById('termsCheckbox');
         const termsTextarea = document.querySelector('textarea');
+        const selectReason = document.getElementById('createReason');
 
         nextBtn1.addEventListener('click', () => {
             step1.classList.remove('active');
             step2.classList.add('active');
             termsCheckbox.disabled = true; // Disable checkbox initially
         });
+        
+        function updateFields() {
+            const reason = selectReason.value;
+            document.getElementById('optionPlace').innerHTML = ''; // Clear previous fields
+
+            if (reason === '儲蓄或消費') {
+                document.getElementById('optionPlace').innerHTML = `
+                    <label>大概月收入：(hkd$/ntd$)</label>
+                    <input type="text" name="savingsGoal" placeholder="例如：$80,000" required>
+                    <br>
+                    <label>這是否為出糧/薪金戶口？</label>
+                    <input type="checkbox">
+                `;
+            } else if (reason === '投資') {
+                document.getElementById('optionPlace').innerHTML = `
+                    <label>是否對投資有經驗？（*必要，否則不能開戶）</label>
+                    <input type="checkbox" required>
+                    <br>
+                    <label>請填寫一項你最近三個月內的投資產品:</label>
+                    <input type="text" name="investProduct" placeholder="例子: BTC" required>
+                `;
+            } else if (reason === '事業發展') {
+                document.getElementById('optionPlace').innerHTML = `
+                    <label>請輸入已註冊的公司名：（如果沒有註冊公司，則填寫僱主的全名)</label>
+                    <input type="text" name="companyName" placeholder="例子: WTech Inc." required>
+                    <br>
+                    <label>介紹一下公司規模、成立年份、以及未來計劃。</label>
+                    <textarea name="businessPlan" placeholder="請簡述您的計劃" required></textarea>
+                    <br>
+                    <label>請上傳相關文件。</label>
+                    <br>
+                    <p> 如果是註冊公司的話，請上傳公司註冊副本或商業登記證。否則，請上傳僱主身份證便可。</p>
+                    <br>
+                    <input type="file" required>
+                `;
+            }
+        }
 
         nextBtn2.addEventListener('click', () => {
             if (termsCheckbox.checked) {
