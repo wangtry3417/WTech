@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>付款</title>
+    <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #1a1a1a; /* 背景顏色 */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            color: #ffffff;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center; /* 標題置中 */
+            padding: 10px 20px;
+            background-color: #333333;
+        }
+        .back-button {
+            position: absolute; /* 返回按鈕絕對定位 */
+            left: 20px;
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .title {
+            font-size: 20px;
+            margin: 0;
+        }
+        .options {
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            background-color: #222222;
+        }
+        .option {
+            color: #ffffff;
+            cursor: pointer;
+            text-align: center;
+        }
+        .qr-area {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed #ff8c00; /* 虛線框顏色 */
+            width: 80%; /* 調整掃描區域的寬度 */
+            height: 300px; /* 掃描區域的高度 */
+            margin: 20px auto;
+            border-radius: 10px;
+            position: relative;
+            background-color: #2a2a2a; /* 掃描區域背景色 */
+        }
+        .qr-placeholder {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ff8c00; /* 文字顏色 */
+        }
+        #reader {
+            width: 100%;
+            height: 100%;
+            display: none; /* 初始隱藏掃描器 */
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button class="back-button" onclick="window.history.back();">&lt;</button>
+        <h1 class="title">付款</h1>
+    </div>
+    <div class="options">
+        <div class="option" onclick="startScan();">一掃即付</div>
+        <div class="option">付款碼</div>
+    </div>
+    <div class="qr-area">
+        <div class="qr-placeholder">掃描區域</div>
+        <div id="reader"></div>
+    </div>
+
+    <script>
+        function startScan() {
+            const qrArea = document.querySelector('.qr-area');
+            const qrPlaceholder = document.querySelector('.qr-placeholder');
+            const reader = document.getElementById('reader');
+
+            qrPlaceholder.style.display = 'none';
+            reader.style.display = 'block';
+
+            const html5QrCode = new Html5Qrcode("reader");
+            html5QrCode.start(
+                { facingMode: "environment" }, 
+                {
+                    fps: 10,
+                    qrbox: { width: 250, height: 250 }
+                },
+                (decodedText, decodedResult) => {
+                    let url = "/wbank/v1/storecode?code=" + decodedText + "&reviewer=" + document.getElementById("username").value + "&amount=" + amount;
+            fetch(url)
+                .then(res => res.json())
+                .then(data => {
+                    let urll = `/wbank/openorder?user=${data.payer}&reviewer=${data.reviewer}&amount=${data.amount}`;
+                    fetch (urll)
+                     .then (res=>res.json())
+                     .then (msg=>alert(msg.success))
+                     .catch (err=>alert(err));
+                    })
+                    .catch (err=>alert(err));
+                    html5QrCode.stop().then(() => {
+                        qrPlaceholder.style.display = 'block';
+                        reader.style.display = 'none';
+                    }).catch(err => {
+                        console.error(err);
+                    });
+                },
+                (errorMessage) => {
+                    // 處理掃描過程中的錯誤
+                })
+            .catch(err => {
+                console.error(`開始掃描失敗: ${err}`);
+            });
+        }
+    </script>
+</body>
+</html>
