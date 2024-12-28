@@ -175,7 +175,10 @@
             step1.classList.remove('active');
             step2.classList.add('active');
             termsCheckbox.disabled = true; // Disable checkbox initially
+            updateFields();
         });
+        
+        selectReason.addEventListener('change',updateFields);
         
         function updateFields() {
             const reason = selectReason.value;
