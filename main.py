@@ -136,6 +136,12 @@ socketio.server.instrument(auth=True,namespace="/admin")
 CORS(app)
 #CORS(app, resources={r"/*": {"origins": "https://bc.wtechhk.xyz"}})
 
+@app.after_request
+def add_cors_headers(response):
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
+    return response
+
 db = SQLAlchemy(app)
 
 # 創建 Flask-Login 管理器
