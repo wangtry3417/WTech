@@ -232,15 +232,15 @@
                 document.getElementById('confirmId').textContent = id;
                 document.getElementById('confirmUser').textContent = user;
 
-                step2.classList.remove('active');
-                step3.classList.add('active');
+                step3.classList.remove('active');
+                step4.classList.add('active');
             } else {
                 alert("請滾動條款並同意條款。");
             }
         });
 
         prevBtn2.addEventListener('click', () => {
-            step2.classList.remove('active');
+            step3.classList.remove('active');
             step1.classList.add('active');
         });
 
