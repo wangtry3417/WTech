@@ -345,8 +345,18 @@ class walletView(ModelView):
     return (
             current_user.is_active
             and current_user.is_authenticated
-            #and current_user.role=="admin"
+            and current_user.role=="admin"
     )
+  def _handle_view(self, name, **kwargs):
+        """
+        Override builtin _handle_view in order to redirect users when a view is not
+        accessible.
+        """
+        if not self.is_accessible():
+            if current_user.is_authenticated:
+                # permission denied
+                abort(403)
+                return redirect("/wbank")
 
 class kycView(ModelView):
   column_list = ('username','fname','id_number','address','career')
@@ -2644,7 +2654,7 @@ def wbank_auth_client():
 def wbank_client():
     user = current_user.username
     user_data = wbankwallet.query.filter_by(username=user).first()
-    if current_user.role != 'user':
+    if current_user.role != 'user' or current_user.role != "admin":
         return render_template("wbank/kyc.html",user=user)
     if user_data:
         if user_data.verify == "no":
