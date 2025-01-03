@@ -347,6 +347,18 @@ class walletView(ModelView):
             and current_user.is_authenticated
             and current_user.role=="admin"
     )
+  def _handle_view(self, name, **kwargs):
+        """
+        Override builtin _handle_view in order to redirect users when a view is not
+        accessible.
+        """
+        if not self.is_accessible():
+            if current_user.is_authenticated:
+                # permission denied
+                return jsonify({"msg":"非管理人員不能訪問"})
+            else:
+                # login
+                return redirect("/wbank")
 
 class kycView(ModelView):
   column_list = ('username','fname','id_number','address','career')
