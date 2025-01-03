@@ -2656,6 +2656,8 @@ def wbank_client():
     user_data = wbankwallet.query.filter_by(username=user).first()
     if current_user.role != 'user' and current_user.role != "admin":
         return render_template("wbank/kyc.html",user=user)
+    if current_user.role == "admin":
+      return redirect("/admin/wbankwallet")
     if user_data:
         if user_data.verify == "no":
             return render_template("wbank/kyc.html",user=user)
