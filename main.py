@@ -2808,7 +2808,7 @@ def user_balance():
       return jsonify({
          "Username" : users.username,
          "Balance" : int(users.balance),
-         "Remark" : users.sub
+         "Remark" : users.sub,
          "Wallet-address" : wallet_address
       })
     except:
