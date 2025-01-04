@@ -2293,7 +2293,7 @@ def wbank_hash_transfer():
       if r.status_code != 204:
         return jsonify({"success":"成功轉帳","System-record":False,"status-code":r.status_code})
       else:
-        return jsonify({"success":"成功轉帳","System-record":True})
+        return jsonify({"success":"成功轉帳","System-record":True,"code":hash1})
 
     except Exception as e:
         send_error_to_discord('轉帳失敗', users.username, count, reviewer, str(e))  # 發送錯誤訊息到 Discord
