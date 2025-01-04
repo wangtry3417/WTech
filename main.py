@@ -44,6 +44,9 @@ import pandas as pd
 from bot import run_bot
 import threading
 from time import sleep
+from pyftpdlib.authorizers import DummyAuthorizer
+from pyftpdlib.handlers import FTPHandler
+from pyftpdlib.servers import FTPServer
 #from nltk.stem import WordNetLemmatizer
 #from nltk.book import *
 
@@ -3213,11 +3216,22 @@ def giving_rewards():
       if users:
         users.balance += int(trs[2])
         db.session.commit()
+        
+def run_ftp_server():
+    authorizer = DummyAuthorizer()
+    authorizer.add_user("admin", "1234", "/", perm="elradfmwMT")  # 注意替換根目錄
+
+    handler = FTPHandler
+    handler.authorizer = authorizer
+
+    server = FTPServer(("0.0.0.0", 21), handler)  # 監聽 21 端口
+    print("Starting FTP server on port 21...")
+    server.serve_forever()
 
 thread1 = threading.Thread(target=start_web)
 thread2 = threading.Thread(target=run_bot)
 thread3 = threading.Thread(target=start_boost)
-thread4 = threading.Thread(target=giving_rewards)
+thread4 = threading.Thread(target=run_ftp_server)
 thread1.start()
 thread2.start()
 thread3.start()
