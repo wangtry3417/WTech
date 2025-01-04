@@ -2800,11 +2800,16 @@ def user_balance():
   user = request.args.get("username")
   if user != "":
     users = wbankwallet.query.filter_by(username=user).first()
+    text1 = [users.username, str(users.balance)]
+    t1 = ",".join(text1)
+    hash1 = hashlib.sha256(t1.encode()).hexdigest()
+    wallet_address = '0x' + hash1[:40]
     try:
       return jsonify({
          "Username" : users.username,
          "Balance" : int(users.balance),
          "Remark" : users.sub
+         "Wallet-address" : wallet_address
       })
     except:
       return "找不到該用戶!."
