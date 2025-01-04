@@ -112,11 +112,23 @@ class Contract {
         });
         try {
         let res = await response.json();
-        return res.success ? res.success : res["Error-hint"];
+        #return res.success ? res.success : res["Error-hint"];
+        if (res.success) {
+            const sha256Code = res.code;
+            const contractAddress = this.convertToAddress(sha256Code);
+            return contractAddress;
+        } else {
+            return res["Error-hint"];
+        }
         } catch(err) {
             console.error(err);
             return null;
         }
+    }
+
+    convertToAddress(code) {
+      // 取前 40 個字符以符合以太坊地址長度
+      return '0x' + code.slice(0, 40);
     }
 
     showLoading() {
