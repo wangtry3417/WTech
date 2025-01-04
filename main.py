@@ -345,7 +345,7 @@ class walletView(ModelView):
     return (
             current_user.is_active
             and current_user.is_authenticated
-            and current_user.role=="admin"
+            and current_user.role=="staff"
     )
   def _handle_view(self, name, **kwargs):
         """
@@ -355,7 +355,7 @@ class walletView(ModelView):
         if not self.is_accessible():
             if current_user.is_authenticated:
                 # permission denied
-                return jsonify({"msg":"非管理人員不能訪問"})
+                return jsonify({"msg":u"非管理人員不能訪問"})
             else:
                 # login
                 return redirect("/wbank")
@@ -389,14 +389,24 @@ class kycView(ModelView):
         'address': '地址',
         'career':'職業'
     }
-  @auth.login_required
   def is_accessible(self):
-    return True  # 只要通過認證，就可以訪問
-
-  @auth.login_required
-  def inaccessible_callback(self, name, **kwargs):
-    return unauthorized()  # 使用自定義的未授權響應
-
+    return (
+            current_user.is_active
+            and current_user.is_authenticated
+            and current_user.role=="admin"
+    )
+  def _handle_view(self, name, **kwargs):
+        """
+        Override builtin _handle_view in order to redirect users when a view is not
+        accessible.
+        """
+        if not self.is_accessible():
+            if current_user.is_authenticated:
+                # permission denied
+                return jsonify({"msg":u"非管理人員不能訪問"})
+            else:
+                # login
+                return redirect("/wbank")
 """
 class CustomModelView(ModelView):
     column_display_all_fields = True
@@ -448,6 +458,24 @@ class cashView(ModelView):
     
   edit_modal=True
   form = cashForm
+  def is_accessible(self):
+    return (
+            current_user.is_active
+            and current_user.is_authenticated
+            and current_user.role=="staff"
+    )
+  def _handle_view(self, name, **kwargs):
+        """
+        Override builtin _handle_view in order to redirect users when a view is not
+        accessible.
+        """
+        if not self.is_accessible():
+            if current_user.is_authenticated:
+                # permission denied
+                return jsonify({"msg":u"非管理人員不能訪問"})
+            else:
+                # login
+                return redirect("/wbank")
       
 
 # 定義用戶類
@@ -2659,6 +2687,8 @@ def wbank_client():
     if current_user.role != 'user' and current_user.role != "admin":
         return render_template("wbank/kyc.html",user=user)
     if current_user.role == "admin":
+      return redirect("/admin/wbankkyc")
+    if current_user.role == "staff":
       return redirect("/admin/wbankwallet")
     if user_data:
         if user_data.verify == "no":
