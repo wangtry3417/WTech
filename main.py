@@ -358,7 +358,7 @@ class walletView(ModelView):
                 return jsonify({"msg":u"非管理人員不能訪問"})
             else:
                 # login
-                return redirect("/wbank")
+                return redirect("/wbank/code.html")
 
 class kycView(ModelView):
   column_list = ('username','fname','id_number','address','career')
