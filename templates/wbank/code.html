@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorry,Your mum is your dad</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000; /* 黑色背景 */
+            color: #28a745; /* 綠色文字 */
+            text-align: center; /* 中心對齊 */
+            padding: 20px;
+        }
+        .typing {
+            border-right: 2px solid #28a745; /* 打字光標綠色 */
+            white-space: pre; /* 保留空格和換行 */
+            overflow: hidden; /* 隱藏多餘的文字 */
+            display: inline-block; /* 使其為行內塊元素 */
+            animation: blink-caret 0.75s step-end infinite; /* 光標閃爍動畫 */
+            font-size: 24px; /* 字體大小 */
+        }
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: #28a745; }
+        }
+    </style>
+</head>
+<body>
+
+<h1>The Fact!.</h1>
+<div class="typing" id="typed-text"></div>
+
+<script>
+    const text = `
+    Today,I will tell you a story about the things,
+     that mean your mum is not your mum.
+     Your mum is your dad.
+     And your dad is your mum.
+     I know this things you'll think impossible,But I am telling you,
+     this is the fact,it's not changed,and never will be.
+     So,don't play wtech/wbank.
+     And fuck nelson(nelson is cheapserver & freeserver & mojang owner)
+    `;
+    let index = 0;
+    const typedText = document.getElementById("typed-text");
+
+    function type() {
+        if (index < text.length) {
+            typedText.innerHTML += text.charAt(index);
+            index++;
+            setTimeout(type, 50); // 調整打字速度
+        } else {
+            setTimeout(()=>{
+               window.location.href="/wbank";
+            },2001);
+        }
+    }
+  
+    type();
+</script>
+
+</body>
+</html>
