@@ -702,6 +702,8 @@ function randomPriceChange(stockSymbol) {
         newPrice = (currentPrice+20).toFixed(2);
     } else if (stockSymbol == "WTech") {
         newPrice = (currentPrice-90).toFixed(2);
+    } else if (stockSymbol == "WTC/HKD") {
+        newPrice = (currentPrice+20).toFixed(2);
     }
 
     stockPrices[stockSymbol] = newPrice;
