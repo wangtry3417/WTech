@@ -224,7 +224,7 @@
         <div id="tradeChart" class="page">
             <div class="card">
                 <h2>投資</h2>
-                <h3>可購買的股票</h3>
+                <h3>可購買的資產項目</h3>
     <table class="table table-striped" id="availableStocks">
         <thead>
             <tr>
@@ -237,28 +237,28 @@
         </thead>
         <tbody>
             <tr>
-                <td>AAPL</td>
+                <td>WBank內銀股</td>
                 <td class="price"></td>
                 <td class="triangle" style="border-left: 10px solid transparent; border-right: 10px solid transparent; border-bottom: 10px solid gray;"></td>
                 <td class="percentage">0%</td>
                 <td><button class="btn btn-primary">買入</button></td>
             </tr>
             <tr>
-                <td>GOOGL</td>
+                <td>泓鐵鐵路局</td>
                 <td class="price"></td>
                 <td class="triangle" style="border-left: 10px solid transparent; border-right: 10px solid transparent; border-bottom: 10px solid gray;"></td>
                 <td class="percentage">0%</td>
                 <td><button class="btn btn-primary">買入</button></td>
             </tr>
             <tr>
-                <td>AMZN</td>
+                <td>WTech</td>
                 <td class="price"></td>
                 <td class="triangle" style="border-left: 10px solid transparent; border-right: 10px solid transparent; border-bottom: 10px solid gray;"></td>
                 <td class="percentage">0%</td>
                 <td><button class="btn btn-primary">買入</button></td>
             </tr>
             <tr>
-                <td>BA</td>
+                <td>WTC/HKD</td>
                 <td class="price"></td>
                 <td class="triangle" style="border-left: 10px solid transparent; border-right: 10px solid transparent; border-bottom: 10px solid gray;"></td>
                 <td class="percentage">0%</td>
@@ -278,7 +278,7 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>股票代碼</th>
+                <th>資產名稱</th>
                 <th>價格</th>
                 <th>數量</th>
                 <th>總計（買價)</th>
@@ -645,10 +645,10 @@
         //Stock place
 let portfolio = JSON.parse(localStorage.getItem('portfolio')) || [];
 const stockPrices = {
-    AAPL: 150.00,
-    GOOGL: 2800.00,
-    AMZN: 3400.00,
-    BA: 2100.00,
+    "WBank內銀股": 150.00,
+    "泓鐵鐵路局": 20.00,
+    "WTech": 15.00,
+    "WTC/HKD: 10.00,
     "BEn-stock": 3.00
 };
 
@@ -700,6 +700,12 @@ function randomPriceChange(stockSymbol) {
         } else {
             newPrice = (currentPrice * 3).toFixed(2);
         }
+    } else if (stockSymnol == "WBank內銀股") {
+        newPrice = currentPrice+50;
+    } else if (stockSymnol == "泓國鐵路局") {
+        newPrice = currentPrice+20;
+    } else if (stockSymnol == "WTech") {
+        newPrice = currentPrice-90;
     }
 
     stockPrices[stockSymbol] = newPrice;
