@@ -792,6 +792,7 @@ function buyStock(stockSymbol) {
     const stockPrice = parseFloat(priceElement.innerText);
     let quantity = prompt("請輸入購買數量:");
     if (!quantity || quantity == "" || quantity == null) {
+        alert("不知道你要買多少");
         return;
     }
     quantity = parseInt(quantity);
