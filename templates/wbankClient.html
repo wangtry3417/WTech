@@ -888,15 +888,12 @@ function sellStock(stockSymbol) {
     });
 }
         
-document.addEventListener('DOMContentLoaded', function() {
-    updateBalance(); // 初始化餘額
-    renderPortfolio(); // 渲染投資組合
-
-    // 隨機更新價格
+// 隨機更新價格
     setInterval(() => {
         Object.keys(stockPrices).forEach(stock => randomPriceChange(stock));
     }, 5000); // 每5秒更新一次價格
-});
+   updateBalance(); // 初始化餘額
+   renderPortfolio(); // 渲染投資組合
     </script>
 </body>
 </html>
