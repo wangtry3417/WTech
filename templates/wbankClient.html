@@ -224,7 +224,8 @@
         <div id="tradeChart" class="page">
             <div class="card">
                 <h2>投資</h2>
-                <h3>可購買的資產項目</h3>
+                <button class="button" onclick="reloadStockButton()">更新價格</button>
+                <h3>可投資的資產項目</h3>
     <table class="table table-striped" id="availableStocks">
         <thead>
             <tr>
@@ -887,11 +888,9 @@ function sellStock(stockSymbol) {
         alert('賣出過程中發生錯誤。'+error);
     });
 }
-        
-// 隨機更新價格
-    setInterval(() => {
-        Object.keys(stockPrices).forEach(stock => randomPriceChange(stock));
-    }, 5000); // 每5秒更新一次價格
+   const reloadStockButton = () => {
+     Object.keys(stockPrices).forEach(stock => randomPriceChange(stock));
+   };
    updateBalance(); // 初始化餘額
    renderPortfolio(); // 渲染投資組合
     </script>
