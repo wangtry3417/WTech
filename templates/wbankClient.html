@@ -693,7 +693,8 @@ function fetchStockPrice(stockSymbol) {
 function randomPriceChange(stockSymbol) {
     const currentPrice = stockPrices[stockSymbol];
     const change = (Math.random() * 2 - 1) * 0.05; // 隨機變動 -5% 到 +5%
-    let newPrice = Math.max(0, (currentPrice * (1 + change)).toFixed(2)); // 確保價格不低於 0
+    // let newPrice = Math.max(0, (currentPrice * (1 + change)).toFixed(2)); // 確保價格不低於 0
+    let newPrice;
     if (stockSymbol == "BEn-stock") {
         newPrice = (currentPrice+100).toFixed(2);
     } else if (stockSymbol == "WBank內銀股") {
@@ -704,6 +705,8 @@ function randomPriceChange(stockSymbol) {
         newPrice = (currentPrice-90).toFixed(2);
     } else if (stockSymbol == "WTC/HKD") {
         newPrice = (currentPrice+20).toFixed(2);
+    } else {
+        newPrice = currentPrice.toFixed(2);
     }
 
     stockPrices[stockSymbol] = newPrice;
