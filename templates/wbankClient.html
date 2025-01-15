@@ -224,7 +224,6 @@
         <div id="tradeChart" class="page">
             <div class="card">
                 <h2>投資</h2>
-                <button class="button" onclick="reloadStockButton()">更新價格</button>
                 <h3>可投資的資產項目</h3>
     <table class="table table-striped" id="availableStocks">
         <thead>
@@ -663,7 +662,9 @@ function renderPortfolio() {
 
     portfolio.forEach((stock) => {
         const originalPrice = stock.originalPrice || stock.price; // 使用原始價格來計算百分比
-
+        if (stock.buyer != "{{user}}") {
+            return;
+        }
         const row = `<tr>
             <td>${stock.symbol}</td>
             <td class="price">${stock.price.toFixed(2)}</td>
@@ -822,7 +823,7 @@ function buyStock(stockSymbol) {
     .then(data => {
         if (data.success) {
             alert("購買成功");
-            const stock = { symbol: stockSymbol, price: stockPrice, quantity: quantity, originalPrice:stockPrice };
+            const stock = { symbol: stockSymbol, price: stockPrice, quantity: quantity, originalPrice:stockPrice, buyer: "{{user}}" };
             portfolio.push(stock);
             localStorage.setItem('portfolio', JSON.stringify(portfolio));
             renderPortfolio(); // 更新已購買股票的顯示
@@ -889,9 +890,14 @@ function sellStock(stockSymbol) {
         alert('賣出過程中發生錯誤。'+error);
     });
 }
+   /*
    const reloadStockButton = () => {
      Object.keys(stockPrices).forEach(stock => randomPriceChange(stock));
    };
+   */
+   setInterval(()=>{
+     Object.keys(stockPrices).forEach(stock => randomPriceChange(stock));
+   },5000)
    updateBalance(); // 初始化餘額
    renderPortfolio(); // 渲染投資組合
     </script>
