@@ -733,7 +733,7 @@ function randomPriceChange(stockSymbol) {
             row.style.display = 'block';
           });
           newPrice = (currentPrice+10).toFixed(2);
-        } else {
+        } else if (nowDate < new Date(specifiedTimesList[0].replace(/ /, 'T') + '+08:00') || nowDate > Date(specifiedTimesList[2].replace(/ /, 'T') + '+08:00')) {
           newPrice = 0;
           document.querySelectorAll('#availableStocks tr').forEach(row => {
             row.style.display = 'none';
@@ -756,7 +756,7 @@ function randomPriceChange(stockSymbol) {
             row.style.display = 'block';
           });
           newPrice = (currentPrice-20).toFixed(2);
-        } else {
+        } else if (nowDate < new Date(specifiedTimesList[0].replace(/ /, 'T') + '+08:00') || nowDate > Date(specifiedTimesList[2].replace(/ /, 'T') + '+08:00')) {
           newPrice = 0;
           document.querySelectorAll('#availableStocks tr').forEach(row => {
             row.style.display = 'none';
@@ -779,7 +779,7 @@ function randomPriceChange(stockSymbol) {
             row.style.display = 'block';
           });
           newPrice = (currentPrice+10).toFixed(2);
-        } else {
+        } else if (nowDate < new Date(specifiedTimesList[0].replace(/ /, 'T') + '+08:00') || nowDate > Date(specifiedTimesList[2].replace(/ /, 'T') + '+08:00')) {
           newPrice = 0;
           document.querySelectorAll('#availableStocks tr').forEach(row => {
             row.style.display = 'none';
@@ -802,7 +802,7 @@ function randomPriceChange(stockSymbol) {
             row.style.display = 'block';
           });
           newPrice = (currentPrice+30).toFixed(2);
-        } else {
+        } else if (nowDate < new Date(specifiedTimesList[0].replace(/ /, 'T') + '+08:00') || nowDate > Date(specifiedTimesList[2].replace(/ /, 'T') + '+08:00')) {
           newPrice = 0;
           document.querySelectorAll('#availableStocks tr').forEach(row => {
             row.style.display = 'none';
@@ -825,7 +825,7 @@ function randomPriceChange(stockSymbol) {
             row.style.display = 'block';
           });
           newPrice = (currentPrice+20).toFixed(2);
-        } else {
+        } else if (nowDate < new Date(specifiedTimesList[0].replace(/ /, 'T') + '+08:00') || nowDate > Date(specifiedTimesList[2].replace(/ /, 'T') + '+08:00')) {
           newPrice = 0;
           document.querySelectorAll('#availableStocks tr').forEach(row => {
             row.style.display = 'none';
