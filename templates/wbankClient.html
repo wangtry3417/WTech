@@ -656,7 +656,7 @@ const stockPrices = {
     "泓鐵鐵路局": 20.00,
     "WTech": 15.00,
     "WTC/HKD": 10.00,
-    "BEn-stock": 3.00
+    "BEn-stock": 0.63
 };
 
 function updateBalance() {
@@ -756,7 +756,7 @@ function randomPriceChange(stockSymbol) {
             row.style.display = 'block';
           });
           newPrice = (currentPrice-20).toFixed(2);
-        } else if (nowDate < new Date(specifiedTimesList[0].replace(/ /, 'T') + '+08:00') || nowDate > Date(specifiedTimesList[2].replace(/ /, 'T') + '+08:00')) {
+        } else if (nowDate < new Date(bankTimesList[0].replace(/ /, 'T') + '+08:00') || nowDate > Date(specifiedTimesList[2].replace(/ /, 'T') + '+08:00')) {
           newPrice = 0;
           document.querySelectorAll('#availableStocks tr').forEach(row => {
             row.style.display = 'none';
