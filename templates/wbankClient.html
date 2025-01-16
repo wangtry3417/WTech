@@ -709,14 +709,14 @@ function randomPriceChange(stockSymbol) {
     const nowDate = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Taipei' }));
     //times&date list of stock
     const specifiedTimesList = [
-         '2025/01/16 9:00:00',
-         '2025/01/16 13:30:00',
-         '2025/01/16 21:00:00'
+         '2025/01/17 9:00:00',
+         '2025/01/17 13:30:00',
+         '2025/01/17 21:00:00'
     ];
     const bankTimesList = [
-        '2025/01/16 8:00:00',
-        '2025/01/16 13:30:00',
-        '2025/01/16 22:00:00'
+        '2025/01/17 8:00:00',
+        '2025/01/17 13:30:00',
+        '2025/01/17 22:00:00'
     ];
     const tradingTimes = {
         "BEn-stock": specifiedTimesList,
@@ -740,20 +740,20 @@ function randomPriceChange(stockSymbol) {
 
                 // 根據股票符號和時間段設定價格變動
                 if (stockSymbol === "BEn-stock") {
-                    // 第一時間段增加100，第二時間段增加10
-                    priceChange = (i === 0) ? 100 : 10;
+                    // 第一時間段增加0.1，第二時間段增加10
+                    priceChange = (i === 0) ? 0.1 : 0.5;
                 } else if (stockSymbol === "WBank內銀股") {
                     // 第一時間段增加100，第二時間段減少20
-                    priceChange = (i === 0) ? 100 : -20;
+                    priceChange = (i === 0) ? -70 : 30;
                 } else if (stockSymbol === "泓國鐵路局") {
                     // 第一時間段增加100，第二時間段增加10
-                    priceChange = (i === 0) ? 100 : 10;
+                    priceChange = (i === 0) ? 100 : 20;
                 } else if (stockSymbol === "WTech") {
                     // 第一時間段減少10，第二時間段增加30
-                    priceChange = (i === 0) ? -10 : 30;
+                    priceChange = (i === 0) ? -10 : -35;
                 } else if (stockSymbol === "WTC/HKD") {
                     // 第一時間段減少95，第二時間段增加20
-                    priceChange = (i === 0) ? -95 : 20;
+                    priceChange = (i === 0) ? -15 : 0.3;
                 }
 
                 // 更新新價格
