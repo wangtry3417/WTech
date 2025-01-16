@@ -706,9 +706,7 @@ function randomPriceChange(stockSymbol) {
     let newPrice = Math.max(0, (currentPrice * (1 + change)).toFixed(2)); // 確保價格不低於 0
     // let newPrice;
     // Record Time&date
-    let date = new Date();
-    let utcOffset = 8 * 60;
-    let nowDate =  Date(date.getTime() + (utcOffset * 60 * 1000));
+    const nowDate = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Taipei' }));
     //times&date list of stock
     const specifiedTimesList = [
          '2025/01/16 9:00:00',
