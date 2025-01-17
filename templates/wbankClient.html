@@ -658,11 +658,13 @@
         //Stock place
 function changeBGColor() {
     if (document.getElementById('colorSwitch').checked) {
+          document.getElementById('container').style.backgroundColor="rgb(0,0,0)";
           document.getElementById('tradeChart').style.backgroundColor="rgb(0,0,0)";
           document.getElementById('tradeChart').style.color="rgb(255,255,255)";
           document.getElementById('availableStocks').style.backgroundColor="rgb(128,128,128)";
           document.getElementById('availableStocks').style.color="rgb(255,255,255)";
     } else {
+        document.getElementById('container').style.backgroundColor="rgb(255,255,255)";
         document.getElementById('tradeChart').style.backgroundColor="rgb(255,255,255)";
         document.getElementById('tradeChart').style.color="rgb(0,0,0)";
         document.getElementById('availableStocks').style.backgroundColor="rgb(255,255,255)";
