@@ -730,9 +730,10 @@ function randomPriceChange(stockSymbol) {
 
     if (times) {
         let isTradingOpen = false;
+        let startTime = null;
 
         for (let i = 0; i < times.length - 1; i++) {
-            const startTime = new Date(times[i].replace(/ /, 'T') + '+08:00');
+            startTime = new Date(times[i].replace(/ /, 'T') + '+08:00');
             const endTime = new Date(times[i + 1].replace(/ /, 'T') + '+08:00');
 
             if (nowDate >= startTime && nowDate <= endTime) {
