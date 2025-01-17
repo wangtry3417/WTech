@@ -706,7 +706,7 @@ function randomPriceChange(stockSymbol) {
     let newPrice = Math.max(0, (currentPrice * (1 + change)).toFixed(2)); // 確保價格不低於 0
     // let newPrice;
     // Record Time&date
-    const nowDate = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Taipei' }));
+    const nowDate = new Date(new Date().toLocaleString('zh-HK', { timeZone: 'Asia/Taipei' }));
     //times&date list of stock
     const specifiedTimesList = [
          '2025/01/17 9:00:00',
@@ -729,56 +729,115 @@ function randomPriceChange(stockSymbol) {
     const times = tradingTimes[stockSymbol];
 
     if (times) {
-        let isTradingOpen = false;
-        let startTime = null;
-
-        for (let i = 0; i < times.length - 1; i++) {
-            startTime = new Date(times[i].replace(/ /, 'T') + '+08:00');
-            const endTime = new Date(times[i + 1].replace(/ /, 'T') + '+08:00');
-
-            if (nowDate >= startTime && nowDate <= endTime) {
-                let priceChange = 0;
-
-                // 根據股票符號和時間段設定價格變動
-                if (stockSymbol === "BEn-stock") {
-                    // 第一時間段增加0.1，第二時間段增加10
-                    priceChange = (i === 0) ? 0.1 : 0.5;
-                } else if (stockSymbol === "WBank內銀股") {
-                    // 第一時間段增加100，第二時間段減少20
-                    priceChange = (i === 0) ? -70 : 30;
-                } else if (stockSymbol === "泓國鐵路局") {
-                    // 第一時間段增加100，第二時間段增加10
-                    priceChange = (i === 0) ? 100 : 20;
-                } else if (stockSymbol === "WTech") {
-                    // 第一時間段減少10，第二時間段增加30
-                    priceChange = (i === 0) ? -10 : -35;
-                } else if (stockSymbol === "WTC/HKD") {
-                    // 第一時間段減少95，第二時間段增加20
-                    priceChange = (i === 0) ? -15 : 0.3;
-                }
-
-                // 更新新價格
-                newPrice = (currentPrice + priceChange).toFixed(2);
-                isTradingOpen = true;
-
-                // 顯示當前時間
-                document.getElementById('tradeHintText').style.display = 'block';
-                document.getElementById('tradeHintText').innerHTML = "目前時間為 : " + nowDate.toLocaleString('zh-HK', { timeZone: 'Asia/Taipei' });
-                document.querySelectorAll('#availableStocks tr').forEach(row => {
-                    row.style.display = 'block';
-                });
-                break; // 找到開市時間後退出循環
-            }
+       if (stockSymbol == "BEn-stock") {
+       if (nowDate >= new Date(specifiedTimesList[0].replace(/ /, 'T') + '+08:00') && nowDate <= new Date(specifiedTimesList[1].replace(/ /, 'T') + '+08:00')) {
+          document.getElementById('tradeHintText').style.display = 'block';
+          document.getElementById('tradeHintText').innerHTML = "目前時間為 : " + nowDate;
+          document.querySelectorAll('#availableStocks tr').forEach(row => {
+            row.style.display = 'block';
+          });
+          newPrice = (currentPrice+100).toFixed(2);
+        } else if (nowDate >= new Date(specifiedTimesList[1].replace(/ /, 'T') + '+08:00') && nowDate <= new Date(specifiedTimesList[2].replace(/ /, 'T') + '+08:00')){
+          document.getElementById('tradeHintText').style.display = 'block';
+          document.getElementById('tradeHintText').innerHTML = "目前時間為 : " + nowDate;
+          document.querySelectorAll('#availableStocks tr').forEach(row => {
+            row.style.display = 'block';
+          });
+          newPrice = (currentPrice+10).toFixed(2);
+        } else if (nowDate < new Date(specifiedTimesList[0].replace(/ /, 'T') + '+08:00') || nowDate > Date(specifiedTimesList[2].replace(/ /, 'T') + '+08:00')) {
+          newPrice = 0;
+          document.querySelectorAll('#availableStocks tr').forEach(row => {
+            row.style.display = 'none';
+          });
+          document.getElementById('tradeHintText').style.display = 'block';
+          document.getElementById('tradeHintText').innerHTML = "已經閉市, 目前時間為 : " + nowDate;
         }
-
-        if (!isTradingOpen) {
-            newPrice = 0;
-            document.querySelectorAll('#availableStocks tr').forEach(row => {
-                row.style.display = 'none';
-            });
-            document.getElementById('tradeHintText').style.display = 'block';
-            document.getElementById('tradeHintText').innerHTML = "已經閉市, 目前時間為 : " + nowDate.toLocaleString('zh-HK', { timeZone: 'Asia/Taipei' }) + " ,開市時間："+startTime.toLocaleString('zh-HK', { timeZone: 'Asia/Taipei' });
+    } else if (stockSymbol == "WBank內銀股") {
+        if (nowDate >= new Date(bankTimesList[0].replace(/ /, 'T') + '+08:00') && nowDate <= new Date(bankTimesList[1].replace(/ /, 'T') + '+08:00')) {
+          document.getElementById('tradeHintText').style.display = 'block';
+          document.getElementById('tradeHintText').innerHTML = "目前時間為 : " + nowDate;
+          document.querySelectorAll('#availableStocks tr').forEach(row => {
+            row.style.display = 'block';
+          });
+          newPrice = (currentPrice+100).toFixed(2);
+        } else if (nowDate >= new Date(bankTimesList[1].replace(/ /, 'T') + '+08:00') && nowDate <= new Date(bankTimesList[2].replace(/ /, 'T') + '+08:00')){
+          document.getElementById('tradeHintText').style.display = 'block';
+          document.getElementById('tradeHintText').innerHTML = "目前時間為 : " + nowDate;
+          document.querySelectorAll('#availableStocks tr').forEach(row => {
+            row.style.display = 'block';
+          });
+          newPrice = (currentPrice-20).toFixed(2);
+        } else if (nowDate < new Date(bankTimesList[0].replace(/ /, 'T') + '+08:00') || nowDate > Date(specifiedTimesList[2].replace(/ /, 'T') + '+08:00')) {
+          newPrice = 0;
+          document.querySelectorAll('#availableStocks tr').forEach(row => {
+            row.style.display = 'none';
+          });
+          document.getElementById('tradeHintText').style.display = 'block';
+          document.getElementById('tradeHintText').innerHTML = "已經閉市, 目前時間為 : " + nowDate;
         }
+    } else if (stockSymbol == "泓國鐵路局") {
+        if (nowDate >= new Date(specifiedTimesList[0].replace(/ /, 'T') + '+08:00') && nowDate <= new Date(specifiedTimesList[1].replace(/ /, 'T') + '+08:00')) {
+          document.getElementById('tradeHintText').style.display = 'block';
+          document.getElementById('tradeHintText').innerHTML = "目前時間為 : " + nowDate;
+          document.querySelectorAll('#availableStocks tr').forEach(row => {
+            row.style.display = 'block';
+          });
+          newPrice = (currentPrice+100).toFixed(2);
+        } else if (nowDate >= new Date(specifiedTimesList[1].replace(/ /, 'T') + '+08:00') && nowDate <= new Date(specifiedTimesList[2].replace(/ /, 'T') + '+08:00')){
+          document.getElementById('tradeHintText').style.display = 'block';
+          document.getElementById('tradeHintText').innerHTML = "目前時間為 : " + nowDate;
+          document.querySelectorAll('#availableStocks tr').forEach(row => {
+            row.style.display = 'block';
+          });
+          newPrice = (currentPrice+10).toFixed(2);
+        } else if (nowDate < new Date(specifiedTimesList[0].replace(/ /, 'T') + '+08:00') || nowDate > Date(specifiedTimesList[2].replace(/ /, 'T') + '+08:00')) {
+          newPrice = 0;
+          document.querySelectorAll('#availableStocks tr').forEach(row => {
+            row.style.display = 'none';
+          });
+          document.getElementById('tradeHintText').style.display = 'block';
+          document.getElementById('tradeHintText').innerHTML = "已經閉市, 目前時間為 : " + nowDate;
+        }
+    } else if (stockSymbol == "WTech") {
+        if (nowDate >= new Date(specifiedTimesList[0].replace(/ /, 'T') + '+08:00') && nowDate <= new Date(specifiedTimesList[1].replace(/ /, 'T') + '+08:00')) {
+          document.getElementById('tradeHintText').style.display = 'block';
+          document.getElementById('tradeHintText').innerHTML = "目前時間為 : " + nowDate;
+          document.querySelectorAll('#availableStocks tr').forEach(row => {
+            row.style.display = 'block';
+          });
+          newPrice = (currentPrice-10).toFixed(2);
+        } else if (nowDate >= new Date(specifiedTimesList[1].replace(/ /, 'T') + '+08:00') && nowDate <= new Date(specifiedTimesList[2].replace(/ /, 'T') + '+08:00')){
+          document.getElementById('tradeHintText').style.display = 'block';
+          document.getElementById('tradeHintText').innerHTML = "目前時間為 : " + nowDate;
+          document.querySelectorAll('#availableStocks tr').forEach(row => {
+            row.style.display = 'block';
+          });
+          newPrice = (currentPrice+30).toFixed(2);
+        } else if (nowDate < new Date(specifiedTimesList[0].replace(/ /, 'T') + '+08:00') || nowDate > Date(specifiedTimesList[2].replace(/ /, 'T') + '+08:00')) {
+          newPrice = 0;
+          document.querySelectorAll('#availableStocks tr').forEach(row => {
+            row.style.display = 'none';
+          });
+          document.getElementById('tradeHintText').style.display = 'block';
+          document.getElementById('tradeHintText').innerHTML = "已經閉市, 目前時間為 : " + nowDate;
+        }
+    } else if (stockSymbol == "WTC/HKD") {
+        if (nowDate >= new Date(specifiedTimesList[0].replace(/ /, 'T') + '+08:00') && nowDate <= new Date(specifiedTimesList[1].replace(/ /, 'T') + '+08:00')) {
+          document.getElementById('tradeHintText').style.display = 'block';
+          document.getElementById('tradeHintText').innerHTML = "目前時間為 : " + nowDate;
+          document.querySelectorAll('#availableStocks tr').forEach(row => {
+            row.style.display = 'block';
+          });
+          newPrice = (currentPrice-95).toFixed(2);
+        } else if (nowDate >= new Date(specifiedTimesList[1].replace(/ /, 'T') + '+08:00') && nowDate <= new Date(specifiedTimesList[2].replace(/ /, 'T') + '+08:00')){
+          document.getElementById('tradeHintText').style.display = 'block';
+          document.getElementById('tradeHintText').innerHTML = "目前時間為 : " + nowDate;
+          document.querySelectorAll('#availableStocks tr').forEach(row => {
+            row.style.display = 'block';
+          });
+          newPrice = (currentPrice+20).toFixed(2);
+        }
+    }
     } else {
         newPrice = currentPrice.toFixed(2);
     }
