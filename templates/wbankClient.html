@@ -777,7 +777,7 @@ function randomPriceChange(stockSymbol) {
                 row.style.display = 'none';
             });
             document.getElementById('tradeHintText').style.display = 'block';
-            document.getElementById('tradeHintText').innerHTML = "已經閉市, 目前時間為 : " + nowDate.toLocaleString('zh-HK', { timeZone: 'Asia/Taipei' }) + " ,開市時間："+startTime;
+            document.getElementById('tradeHintText').innerHTML = "已經閉市, 目前時間為 : " + nowDate.toLocaleString('zh-HK', { timeZone: 'Asia/Taipei' }) + " ,開市時間："+startTime.toLocaleString('zh-HK', { timeZone: 'Asia/Taipei' });
         }
     } else {
         newPrice = currentPrice.toFixed(2);
