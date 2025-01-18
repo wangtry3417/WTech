@@ -807,6 +807,8 @@ function randomPriceChange(stockSymbol) {
           });
           document.getElementById('tradeHintText').style.display = 'block';
           document.getElementById('tradeHintText').innerHTML = "已經閉市, 目前時間為 : " + nowDate;
+        } else {
+            newPrice = currentPrice;
         }
     } else if (stockSymbol == "泓國鐵路局") {
         if (nowDate >= new Date(specifiedTimesList[0].replace(/ /, 'T') + '+08:00') && nowDate <= new Date(specifiedTimesList[1].replace(/ /, 'T') + '+08:00')) {
@@ -830,6 +832,8 @@ function randomPriceChange(stockSymbol) {
           });
           document.getElementById('tradeHintText').style.display = 'block';
           document.getElementById('tradeHintText').innerHTML = "已經閉市, 目前時間為 : " + nowDate;
+        } else {
+            newPrice = currentPrice;
         }
     } else if (stockSymbol == "WTech") {
         if (nowDate >= new Date(specifiedTimesList[0].replace(/ /, 'T') + '+08:00') && nowDate <= new Date(specifiedTimesList[1].replace(/ /, 'T') + '+08:00')) {
@@ -853,6 +857,8 @@ function randomPriceChange(stockSymbol) {
           });
           document.getElementById('tradeHintText').style.display = 'block';
           document.getElementById('tradeHintText').innerHTML = "已經閉市, 目前時間為 : " + nowDate;
+        } else {
+            newPrice = currentPrice;
         }
     } else if (stockSymbol == "WTC/HKD") {
         if (nowDate >= new Date(specifiedTimesList[0].replace(/ /, 'T') + '+08:00') && nowDate <= new Date(specifiedTimesList[1].replace(/ /, 'T') + '+08:00')) {
@@ -869,6 +875,8 @@ function randomPriceChange(stockSymbol) {
             row.style.display = 'block';
           });
           newPrice = (currentPrice-0.2).toFixed(2);
+        } else {
+            newPrice = currentPrice;
         }
     }
     } else {
