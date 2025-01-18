@@ -768,7 +768,7 @@ function randomPriceChange(stockSymbol) {
           document.querySelectorAll('#availableStocks tr').forEach(row => {
             row.style.display = 'block';
           });
-          newPrice = (currentPrice+100).toFixed(2);
+          newPrice = (currentPrice+0.01).toFixed(2);
         } else if (nowDate >= new Date(specifiedTimesList[1].replace(/ /, 'T') + '+08:00') && nowDate <= new Date(specifiedTimesList[2].replace(/ /, 'T') + '+08:00')){
           document.getElementById('tradeHintText').style.display = 'block';
           document.getElementById('tradeHintText').innerHTML = "目前時間為 : " + nowDate;
@@ -777,7 +777,7 @@ function randomPriceChange(stockSymbol) {
           });
           newPrice = (currentPrice+10).toFixed(2);
         } else if (nowDate < new Date(specifiedTimesList[0].replace(/ /, 'T') + '+08:00') || nowDate > Date(specifiedTimesList[2].replace(/ /, 'T') + '+08:00')) {
-          newPrice = 0;
+          newPrice = 0.01;
           document.querySelectorAll('#availableStocks tr').forEach(row => {
             row.style.display = 'none';
           });
@@ -791,7 +791,7 @@ function randomPriceChange(stockSymbol) {
           document.querySelectorAll('#availableStocks tr').forEach(row => {
             row.style.display = 'block';
           });
-          newPrice = (currentPrice+100).toFixed(2);
+          newPrice = (currentPrice+0.01).toFixed(2);
         } else if (nowDate >= new Date(bankTimesList[1].replace(/ /, 'T') + '+08:00') && nowDate <= new Date(bankTimesList[2].replace(/ /, 'T') + '+08:00')){
           document.getElementById('tradeHintText').style.display = 'block';
           document.getElementById('tradeHintText').innerHTML = "目前時間為 : " + nowDate;
@@ -800,7 +800,7 @@ function randomPriceChange(stockSymbol) {
           });
           newPrice = (currentPrice-20).toFixed(2);
         } else if (nowDate < new Date(bankTimesList[0].replace(/ /, 'T') + '+08:00') || nowDate > Date(specifiedTimesList[2].replace(/ /, 'T') + '+08:00')) {
-          newPrice = 0;
+          newPrice = 0.956;
           document.querySelectorAll('#availableStocks tr').forEach(row => {
             row.style.display = 'none';
           });
@@ -814,14 +814,14 @@ function randomPriceChange(stockSymbol) {
           document.querySelectorAll('#availableStocks tr').forEach(row => {
             row.style.display = 'block';
           });
-          newPrice = (currentPrice+100).toFixed(2);
+          newPrice = (currentPrice+1).toFixed(2);
         } else if (nowDate >= new Date(specifiedTimesList[1].replace(/ /, 'T') + '+08:00') && nowDate <= new Date(specifiedTimesList[2].replace(/ /, 'T') + '+08:00')){
           document.getElementById('tradeHintText').style.display = 'block';
           document.getElementById('tradeHintText').innerHTML = "目前時間為 : " + nowDate;
           document.querySelectorAll('#availableStocks tr').forEach(row => {
             row.style.display = 'block';
           });
-          newPrice = (currentPrice+10).toFixed(2);
+          newPrice = (currentPrice+6).toFixed(2);
         } else if (nowDate < new Date(specifiedTimesList[0].replace(/ /, 'T') + '+08:00') || nowDate > Date(specifiedTimesList[2].replace(/ /, 'T') + '+08:00')) {
           newPrice = 0;
           document.querySelectorAll('#availableStocks tr').forEach(row => {
@@ -837,14 +837,14 @@ function randomPriceChange(stockSymbol) {
           document.querySelectorAll('#availableStocks tr').forEach(row => {
             row.style.display = 'block';
           });
-          newPrice = (currentPrice-10).toFixed(2);
+          newPrice = (currentPrice-0.9).toFixed(2);
         } else if (nowDate >= new Date(specifiedTimesList[1].replace(/ /, 'T') + '+08:00') && nowDate <= new Date(specifiedTimesList[2].replace(/ /, 'T') + '+08:00')){
           document.getElementById('tradeHintText').style.display = 'block';
           document.getElementById('tradeHintText').innerHTML = "目前時間為 : " + nowDate;
           document.querySelectorAll('#availableStocks tr').forEach(row => {
             row.style.display = 'block';
           });
-          newPrice = (currentPrice+30).toFixed(2);
+          newPrice = (currentPrice+0.08).toFixed(2);
         } else if (nowDate < new Date(specifiedTimesList[0].replace(/ /, 'T') + '+08:00') || nowDate > Date(specifiedTimesList[2].replace(/ /, 'T') + '+08:00')) {
           newPrice = 0;
           document.querySelectorAll('#availableStocks tr').forEach(row => {
@@ -860,14 +860,14 @@ function randomPriceChange(stockSymbol) {
           document.querySelectorAll('#availableStocks tr').forEach(row => {
             row.style.display = 'block';
           });
-          newPrice = (currentPrice-95).toFixed(2);
+          newPrice = (currentPrice+0.09).toFixed(2);
         } else if (nowDate >= new Date(specifiedTimesList[1].replace(/ /, 'T') + '+08:00') && nowDate <= new Date(specifiedTimesList[2].replace(/ /, 'T') + '+08:00')){
           document.getElementById('tradeHintText').style.display = 'block';
           document.getElementById('tradeHintText').innerHTML = "目前時間為 : " + nowDate;
           document.querySelectorAll('#availableStocks tr').forEach(row => {
             row.style.display = 'block';
           });
-          newPrice = (currentPrice+20).toFixed(2);
+          newPrice = (currentPrice-0.2).toFixed(2);
         }
     }
     } else {
