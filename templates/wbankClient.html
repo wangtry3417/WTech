@@ -784,6 +784,8 @@ function randomPriceChange(stockSymbol) {
           });
           document.getElementById('tradeHintText').style.display = 'block';
           document.getElementById('tradeHintText').innerHTML = "已經閉市, 目前時間為 : " + nowDate;
+        } else {
+            newPrice = currentPrice;
         }
     } else if (stockSymbol == "WBank內銀股") {
         if (nowDate >= new Date(bankTimesList[0].replace(/ /, 'T') + '+08:00') && nowDate <= new Date(bankTimesList[1].replace(/ /, 'T') + '+08:00')) {
