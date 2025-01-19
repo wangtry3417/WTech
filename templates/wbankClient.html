@@ -733,11 +733,106 @@ function randomPriceChange(stockSymbol) {
     currentPrice = parseFloat(currentPrice);
     //const change = (Math.random() * 2 - 1) * 0.05; // 隨機變動 -5% 到 +5%
     const change = currentPrice*100/100;
-    let newPrice = Math.max(0, (currentPrice * (1 + change)).toFixed(2)); // 確保價格不低於 0
+    let newPrice = currentPrice; // 確保價格不低於 0，因為價格不可能為0
     // let newPrice;
     // Record Time&date
-    const nowDate = new Date().toLocaleString('zh-HK', { timeZone: 'Asia/Taipei' });
-    
+    const targetTimes = [
+       { hour: 9, minute: 0, second: 0 },
+       { hour: 13, minute: 0, second: 0 },
+       { hour: 17, minute: 30, second: 0 },
+       { hour: 20, minute: 0, second: 0 },
+       { hour: 22, minute: 0, second: 0 }
+    ];
+    const now = new Date().toLocaleString('zh-HK', { timeZone: 'Asia/Taipei' });
+    const nowDate = new Date(now);
+    let currentPeriod = null;
+
+for (let i = 0; i < targetTimes.length; i++) {
+    const startTime = new Date();
+    startTime.setHours(targetTimes[i].hour, targetTimes[i].minute, targetTimes[i].second);
+
+    let endTime;
+    if (i < targetTimes.length - 1) {
+        endTime = new Date();
+        endTime.setHours(targetTimes[i + 1].hour, targetTimes[i + 1].minute, targetTimes[i + 1].second);
+    } else {
+        endTime = new Date(startTime);
+        endTime.setDate(endTime.getDate() + 1);
+    }
+
+    if (nowDate >= startTime && nowDate < endTime) {
+        currentPeriod = targetTimes[i];
+        break;
+    }
+}
+
+if (currentPeriod) {
+    if (currentPeriod.hour == 9) {
+        if (stockSymbol == "WBank內銀股") {
+            newPrice += 0.03
+        } else if (stockSymbol == "泓國綜合指數") {
+            newPrice += 0.01
+        } else if (stockSymbol == "經發集團") {
+            newPrice += 0.1
+        } else if (stockSymbol == "WTC/HKD") {
+            newPrice += 0.01
+        } else if (stockSymbol == "BEn-stock") {
+            newPrice += 0.05
+        }
+    } else if (currentPeriod.hour == 13) {
+        if (stockSymbol == "WBank內銀股") {
+            newPrice += 0.06
+        } else if (stockSymbol == "泓國綜合指數") {
+            newPrice += 0.02
+        } else if (stockSymbol == "經發集團") {
+            newPrice += 5.00
+        } else if (stockSymbol == "WTC/HKD") {
+            newPrice += 0.1
+        } else if (stockSymbol == "BEn-stock") {
+            newPrice += 1
+        }
+    } else if (currentPeriod.hour == 17 && currentPeriod.minute == 30) {
+        if (stockSymbol == "WBank內銀股") {
+            newPrice += 0.5
+        } else if (stockSymbol == "泓國綜合指數") {
+            newPrice += 0.5
+        } else if (stockSymbol == "經發集團") {
+            newPrice += 80.09
+        } else if (stockSymbol == "WTC/HKD") {
+            newPrice += 5
+        } else if (stockSymbol == "BEn-stock") {
+            newPrice -= 0.1
+        }
+    } else if (currentPeriod.hour == 20) {
+        if (stockSymbol == "WBank內銀股") {
+            newPrice += 0.19
+        } else if (stockSymbol == "泓國綜合指數") {
+            newPrice += 0.6
+        } else if (stockSymbol == "經發集團") {
+            newPrice -= 0.08
+        } else if (stockSymbol == "WTC/HKD") {
+            newPrice += 2
+        } else if (stockSymbol == "BEn-stock") {
+            newPrice -= 0.2
+        }
+    } else if (currentPeriod.hour == 22) {
+        if (stockSymbol == "WBank內銀股") {
+            newPrice += 0.2
+        } else if (stockSymbol == "泓國綜合指數") {
+            newPrice -= 2.09
+        } else if (stockSymbol == "經發集團") {
+            newPrice -= 1.02
+        } else if (stockSymbol == "WTC/HKD") {
+            newPrice += 0.98
+        } else if (stockSymbol == "BEn-stock") {
+            newPrice -= 2.55
+        }
+    } else {
+        newPrice = currentPrice.toFixed(2);
+    }
+} else {
+    newPrice = currentPrice.toFixed(2);
+}
 
     stockPrices[stockSymbol] = newPrice;
 
