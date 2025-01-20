@@ -733,7 +733,7 @@ function randomPriceChange(stockSymbol) {
     currentPrice = parseFloat(currentPrice);
     const change = (Math.random() * 2 - 1) * 0.05; // 隨機變動 -5% 到 +5%
     //const change = currentPrice*100/100;
-    let newPrice = currentPrice; // 確保價格不低於 0，因為價格不可能為0
+    let newPrice = currentPrice.toFixed(2); // 確保價格不低於 0，因為價格不可能為0
     // let newPrice;
     // Record Time&date
     const targetTimes = [
@@ -781,7 +781,7 @@ if (currentPeriod) {
         }
     } else if (currentPeriod.hour == 13) {
         if (stockSymbol == "WBank內銀股") {
-            newPrice -= 1
+            newPrice -= 1.00
         } else if (stockSymbol == "泓國綜合指數") {
             newPrice += 0.02
         } else if (stockSymbol == "經發集團") {
