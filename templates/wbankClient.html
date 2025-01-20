@@ -681,11 +681,11 @@ function changeBGColor() {
 }
 let portfolio = JSON.parse(localStorage.getItem('portfolio')) || [];
 const stockPrices = {
-    "WBank內銀股": 500.00,
-    "泓國綜合指數": 15.00,
-    "經發集團": 2.87,
+    "WBank內銀股": 350.00,
+    "泓國綜合指數": 16.00,
+    "經發集團": 4.09,
     "WTC/HKD": 10.00,
-    "BEn-stock": 0.09
+    "BEn-stock": 0.18
 };
 
 function updateBalance() {
@@ -769,23 +769,23 @@ for (let i = 0; i < targetTimes.length; i++) {
 if (currentPeriod) {
     if (currentPeriod.hour == 9) {
         if (stockSymbol == "WBank內銀股") {
-            newPrice += 0.03
-        } else if (stockSymbol == "泓國綜合指數") {
             newPrice += 0.01
+        } else if (stockSymbol == "泓國綜合指數") {
+            newPrice -= 0.02
         } else if (stockSymbol == "經發集團") {
-            newPrice += 0.1
+            newPrice += 0.01
         } else if (stockSymbol == "WTC/HKD") {
             newPrice += 0.01
         } else if (stockSymbol == "BEn-stock") {
-            newPrice += 0.05
+            newPrice += 0.04
         }
     } else if (currentPeriod.hour == 13) {
         if (stockSymbol == "WBank內銀股") {
-            newPrice += 0.06
+            newPrice -= 1
         } else if (stockSymbol == "泓國綜合指數") {
             newPrice += 0.02
         } else if (stockSymbol == "經發集團") {
-            newPrice += 5.00
+            newPrice += 4.56
         } else if (stockSymbol == "WTC/HKD") {
             newPrice += 0.1
         } else if (stockSymbol == "BEn-stock") {
@@ -828,7 +828,7 @@ if (currentPeriod) {
             newPrice -= 2.55
         }
     } else {
-        newPrice = currentPrice.toFixed(2);
+        newPrice += 0.03;
     }
 } else {
     newPrice = currentPrice.toFixed(2);
