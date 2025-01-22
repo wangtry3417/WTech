@@ -993,6 +993,15 @@ function sellStock(stockSymbol) {
 
     const totalGain = stock.price * stock.quantity;
 
+    if ('Notification' in window && Notification.permission !== 'denied') {
+        Notification.requestPermission().then(permission => {
+            if (permission === 'granted') {
+                let msg = `你已賣出 ${stockSymbol} , 賣出金額：${totalGain}`;
+                new Notification('股票通知', { body: msg, icon: "/static/IMG_7428.ico" });
+            }
+        });
+    }
+
     // 更新餘額
     balance += totalGain;
     updateBalance();
