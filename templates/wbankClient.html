@@ -932,18 +932,15 @@ function buyStock(stockSymbol) {
 
     alert("Ok " + stockSymbol);
     balance -= totalCost;
-    if (!('Notification' in window)) {
-  console.log('This browser does not support notification');
-}
-    if (Notification.permission === 'default' || Notification.permission === 'undefined') {
-  Notification.requestPermission(function(permission) {
-    if (permission === 'granted') {
-      // 使用者同意授權
-      let msg = "你已買入 " + stockSymbol + " , 買入金額："+totalCost;
-      var notification = new Notification('股票通知', { body: msg, icon: "/static/IMG_7428.ico"}); // 建立通知
+    if ('Notification' in window && Notification.permission !== 'denied') {
+        Notification.requestPermission().then(permission => {
+            if (permission === 'granted') {
+                let msg = `你已買入 ${stockSymbol} , 買入金額：${totalCost}`;
+                new Notification('股票通知', { body: msg, icon: "/static/IMG_7428.ico" });
+            }
+        });
     }
-  });
-}
+    
     updateBalance();
 
     fetch("/wbank/hash/transfer", {
