@@ -1,0 +1,51 @@
+<html>
+  <body>
+    <script>
+    const supportedInstruments = [
+  {
+    supportedMethods: "https://sites.wtechhk.xyz",
+  },
+];
+
+const details = {
+  total: { label: "Donation", amount: { currency: "USD", value: "20.00" } },
+  displayItems: [
+    {
+      label: "Original donation amount",
+      amount: { currency: "USD", value: "20.00" },
+    },
+  ],
+  shippingOptions: [
+    {
+      id: "standard",
+      label: "Standard shipping",
+      amount: { currency: "USD", value: "0.00" },
+      selected: true,
+    },
+  ],
+};
+
+const options = { requestShipping: true };
+
+try {
+  const request = new PaymentRequest(supportedInstruments, details, options);
+  // Add event listeners here.
+  // Call show() to trigger the browser's payment flow.
+  request
+    .show()
+    .then((instrumentResponse) => {
+      // Do something with the response from the UI.
+      alert("Done");
+    })
+    .catch((err) => {
+      // Do something with the error from request.show().
+      alert(err.message);
+    });
+} catch (e) {
+  // Catch any other errors.
+  alert(e);
+}
+
+    </script>
+  </body>
+</html>
