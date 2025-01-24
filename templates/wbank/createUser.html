@@ -140,7 +140,7 @@
                     <input type="checkbox" id="termsCheckbox" disabled>
                     <label for="termsCheckbox">我已閱讀並同意條款及條件。</label>
                 </div>
-                <button type="button" id="prevBtn2" class="button">上一步</button>
+                <button type="button" id="prevBtn3" class="button">上一步</button>
                 <button type="button" id="nextBtn2" class="button">下一步</button>
             </div>
 
@@ -151,7 +151,7 @@
                 <p><strong>身份證號碼：</strong><span id="confirmId"></span></p>
                 <p><strong>用戶名稱：</strong><span id="confirmUser"></span></p>
                 <button type="submit" id="submitBtn" class="button">提交</button>
-                <button type="button" id="prevBtn3" class="button">上一步</button>
+                <button type="button" id="prevBtn4" class="button">上一步</button>
             </div>
         </form>
     </div>
@@ -162,6 +162,7 @@
         const nextBtn2 = document.getElementById('nextBtn2');
         const prevBtn2 = document.getElementById('prevBtn2');
         const prevBtn3 = document.getElementById('prevBtn3');
+        const prevBtn4 = document.getElementById('prevBtn4');
         const submitBtn = document.getElementById('submitBtn');
 
         const step1 = document.getElementById('step1');
@@ -247,6 +248,11 @@
         prevBtn3.addEventListener('click', () => {
             step3.classList.remove('active');
             step2.classList.add('active');
+        });
+        
+        prevBtn4.addEventListener('click', () => {
+            step4.classList.remove('active');
+            step3.classList.add('active');
         });
 
         termsTextarea.addEventListener('scroll', () => {
