@@ -169,6 +169,7 @@ input:checked + .slider:before {
             <!-- Step 2: Information detail -->
             <div class="step" id="step2">
                 <span id="optionPlace"></span>
+                <br>
                 <button type="button" id="prevBtn2" class="button">上一步</button>
                 <button type="button" id="confirmInfoBtn" class="button">下一步</button>
             </div>
@@ -253,6 +254,12 @@ input:checked + .slider:before {
                        <input type="checkbox">
                        <span class="slider"></span>
                      </label>
+                    <br>
+                    <label>你是否不是中國大陸人？（如果你是中國大陸人，則不能開戶)</label>
+                    <label class="switch">
+                       <input type="checkbox">
+                       <span class="slider"></span>
+                     </label>
                 `;
             } else if (reason === '投資') {
                 document.getElementById('optionPlace').innerHTML = `
@@ -261,6 +268,12 @@ input:checked + .slider:before {
                     <br>
                     <label>請填寫一項你最近三個月內的投資產品:</label>
                     <input type="text" name="investProduct" placeholder="例子: BTC" required>
+                    <br>
+                    <label>你是否持牌交易員？（如果是，事前要得到公司相關部門同意)</label>
+                    <label class="switch">
+                       <input type="checkbox">
+                       <span class="slider"></span>
+                     </label>
                 `;
             } else if (reason === '事業發展') {
                 document.getElementById('optionPlace').innerHTML = `
