@@ -31,8 +31,7 @@ try {
   const request = new PaymentRequest(supportedInstruments, details, options);
   // Add event listeners here.
   // Call show() to trigger the browser's payment flow.
-  request
-    .show()
+  request.show()
     .then((instrumentResponse) => {
       // Do something with the response from the UI.
       alert("Done");
