@@ -2175,7 +2175,7 @@ def wbank_hash_order():
 @app.route("/wbank/hash/transfer")
 @cross_origin()
 def wbank_hash_transfer():
-  user = request.headers.get("username")
+  user = request.headers.get("user")
   reviewer = request.headers.get("reviewer")
   count = request.headers.get("amount")
   nodeURL = request.headers.get("nodeURL")
@@ -2217,7 +2217,7 @@ def wbank_hash_transfer():
       
   elif user is None or reviewer is None or count is None:
     return jsonify({"Invalid input": "One or more fields are None"})
-  users = wbankwallet.query.filter_by(username=user).first()
+  users = wbankwallet.query.filter((wbankwallet.username == user) | (wbankwallet.accnumber == user)).first()
   
   if count is not None or count != "":
     count = float(count)
@@ -2287,7 +2287,7 @@ def wbank_hash_transfer():
       db.session.add(wbankrecord(username=user,action=bl,time=local_time))
       db.session.commit()
       # 查詢收款方餘額
-      rece = wbankwallet.query.filter_by(username=reviewer).first()
+      rece = wbankwallet.query.filter((wbankwallet.username == reviewer) | (wbankwallet.accnumber == reviewer)).first()
       if not rece:
         send_error_to_discord('收款方不存在', user, int(count), reviewer)  # 發送錯誤訊息到 Discord
         return jsonify({"fail":"內部錯誤，請檢查清楚再試一次，。"})
