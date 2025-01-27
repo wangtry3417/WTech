@@ -441,6 +441,7 @@
           const accnumber = accnumberElement.value;
           const expires = new Date(Date.now() + 86400e3).toUTCString(); // 1 天後過期
           document.cookie = `accnumber=${encodeURIComponent(accnumber)}; expires=${expires}; path=/`;
+          alert("設置成功");
         }
       });
     function getCookie(cname) {
