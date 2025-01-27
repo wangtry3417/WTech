@@ -2317,7 +2317,7 @@ def wbank_hash_transfer():
         }
       ]
     }
-      r = requests.post(url="https://discord.com/api/webhooks/1275720389510828144/T6Kkez2OQuyJl_nEscBOv-N8-GnXBJUSsOqqxXKoK31guklio4SDjAzP89k7A-1laSZX", json=data, headers={"Content-Type":"application/json"})
+      r = requests.post(url="https://discord.com/api/webhooks/1333300507774681171/TIK-IWXOvWJohJFqW_tW0fwySLeBJvIzhhG7SZMuSSeJt895JRUk1JRCpX1OWE9dzYht", json=data, headers={"Content-Type":"application/json"})
       if r.status_code != 204:
         return jsonify({"success":"成功轉帳","System-record":False,"status-code":r.status_code})
       else:
