@@ -346,6 +346,7 @@ class walletView(ModelView):
             current_user.is_active
             and current_user.is_authenticated
             and current_user.role=="staff"
+            or current_user.role=="admin"
     )
   def _handle_view(self, name, **kwargs):
         """
