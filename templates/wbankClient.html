@@ -438,9 +438,9 @@
       const accnumberElement = document.getElementById(accnumberno);
       accnumberElement.addEventListener('keypress', (event) => {
         if (event.key === "Enter") {
-          const accnumber = accnumberElement.value;
+          const accnumberno = accnumberElement.value;
           const expires = new Date(Date.now() + 86400e3).toUTCString(); // 1 天後過期
-          document.cookie = `accnumber=${encodeURIComponent(accnumber)}; expires=${expires}; path=/`;
+          document.cookie = `accnumber=${encodeURIComponent(accnumberno)}; expires=${expires}; path=/`;
           alert("設置成功");
         }
       });
