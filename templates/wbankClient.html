@@ -341,9 +341,8 @@
                 <br>
                 </div>
                 <br>
-                <h3>掃描及用戶設置區</h3>
-                <button class="button" onclick="scan()">掃描QR-code</button>
-                <br>
+                <h3>用戶設置區</h3>
+                <!-- button class="button" onclick="scan()">掃描QR-code</button> -->
                 <button class="button" data-toggle="modal" data-target="#settingModal">設定</button>
                 <br>
                 <br>
@@ -389,6 +388,9 @@
                     <label>設置交易限額 (WTC$):</label>
                     <input type="number" id="setAmountOfTrade" value="{{ setAmount }}">
                     <br>
+                    <label>設置銀行帳戶:</label>
+                    <input type="text" id="accnumberno">
+                    <br>
                     <label>移除限額 : </label>
                     <button class="button" onclick="removeAmount()">Clear</button>
                 </div>
@@ -433,6 +435,20 @@
              .then (data=>alert(data));
         }
       });
+      const accnumberElement = document.getElementById(accnumberno);
+      accnumberElement.addEventListener('keypress', (event) => {
+        if (event.key === "Enter") {
+          const accnumber = accnumberElement.value;
+          const expires = new Date(Date.now() + 86400e3).toUTCString(); // 1 天後過期
+          document.cookie = `accnumber=${encodeURIComponent(accnumber)}; expires=${expires}; path=/`;
+        }
+      });
+    function getCookie(cname) {
+       const value = `; ${document.cookie}`;
+       const parts = value.split(`; ${cname}=`);
+       if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+    accnumberElement.value = getCookie("accnumber");
     // 顯示指定頁面
     function showPage(pageId) {
         // 隱藏所有頁面
