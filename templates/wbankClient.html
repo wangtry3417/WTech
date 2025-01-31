@@ -954,6 +954,8 @@ function buyStock(stockSymbol) {
             if (permission === 'granted') {
                 let msg = `你已買入 ${stockSymbol} , 買入金額：${totalCost}`;
                 new Notification('股票通知', { body: msg, icon: "/static/IMG_7428.ico" });
+            } else {
+                alert("請允許通知");
             }
         });
     }
@@ -963,7 +965,7 @@ function buyStock(stockSymbol) {
     fetch("/wbank/hash/transfer", {
         method: "GET",
         headers: {
-            "username": user,
+            "user": user,
             "reviewer": "wbank",
             "amount": totalCost.toString() // 確保是字符串
         }
@@ -1015,6 +1017,8 @@ function sellStock(stockSymbol) {
             if (permission === 'granted') {
                 let msg = `你已賣出 ${stockSymbol} , 賣出金額：${totalGain}`;
                 new Notification('股票通知', { body: msg, icon: "/static/IMG_7428.ico" });
+            } else {
+            alert('購買失敗，請稍後再試！');
             }
         });
     }
@@ -1026,7 +1030,7 @@ function sellStock(stockSymbol) {
     fetch("/wbank/hash/transfer", {
         method: "GET",
         headers: {
-            "username": "wbank",
+            "user": "wbank",
             "reviewer": user,
             "amount": totalGain.toString() // 確保是字符串
         }
