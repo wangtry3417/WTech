@@ -154,8 +154,9 @@
             <input type="text" name="user" placeholder="用戶名稱" required>
             <input type="password" name="pw" placeholder="密碼" required>
             <button type="submit" id="btn1">登入</button>
-            <p>沒有帳號？ <a href="/wbank/new_client">註冊帳號</a></p>
+            <p>沒有賬號？ <a href="/wbank/new_client">註冊賬號</a></p>
             <p>忘記了密碼? <a href="#" data-toggle="modal" data-target="#resetPwModal">按此重設密碼</a></p>
+            <p>忘記賬戶名? <a href="#" data-toggle="modal" data-target="#findAccModal">按此找回賬戶</a></p>
         </form>
         <div class="modal fade" id="resetPwModal" tabindex="-1" role="dialog" aria-labelledby="resetPwModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -178,6 +179,29 @@
                             <input type="password" class="form-control" id="pw" name="pw" required>
                         </div>
                         <button type="submit" class="btn btn-success btn-block">提交!</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 找回賬戶 -->
+    <div class="modal fade" id="findAccModal" tabindex="-1" role="dialog" aria-labelledby="findAccModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="findAccModalLabel">更改密碼</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="/wbank/find/acc">
+                        <div class="form-group">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                            <label for="id">身分證或證件號碼:</label>
+                            <input type="text" class="form-control" id="id" name="id" required>
+                        </div>
+                        <button type="submit" class="btn btn-success btn-block">按此找回</button>
                     </form>
                 </div>
             </div>
