@@ -2778,6 +2778,16 @@ def wbank_v1_set_amount():
     return "成功設置"
   return "找不到用戶"
 
+@app.route("/wbank/find/acc",methods=["POST"])
+def wbank_acc_by_using_id():
+  id_number = request.form.get("id")
+  users = wbankkyc.query.filter_by(id_number=id_number).first()
+  if users:
+    flash(f"你的賬號名稱：{users.username}, 請記住!","info")
+    return redirect("/wbank")
+  flash("找不到任何用戶，請確保輸入無誤,並且再試一次!","error")
+  return redirect("/wbank")
+
 @app.route("/wbank/v1/cashout")
 def wbank_v1_cash_out():
   user = request.args.get("user")
