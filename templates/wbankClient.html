@@ -295,7 +295,7 @@
 
     <div id="chatModal" class="chat-modal">
         <div class="chat-modal-content">
-            <span class="custom-close">&times;</span>
+            <span class="chat-close">&times;</span>
             <h2>歡迎使用線上客服</h2>
             <p>在對話時，請注意言詞</p>
             <div id="chat-container">
@@ -1152,24 +1152,24 @@ function sellStock(stockSymbol) {
 }
    // Chat UI
    // 獲取 modal 和按鈕元素
-        const modal = document.getElementById("chatModal");
+        const Chatmodal = document.getElementById("chatModal");
         const openModalButton = document.getElementById("open-chat-modal");
         const closeModalButton = document.getElementsByClassName("chat-close")[0];
 
         // 打開 modal
         openModalButton.onclick = function() {
-            modal.style.display = "block";
+            Chatmodal.style.display = "block";
         }
 
         // 關閉 modal
         closeModalButton.onclick = function() {
-            modal.style.display = "none";
+            Chatmodal.style.display = "none";
         }
 
         // 點擊窗口外部關閉 modal
         window.onclick = function(event) {
             if (event.target == modal) {
-                modal.style.display = "none";
+                Chatmodal.style.display = "none";
             }
         }
    /*
