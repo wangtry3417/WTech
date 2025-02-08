@@ -1165,13 +1165,6 @@ function sellStock(stockSymbol) {
         closeModalButton.onclick = function() {
             Chatmodal.style.display = "none";
         }
-
-        // 點擊窗口外部關閉 modal
-        window.onclick = function(event) {
-            if (event.target == Chatmodal) {
-                Chatmodal.style.display = "none";
-            }
-        }
    /*
    const reloadStockButton = () => {
      Object.keys(stockPrices).forEach(stock => randomPriceChange(stock));
