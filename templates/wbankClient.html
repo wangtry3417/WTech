@@ -275,6 +275,17 @@
             color: #555; /* 文字顏色 */
             line-height: 1.5; /* 行高 */
         }
+        .chat-area {
+            display: block; /* 初始顯示聊天區域 */
+        }
+
+        .chat-messages {
+            border: 1px solid #ccc; /* 訊息區域邊框 */
+            height: 200px; /* 高度 */
+            overflow-y: auto; /* 垂直滾動 */
+            margin-bottom: 10px; /* 下邊距 */
+            padding: 10px; /* 內邊距 */
+        }
     </style>
 </head>
 <body>
@@ -1171,7 +1182,7 @@ function sellStock(stockSymbol) {
         document.getElementById("send-button").onclick = function() {
             const message = messageInput.value;
             if (message) {
-                const messageData = { username: username, text: message, room_number: room, type: "text", timestamp: Date.now() };
+                const messageData = { username: username, text: message, room_number: chatRoom, type: "text", timestamp: Date.now() };
                 socket.emit('chatMessage', messageData);
                 chatMessages.appendChild(createMessageElement(messageData));
                 messageInput.value = ''; // 清空輸入框
