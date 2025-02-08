@@ -5,149 +5,299 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WChat 泓聊平台</title>
     <style>
+         :root {
+            --primary: #7289da;
+            --primary-hover: #5b6eae;
+            --background: linear-gradient(45deg, #1a1b1f, #2a2d35);
+            --glass: rgba(255, 255, 255, 0.05);
+            --neon: 0 0 15px rgba(114, 137, 218, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', 'Noto Sans TC', system-ui, -apple-system, sans-serif;
             margin: 0;
-            padding: 0;
-            background-color: #2f3136;
+            padding: 2rem;
+            min-height: 100vh;
+            background: var(--background);
             color: #ffffff;
+            line-height: 1.6;
         }
+
+        /* 霓虹光效容器 */
+        .neon-container {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: var(--neon);
+            padding: 2rem;
+            margin: 1rem auto;
+            max-width: 800px;
+        }
+
+        /* 輸入區域美化 */
         #username-input-area {
-            padding: 20px;
-            background-color: #40444b;
-            border-radius: 8px;
-            margin: 20px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
         }
-        .container {
-            display: none;
-            flex-direction: column;
-            align-items: center;
+
+        /* 動態漸變邊框 */
+        .gradient-border {
+            position: relative;
+            background: var(--glass);
+            border-radius: 16px;
         }
+
+        .gradient-border::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(45deg, #7289da, #5b6eae, #2f3136);
+            z-index: -1;
+            border-radius: inherit;
+            animation: rotate 3s linear infinite;
+        }
+
+        @keyframes rotate {
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 頻道列表 */
         .channel-list {
-            margin-top: 20px;
-            max-width: 400px;
-            background-color: #40444b;
-            border-radius: 8px;
-            padding: 10px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            display: grid;
+            gap: 0.8rem;
+            margin-top: 1.5rem;
         }
+
         .channel-item {
-            padding: 10px;
-            border-bottom: 1px solid #555;
+            padding: 1rem;
+            border-radius: 12px;
+            background: var(--glass);
             cursor: pointer;
-            transition: background-color 0.3s;
+            position: relative;
+            overflow: hidden;
         }
+
         .channel-item:hover {
-            background-color: #5865f2;
+            background: rgba(114, 137, 218, 0.2);
+            transform: translateY(-2px);
         }
-        .chat-area {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            background-color: #35393f;
-            padding: 20px;
+
+        .channel-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
             width: 100%;
-            max-width: 600px;
-            border-radius: 8px;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.1),
+                transparent
+            );
+            transition: 0.5s;
         }
+
+        .channel-item:hover::before {
+            left: 100%;
+        }
+
+        /* 聊天區域 */
+        .chat-area {
+            border-radius: 16px;
+            background: var(--glass);
+            backdrop-filter: blur(8px);
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
         .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            border: 1px solid #555;
-            border-radius: 8px;
-            padding: 10px;
-            margin-bottom: 10px;
-            background-color: #40444b;
-            max-height: 400px;
-            color: #ffffff;
+            height: 60vh;
+            padding: 1rem;
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.3);
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary) transparent;
         }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 3px;
+        }
+
+        /* 訊息泡泡 */
         .message {
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 8px;
-            max-width: 80%;
-            display: block;
-            animation: fadeIn 0.5s;
-            word-wrap: break-word;
+            margin: 1rem 0;
+            padding: 1rem;
+            border-radius: 1rem;
+            max-width: 75%;
+            position: relative;
+            animation: popIn 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
         }
+
+        @keyframes popIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
         .message.sent {
-            background-color: #ADD8E6; /* 淺藍色背景 */
-            color: #ffffff; /* 白色文字 */
-            align-self: flex-end;
+            background: var(--primary);
+            margin-left: auto;
+            border-bottom-right-radius: 4px;
         }
 
         .message.received {
-            background-color: #4682B4; /* 藍色背景 */
-            color: #ffffff; /* 白色文字 */
-            align-self: flex-start;
+            background: #3a3d45;
+            margin-right: auto;
+            border-bottom-left-radius: 4px;
         }
-        .message.sys-msg {
-            background-color: #FF0000;
-            text-align: center;
-            color: #ffffff;
+
+        .message::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            width: 12px;
+            height: 12px;
+            background: inherit;
         }
-        .system-message {
-            background-color: #FF0000;
-            text-align: center;
-            color: #ffffff;
+
+        .message.sent::after {
+            right: -6px;
+            clip-path: polygon(0 0, 100% 0, 100% 100%);
         }
-        .input-area {
-            display: flex;
+
+        .message.received::after {
+            left: -6px;
+            clip-path: polygon(0 0, 0 100%, 100% 0);
         }
+
+        /* 輸入框美化 */
         .input-field {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid #555;
-            border-radius: 4px;
-            margin-right: 10px;
-            background-color: #2f3136;
-            color: #ffffff;
-        }
-        .send-button {
-            padding: 10px 15px;
-            border-radius: 4px;
+            width: 100%;
+            padding: 1rem;
             border: none;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.3);
             color: white;
-            background-color: #7289da;
+            font-size: 1rem;
+        }
+
+        .input-field:focus {
+            outline: 2px solid var(--primary);
+            box-shadow: 0 0 15px rgba(114, 137, 218, 0.3);
+        }
+
+        /* 按鈕美化 */
+        .send-button {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            background: var(--primary);
+            color: white;
             cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
         }
+
         .send-button:hover {
-            background-color: #5b6eae;
-            transform: scale(1.05);
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(114, 137, 218, 0.3);
         }
+
         .send-button:active {
-            transform: scale(0.95);
+            transform: translateY(0);
         }
-        .timestamp {
-            font-size: 0.8em;
-            color: #aaa;
+
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .neon-container {
+                padding: 1rem;
+            }
+
+            .chat-messages {
+                height: 50vh;
+            }
+
+            .message {
+                max-width: 85%;
+            }
+        }
+
+        /* 時間顯示 */
+        #timeList {
+            font-size: 0.9rem;
+            color: #8a8f99;
             text-align: right;
-            margin-top: 5px;
+            margin-bottom: 1rem;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+
+        /* 部門選擇下拉選單 */
+        select#room {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1rem;
+        }
+
+        /* 退出按鈕 */
+        #exit-button {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #ed4245;
+        }
+
+        #exit-button:hover {
+            background: #c5393b;
         }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+TC:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div id="username-input-area">
-        <input type="text" id="username-input" placeholder="輸入你的用戶名" required style="padding: 10px; border: 1px solid #555; border-radius: 4px; width: calc(100% - 22px);">
-        <button id="submit-username" class="send-button">確認用戶名</button>
+    <div class="neon-container gradient-border" id="username-input-area">
+        <div id="timeList"></div>
+        <input type="text" id="username-input" placeholder="輸入你的用戶名" class="input-field">
+        <button id="submit-username" class="send-button" style="margin-top: 1.5rem;">開始使用</button>
+        
         <div class="channel-list" id="active-channels" style="display: none;">
-            <div id="timeList"></div>
-            <br>
-            <h3>正在有效的通道</h3>
+            <h3 style="margin: 1rem 0; color: var(--primary); font-weight: 600;">有效頻道列表</h3>
             <div id="channel-list-items"></div>
         </div>
     </div>
 
-    <div class="container" id="chat-container">
-        <button id="exit-button" class="send-button">退出通道</button>
+    <div class="neon-container" id="chat-container" style="display: none;">
+        <button id="exit-button" class="send-button">離開頻道</button>
         <select id="room" required>
-            <option value="default">請選擇部門通訊通道</option>
+            <option value="default">選擇部門頻道</option>
             <option value="cs">客戶服務部</option>
             <option value="ta">技術部</option>
             <option value="ma">市場部</option>
@@ -155,12 +305,13 @@
             <option value="chatOne">包廂1號</option>
             <option value="chatTwo">包廂2號</option>
         </select>
-        <button id="join-button" class="send-button">加入</button>
+        <button id="join-button" class="send-button" style="margin: 1rem 0;">加入頻道</button>
+        
         <div class="chat-area">
             <div class="chat-messages" id="chat-messages"></div>
-            <div class="input-area">
-                <input type="text" class="input-field" id="message-input" placeholder="輸入訊息" required>
-                <button class="send-button" id="send-button">發送</button>
+            <div class="input-area" style="margin-top: 1rem;">
+                <input type="text" class="input-field" id="message-input" placeholder="輸入訊息...">
+                <button class="send-button" id="send-button" style="margin-top: 1rem; width: 100%;">傳送訊息</button>
             </div>
         </div>
     </div>
@@ -181,6 +332,18 @@
 
         let username = null;
         let room = null;
+
+        //add time function
+        function updateTime() {
+            const options = { 
+                year: 'numeric', month: '2-digit', day: '2-digit',
+                hour: '2-digit', minute: '2-digit', second: '2-digit',
+                hour12: false 
+            };
+            timeDisplayList.textContent = new Date().toLocaleString('zh-Hant', options);
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
 
         const loadChatHistory = () => {
             const messages = JSON.parse(sessionStorage.getItem('chatMessages')) || [];
