@@ -284,38 +284,37 @@
 </head>
 <body>
     <div class="neon-container gradient-border" id="username-input-area">
-        <div id="timeList"></div>
-        <input type="text" id="username-input" placeholder="輸入你的用戶名" class="input-field">
-        <button id="submit-username" class="send-button" style="margin-top: 1.5rem;">開始使用</button>
-        
-        <div class="channel-list" id="active-channels" style="display: none;">
-            <h3 style="margin: 1rem 0; color: var(--primary); font-weight: 600;">有效頻道列表</h3>
-            <div id="channel-list-items"></div>
+    <div id="timeList"></div>
+    <input type="text" id="username-input" placeholder="輸入你的用戶名" class="input-field">
+    <button id="submit-username" class="send-button" style="margin-top: 1.5rem;">開始使用</button>
+
+    <div class="channel-list" id="active-channels" style="display: none;">
+        <h3 style="margin: 1rem 0; color: var(--primary); font-weight: 600;">有效頻道列表</h3>
+        <div id="channel-list-items"></div>
+    </div>
+</div>
+
+<div class="neon-container" id="chat-container" style="display: none;">
+    <button id="exit-button" class="send-button">離開頻道</button>
+    <select id="room" required>
+        <option value="default">選擇部門頻道</option>
+        <option value="cs">客戶服務部</option>
+        <option value="ta">技術部</option>
+        <option value="ma">市場部</option>
+        <option value="trade">wcoins交易群組</option>
+        <option value="chatOne">包廂1號</option>
+        <option value="chatTwo">包廂2號</option>
+    </select>
+    <button id="join-button" class="send-button" style="margin: 1rem 0;">加入頻道</button>
+
+    <div class="chat-area">
+        <div class="chat-messages" id="chat-messages"></div>
+        <div class="input-area" style="margin-top: 1rem;">
+            <input type="text" class="input-field" id="message-input" placeholder="輸入訊息...">
+            <button class="send-button" id="send-button" style="margin-top: 1rem; width: 100%;">傳送訊息</button>
         </div>
     </div>
-
-    <div class="neon-container" id="chat-container" style="display: none;">
-        <button id="exit-button" class="send-button">離開頻道</button>
-        <select id="room" required>
-            <option value="default">選擇部門頻道</option>
-            <option value="cs">客戶服務部</option>
-            <option value="ta">技術部</option>
-            <option value="ma">市場部</option>
-            <option value="trade">wcoins交易群組</option>
-            <option value="chatOne">包廂1號</option>
-            <option value="chatTwo">包廂2號</option>
-        </select>
-        <button id="join-button" class="send-button" style="margin: 1rem 0;">加入頻道</button>
-        
-        <div class="chat-area">
-            <div class="chat-messages" id="chat-messages"></div>
-            <div class="input-area" style="margin-top: 1rem;">
-                <input type="text" class="input-field" id="message-input" placeholder="輸入訊息...">
-                <button class="send-button" id="send-button" style="margin-top: 1rem; width: 100%;">傳送訊息</button>
-            </div>
-        </div>
-    </div>
-
+</div>
     <script src="https://cdn.socket.io/4.7.1/socket.io.min.js"></script>
     <script>
         const socket = io();
