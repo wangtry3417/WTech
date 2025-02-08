@@ -1155,6 +1155,8 @@ function sellStock(stockSymbol) {
         const Chatmodal = document.getElementById("chatModal");
         const openModalButton = document.getElementById("open-chat-modal");
         const closeModalButton = document.getElementsByClassName("chat-close")[0];
+        let username = user;
+        let chatRoom = "wbank客服";
 
         // 打開 modal
         openModalButton.onclick = function() {
@@ -1164,6 +1166,21 @@ function sellStock(stockSymbol) {
         // 關閉 modal
         closeModalButton.onclick = function() {
             Chatmodal.style.display = "none";
+        }
+        document.getElementById("send-button").onclick = function() {
+            const messageInput = document.getElementById("message-input");
+            const message = messageInput.value;
+            if (message) {
+                const messageData = { username: username, text: message, room_number: room, type: "text", timestamp: Date.now() };
+                socket.emit('chatMessage', messageData);
+                const chatMessages = document.getElementById("chat-messages");
+                chatMessages.appendChild(createMessageElement(messageData));
+                messageInput.value = ''; // 清空輸入框
+                chatMessages.scrollTop = chatMessages.scrollHeight; // 滾動到最新消息
+            }
+        }
+        document.getElementById("exit-button").onclick = function() {
+            Chatmodal.style.display = "none"; // 隱藏 chat-modal
         }
    /*
    const reloadStockButton = () => {
