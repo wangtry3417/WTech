@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="/static/wbank/authpayment.css">
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="/static/wchat/chat.js"></script>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -200,6 +201,81 @@
       background-color: #cce5ff;
       color: #004085;
     }
+     /* Chat Modal 背景 */
+        .chat-modal {
+            display: none; /* 默認隱藏 */
+            position: fixed; /* 固定定位 */
+            z-index: 1000; /* 層級 */
+            left: 0;
+            top: 0;
+            width: 100%; /* 寬度100% */
+            height: 100%; /* 高度100% */
+            overflow: auto; /* 滾動 */
+            background-color: rgba(0, 0, 0, 0.7); /* 背景顏色 */
+        }
+
+        /* Chat Modal 內容 */
+        .chat-modal-content {
+            background-color: #fefefe; /* 背景色 */
+            margin: 10% auto; /* 上邊距 */
+            padding: 20px; /* 內邊距 */
+            border: 1px solid #ccc; /* 邊框 */
+            width: 80%; /* 寬度 */
+            max-width: 500px; /* 最大寬度 */
+            border-radius: 15px; /* 圓角 */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* 陰影效果 */
+        }
+
+        /* Chat關閉按鈕 */
+        .chat-close {
+            color: #d9534f; /* 顏色 */
+            float: right; /* 右側 */
+            font-size: 30px; /* 字體大小 */
+            font-weight: bold; /* 粗體 */
+        }
+
+        .chat-close:hover,
+        .chat-close:focus {
+            color: #c9302c; /* 懸停效果 */
+            text-decoration: none; /* 去除下劃線 */
+            cursor: pointer; /* 鼠標樣式 */
+        }
+
+        /* 圓形按鈕樣式 */
+        #open-chat-modal {
+            position: fixed; /* 固定定位 */
+            bottom: 20px; /* 距離底部20px */
+            right: 20px; /* 距離右側20px */
+            width: 60px; /* 寬度 */
+            height: 60px; /* 高度 */
+            border-radius: 50%; /* 圓形 */
+            background-color: #7289da; /* 背景顏色 */
+            color: white; /* 文字顏色 */
+            border: none; /* 去除邊框 */
+            font-size: 24px; /* 字體大小 */
+            cursor: pointer; /* 鼠標樣式 */
+            display: flex; /* 內聯彈性盒模型 */
+            justify-content: center; /* 水平居中 */
+            align-items: center; /* 垂直居中 */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* 陰影效果 */
+        }
+
+        #open-chat-modal:hover {
+            background-color: #5b6eae; /* 懸停顏色 */
+        }
+
+        /* 自定義文字樣式 */
+        .chat-modal-content h2 {
+            font-size: 1.5rem; /* 標題字體大小 */
+            color: #333; /* 標題顏色 */
+            margin: 0 0 10px; /* 邊距 */
+        }
+
+        .chat-modal-content p {
+            font-size: 1rem; /* 文字字體大小 */
+            color: #555; /* 文字顏色 */
+            line-height: 1.5; /* 行高 */
+        }
     </style>
 </head>
 <body>
@@ -213,6 +289,28 @@
             <input type="range" id="authorizationSlider" min="0" max="100" value="0" class="custom-slider">
         </div>
     </div>
+    
+    <!-- Chat Modal -->
+    <button id="open-modal" class="send-button">🗨️</button>
+
+    <div id="chatModal" class="chat-modal">
+        <div class="chat-modal-content">
+            <span class="custom-close">&times;</span>
+            <h2>歡迎使用線上客服</h2>
+            <p>在對話時，請注意言詞</p>
+            <div id="chat-container">
+                <div class="chat-area" style="display: none;">
+                    <button id="exit-button" class="send-button">離開頻道</button>
+                    <div class="chat-messages" id="chat-messages"></div>
+                    <input type="text" id="message-input" placeholder="輸入訊息...">
+                    <button id="send-button" class="send-button">傳送訊息</button>
+                </div>
+            </div>
+            <br />
+            <p style="color: gray;">本次chat應用使用wchat-api</p>
+        </div>
+    </div>
+    
     <header>WBank - 數字銀行</header>
 
     <div id="container">
@@ -1052,6 +1150,28 @@ function sellStock(stockSymbol) {
         alert('賣出過程中發生錯誤。'+error);
     });
 }
+   // Chat UI
+   // 獲取 modal 和按鈕元素
+        const modal = document.getElementById("chatModal");
+        const openModalButton = document.getElementById("open-chat-modal");
+        const closeModalButton = document.getElementsByClassName("chat-close")[0];
+
+        // 打開 modal
+        openModalButton.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        // 關閉 modal
+        closeModalButton.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        // 點擊窗口外部關閉 modal
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
    /*
    const reloadStockButton = () => {
      Object.keys(stockPrices).forEach(stock => randomPriceChange(stock));
