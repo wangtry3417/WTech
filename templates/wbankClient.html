@@ -1185,11 +1185,13 @@ function sellStock(stockSymbol) {
         openModalButton.onclick = function() {
             Chatmodal.style.display = "block";
             chatArea.style.display = "block";
+            socket.emit('joinChat', { username, room_number: chatRoom });
         }
 
         // 關閉 modal
         closeModalButton.onclick = function() {
             Chatmodal.style.display = "none";
+            socket.emit('leaveChat', { username, room_number: chatRoom });
         }
         document.getElementById("send-button").onclick = function() {
             const message = messageInput.value;
@@ -1205,6 +1207,7 @@ function sellStock(stockSymbol) {
         // 離開頻道
         document.getElementById("exit-button").onclick = function() {
             Chatmodal.style.display = "none"; // 隱藏 chat-modal
+            socket.emit('leaveChat', { username, room_number: chatRoom });
         }
 
         // 創建訊息元素
