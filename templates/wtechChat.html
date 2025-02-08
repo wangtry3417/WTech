@@ -5,13 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WChat 泓聊平台</title>
     <style>
-         /* 定義顏色變數 */
+       /* 定義顏色變數 */
         :root {
             --primary: #7289da;          /* 主色 */
             --primary-hover: #5b6eae;    /* 主色懸停效果 */
             --background: linear-gradient(45deg, #1a1b1f, #2a2d35); /* 背景漸變 */
             --glass: rgba(255, 255, 255, 0.05); /* 玻璃效果 */
             --neon: 0 0 15px rgba(114, 137, 218, 0.3); /* 霓虹光效 */
+            --message-sent: #7289da;     /* 發送消息顏色 */
+            --message-received: #3a3d45;  /* 接收消息顏色 */
+            --message-text: #ffffff;     /* 消息文字顏色 */
+            --channel-bg: rgba(0, 0, 0, 0.3); /* 頻道背景顏色 */
         }
 
         /* 全局樣式設置 */
@@ -27,7 +31,7 @@
             padding: 2rem; /* 主體內邊距 */
             min-height: 100vh; /* 最小高度為視口高度 */
             background: var(--background); /* 背景設置 */
-            color: #ffffff; /* 文字顏色 */
+            color: var(--message-text); /* 文字顏色 */
             line-height: 1.6; /* 行高設置 */
         }
 
@@ -50,7 +54,7 @@
             border: none; /* 去除邊框 */
             border-radius: 8px; /* 圓角 */
             background: rgba(0, 0, 0, 0.3); /* 背景顏色 */
-            color: white; /* 文字顏色 */
+            color: var(--message-text); /* 文字顏色 */
             font-size: 1rem; /* 字體大小 */
             margin-bottom: 1rem; /* 底部邊距 */
         }
@@ -61,7 +65,7 @@
             border: none; /* 去除邊框 */
             border-radius: 8px; /* 圓角 */
             background: var(--primary); /* 背景顏色 */
-            color: white; /* 文字顏色 */
+            color: var(--message-text); /* 文字顏色 */
             cursor: pointer; /* 鼠標懸停樣式 */
             display: inline-flex; /* 內聯彈性盒模型 */
             align-items: center; /* 垂直中心對齊 */
@@ -91,6 +95,63 @@
             margin-bottom: 1rem; /* 底部邊距 */
         }
 
+        /* 訊息泡泡樣式 */
+        .message {
+            margin: 0.5rem 0; /* 上下邊距 */
+            padding: 1rem; /* 內邊距 */
+            border-radius: 1rem; /* 圓角 */
+            max-width: 75%; /* 最大寬度 */
+            position: relative; /* 相對定位 */
+            animation: popIn 0.3s ease; /* 動畫效果 */
+            font-size: 0.9rem; /* 字體大小 */
+        }
+
+        /* 發送的消息樣式 */
+        .message.sent {
+            background: var(--message-sent); /* 背景顏色 */
+            margin-left: auto; /* 向右對齊 */
+            border-bottom-right-radius: 4px; /* 右下角圓角 */
+        }
+
+        /* 接收的消息樣式 */
+        .message.received {
+            background: var(--message-received); /* 背景顏色 */
+            margin-right: auto; /* 向左對齊 */
+            border-bottom-left-radius: 4px; /* 左下角圓角 */
+        }
+
+        /* 頻道列表樣式 */
+        .channel-list {
+            background: var(--channel-bg); /* 頻道背景顏色 */
+            border-radius: 8px; /* 圓角 */
+            padding: 1rem; /* 內邊距 */
+            margin-top: 1rem; /* 上邊距 */
+        }
+
+        .channel-item {
+            padding: 0.5rem; /* 頻道項目內邊距 */
+            border-radius: 4px; /* 頻道項目圓角 */
+            margin: 0.5rem 0; /* 頻道項目間距 */
+            cursor: pointer; /* 鼠標懸停樣式 */
+            transition: background 0.2s; /* 背景過渡效果 */
+        }
+
+        .channel-item:hover {
+            background: rgba(255, 255, 255, 0.1); /* 懸停背景顏色 */
+        }
+
+        /* 動畫效果 */
+        @keyframes popIn {
+            from {
+                opacity: 0; /* 初始透明度 */
+                transform: scale(0.9); /* 初始縮放 */
+            }
+            to {
+                opacity: 1; /* 最終透明度 */
+                transform: scale(1); /* 最終縮放 */
+            }
+        }
+
         /* 響應式設計 */
         @media (max-width: 768px) {
             body {
@@ -112,7 +173,7 @@
     <div class="neon-container gradient-border" id="username-input-area">
         <div id="timeList"></div>
         <input type="text" id="username-input" placeholder="輸入你的用戶名" class="input-field">
-        <button id="submit-username" class="send-button">開始使用</button>
+        <button id="submit-username" class="send-button">開始chat!</button>
 
         <div class="channel-list" id="active-channels" style="display: none;">
             <h3 style="margin: 1.5rem 0; color: var(--primary); font-weight: 600;">有效頻道列表</h3>
@@ -122,16 +183,6 @@
 
     <div class="neon-container" id="chat-container" style="display: none;">
         <button id="exit-button" class="send-button">離開頻道</button>
-        <select id="room" required class="input-field">
-            <option value="default">選擇部門頻道</option>
-            <option value="cs">客戶服務部</option>
-            <option value="ta">技術部</option>
-            <option value="ma">市場部</option>
-            <option value="trade">wcoins交易群組</option>
-            <option value="chatOne">包廂1號</option>
-            <option value="chatTwo">包廂2號</option>
-        </select>
-        <button id="join-button" class="send-button">加入頻道</button>
 
         <div class="chat-area">
             <div class="chat-messages" id="chat-messages"></div>
@@ -165,7 +216,7 @@
                 hour: '2-digit', minute: '2-digit', second: '2-digit',
                 hour12: false 
             };
-            timeDisplayList.textContent = new Date().toLocaleString('zh-Hant', options);
+            timeDisplayList.textContent = new Date().toLocaleString('zh-TW', options);
         }
         setInterval(updateTime, 1000);
         updateTime();
