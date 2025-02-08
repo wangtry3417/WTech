@@ -5,316 +5,142 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WChat 泓聊平台</title>
     <style>
-         :root {
-            --primary: #7289da;
-            --primary-hover: #5b6eae;
-            --background: linear-gradient(45deg, #1a1b1f, #2a2d35);
-            --glass: rgba(255, 255, 255, 0.05);
-            --neon: 0 0 15px rgba(114, 137, 218, 0.3);
+         /* 定義顏色變數 */
+        :root {
+            --primary: #7289da;          /* 主色 */
+            --primary-hover: #5b6eae;    /* 主色懸停效果 */
+            --background: linear-gradient(45deg, #1a1b1f, #2a2d35); /* 背景漸變 */
+            --glass: rgba(255, 255, 255, 0.05); /* 玻璃效果 */
+            --neon: 0 0 15px rgba(114, 137, 218, 0.3); /* 霓虹光效 */
         }
 
+        /* 全局樣式設置 */
         * {
-            box-sizing: border-box;
-            transition: all 0.3s ease;
+            box-sizing: border-box; /* 盒模型設置 */
+            transition: all 0.3s ease; /* 動畫過渡效果 */
         }
 
+        /* 主體樣式 */
         body {
-            font-family: 'Inter', 'Noto Sans TC', system-ui, -apple-system, sans-serif;
-            margin: 0;
-            padding: 2rem;
-            min-height: 100vh;
-            background: var(--background);
-            color: #ffffff;
-            line-height: 1.6;
+            font-family: 'Inter', 'Noto Sans TC', system-ui, -apple-system, sans-serif; /* 字體設置 */
+            margin: 0; /* 去除默認邊距 */
+            padding: 2rem; /* 主體內邊距 */
+            min-height: 100vh; /* 最小高度為視口高度 */
+            background: var(--background); /* 背景設置 */
+            color: #ffffff; /* 文字顏色 */
+            line-height: 1.6; /* 行高設置 */
         }
 
         /* 霓虹光效容器 */
         .neon-container {
-            background: var(--glass);
-            backdrop-filter: blur(12px);
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: var(--neon);
-            padding: 2rem;
-            margin: 1rem auto;
-            max-width: 800px;
+            background: var(--glass); /* 背景玻璃效果 */
+            backdrop-filter: blur(12px); /* 背景模糊效果 */
+            border-radius: 16px; /* 圓角邊框 */
+            border: 1px solid rgba(255, 255, 255, 0.1); /* 邊框設置 */
+            box-shadow: var(--neon); /* 霓虹光效 */
+            padding: 2rem; /* 容器內邊距 */
+            margin: 1rem auto; /* 上下邊距，自動水平居中 */
+            max-width: 800px; /* 最大寬度 */
         }
 
-        /* 輸入區域美化 */
-        #username-input-area {
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* 動態漸變邊框 */
-        .gradient-border {
-            position: relative;
-            background: var(--glass);
-            border-radius: 16px;
-        }
-
-        .gradient-border::before {
-            content: '';
-            position: absolute;
-            inset: -2px;
-            background: linear-gradient(45deg, #7289da, #5b6eae, #2f3136);
-            z-index: -1;
-            border-radius: inherit;
-            animation: rotate 3s linear infinite;
-        }
-
-        @keyframes rotate {
-            100% { transform: rotate(360deg); }
-        }
-
-        /* 頻道列表 */
-        .channel-list {
-            display: grid;
-            gap: 0.8rem;
-            margin-top: 1.5rem;
-        }
-
-        .channel-item {
-            padding: 1rem;
-            border-radius: 12px;
-            background: var(--glass);
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .channel-item:hover {
-            background: rgba(114, 137, 218, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .channel-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                90deg,
-                transparent,
-                rgba(255, 255, 255, 0.1),
-                transparent
-            );
-            transition: 0.5s;
-        }
-
-        .channel-item:hover::before {
-            left: 100%;
-        }
-
-        /* 聊天區域 */
-        .chat-area {
-            border-radius: 16px;
-            background: var(--glass);
-            backdrop-filter: blur(8px);
-            padding: 1.5rem;
-            margin-top: 1.5rem;
-        }
-
-        .chat-messages {
-            height: 60vh;
-            padding: 1rem;
-            border-radius: 12px;
-            background: rgba(0, 0, 0, 0.3);
-            scrollbar-width: thin;
-            scrollbar-color: var(--primary) transparent;
-        }
-
-        .chat-messages::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .chat-messages::-webkit-scrollbar-thumb {
-            background: var(--primary);
-            border-radius: 3px;
-        }
-
-        /* 訊息泡泡 */
-        .message {
-            margin: 1rem 0;
-            padding: 1rem;
-            border-radius: 1rem;
-            max-width: 75%;
-            position: relative;
-            animation: popIn 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
-        }
-
-        @keyframes popIn {
-            from {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        .message.sent {
-            background: var(--primary);
-            margin-left: auto;
-            border-bottom-right-radius: 4px;
-        }
-
-        .message.received {
-            background: #3a3d45;
-            margin-right: auto;
-            border-bottom-left-radius: 4px;
-        }
-
-        .message::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            width: 12px;
-            height: 12px;
-            background: inherit;
-        }
-
-        .message.sent::after {
-            right: -6px;
-            clip-path: polygon(0 0, 100% 0, 100% 100%);
-        }
-
-        .message.received::after {
-            left: -6px;
-            clip-path: polygon(0 0, 0 100%, 100% 0);
-        }
-
-        /* 輸入框美化 */
+        /* 輸入框樣式 */
         .input-field {
-            width: 100%;
-            padding: 1rem;
-            border: none;
-            border-radius: 8px;
-            background: rgba(0, 0, 0, 0.3);
-            color: white;
-            font-size: 1rem;
+            width: 100%; /* 寬度100%以適應容器 */
+            padding: 1rem; /* 內邊距 */
+            border: none; /* 去除邊框 */
+            border-radius: 8px; /* 圓角 */
+            background: rgba(0, 0, 0, 0.3); /* 背景顏色 */
+            color: white; /* 文字顏色 */
+            font-size: 1rem; /* 字體大小 */
+            margin-bottom: 1rem; /* 底部邊距 */
         }
 
-        .input-field:focus {
-            outline: 2px solid var(--primary);
-            box-shadow: 0 0 15px rgba(114, 137, 218, 0.3);
-        }
-
-        /* 按鈕美化 */
+        /* 按鈕樣式 */
         .send-button {
-            padding: 0.8rem 1.5rem;
-            border: none;
-            border-radius: 8px;
-            background: var(--primary);
-            color: white;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
+            padding: 0.8rem 1.5rem; /* 內邊距 */
+            border: none; /* 去除邊框 */
+            border-radius: 8px; /* 圓角 */
+            background: var(--primary); /* 背景顏色 */
+            color: white; /* 文字顏色 */
+            cursor: pointer; /* 鼠標懸停樣式 */
+            display: inline-flex; /* 內聯彈性盒模型 */
+            align-items: center; /* 垂直中心對齊 */
+            gap: 0.5rem; /* 按鈕內部元素間距 */
+            width: 100%; /* 寬度100% */
         }
 
+        /* 按鈕懸停效果 */
         .send-button:hover {
-            background: var(--primary-hover);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 15px rgba(114, 137, 218, 0.3);
+            background: var(--primary-hover); /* 懸停顏色 */
+            transform: translateY(-1px); /* 懸停時微微上移 */
+            box-shadow: 0 4px 15px rgba(114, 137, 218, 0.3); /* 懸停時陰影效果 */
         }
 
-        .send-button:active {
-            transform: translateY(0);
+        /* 聊天區域設置 */
+        .chat-area {
+            margin-top: 1.5rem; /* 上邊距 */
+        }
+
+        /* 聊天消息區域 */
+        .chat-messages {
+            height: 60vh; /* 高度設定 */
+            padding: 1rem; /* 內邊距 */
+            border-radius: 12px; /* 圓角 */
+            background: rgba(0, 0, 0, 0.3); /* 背景顏色 */
+            overflow-y: auto; /* 超出內容顯示滾動條 */
+            margin-bottom: 1rem; /* 底部邊距 */
         }
 
         /* 響應式設計 */
         @media (max-width: 768px) {
             body {
-                padding: 1rem;
+                padding: 1rem; /* 手機版內邊距 */
             }
 
             .neon-container {
-                padding: 1rem;
+                padding: 1rem; /* 手機版容器內邊距 */
             }
 
             .chat-messages {
-                height: 50vh;
+                height: 50vh; /* 手機版聊天區域高度 */
             }
-
-            .message {
-                max-width: 85%;
-            }
-        }
-
-        /* 時間顯示 */
-        #timeList {
-            font-size: 0.9rem;
-            color: #8a8f99;
-            text-align: right;
-            margin-bottom: 1rem;
-        }
-
-        /* 部門選擇下拉選單 */
-        select#room {
-            width: 100%;
-            padding: 1rem;
-            border: none;
-            border-radius: 8px;
-            background: rgba(0, 0, 0, 0.3);
-            color: white;
-            appearance: none;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
-            background-repeat: no-repeat;
-            background-position: right 1rem center;
-            background-size: 1rem;
-        }
-
-        /* 退出按鈕 */
-        #exit-button {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: #ed4245;
-        }
-
-        #exit-button:hover {
-            background: #c5393b;
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+TC:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="neon-container gradient-border" id="username-input-area">
-    <div id="timeList"></div>
-    <input type="text" id="username-input" placeholder="輸入你的用戶名" class="input-field">
-    <button id="submit-username" class="send-button" style="margin-top: 1.5rem;">開始使用</button>
+        <div id="timeList"></div>
+        <input type="text" id="username-input" placeholder="輸入你的用戶名" class="input-field">
+        <button id="submit-username" class="send-button">開始使用</button>
 
-    <div class="channel-list" id="active-channels" style="display: none;">
-        <h3 style="margin: 1rem 0; color: var(--primary); font-weight: 600;">有效頻道列表</h3>
-        <div id="channel-list-items"></div>
-    </div>
-</div>
-
-<div class="neon-container" id="chat-container" style="display: none;">
-    <button id="exit-button" class="send-button">離開頻道</button>
-    <select id="room" required>
-        <option value="default">選擇部門頻道</option>
-        <option value="cs">客戶服務部</option>
-        <option value="ta">技術部</option>
-        <option value="ma">市場部</option>
-        <option value="trade">wcoins交易群組</option>
-        <option value="chatOne">包廂1號</option>
-        <option value="chatTwo">包廂2號</option>
-    </select>
-    <button id="join-button" class="send-button" style="margin: 1rem 0;">加入頻道</button>
-
-    <div class="chat-area">
-        <div class="chat-messages" id="chat-messages"></div>
-        <div class="input-area" style="margin-top: 1rem;">
-            <input type="text" class="input-field" id="message-input" placeholder="輸入訊息...">
-            <button class="send-button" id="send-button" style="margin-top: 1rem; width: 100%;">傳送訊息</button>
+        <div class="channel-list" id="active-channels" style="display: none;">
+            <h3 style="margin: 1.5rem 0; color: var(--primary); font-weight: 600;">有效頻道列表</h3>
+            <div id="channel-list-items"></div>
         </div>
     </div>
-</div>
+
+    <div class="neon-container" id="chat-container" style="display: none;">
+        <button id="exit-button" class="send-button">離開頻道</button>
+        <select id="room" required class="input-field">
+            <option value="default">選擇部門頻道</option>
+            <option value="cs">客戶服務部</option>
+            <option value="ta">技術部</option>
+            <option value="ma">市場部</option>
+            <option value="trade">wcoins交易群組</option>
+            <option value="chatOne">包廂1號</option>
+            <option value="chatTwo">包廂2號</option>
+        </select>
+        <button id="join-button" class="send-button">加入頻道</button>
+
+        <div class="chat-area">
+            <div class="chat-messages" id="chat-messages"></div>
+            <div class="input-area">
+                <input type="text" class="input-field" id="message-input" placeholder="輸入訊息...">
+                <button class="send-button" id="send-button">傳送訊息</button>
+            </div>
+        </div>
+    </div>
     <script src="https://cdn.socket.io/4.7.1/socket.io.min.js"></script>
     <script>
         const socket = io();
