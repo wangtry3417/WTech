@@ -278,13 +278,23 @@
         .chat-area {
             display: block; /* 初始顯示聊天區域 */
         }
-
         .chat-messages {
-            border: 1px solid #ccc; /* 訊息區域邊框 */
-            height: 200px; /* 高度 */
-            overflow-y: auto; /* 垂直滾動 */
-            margin-bottom: 10px; /* 下邊距 */
-            padding: 10px; /* 內邊距 */
+            border: 1px solid #ccc; 
+            height: 200px; 
+            overflow-y: auto; 
+            margin-bottom: 10px; 
+            padding: 10px; 
+        }
+        .message {
+            margin: 5px 0;
+        }
+        .sent {
+            text-align: right;
+            color: blue;
+        }
+        .received {
+            text-align: left;
+            color: green;
         }
     </style>
 </head>
@@ -1167,6 +1177,7 @@ function sellStock(stockSymbol) {
         const closeModalButton = document.getElementsByClassName("chat-close")[0];
         let chatMessages = document.getElementById('chat-messages');
         let messageInput = document.getElementById('message-input');
+        let chatArea = document.querySelector('.chat-area');
         let username = user;
         let chatRoom = "wbank客服";
 
@@ -1189,35 +1200,35 @@ function sellStock(stockSymbol) {
                 chatMessages.scrollTop = chatMessages.scrollHeight; // 滾動到最新消息
             }
         }
+
+        // 離開頻道
         document.getElementById("exit-button").onclick = function() {
             Chatmodal.style.display = "none"; // 隱藏 chat-modal
         }
+
+        // 創建訊息元素
         const createMessageElement = (data) => {
             const message = document.createElement('div');
-            //message.classList.add('message', data.type);
             message.classList.add('message');
 
-            // 根據消息來源設置類別
             if (data.username === username) {
                 message.classList.add('sent'); // 自己的消息
             } else {
                 message.classList.add('received'); // 對方的消息
             }
-            const timestamp = new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            if (data.type === 'text') {
-                message.innerHTML = `<div class="username">${data.username}</div><div class="chat-text">${data.text}</div><div class="timestamp">${timestamp}</div>`;
-            } else if (data.type === 'image') {
-                message.innerHTML = `<div class="username">${data.username}</div><img src="${data.imageUrl}" alt="image" style="max-width: 100%; border-radius: 8px;"><div class="timestamp">${timestamp}</div>`;
-            }
 
+            const timestamp = new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            message.innerHTML = `<div class="username">${data.username}</div><div class="chat-text">${data.text}</div><div class="timestamp">${timestamp}</div>`;
             return message;
         };
+
+        // 接收訊息
         socket.on('chatMessage', (data) => {
-            const messageData = { username:data.username, text: data.text, type: data.type, timestamp: data.timestamp}; // 根據類型設置
+            const messageData = { username: data.username, text: data.text, type: data.type, timestamp: data.timestamp };
             if (data.username !== username) {
-              chatMessages.appendChild(createMessageElement(messageData));
+                chatMessages.appendChild(createMessageElement(messageData));
             }
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+            chatMessages.scrollTop = chatMessages.scrollHeight; // 滾動到最新消息
         });
    /*
    const reloadStockButton = () => {
