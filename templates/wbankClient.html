@@ -13,7 +13,6 @@
     <link rel="stylesheet" href="/static/wbank/authpayment.css">
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="/static/wchat/chat.js"></script>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -1155,6 +1154,8 @@ function sellStock(stockSymbol) {
         const Chatmodal = document.getElementById("chatModal");
         const openModalButton = document.getElementById("open-chat-modal");
         const closeModalButton = document.getElementsByClassName("chat-close")[0];
+        let chatMessages = document.getElementById('chat-messages');
+        let messageInput = document.getElementById('message-input');
         let username = user;
         let chatRoom = "wbank客服";
 
@@ -1168,12 +1169,10 @@ function sellStock(stockSymbol) {
             Chatmodal.style.display = "none";
         }
         document.getElementById("send-button").onclick = function() {
-            const messageInput = document.getElementById("message-input");
             const message = messageInput.value;
             if (message) {
                 const messageData = { username: username, text: message, room_number: room, type: "text", timestamp: Date.now() };
                 socket.emit('chatMessage', messageData);
-                const chatMessages = document.getElementById("chat-messages");
                 chatMessages.appendChild(createMessageElement(messageData));
                 messageInput.value = ''; // 清空輸入框
                 chatMessages.scrollTop = chatMessages.scrollHeight; // 滾動到最新消息
@@ -1182,6 +1181,33 @@ function sellStock(stockSymbol) {
         document.getElementById("exit-button").onclick = function() {
             Chatmodal.style.display = "none"; // 隱藏 chat-modal
         }
+        const createMessageElement = (data) => {
+            const message = document.createElement('div');
+            //message.classList.add('message', data.type);
+            message.classList.add('message');
+
+            // 根據消息來源設置類別
+            if (data.username === username) {
+                message.classList.add('sent'); // 自己的消息
+            } else {
+                message.classList.add('received'); // 對方的消息
+            }
+            const timestamp = new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            if (data.type === 'text') {
+                message.innerHTML = `<div class="username">${data.username}</div><div class="chat-text">${data.text}</div><div class="timestamp">${timestamp}</div>`;
+            } else if (data.type === 'image') {
+                message.innerHTML = `<div class="username">${data.username}</div><img src="${data.imageUrl}" alt="image" style="max-width: 100%; border-radius: 8px;"><div class="timestamp">${timestamp}</div>`;
+            }
+
+            return message;
+        };
+        socket.on('chatMessage', (data) => {
+            const messageData = { username:data.username, text: data.text, type: data.type, timestamp: data.timestamp}; // 根據類型設置
+            if (data.username !== username) {
+              chatMessages.appendChild(createMessageElement(messageData));
+            }
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        });
    /*
    const reloadStockButton = () => {
      Object.keys(stockPrices).forEach(stock => randomPriceChange(stock));
