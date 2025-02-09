@@ -150,6 +150,17 @@
         }
 
         /* Chat Modal 內容 */
+         .chat-modal {
+            display: none; /* 默認隱藏 */
+            position: fixed; /* 固定定位 */
+            z-index: 1000; /* 層級 */
+            left: 0;
+            top: 0;
+            width: 100%; /* 寬度100% */
+            height: 100%; /* 高度100% */
+            overflow: auto; /* 滾動 */
+            background-color: rgba(0, 0, 0, 0.7); /* 背景顏色 */
+        }
         .chat-modal-content {
             background-color: #fefefe; /* 背景色 */
             margin: 10% auto; /* 上邊距 */
