@@ -382,7 +382,7 @@
           window.location.href="/wbank/client";
         }
         //chat-modal部分
-        let uname;
+        let uname = null;
         let socket = io();
         // 獲取 modal 和按鈕元素
         const Chatmodal = document.getElementById("chatModal");
@@ -399,13 +399,13 @@
             if (!uname || uname == null) return;
             Chatmodal.style.display = "block";
             chatArea.style.display = "block";
-            socket.emit('joinChat', { uname, room_number: chatRoom });
+            socket.emit('joinChat', { username: uname, room_number: chatRoom });
         }
 
         // 關閉 modal
         closeModalButton.onclick = function() {
             Chatmodal.style.display = "none";
-            socket.emit('leaveChat', { uname, room_number: chatRoom });
+            socket.emit('leaveChat', { username: uname, room_number: chatRoom });
         }
         document.getElementById("send-button").onclick = function() {
             const message = messageInput.value;
@@ -421,7 +421,7 @@
         // 離開頻道
         document.getElementById("exit-button").onclick = function() {
             Chatmodal.style.display = "none"; // 隱藏 chat-modal
-            socket.emit('leaveChat', { uname, room_number: chatRoom });
+            socket.emit('leaveChat', { username: uname, room_number: chatRoom });
         }
 
         // 創建訊息元素
