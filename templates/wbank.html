@@ -247,6 +247,23 @@
         {% endif %}
         {% endwith %}
         <h2>WBank - 安全登入</h2>
+        <div id="chatModal" class="chat-modal">
+        <div class="chat-modal-content">
+            <span class="chat-close">&times;</span>
+            <h2>歡迎使用線上客服</h2>
+            <p>在對話時，請注意言詞</p>
+            <div id="chat-container">
+                <div class="chat-area" style="display: none;">
+                    <button id="exit-button" class="send-button">離開頻道</button>
+                    <div class="chat-messages" id="chat-messages"></div>
+                    <input type="text" id="message-input" placeholder="輸入訊息...">
+                    <button id="send-button" class="send-button">傳送訊息</button>
+                </div>
+            </div>
+            <br />
+            <p style="color: gray;">本次chat應用使用wchat-api</p>
+        </div>
+    </div>
         <form id="login-stage" action="/wbank/auth/login" method="post">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             <input type="text" name="user" placeholder="用戶名稱" required>
@@ -309,23 +326,7 @@
        <!-- chat-modal -->
        <button id="open-chat-modal" class="send-button">🗨️</button>
 
-    <div id="chatModal" class="chat-modal">
-        <div class="chat-modal-content">
-            <span class="chat-close">&times;</span>
-            <h2>歡迎使用線上客服</h2>
-            <p>在對話時，請注意言詞</p>
-            <div id="chat-container">
-                <div class="chat-area" style="display: none;">
-                    <button id="exit-button" class="send-button">離開頻道</button>
-                    <div class="chat-messages" id="chat-messages"></div>
-                    <input type="text" id="message-input" placeholder="輸入訊息...">
-                    <button id="send-button" class="send-button">傳送訊息</button>
-                </div>
-            </div>
-            <br />
-            <p style="color: gray;">本次chat應用使用wchat-api</p>
-        </div>
-    </div>
+    
         <div id="lc" class="loading-container">
             <div class="loader"></div>
             <div class="loading-text">自動登入中...</div>
