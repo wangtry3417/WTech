@@ -1229,6 +1229,7 @@ function sellStock(stockSymbol) {
         // 接收訊息
         socket.on('chatMessage', (data) => {
             const message = document.createElement('div');
+            if (data.username == username) return;
             message.textContent = `${data.username}: ${data.text}`;
             chatMessages.appendChild(message);
             chatMessages.scrollTop = chatMessages.scrollHeight; // 滾動到最新消息
