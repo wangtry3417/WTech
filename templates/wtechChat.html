@@ -313,7 +313,7 @@
             if (data.type === 'text') {
                 message.innerHTML = `<div class="username">${data.username}</div><div class="chat-text">${data.text}</div><div class="timestamp">${timestamp}</div>`;
             } else if (data.type === 'image') {
-                message.innerHTML = `<div class="username">${data.username}</div><img src="data:image/svg+xml;base64, ${data.imageData}" alt="image" style="max-width: 150px"><div class="timestamp">${timestamp}</div>`;
+                message.innerHTML = `<div class="username">${data.username}</div><img src="data:${data.mimeType};base64, ${data.imageData}" alt="image" style="max-width: 150px"><div class="timestamp">${timestamp}</div>`;
             }
 
             return message;
@@ -327,9 +327,10 @@
                 msgType = "image";
                 // 啟用文件閱讀器
                 const render = new FileReader();
+                let mimeType = imageUpload.type;
                 render.readAsDataURL(imageUpload);
                 render.onloadend = () => {
-                    const msgData = { username:username, imageData: render.result, room_number: room, type: msgType, timestamp: Date.now() };
+                    const msgData = { username:username, imageData: render.result.split(",")[1], room_number: room, type: msgType, timestamp: Date.now(), mimeType: mimeType};
                      socket.emit('chatMessage', msgData);
                       document.getElementById("image-upload").value = '';
                  };
@@ -346,7 +347,7 @@
 
         socket.on('chatMessage', (data) => {
             let msgData = {};
-            const msgData = data.type === "image" ? 
+            msgData = data.type === "image" ? 
         { username: data.username, imageData: data.imageData, type: data.type, timestamp: data.timestamp } : 
         { username: data.username, text: data.text, type: data.type, timestamp: data.timestamp };
             if (data.username !== username) {
