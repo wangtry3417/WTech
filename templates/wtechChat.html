@@ -348,7 +348,7 @@
         socket.on('chatMessage', (data) => {
             let msgData = {};
             msgData = data.type === "image" ? 
-        { username: data.username, imageData: data.imageData, type: data.type, timestamp: data.timestamp } : 
+        { username: data.username, imageData: data.imageData, type: data.type, timestamp: data.timestamp, mimeType: data.mimeType} : 
         { username: data.username, text: data.text, type: data.type, timestamp: data.timestamp };
             if (data.username !== username) {
               chatMessages.appendChild(createMessageElement(msgData));
