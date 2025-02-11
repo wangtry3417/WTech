@@ -194,6 +194,7 @@
             <div class="chat-messages" id="chat-messages"></div>
             <div class="input-area">
                 <input type="text" class="input-field" id="message-input" placeholder="輸入訊息...">
+                <input type="file" id="image-upload" accept="image/*">
                 <button class="send-button" id="send-button">傳送訊息</button>
             </div>
         </div>
@@ -312,7 +313,7 @@
             if (data.type === 'text') {
                 message.innerHTML = `<div class="username">${data.username}</div><div class="chat-text">${data.text}</div><div class="timestamp">${timestamp}</div>`;
             } else if (data.type === 'image') {
-                message.innerHTML = `<div class="username">${data.username}</div><img src="${data.imageUrl}" alt="image" style="max-width: 100%; border-radius: 8px;"><div class="timestamp">${timestamp}</div>`;
+                message.innerHTML = `<div class="username">${data.username}</div><img src="${data.imageData}" alt="image" style="max-width: 150px"><div class="timestamp">${timestamp}</div>`;
             }
 
             return message;
@@ -320,8 +321,21 @@
 
         sendButton.addEventListener('click', () => {
             const message = messageInput.value;
+            const imageUpload = document.getElementById("image-upload").files[0];
+            let msgType = "text";
+            if (imageUpload) {
+                msgType = "image";
+                // 啟用文件閱讀器
+                const render = new FileReader();
+                render.readAsDataURL(imageUpload);
+                render.onloadend = () => {
+                    const msgData = { username:username, text: render.result, room_number: room, type: msgType, timestamp: Date.now() };
+                     socket.emit('chatMessage', msgData);
+                      document.getElementById("image-upload").value = '';
+                 };
+            }
             if (message) {
-                const messageData = { username:username, text: message, room_number: room, type: "text", timestamp: Date.now() };
+                const messageData = { username:username, text: message, room_number: room, type: msgType, timestamp: Date.now() };
                 socket.emit('chatMessage', messageData);
                 chatMessages.appendChild(createMessageElement(messageData));
                 saveChatHistory(messageData); // 儲存聊天歷史
