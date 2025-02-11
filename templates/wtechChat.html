@@ -329,7 +329,7 @@
                 const render = new FileReader();
                 render.readAsDataURL(imageUpload);
                 render.onloadend = () => {
-                    const msgData = { username:username, imagData: render.result, room_number: room, type: msgType, timestamp: Date.now() };
+                    const msgData = { username:username, imageData: render.result, room_number: room, type: msgType, timestamp: Date.now() };
                      socket.emit('chatMessage', msgData);
                       document.getElementById("image-upload").value = '';
                  };
@@ -345,9 +345,12 @@
         });
 
         socket.on('chatMessage', (data) => {
-            const messageData = { username:data.username, text: data.text, type: data.type, timestamp: data.timestamp}; // 根據類型設置
+            let msgData = {};
+            const msgData = data.type === "image" ? 
+        { username: data.username, imageData: data.imageData, type: data.type, timestamp: data.timestamp } : 
+        { username: data.username, text: data.text, type: data.type, timestamp: data.timestamp };
             if (data.username !== username) {
-              chatMessages.appendChild(createMessageElement(messageData));
+              chatMessages.appendChild(createMessageElement(msgData));
               saveChatHistory(messageData); // 儲存聊天歷史
             }
             chatMessages.scrollTop = chatMessages.scrollHeight;
