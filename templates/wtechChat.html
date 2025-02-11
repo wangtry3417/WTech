@@ -333,6 +333,7 @@
                     const msgData = { username:username, imageData: render.result, room_number: room, type: msgType, timestamp: Date.now(), mimeType: mimeType};
                      socket.emit('chatMessage', msgData);
                       document.getElementById("image-upload").value = '';
+                     chatMessages.scrollTop = chatMessages.scrollHeight;
                  };
             }
             if (message) {
