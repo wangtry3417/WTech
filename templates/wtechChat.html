@@ -313,7 +313,7 @@
             if (data.type === 'text') {
                 message.innerHTML = `<div class="username">${data.username}</div><div class="chat-text">${data.text}</div><div class="timestamp">${timestamp}</div>`;
             } else if (data.type === 'image') {
-                message.innerHTML = `<div class="username">${data.username}</div><img src="${data.imageData}" alt="image" style="max-width: 150px"><div class="timestamp">${timestamp}</div>`;
+                message.innerHTML = `<div class="username">${data.username}</div><img src="data:image/svg+xml;base64, ${data.imageData}" alt="image" style="max-width: 150px"><div class="timestamp">${timestamp}</div>`;
             }
 
             return message;
