@@ -330,7 +330,7 @@
                 let mimeType = imageUpload.type;
                 render.readAsDataURL(imageUpload);
                 render.onloadend = () => {
-                    const msgData = { username:username, imageData: render.result.split(",")[1], room_number: room, type: msgType, timestamp: Date.now(), mimeType: mimeType};
+                    const msgData = { username:username, imageData: render.result, room_number: room, type: msgType, timestamp: Date.now(), mimeType: mimeType};
                      socket.emit('chatMessage', msgData);
                       document.getElementById("image-upload").value = '';
                  };
