@@ -856,11 +856,8 @@ def handle_join_chat(data):
 def handle_chat_message(data):
     if data['type'] == 'image':
         # 將 Base64 編碼的圖片資料轉換為圖片檔案
-        image_data = base64.b64decode(data['imageUrl'].split(',')[1])
-        image_path = os.path.join(f"{app.static_folder}/wchat", 'uploads', f"{data['username']}_{data['room_number']}_{data['timestamp']}.png")
-        with open(image_path, 'wb') as f:
-            f.write(image_data)
-        data['imageUrl'] = f"/static/wchat/{data['username']}_{data['room_number']}_{data['timestamp']}.png"
+        image_data = base64.b64decode(data['imageData'].split(',')[1])
+        data["imageData"] = image_data
         emit('chatMessage', data, room=data['room_number'])
     # 處理文字類型的 data
     elif data['type'] == 'text':
