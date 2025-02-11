@@ -351,7 +351,7 @@
         { username: data.username, text: data.text, type: data.type, timestamp: data.timestamp };
             if (data.username !== username) {
               chatMessages.appendChild(createMessageElement(msgData));
-              saveChatHistory(messageData); // 儲存聊天歷史
+              saveChatHistory(msgData); // 儲存聊天歷史
             }
             chatMessages.scrollTop = chatMessages.scrollHeight;
         });
