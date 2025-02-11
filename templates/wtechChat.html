@@ -329,7 +329,7 @@
                 const render = new FileReader();
                 render.readAsDataURL(imageUpload);
                 render.onloadend = () => {
-                    const msgData = { username:username, text: render.result, room_number: room, type: msgType, timestamp: Date.now() };
+                    const msgData = { username:username, imagData: render.result, room_number: room, type: msgType, timestamp: Date.now() };
                      socket.emit('chatMessage', msgData);
                       document.getElementById("image-upload").value = '';
                  };
