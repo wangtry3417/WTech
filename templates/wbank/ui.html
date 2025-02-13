@@ -184,7 +184,7 @@
         let nextDirection = 'right'; // 預計的下一個方向 (避免快速連續按鍵的問題)
         let score = 0;
         let level = 1;
-        let gameSpeed = 150; // 遊戲速度 (毫秒)
+        let gameSpeed = 80; // 遊戲速度 (毫秒)
         let gameInterval;
         let isGameOver = false;
 
@@ -198,7 +198,7 @@
             nextDirection = 'right';
             score = 0;
             level = 1;
-            gameSpeed = 150;
+            gameSpeed = 80;
             scoreDisplay.textContent = score;
             levelDisplay.textContent = level;
             isGameOver = false;
