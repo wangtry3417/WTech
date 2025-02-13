@@ -321,7 +321,7 @@
 
 
             // 繪製玩家
-            ctx.fillStyle = 'blue';
+            ctx.fillStyle = 'red';
             ctx.fillRect(playerX, playerY, playerWidth, playerHeight);
 
 
@@ -411,7 +411,7 @@
 
 
         function drawSpike(x, y, width, height) {
-            ctx.fillStyle = 'red';
+            ctx.fillStyle = 'black';
             ctx.beginPath();
             ctx.moveTo(x, y + height); // 底部中心點
             ctx.lineTo(x + width / 2, y);   // 頂部尖端
