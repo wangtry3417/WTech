@@ -3,149 +3,478 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>使用者介面 -- By Google-gemini</title>
-    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <title>俄羅斯方塊 (Russia Block) - 手機版</title>
     <style>
-      /* 全域樣式設定 */
-body {
-    font-family: 'Arial', sans-serif; /* 現代化字體 */
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4; /* 淺灰色背景 */
-    color: #333; /* 深灰色文字 */
-    line-height: 1.6;
-}
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden; /* 防止捲軸 */
+        }
 
-.app-container {
-    display: flex;
-    flex-direction: column; /* 垂直排列 header, nav, main, footer */
-    min-height: 100vh; /* 確保容器佔滿整個視窗高度 */
-}
+        .game-container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            text-align: center;
+            position: relative; /*  ** 設定相對定位，方便觸控按鈕絕對定位 **  */
+        }
 
-/* Header 樣式 */
-.app-header {
-    background-color: #007bff; /* 藍色 Header 背景 */
-    color: white;
-    padding: 20px;
-    text-align: center;
-}
+        #gameCanvas {
+            background-color: #ddd;
+            border: 2px solid #333;
+            border-radius: 5px;
+        }
 
-.app-header h1 {
-    margin: 0;
-    font-size: 2em; /* 標題文字大小 */
-}
+        .info-panel {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
 
-/* Navigation 樣式 */
-.app-nav {
-    background-color: #eee; /* 淺灰色 Navigation 背景 */
-    padding: 10px 20px;
-    border-bottom: 1px solid #ddd; /* 底部邊框 */
-}
+        .score-display, .level-display {
+            background-color: #eee;
+            padding: 10px 15px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
 
-.app-nav ul {
-    list-style: none; /* 移除列表符號 */
-    padding: 0;
-    margin: 0;
-    display: flex; /* 水平排列選單項目 */
-    justify-content: flex-start; /* 選單項目靠左對齊 */
-}
+        .controls-info {
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #777;
+        }
 
-.app-nav li {
-    margin-right: 20px; /* 選單項目間距 */
-}
+        /*  ** 觸控按鈕樣式 **  */
+        .touch-controls {
+            display: none; /*  ** 預設隱藏觸控按鈕 (電腦螢幕先不顯示) **  */
+            margin-top: 20px;
+            display: flex; /*  ** 手機版時會顯示並使用 Flexbox 排列 **  */
+            justify-content: center; /*  ** 水平置中 **  */
+            align-items: center; /*  ** 垂直置中 (雖然在這個案例中效果不明顯) **  */
+            position: absolute; /*  ** 相對於 .game-container 定位 **  */
+            bottom: 10px; /*  ** 底部間距 **  */
+            left: 0;
+            right: 0;
+        }
 
-.app-nav li:last-child {
-    margin-right: 0; /* 最後一個選單項目移除右邊距 */
-}
+        .touch-button {
+            background-color: #eee; /*  ** 淺灰色按鈕背景 **  */
+            color: #333; /*  ** 深灰色文字 **  */
+            border: 1px solid #ccc; /*  ** 灰色邊框 **  */
+            border-radius: 50%; /*  ** 圓形按鈕 **  */
+            width: 50px; /*  ** 按鈕寬度 **  */
+            height: 50px; /*  ** 按鈕高度 **  */
+            display: flex; /*  ** 讓按鈕文字置中 **  */
+            justify-content: center; /*  ** 水平置中 **  */
+            align-items: center; /*  ** 垂直置中 **  */
+            font-size: 1.5em; /*  ** 按鈕文字大小 **  */
+            cursor: pointer; /*  ** 滑鼠游標樣式 **  */
+            user-select: none; /*  ** 禁止選取文字 **  */
+            margin: 0 10px; /*  ** 按鈕間距 **  */
+            transition: background-color 0.2s ease; /*  ** 背景顏色過渡效果 **  */
+        }
 
-.app-nav a {
-    text-decoration: none; /* 移除連結底線 */
-    color: #333; /* 深灰色連結文字 */
-    padding: 8px 12px;
-    border-radius: 5px; /* 連結圓角 */
-    transition: background-color 0.3s ease; /* 背景顏色過渡效果 */
-}
-
-.app-nav a:hover {
-    background-color: #ddd; /* 滑鼠懸停時背景顏色 */
-}
+        .touch-button:hover,
+        .touch-button:active { /*  ** 滑鼠 hover 和觸控按下時的效果 **  */
+            background-color: #ddd; /*  ** 更深的淺灰色背景 **  */
+        }
 
 
-/* Main Content 樣式 */
-.app-main {
-    flex: 1; /* main 佔據剩餘空間 */
-    padding: 20px;
-    display: flex;
-    justify-content: center; /* 內容水平置中 */
-    align-items: center; /* 內容垂直置中 */
-}
+        /*  ** 特定按鈕的樣式 (方向按鈕) **  */
+        .touch-button-left,
+        .touch-button-right,
+        .touch-button-down {
+            background-color: #e0e0e0; /*  ** 稍微不同的背景色 **  */
+        }
 
-.content-area {
-    background-color: white; /* 白色內膽背景 */
-    padding: 30px;
-    border-radius: 8px; /* 內膽圓角 */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* 內膽陰影 */
-    text-align: center; /* 內膽文字置中 */
-    max-width: 800px; /* 內膽最大寬度 */
-    width: 100%;
-}
 
-.content-area h2 {
-    color: #007bff; /* 藍色標題文字 */
-    margin-top: 0;
-}
+        /*  **  針對手機螢幕的 Media Query  **  */
+        @media (max-width: 768px) { /*  ** 當螢幕寬度小於等於 768px 時 (常見手機螢幕) **  */
+            .touch-controls {
+                display: flex; /*  ** 顯示觸控按鈕 **  */
+            }
 
-/* Footer 樣式 */
-.app-footer {
-    background-color: #333; /* 深灰色 Footer 背景 */
-    color: white;
-    text-align: center;
-    padding: 10px;
-}
-</style>
+            .game-container {
+                padding-bottom: 80px; /*  ** 底部增加內邊距，避免按鈕遮擋遊戲畫面 **  */
+            }
+
+            .touch-button {
+                width: 60px; /*  ** 手機上按鈕稍微放大 **  */
+                height: 60px; /*  ** 手機上按鈕稍微放大 **  */
+                font-size: 1.8em; /*  ** 手機上按鈕文字稍微放大 **  */
+                margin: 0 15px; /*  ** 手機上按鈕間距稍微加大 **  */
+            }
+        }
+
+
+    </style>
 </head>
 <body>
 
-    <div id="root"></div>
+    <div class="game-container">
+        <h1>俄羅斯方塊</h1>
+        <canvas id="gameCanvas" width="300" height="600"></canvas>
+        <div class="info-panel">
+            <div class="score-display">分數: <span id="score">0</span></div>
+            <div class="level-display">等級: <span id="level">1</span></div>
+        </div>
+        <div class="controls-info">
+            操作方式： &larr; (左移) &rarr; (右移) &uarr; (旋轉) &darr; (加速下降)
+        </div>
 
-    <script type="text/babel">
+        <div class="touch-controls">
+            <div class="touch-button touch-button-left" id="touchLeft">
+                &larr;
+            </div>
+            <div class="touch-button touch-button-rotate" id="touchRotate">
+                &uarr;
+            </div>
+            <div class="touch-button touch-button-right" id="touchRight">
+                &rarr;
+            </div>
+            <div class="touch-button touch-button-down" id="touchDown">
+                &darr;
+            </div>
+        </div>
+    </div>
 
-        // React Component 將在這裡
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreDisplay = document.getElementById('score');
+        const levelDisplay = document.getElementById('level');
 
-        const App = () => {
-            return (
-                <div className="app-container">
-                    <header className="app-header">
-                        <h1>歡迎來到現代化介面</h1>
-                    </header>
+        const gridSize = 30; // 格子大小
+        const canvasWidth = canvas.width;
+        const canvasHeight = canvas.height;
+        const gridCols = canvasWidth / gridSize; // 遊戲區塊寬度格數
+        const gridRows = canvasHeight / gridSize; // 遊戲區塊高度格數
 
-                    <nav className="app-nav">
-                        <ul>
-                            <li><a href="#">首頁</a></li>
-                            <li><a href="#">我的</a></li>
-                        </ul>
-                    </nav>
+        // 方塊形狀 (順時針旋轉的形狀定義)
+        const shapes = [
+            [[0, 1], [1, 1], [2, 1], [3, 1]],       // I
+            [[0, 0], [1, 0], [0, 1], [1, 1]],       // O
+            [[0, 0], [1, 0], [2, 0], [2, 1]],       // L
+            [[0, 0], [1, 0], [2, 0], [0, 1]],       // J
+            [[0, 0], [1, 0], [1, 1], [2, 1]],       // Z
+            [[0, 1], [1, 0], [1, 1], [2, 0]],       // S
+            [[0, 0], [1, 0], [2, 0], [1, 1]]        // T
+        ];
 
-                    <main className="app-main">
-                        <div className="content-area">
-                            <h2>內膽區域</h2>
-                            <p>這是一個現代化使用者介面的內膽區域，您可以在這裡放入各種內容。</p>
-                            <p>例如，您可以放置文字、圖片、表單、按鈕等等。</p>
-                        </div>
-                    </main>
+        const shapeColors = [
+            'cyan', 'yellow', 'orange', 'blue', 'red', 'lime', 'purple'
+        ];
 
-                    <footer className="app-footer">
-                        <p>&copy; 2023 現代化使用者介面</p>
-                    </footer>
-                </div>
-            );
-        };
+        let gameBoard = createGameBoard();
+        let currentPiece = null;
+        let pieceX, pieceY;
+        let score = 0;
+        let level = 1;
+        let gameSpeed = 750; // 初始速度 (毫秒)
+        let isGameOver = false;
+        let gameInterval;
+
+        function createGameBoard() {
+            // 創建一個填滿 0 的 2D 陣列作為遊戲盤面
+            return Array.from({ length: gridRows }, () => Array(gridCols).fill(0));
+        }
+
+        function generateNewPiece() {
+            const randomShapeIndex = Math.floor(Math.random() * shapes.length);
+            const shape = shapes[randomShapeIndex];
+            const color = shapeColors[randomShapeIndex];
+
+            currentPiece = shape;
+            pieceColor = color;
+            pieceX = Math.floor(gridCols / 2) - Math.ceil(currentPiece[0].length / 2); // 初始 X 位置置中
+            pieceY = 0; // 初始 Y 位置在頂端
+
+            // 檢查新的方塊是否在生成時就已經與現有方塊重疊，如果是則遊戲結束
+            if (checkCollision(pieceX, pieceY)) {
+                gameOver();
+                return false; // 遊戲結束，不再生成新的方塊
+            }
+            return true; // 成功生成方塊
+        }
 
 
-        ReactDOM.render(<App />, document.getElementById('root'));
+        function drawGrid() {
+            // 繪製遊戲盤面格線 (可選，裝飾用)
+            ctx.strokeStyle = '#ccc'; // 淺灰色格線
+            for (let x = 0; x <= canvasWidth; x += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, canvasHeight);
+                ctx.stroke();
+            }
+            for (let y = 0; y <= canvasHeight; y += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvasWidth, y);
+                ctx.stroke();
+            }
+        }
 
+
+        function drawPiece() {
+            if (!currentPiece) return;
+            ctx.fillStyle = pieceColor;
+            currentPiece.forEach(block => {
+                drawBlock(pieceX + block[0], pieceY + block[1], pieceColor);
+            });
+        }
+
+        function drawBlock(x, y, color) {
+            ctx.fillStyle = color;
+            ctx.fillRect(x * gridSize, y * gridSize, gridSize, gridSize);
+            ctx.strokeStyle = '#333'; // 黑色邊框
+            ctx.lineWidth = 1;
+            ctx.strokeRect(x * gridSize, y * gridSize, gridSize, gridSize); // 畫邊框
+        }
+
+        function drawGameBoard() {
+            gameBoard.forEach((row, y) => {
+                row.forEach((colorCode, x) => {
+                    if (colorCode) {
+                        drawBlock(x, y, colorCode);
+                    }
+                });
+            });
+        }
+
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+        }
+
+        function checkCollision(xOffset, yOffset, testPiece = currentPiece) {
+            // 檢查方塊移動後是否會碰撞到邊界或已存在的方塊
+            for (let block of testPiece) {
+                let x = pieceX + block[0] + xOffset;
+                let y = pieceY + block[1] + yOffset;
+
+                if (x < 0 || x >= gridCols || y >= gridRows || (y >= 0 && gameBoard[y][x])) {
+                    return true; // 發生碰撞
+                }
+                if (y < 0) continue; // 忽略檢查盤面頂部以上的區域
+            }
+            return false; // 沒有碰撞
+        }
+
+
+        function movePieceDown() {
+            if (!currentPiece) return;
+            if (!checkCollision(0, 1)) {
+                pieceY++;
+            } else {
+                freezePiece();
+                clearFullRows();
+                if (!generateNewPiece()) { // 嘗試生成新方塊，如果失敗 (遊戲結束)
+                    return; // 停止 movePieceDown 的後續執行
+                }
+            }
+        }
+
+        function movePieceLeft() {
+            if (!currentPiece) return;
+            if (!checkCollision(-1, 0)) {
+                pieceX--;
+            }
+        }
+
+        function movePieceRight() {
+            if (!currentPiece) return;
+            if (!checkCollision(1, 0)) {
+                pieceX++;
+            }
+        }
+
+        function rotatePiece() {
+            if (!currentPiece) return;
+            const originalPiece = currentPiece;
+            const rotatedPiece = rotateShape(currentPiece);
+
+            // 旋轉後如果會碰撞，則不旋轉
+            if (!checkCollision(0, 0, rotatedPiece)) {
+                currentPiece = rotatedPiece;
+            } else {
+                // 嘗試微調位置，左右各微調一格看看是否可以旋轉
+                if (!checkCollision(-1, 0, rotatedPiece)) {
+                    pieceX--;
+                    currentPiece = rotatedPiece;
+                } else if (!checkCollision(1, 0, rotatedPiece)) {
+                    pieceX++;
+                    currentPiece = rotatedPiece;
+                } else {
+                    currentPiece = originalPiece; // 無法旋轉，恢復原狀
+                }
+            }
+        }
+
+
+        function rotateShape(shape) {
+            // 旋轉方塊的形狀 (順時針 90 度)
+            const rows = shape.length;
+            const cols = shape[0].length;
+            const newShape = [];
+            for (let x = 0; x < cols; x++) {
+                let newRow = [];
+                for (let y = rows - 1; y >= 0; y--) {
+                    newRow.push(shape[y][x]);
+                }
+                newShape.push(newRow);
+            }
+            return newShape;
+        }
+
+
+        function freezePiece() {
+            if (!currentPiece) return;
+            currentPiece.forEach(block => {
+                let x = pieceX + block[0];
+                let y = pieceY + block[1];
+                if (y >= 0) { // 確保 y 是有效的行索引 (避免超出頂部)
+                    gameBoard[y][x] = pieceColor; // 將方塊顏色記錄到遊戲盤面
+                }
+            });
+            currentPiece = null; // 固定後清除當前方塊
+        }
+
+
+        function clearFullRows() {
+            let rowsCleared = 0;
+            for (let y = gridRows - 1; y >= 0; y--) {
+                if (gameBoard[y].every(cell => cell)) {
+                    // 如果整行都填滿了方塊
+                    rowsCleared++;
+                    // 移除滿行的方塊，並在頂部加入新的空行
+                    gameBoard.splice(y, 1); // 移除整行
+                    gameBoard.unshift(Array(gridCols).fill(0)); // 在頂端加入新的一空行
+                }
+            }
+
+            if (rowsCleared > 0) {
+                updateScore(rowsCleared);
+                if (score >= level * level * 1000) { // 每累積一定分數升級
+                    levelUp();
+                }
+            }
+        }
+
+
+        function updateScore(rows) {
+            let points = 0;
+            switch (rows) {
+                case 1: points = 100; break;
+                case 2: points = 300; break;
+                case 3: points = 500; break;
+                case 4: points = 800; break; // Tetris!
+            }
+            score += points * level; // 分數倍率與等級連動
+            scoreDisplay.textContent = score;
+        }
+
+        function levelUp() {
+            level++;
+            levelDisplay.textContent = level;
+            gameSpeed = Math.max(100, gameSpeed - 50); // 每次升級加快速度，但最低 100ms
+            clearInterval(gameInterval); // 清除舊的 interval
+            gameInterval = setInterval(gameLoop, gameSpeed); // 設定新的 interval
+        }
+
+
+        function gameOver() {
+            isGameOver = true;
+            clearInterval(gameInterval); // 停止遊戲迴圈
+            alert(`遊戲結束！ 您的分數: ${score}，等級: ${level}`);
+            // 重新開始遊戲 (可選)
+            resetGame(); // 呼叫 resetGame 重新開始
+        }
+
+        function resetGame() {
+            gameBoard = createGameBoard(); // 清空盤面
+            score = 0;
+            level = 1;
+            gameSpeed = 750;
+            scoreDisplay.textContent = score;
+            levelDisplay.textContent = level;
+            isGameOver = false;
+            clearInterval(gameInterval); // 確保清除舊的 interval
+            generateNewPiece(); // 產生第一個方塊
+            gameInterval = setInterval(gameLoop, gameSpeed); // 重新啟動遊戲迴圈
+        }
+
+
+        function gameLoop() {
+            if (isGameOver) return;
+
+            clearCanvas();
+            // drawGrid(); // 可選：如果需要格線就取消註解
+            drawGameBoard();
+            movePieceDown(); // 方塊自動下落
+            drawPiece(); // 繪製當前方塊
+        }
+
+
+        //  ** 取得觸控按鈕元素 **
+        const touchLeftButton = document.getElementById('touchLeft');
+        const touchRotateButton = document.getElementById('touchRotate');
+        const touchRightButton = document.getElementById('touchRight');
+        const touchDownButton = document.getElementById('touchDown');
+
+
+        //  ** 觸控事件處理 (觸摸開始) **
+        touchLeftButton.addEventListener('touchstart', function(event) {
+            event.preventDefault(); //  ** 防止觸控事件觸發瀏覽器預設行為 **
+            movePieceLeft();
+        });
+
+        touchRightButton.addEventListener('touchstart', function(event) {
+            event.preventDefault();
+            movePieceRight();
+        });
+
+        touchRotateButton.addEventListener('touchstart', function(event) {
+            event.preventDefault();
+            rotatePiece();
+        });
+
+        touchDownButton.addEventListener('touchstart', function(event) {
+            event.preventDefault();
+            movePieceDown(); //  ** 觸控按下向下按鈕，直接加速下落 **
+        });
+
+
+        // 鍵盤事件處理
+        document.addEventListener('keydown', event => {
+            if (isGameOver) return; // 遊戲結束時不響應操作
+
+            switch (event.key) {
+                case 'ArrowLeft':
+                    movePieceLeft();
+                    break;
+                case 'ArrowRight':
+                    movePieceRight();
+                    break;
+                case 'ArrowUp':
+                    rotatePiece();
+                    break;
+                case 'ArrowDown': // 加速下降
+                    movePieceDown();
+                    break;
+            }
+        });
+
+
+        // 遊戲啟動
+        resetGame(); // 初始化並開始遊戲
     </script>
 
 </body>
