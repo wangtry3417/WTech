@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>使用者介面 -- By Google-gemini</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+      /* 全域樣式設定 */
+body {
+    font-family: 'Arial', sans-serif; /* 現代化字體 */
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4; /* 淺灰色背景 */
+    color: #333; /* 深灰色文字 */
+    line-height: 1.6;
+}
+
+.app-container {
+    display: flex;
+    flex-direction: column; /* 垂直排列 header, nav, main, footer */
+    min-height: 100vh; /* 確保容器佔滿整個視窗高度 */
+}
+
+/* Header 樣式 */
+.app-header {
+    background-color: #007bff; /* 藍色 Header 背景 */
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+.app-header h1 {
+    margin: 0;
+    font-size: 2em; /* 標題文字大小 */
+}
+
+/* Navigation 樣式 */
+.app-nav {
+    background-color: #eee; /* 淺灰色 Navigation 背景 */
+    padding: 10px 20px;
+    border-bottom: 1px solid #ddd; /* 底部邊框 */
+}
+
+.app-nav ul {
+    list-style: none; /* 移除列表符號 */
+    padding: 0;
+    margin: 0;
+    display: flex; /* 水平排列選單項目 */
+    justify-content: flex-start; /* 選單項目靠左對齊 */
+}
+
+.app-nav li {
+    margin-right: 20px; /* 選單項目間距 */
+}
+
+.app-nav li:last-child {
+    margin-right: 0; /* 最後一個選單項目移除右邊距 */
+}
+
+.app-nav a {
+    text-decoration: none; /* 移除連結底線 */
+    color: #333; /* 深灰色連結文字 */
+    padding: 8px 12px;
+    border-radius: 5px; /* 連結圓角 */
+    transition: background-color 0.3s ease; /* 背景顏色過渡效果 */
+}
+
+.app-nav a:hover {
+    background-color: #ddd; /* 滑鼠懸停時背景顏色 */
+}
+
+
+/* Main Content 樣式 */
+.app-main {
+    flex: 1; /* main 佔據剩餘空間 */
+    padding: 20px;
+    display: flex;
+    justify-content: center; /* 內容水平置中 */
+    align-items: center; /* 內容垂直置中 */
+}
+
+.content-area {
+    background-color: white; /* 白色內膽背景 */
+    padding: 30px;
+    border-radius: 8px; /* 內膽圓角 */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* 內膽陰影 */
+    text-align: center; /* 內膽文字置中 */
+    max-width: 800px; /* 內膽最大寬度 */
+    width: 100%;
+}
+
+.content-area h2 {
+    color: #007bff; /* 藍色標題文字 */
+    margin-top: 0;
+}
+
+/* Footer 樣式 */
+.app-footer {
+    background-color: #333; /* 深灰色 Footer 背景 */
+    color: white;
+    text-align: center;
+    padding: 10px;
+}
+</style>
+</head>
+<body>
+
+    <div id="root"></div>
+
+    <script type="text/babel">
+
+        // React Component 將在這裡
+
+        const App = () => {
+            return (
+                <div className="app-container">
+                    <header className="app-header">
+                        <h1>歡迎來到現代化介面</h1>
+                    </header>
+
+                    <nav className="app-nav">
+                        <ul>
+                            <li><a href="#">首頁</a></li>
+                            <li><a href="#">我的</a></li>
+                        </ul>
+                    </nav>
+
+                    <main className="app-main">
+                        <div className="content-area">
+                            <h2>內膽區域</h2>
+                            <p>這是一個現代化使用者介面的內膽區域，您可以在這裡放入各種內容。</p>
+                            <p>例如，您可以放置文字、圖片、表單、按鈕等等。</p>
+                        </div>
+                    </main>
+
+                    <footer className="app-footer">
+                        <p>&copy; 2023 現代化使用者介面</p>
+                    </footer>
+                </div>
+            );
+        };
+
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+
+    </script>
+
+</body>
+</html>
