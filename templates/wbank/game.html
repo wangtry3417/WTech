@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2D 方塊跑酷遊戲</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #cceeff; /* 淺藍色背景 */
+            margin: 0;
+            overflow: hidden; /* 防止捲軸 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .game-container {
+            background-color: #f0f0f0; /* 淺灰色遊戲容器背景 */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            text-align: center;
+            position: relative; /* 相對定位，方便按鈕絕對定位 */
+        }
+
+        #gameCanvas {
+            background-color: #77eeaa; /* 淺綠色畫布背景 */
+            border: 2px solid #559977;
+            border-radius: 5px;
+            display: block; /* 確保 canvas 是 block 元素 */
+            margin: 0 auto; /* 水平置中 */
+        }
+
+        .info-panel {
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .score-display, .level-display {
+            background-color: #eee;
+            padding: 8px 12px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .controls-info {
+            margin-top: 10px;
+            font-size: 0.8em;
+            color: #777;
+        }
+
+        /* Switch 風格按鈕 */
+        .switch-controls {
+            display: none; /* 預設隱藏 */
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex; /* Flexbox 水平排列按鈕 */
+            gap: 10px; /* 按鈕間距 */
+        }
+
+        .switch-button {
+            background-color: #ddd;
+            border: 2px solid #bbb;
+            border-radius: 5px;
+            padding: 10px 15px;
+            text-align: center;
+            cursor: pointer;
+            user-select: none;
+            transition: background-color 0.2s ease;
+        }
+
+        .switch-button:hover, .switch-button:active {
+            background-color: #eee;
+        }
+
+        .switch-button-jump {
+            background-color: #ff6f61; /* 橙紅色 */
+            color: white;
+            border-color: #e05244;
+        }
+
+        .switch-button-jump:hover, .switch-button-jump:active {
+            background-color: #ff877a;
+        }
+
+
+        /* 手機螢幕 Media Query */
+        @media (max-width: 768px) {
+            .switch-controls {
+                display: flex; /* 手機螢幕顯示按鈕 */
+            }
+            .game-container {
+                padding-bottom: 80px; /* 為按鈕預留空間 */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        <h1>方塊跑酷</h1>
+        <canvas id="gameCanvas" width="600" height="400"></canvas>
+        <div class="info-panel">
+            <div class="score-display">分數: <span id="score">0</span></div>
+            <div class="level-display">難度: <span id="level">1</span></div>
+        </div>
+        <div class="controls-info">
+            電腦操作： Space鍵 (跳躍) |  手機操作： 觸控按鈕 (跳躍)
+        </div>
+
+        <div class="switch-controls">
+            <div class="switch-button switch-button-jump" id="jumpButton">跳躍</div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreDisplay = document.getElementById('score');
+        const levelDisplay = document.getElementById('level');
+        const jumpButton = document.getElementById('jumpButton'); // Switch 風格跳躍按鈕
+
+        const gravity = 0.5;
+        const playerWidth = 30;
+        const playerHeight = 30;
+        let playerX = 50;
+        let playerY = 0; // 初始在空中，會掉落到地面
+        let playervelocityY = 0;
+        let isJumping = false;
+        let score = 0;
+        let level = 1;
+        let obstacles = []; // 障礙物陣列
+        let gameSpeed = 2; // 遊戲速度，控制場景移動速度
+        let obstacleSpawnInterval = 150; // 生成障礙物的間隔 (frameCount)
+        let lastObstacleSpawnTime = 0;
+        let gameFrameCount = 0;
+        let isGameOver = false;
+        let currentLevelData; // 目前關卡資料
+        let currentLevelIndex = 0; // 目前關卡索引，從 0 開始
+
+
+        // 關卡資料設定
+        const levelData = [
+            { // Level 1: 平地和空地
+                obstacleTypes: ['gap'], // 只生成空地 (間隙)
+                obstacleSpawnInterval: 150,
+                gameSpeed: 2,
+                levelLabel: 'Level 1'
+            },
+            { // Level 2: 平地、空地、尖刺
+                obstacleTypes: ['gap', 'spike'], // 生成空地和尖刺
+                obstacleSpawnInterval: 130,
+                gameSpeed: 2.5,
+                levelLabel: 'Level 2'
+            },
+            { // Level 3: 平地、空地、尖刺、火焰
+                obstacleTypes: ['gap', 'spike', 'fire'], // 生成空地、尖刺、火焰
+                obstacleSpawnInterval: 110,
+                gameSpeed: 3,
+                levelLabel: 'Level 3'
+            },
+            { // Level 4: 多火焰
+                obstacleTypes: ['gap', 'spike', 'fire', 'fire', 'fire'], // 增加火焰出現頻率
+                obstacleSpawnInterval: 90,
+                gameSpeed: 3.5,
+                levelLabel: 'Level 4'
+            }
+        ];
+
+
+        // 初始化遊戲
+        function initGame() {
+            playerY = canvas.height - playerHeight; // 玩家初始站在地面上
+            playervelocityY = 0;
+            isJumping = false;
+            score = 0;
+            obstacles = [];
+            gameFrameCount = 0;
+            isGameOver = false;
+            currentLevelIndex = 0; // 從第一關開始
+            loadLevel(currentLevelIndex);
+            scoreDisplay.textContent = score;
+            levelDisplay.textContent = currentLevelData.levelLabel;
+
+            gameLoop();
+        }
+
+
+        function loadLevel(levelIndex) {
+            currentLevelData = levelData[levelIndex];
+            if (!currentLevelData) {
+                // 如果關卡索引超出範圍，則默認回到第一關，或可以顯示遊戲已完成
+                currentLevelData = levelData[0];
+                currentLevelIndex = 0;
+            }
+            obstacleSpawnInterval = currentLevelData.obstacleSpawnInterval;
+            gameSpeed = currentLevelData.gameSpeed;
+            levelDisplay.textContent = currentLevelData.levelLabel;
+        }
+
+
+        function gameOver() {
+            isGameOver = true;
+            alert(`遊戲結束! 分數: ${score}, 難度: ${currentLevelData.levelLabel}`);
+            initGame(); // 重新開始遊戲
+        }
+
+
+        function jump() {
+            if (!isJumping) {
+                playervelocityY = -15; // 向上跳躍的初始速度
+                isJumping = true;
+            }
+        }
+
+
+        function gameLoop() {
+            if (isGameOver) return; // 遊戲結束則停止迴圈
+
+            gameFrameCount++;
+            update();
+            draw();
+            requestAnimationFrame(gameLoop); // 使用 requestAnimationFrame 實現更流暢的動畫
+        }
+
+
+        function update() {
+            // 玩家物理運動
+            playervelocityY += gravity;
+            playerY += playervelocityY;
+
+            // 檢查是否回到地面
+            if (playerY > canvas.height - playerHeight) {
+                playerY = canvas.height - playerHeight;
+                playervelocityY = 0;
+                isJumping = false;
+            }
+
+
+            // 場景移動效果
+            if (gameFrameCount % 3 === 0) { // 每隔幾幀移動場景，調整數值可以改變流暢度
+                obstacles.forEach(obstacle => {
+                    obstacle.x -= gameSpeed; // 障礙物向左移動，營造玩家前進的效果
+                });
+            }
+
+
+            // 生成新的障礙物
+            if (gameFrameCount - lastObstacleSpawnTime > obstacleSpawnInterval) {
+                lastObstacleSpawnTime = gameFrameCount;
+                spawnObstacle();
+            }
+
+
+            // 移除超出畫面的障礙物
+            obstacles = obstacles.filter(obstacle => obstacle.x + obstacle.width > 0);
+
+
+            // 碰撞檢測
+            obstacles.forEach(obstacle => {
+                if (playerX < obstacle.x + obstacle.width &&
+                    playerX + playerWidth > obstacle.x &&
+                    playerY < obstacle.y + obstacle.height &&
+                    playerY + playerHeight > obstacle.y) {
+
+                    if (obstacle.type === 'gap') {
+                        if (playerX + playerWidth > obstacle.x && playerX < obstacle.x + obstacle.width) {
+                           if (playerY + playerHeight > obstacle.y ) {
+                                if (playerY + playerHeight <= obstacle.y + 20 ) { // 容錯：允許一定程度的 "擦邊"
+                                    return; // 允許站在平地上
+                                }
+                            }
+                        }
+                        gameOver(); // 掉入空地
+                    } else if (obstacle.type === 'spike' || obstacle.type === 'fire') {
+                        gameOver(); // 碰到尖刺或火焰
+                    }
+                }
+
+
+                // 分數計算 (簡單地以移動距離作為分數)
+                if (obstacle.type !== 'gap' && obstacle.x + obstacle.width < playerX && !obstacle.counted) {
+                    score += 10;
+                    scoreDisplay.textContent = score;
+                    obstacle.counted = true; // 標記為已計分，避免重複計分
+                }
+
+            });
+
+
+            // 檢查是否升級 (簡單地以分數作為升級條件)
+            if (score >= level * level * 500) {
+                level++;
+                levelDisplay.textContent = currentLevelData.levelLabel.replace(/Level \d+/, 'Level ' + level); // 更新 UI 顯示的關卡數字
+                if (currentLevelIndex < levelData.length - 1) {
+                     currentLevelIndex++;
+                     loadLevel(currentLevelIndex); // 加載下一關卡資料
+                } else {
+                    levelDisplay.textContent = "Level " + level + " (Max)"; // 顯示 Max 等級
+                    gameSpeed = Math.min(gameSpeed + 0.5, 5); // 最高速度限制
+                    obstacleSpawnInterval = Math.max(obstacleSpawnInterval - 5, 50); // 最短間隔限制
+                }
+            }
+
+
+        }
+
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // 清除畫布
+
+            // 繪製地面
+            ctx.fillStyle = '#996633'; // 棕色地面
+            ctx.fillRect(0, canvas.height - 50, canvas.width, 50);
+
+
+            // 繪製玩家
+            ctx.fillStyle = 'blue';
+            ctx.fillRect(playerX, playerY, playerWidth, playerHeight);
+
+
+            // 繪製障礙物
+            obstacles.forEach(obstacle => {
+                if (obstacle.type === 'gap') {
+                    // 空地 (不繪製，表示空缺)
+                } else if (obstacle.type === 'spike') {
+                    drawSpike(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+                } else if (obstacle.type === 'fire') {
+                    drawFire(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+                } else { // 平地
+                    ctx.fillStyle = '#666666'; // 深灰色平台
+                    ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+                }
+            });
+        }
+
+
+        function spawnObstacle() {
+            const obstacleWidth = 50;
+            const obstacleHeight = 50;
+            const gapWidth = 150; // 空地寬度
+            const groundY = canvas.height - 50; // 地面高度
+            const obstacleY = groundY - obstacleHeight; // 障礙物高度與地面對齊
+            const minGapPosition = 300; // 空地最小起始位置
+            const maxGapPosition = canvas.width + 100; // 空地最大起始位置 (超出畫面右側一些)
+
+
+            let obstacleType = 'platform'; // 預設生成平台
+
+            // 隨機決定是否生成空地或障礙物
+            if (Math.random() < 0.3) { // 30% 機率生成特殊障礙
+                const randomObstacleTypeIndex = Math.floor(Math.random() * currentLevelData.obstacleTypes.length);
+                obstacleType = currentLevelData.obstacleTypes[randomObstacleTypeIndex];
+            }
+
+
+            let obstacleX;
+
+            if (obstacleType === 'gap') {
+                obstacleX = maxGapPosition; // 空地從較遠處開始出現
+                obstacles.push({
+                    x: obstacleX,
+                    y: groundY,
+                    width: gapWidth,
+                    height: obstacleHeight,
+                    type: 'gap',
+                    counted: false // 新增 counted 屬性，用於計分判斷
+                });
+            }
+            else if (obstacleType === 'spike') {
+                obstacleX = canvas.width + obstacleWidth; // 尖刺從畫面外開始出現
+                 obstacles.push({
+                    x: obstacleX,
+                    y: obstacleY + 20, // 尖刺稍微向上偏移，避免完全被地面覆蓋
+                    width: obstacleWidth,
+                    height: obstacleHeight - 20, // 尖刺高度稍微降低
+                    type: 'spike',
+                    counted: false
+                });
+            }
+            else if (obstacleType === 'fire') {
+                obstacleX = canvas.width + obstacleWidth; // 火焰從畫面外開始出現
+                 obstacles.push({
+                    x: obstacleX + 10, // 火焰位置稍微向右偏移
+                    y: obstacleY + 5, // 火焰位置稍微向上偏移
+                    width: obstacleWidth - 20, // 火焰寬度稍微縮小
+                    height: obstacleHeight - 5, // 火焰高度稍微降低
+                    type: 'fire',
+                    counted: false
+                });
+            }
+            else { // platform 平地
+                obstacleX = canvas.width + obstacleWidth; // 平地從畫面外開始出現
+                 obstacles.push({
+                    x: obstacleX,
+                    y: obstacleY,
+                    width: obstacleWidth,
+                    height: obstacleHeight,
+                    type: 'platform',
+                    counted: false
+                });
+            }
+        }
+
+
+
+        function drawSpike(x, y, width, height) {
+            ctx.fillStyle = 'red';
+            ctx.beginPath();
+            ctx.moveTo(x, y + height); // 底部中心點
+            ctx.lineTo(x + width / 2, y);   // 頂部尖端
+            ctx.lineTo(x + width, y + height); // 底部右端
+            ctx.closePath();
+            ctx.fill();
+        }
+
+
+        function drawFire(x, y, width, height) {
+            // 簡單火焰效果 (可以根據需要調整)
+            ctx.fillStyle = 'orange';
+            ctx.fillRect(x, y, width, height / 2); // 下半部分橙色
+            ctx.fillStyle = 'yellow';
+            ctx.fillRect(x, y - height / 4, width, height / 2); // 上半部分黃色
+        }
+
+
+
+        //  ** 電腦鍵盤事件 **
+        document.addEventListener('keydown', function(event) {
+            if (event.code === 'Space') {
+                jump();
+            }
+        });
+
+        //  ** Switch 風格按鈕觸控事件 **
+        jumpButton.addEventListener('touchstart', function(event) {
+            event.preventDefault(); // 阻止滑鼠事件
+            jump();
+        });
+
+
+        // 遊戲啟動
+        initGame();
+
+
+    </script>
+</body>
+</html>
