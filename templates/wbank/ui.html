@@ -184,7 +184,7 @@
         let nextDirection = 'right'; // 預計的下一個方向 (避免快速連續按鍵的問題)
         let score = 0;
         let level = 1;
-        let gameSpeed = 80; // 遊戲速度 (毫秒)
+        let gameSpeed = 200; // 遊戲速度 (毫秒)
         let gameInterval;
         let isGameOver = false;
 
@@ -198,7 +198,7 @@
             nextDirection = 'right';
             score = 0;
             level = 1;
-            gameSpeed = 80;
+            gameSpeed = 300;
             scoreDisplay.textContent = score;
             levelDisplay.textContent = level;
             isGameOver = false;
@@ -308,7 +308,7 @@
                 score += 10 * level; // 吃到食物加分，分數與等級連動
                 generateFood();     // 產生新的食物
                 levelUpCheck();      // 檢查是否升級
-                gameSpeed += 10;
+                gameSpeed -= 10;
             } else {
                 snake.pop(); // 沒有吃到食物，移除蛇尾 (保持蛇的長度)
             }
