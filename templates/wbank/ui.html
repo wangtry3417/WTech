@@ -308,6 +308,7 @@
                 score += 10 * level; // 吃到食物加分，分數與等級連動
                 generateFood();     // 產生新的食物
                 levelUpCheck();      // 檢查是否升級
+                gameSpeed += 10;
             } else {
                 snake.pop(); // 沒有吃到食物，移除蛇尾 (保持蛇的長度)
             }
