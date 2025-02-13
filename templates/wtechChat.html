@@ -372,6 +372,7 @@ sendButton.addEventListener('click', async () => { // sendButton 監聽器改為
             if (compressedDataUrl) { // 檢查壓縮是否成功
                 const msgData = { username: username, imageData: compressedDataUrl, room_number: room, type: msgType, timestamp: Date.now(), mimeType: imageUpload.type };
                 socket.emit('chatMessage', msgData);
+                chatMessages.appendChild(createMessageElement(msgData));
                 document.getElementById("image-upload").value = '';
             } else {
                 // 圖片壓縮失敗的處理 (例如顯示錯誤訊息)
