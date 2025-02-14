@@ -478,27 +478,107 @@
             }
         }
         function displayInitialPlayerCards(hand) {
-            playerCardsPlaceholder.innerHTML = '';
+    playerCardsPlaceholder.innerHTML = '';
 
-            //  **加入以下測試程式碼**  --- 開始 ---
-            const testCardElement = document.createElement('div');
-            testCardElement.classList.add('card');
-            testCardElement.textContent = "測試牌"; //  隨意設定牌面文字
-            testCardElement.draggable = true;
-            testCardElement.addEventListener('dragstart', dragStart);
-            playerCardsPlaceholder.appendChild(testCardElement);
-            //  **加入以下測試程式碼**  --- 結束 ---
+    hand.forEach(card => {
+        const cardElement = document.createElement('div');
+        cardElement.classList.add('card');
+        cardElement.textContent = getCardDisplay(card);
+
+        // **滑鼠事件監聽器 (註解掉)**
+        // cardElement.draggable = true;
+        // cardElement.addEventListener('dragstart', dragStart);
+
+        // **觸控事件監聽器 (新增)**
+        cardElement.addEventListener('touchstart', touchStart); // 觸控開始
+        playerCardsPlaceholder.appendChild(cardElement);
+    });
+}
 
 
-            hand.forEach(card => { //  原本的發牌顯示程式碼 (保持不變)
-                const cardElement = document.createElement('div');
-                cardElement.classList.add('card');
-                cardElement.textContent = getCardDisplay(card);
-                cardElement.draggable = true;
-                cardElement.addEventListener('dragstart', dragStart);
-                playerCardsPlaceholder.appendChild(cardElement);
-            });
-        }
+// **滑鼠事件函式 (註解掉)**
+// function dragStart(event) {
+//     event.dataTransfer.setData("text/plain", event.target.textContent);
+// }
+
+
+// **觸控事件函式 (touchstart 替代 dragstart)**
+function touchStart(event) {
+    event.preventDefault(); //  通常 touchstart 內也建議 preventDefault
+    const touch = event.touches[0]; //  取得第一個觸控點
+    const target = event.target;     //  觸控的目標元素 (卡牌)
+
+    //  **重要：**  觸控事件沒有 dataTransfer，手機拖動可能需要使用其他方式傳遞資料
+    //  例如：直接將被拖動的牌的 DOM 元素儲存到一個全域變數，
+    //  然後在 touchmove 和 touchend 事件中再取出使用。
+
+    draggedCard = target; //  假設 draggedCard 是一個全域變數，儲存被拖曳的牌
+    setStatus("開始拖曳 " + draggedCard.textContent); //  測試訊息
+}
+
+
+const handCardAreas = document.querySelectorAll('.player-cards');
+handCardAreas.forEach(area => {
+
+    // **滑鼠事件監聽器 (註解掉)**
+    // area.addEventListener('dragover', dragOver);
+    // area.addEventListener('drop', dropCard);
+
+    // **觸控事件監聽器 (新增)**
+    area.addEventListener('touchmove', touchMove); // 觸控移動 (替代 dragover)
+    area.addEventListener('touchend', touchEnd);   // 觸控結束 (替代 drop)
+});
+
+
+// **滑鼠事件函式 (註解掉)**
+// function dragOver(event) {
+//     event.preventDefault();
+// }
+
+
+// **觸控事件函式 (touchmove 替代 dragover)**
+function touchMove(event) {
+    event.preventDefault(); //  touchmove 內通常也建議 preventDefault
+    if (!draggedCard) return; //  如果沒有被拖曳的牌，則返回
+
+    const touch = event.touches[0]; // 取得第一個觸控點
+    //  **觸控位置取得：** 使用 touch.clientX, touch.clientY 取得觸控點在視窗中的座標
+    //  **移動卡牌：**  在這裡可以更新 draggedCard 的位置，使其跟隨觸控點移動
+    //  例如：設定 draggedCard 的 style.position = 'absolute',  style.left = touch.clientX + 'px', style.top = touch.clientY + 'px'
+    setStatus("拖曳中 " + draggedCard.textContent); //  測試訊息
+}
+
+
+// **滑鼠事件函式 (註解掉)**
+// function dropCard(event) {
+//     event.preventDefault();
+//     const cardText = event.dataTransfer.getData("text/plain");
+//     const cardElement = document.createElement('div');
+//     cardElement.classList.add('card');
+//     cardElement.textContent = cardText;
+//     event.target.appendChild(cardElement);
+// }
+
+
+// **觸控事件函式 (touchend 替代 drop)**
+function touchEnd(event) {
+    event.preventDefault(); //  touchend 內通常也建議 preventDefault
+    if (!draggedCard) return; //  如果沒有被拖曳的牌，則返回
+
+    const touch = event.changedTouches[0]; // 取得最後一個觸控點 (放開手指的觸點)
+    const targetArea = document.elementFromPoint(touch.clientX, touch.clientY); // 取得觸控點位置的元素
+
+    if (targetArea && targetArea.classList.contains('player-cards')) { //  檢查放開位置是否在目標牌區域內
+        targetArea.appendChild(draggedCard); // 將被拖曳的牌加入目標區域
+        setStatus("牌 " + draggedCard.textContent + "  已放入 " + targetArea.id); //  測試訊息
+    } else {
+        //  如果放開位置不在目標區域，則可以將牌放回原始手牌區域，或者做其他處理
+        playerCardsPlaceholder.appendChild(draggedCard); //  放回原始手牌區 (範例)
+        setStatus("牌 " + draggedCard.textContent + "  放回原始手牌區"); //  測試訊息
+    }
+
+    draggedCard = null; // 清空被拖曳的牌變數，結束拖曳
+}
        /*
         function displayInitialPlayerCards(hand) {
             playerCardsPlaceholder.innerHTML = '';
