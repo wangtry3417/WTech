@@ -426,6 +426,7 @@
              setTimeout(() => { // 動畫結束後移除 CSS class
                 playerCardAreaContainer.classList.remove('card-dealing');
                 bankerCardAreaContainer.classList.remove('card-dealing');
+                clearCards();
             }, 2000); // 延遲時間要比最長的發牌動畫時間稍長
         }
 
