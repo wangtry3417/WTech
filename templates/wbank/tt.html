@@ -244,7 +244,7 @@
 </head>
 <body>
     <div class="game-container">
-        <h1>網頁十三張</h1>
+        <h1>十三張</h1>
 
         <div id="status" class="status-display">請開始擺牌</div>
 
@@ -315,15 +315,15 @@
     </div>
     <script>
         let playerChips = 10000; // 玩家初始籌碼
-        let opponentChips = 10000; // 電腦對手初始籌碼 (可以共用一個變數或為每個對手設定獨立變數)
+        let opponentChips = 10000; // 電腦對手初始籌碼
         let betAmount = 0; // 玩家下注金額
         let betPlaced = false; // 玩家是否已下注
         let deck = []; // 牌組
-        let playerHand = []; // 玩家手牌 (新增)
-        let opponentHands = [[], [], []]; // 電腦對手手牌 (新增 - 二維陣列，三個對手)
+        let playerHand = []; // 玩家手牌
+        let opponentHands = [[], [], []]; // 電腦對手手牌
 
         let playerChipsDisplay = document.getElementById('playerChips');
-        let opponentChipsDisplay = document.querySelectorAll('.opponent-chips-display span'); // 選擇所有電腦對手的籌碼顯示
+        let opponentChipsDisplay = document.querySelectorAll('.opponent-chips-display span');
         let statusDisplay = document.getElementById('status');
         let playerCardsPlaceholder = document.getElementById('playerCardsPlaceholder'); // 原始手牌區
 
@@ -351,15 +351,42 @@
 
 
         playerChipsDisplay.textContent = playerChips;
-        opponentChipsDisplay.forEach(span => span.textContent = opponentChips); // 初始化所有電腦對手的籌碼顯示
+        opponentChipsDisplay.forEach(span => span.textContent = opponentChips);
+
+        // 修改 showHint 函式，提供簡單提示
+        function showHint() {
+            if (!gameStarted) {
+                setStatus("請先開始遊戲 (下注並發牌)");
+                return;
+            }
+
+            let hintMessage = "提示：\n";
+            let pairs = findPairs(playerHand);
+            if (pairs.length > 0) {
+                hintMessage += `您手上有 ${pairs.length} 對。\n`;
+            }
+            let straights = findStraights(playerHand);
+            if (straights.length > 0) {
+                hintMessage += `您可能有順子組合。\n`; // 這裡可以更精確提示是哪些順子
+            }
+            let flushes = findFlushes(playerHand);
+            if (flushes.length > 0) {
+                hintMessage += `您可能有同花組合。\n`; // 這裡可以更精確提示是哪些同花
+            }
+
+            if (hintMessage === "提示：\n") {
+                hintMessage += "目前手牌沒有明顯的牌型組合。";
+            }
+
+            setStatus(hintMessage); // 將提示訊息顯示在狀態區域
+        }
 
 
-        function showHint() { alert('提示功能待實作'); }
         function arrangeCards() { alert('排列完成功能待實作'); }
         function resetGame() {
             playerChips = 10000;
             playerChipsDisplay.textContent = playerChips;
-            opponentChipsDisplay.forEach(span => span.textContent = opponentChips); // 重置所有電腦對手的籌碼顯示
+            opponentChipsDisplay.forEach(span => span.textContent = opponentChips);
             betAmount = 0;
             betPlaced = false;
             gameStarted = false;
@@ -368,48 +395,48 @@
         }
 
         function setBetAmount(amount) {
-            if (gameStarted || betPlaced) return; // 遊戲開始或已下注，不處理
+            if (gameStarted || betPlaced) return;
 
             if (amount === 'allin') {
-                betAmount = playerChips; // All In 則下注所有籌碼
+                betAmount = playerChips;
             } else {
-                betAmount = amount; // 否則下注指定金額
+                betAmount = amount;
             }
 
             if (betAmount > playerChips) {
-                betAmount = playerChips; // 防止下注金額超過持有籌碼
+                betAmount = playerChips;
             }
 
-            setStatus(`您設定下注金額為: ${betAmount}`); // 更新狀態訊息顯示下注金額
+            setStatus(`您設定下注金額為: ${betAmount}`);
         }
 
 
         function placeBet() {
             if (gameStarted || betPlaced) {
-                setStatus("請先完成當前牌局"); // 避免重複下注
+                setStatus("請先完成當前牌局");
                 return;
             }
 
             if (betAmount <= 0) {
-                setStatus("請先設定下注金額"); // 提示先設定下注金額
+                setStatus("請先設定下注金額");
                 return;
             }
 
             if (betAmount > playerChips) {
-                setStatus("您的籌碼不足，無法下注"); // 籌碼不足提示
+                setStatus("您的籌碼不足，無法下注");
                 return;
             }
 
 
-            setStatus(`您已下注 ${betAmount} 籌碼`); // 顯示下注成功訊息
-            betPlaced = true; // 設定已下注旗標
+            setStatus(`您已下注 ${betAmount} 籌碼`);
+            betPlaced = true;
             dealCards();
         }
 
 
         function dealCards() {
             if (!betPlaced) {
-                setStatus("請先下注"); // 發牌前檢查是否已下注
+                setStatus("請先下注");
                 return;
             }
             if (gameStarted) {
@@ -421,19 +448,15 @@
             clearCards();
             setStatus("發牌中...");
 
-            deck = createDeck(); // 1. 創建牌組
-            shuffleDeck(deck); // 2. 洗牌
+            deck = createDeck();
+            shuffleDeck(deck);
 
-            // 3. 發牌給玩家和電腦對手 (每人 13 張)
-            playerHand = deck.splice(0, 13); // 從牌組取出 13 張給玩家
-            opponentHands[0] = deck.splice(0, 13); // 發給電腦對手 1
-            opponentHands[1] = deck.splice(0, 13); // 發給電腦對手 2
-            opponentHands[2] = deck.splice(0, 13); // 發給電腦對手 3
+            playerHand = deck.splice(0, 13);
+            opponentHands[0] = deck.splice(0, 13);
+            opponentHands[1] = deck.splice(0, 13);
+            opponentHands[2] = deck.splice(0, 13);
 
-            // 4. 顯示玩家的初始手牌 (在 playerCardsPlaceholder 區域)
             displayInitialPlayerCards(playerHand);
-
-
         }
 
         function createDeck() {
@@ -455,18 +478,19 @@
             }
         }
 
-        // 新增 displayInitialPlayerCards 函式，顯示玩家初始手牌
+
         function displayInitialPlayerCards(hand) {
-            playerCardsPlaceholder.innerHTML = ''; // 清空原始手牌區域
+            playerCardsPlaceholder.innerHTML = '';
 
             hand.forEach(card => {
                 const cardElement = document.createElement('div');
                 cardElement.classList.add('card');
-                cardElement.textContent = getCardDisplay(card); // 顯示牌面文字 (例如: "K♥")
-                playerCardsPlaceholder.appendChild(cardElement); // 將牌 DOM 元素加入手牌區域
+                cardElement.textContent = getCardDisplay(card);
+                cardElement.draggable = true;
+                cardElement.addEventListener('dragstart', dragStart);
+                playerCardsPlaceholder.appendChild(cardElement);
             });
         }
-
 
         function getCardDisplay(card) {
             return card.rank + card.suit;
@@ -474,7 +498,7 @@
 
 
         function clearCards() {
-            playerCardsPlaceholder.innerHTML = ''; // 清空玩家原始手牌顯示區域
+            playerCardsPlaceholder.innerHTML = '';
             playerFrontHandCardsArea.innerHTML = '';
             playerMiddleHandCardsArea.innerHTML = '';
             playerBackHandCardsArea.innerHTML = '';
@@ -494,6 +518,101 @@
 
         function setStatus(message) {
             statusDisplay.textContent = message;
+        }
+
+
+        //  Drag and Drop 功能相關函式
+
+        function dragStart(event) {
+            event.dataTransfer.setData("text/plain", event.target.textContent);
+        }
+
+
+        const handCardAreas = document.querySelectorAll('.player-cards');
+        handCardAreas.forEach(area => {
+            area.addEventListener('dragover', dragOver);
+            area.addEventListener('drop', dropCard);
+        });
+
+
+        function dragOver(event) {
+            event.preventDefault();
+        }
+
+
+        function dropCard(event) {
+            event.preventDefault();
+            const cardText = event.dataTransfer.getData("text/plain");
+            const cardElement = document.createElement('div');
+            cardElement.classList.add('card');
+            cardElement.textContent = cardText;
+            event.target.appendChild(cardElement);
+        }
+
+
+        //  新增提示功能相關函式
+
+        // 找出手牌中的所有對子
+        function findPairs(hand) {
+            const rankCounts = {}; // 用於統計牌的點數出現次數
+            const pairs = []; // 用於儲存對子
+
+            for (const card of hand) {
+                const rank = card.rank;
+                rankCounts[rank] = (rankCounts[rank] || 0) + 1; // 統計點數出現次數
+            }
+
+            for (const rank in rankCounts) {
+                if (rankCounts[rank] >= 2) { // 次數大於等於 2，表示是對子
+                    pairs.push(rank); // 將點數加入對子陣列
+                }
+            }
+            return pairs; // 回傳對子陣列
+        }
+
+
+        // 找出是否可能有順子 (簡化版，只檢查 A2345, 10JQKA, 不檢查中間順)
+        function findStraights(hand) {
+            const ranks = hand.map(card => card.rank); // 取得所有牌的點數
+            const uniqueRanks = [...new Set(ranks)]; // 去除重複點數
+            const sortedRanks = sortRanks(uniqueRanks); // 將點數排序
+
+            const straightRanks = ['A', '2', '3', '4', '5', '10', 'J', 'Q', 'K', 'A']; // 檢查順子的點數組合 (A2345 和 10JQKA)
+            const possibleStraights = [];
+
+            for (let i = 0; i <= 5; i++) { // 檢查兩種順子組合
+                const straightCheck = straightRanks.slice(i, i + 5); // 每次取 5 張牌檢查
+                if (straightCheck.every(rank => sortedRanks.includes(rank))) { // 檢查排序後的點數是否包含順子組合
+                    possibleStraights.push(straightCheck.join(',')); // 如果包含，將順子組合加入結果陣列
+                }
+            }
+            return possibleStraights; // 回傳可能的順子陣列
+        }
+
+
+        // 找出是否可能有同花 (簡化版，只檢查是否有超過 5 張同花色的牌)
+        function findFlushes(hand) {
+            const suitCounts = {}; // 用於統計花色出現次數
+            const flushes = []; // 用於儲存同花花色
+
+            for (const card of hand) {
+                const suit = card.suit;
+                suitCounts[suit] = (suitCounts[suit] || 0) + 1; // 統計花色出現次數
+            }
+
+            for (const suit in suitCounts) {
+                if (suitCounts[suit] >= 5) { // 次數大於等於 5，表示可能是同花
+                    flushes.push(suit); // 將花色加入同花陣列
+                }
+            }
+            return flushes; // 回傳可能的同花花色陣列
+        }
+
+
+        // 點數排序函式 (用於順子判斷)
+        function sortRanks(ranks) {
+            const rankOrder = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']; // 點數順序
+            return ranks.sort((a, b) => rankOrder.indexOf(a) - rankOrder.indexOf(b)); // 依照 rankOrder 排序
         }
 
 
