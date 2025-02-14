@@ -316,8 +316,11 @@
     <script>
         let playerChips = 10000; // 玩家初始籌碼
         let opponentChips = 10000; // 電腦對手初始籌碼 (可以共用一個變數或為每個對手設定獨立變數)
-        let betAmount = 0; // 玩家下注金額 (新增)
-        let betPlaced = false; // 玩家是否已下注 (新增)
+        let betAmount = 0; // 玩家下注金額
+        let betPlaced = false; // 玩家是否已下注
+        let deck = []; // 牌組
+        let playerHand = []; // 玩家手牌 (新增)
+        let opponentHands = [[], [], []]; // 電腦對手手牌 (新增 - 二維陣列，三個對手)
 
         let playerChipsDisplay = document.getElementById('playerChips');
         let opponentChipsDisplay = document.querySelectorAll('.opponent-chips-display span'); // 選擇所有電腦對手的籌碼顯示
@@ -353,9 +356,17 @@
 
         function showHint() { alert('提示功能待實作'); }
         function arrangeCards() { alert('排列完成功能待實作'); }
-        function resetGame() { alert('重新開始功能待實作'); }
+        function resetGame() {
+            playerChips = 10000;
+            playerChipsDisplay.textContent = playerChips;
+            opponentChipsDisplay.forEach(span => span.textContent = opponentChips); // 重置所有電腦對手的籌碼顯示
+            betAmount = 0;
+            betPlaced = false;
+            gameStarted = false;
+            clearCards();
+            setStatus("遊戲已重置，請下注");
+        }
 
-        // 修改 setBetAmount 函式，設定下注金額
         function setBetAmount(amount) {
             if (gameStarted || betPlaced) return; // 遊戲開始或已下注，不處理
 
@@ -373,7 +384,6 @@
         }
 
 
-        // 新增 placeBet 函式，處理下注動作
         function placeBet() {
             if (gameStarted || betPlaced) {
                 setStatus("請先完成當前牌局"); // 避免重複下注
@@ -409,13 +419,76 @@
             gameStarted = true;
             clearCards();
             setStatus("發牌中...");
-            // ... (發牌的程式碼 -  後續加入) ...
 
+            deck = createDeck(); // 1. 創建牌組
+            shuffleDeck(deck); // 2. 洗牌
+
+            // 3. 發牌給玩家和電腦對手 (每人 13 張)
+            playerHand = deck.splice(0, 13); // 從牌組取出 13 張給玩家
+            opponentHands[0] = deck.splice(0, 13); // 發給電腦對手 1
+            opponentHands[1] = deck.splice(0, 13); // 發給電腦對手 2
+            opponentHands[2] = deck.splice(0, 13); // 發給電腦對手 3
+
+            // 4. 顯示玩家的初始手牌 (在 playerCardsPlaceholder 區域)
+            displayInitialPlayerCards(playerHand);
+
+
+        }
+
+        function createDeck() {
+            const suits = ['♥', '♦', '♣', '♠'];
+            const ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+            let deck = [];
+            for (let suit of suits) {
+                for (let rank of ranks) {
+                    deck.push({ suit: suit, rank: rank });
+                }
+            }
+            return deck;
+        }
+
+        function shuffleDeck(deck) {
+            for (let i = deck.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [deck[i], deck[j]] = [deck[j], deck[i]];
+            }
+        }
+
+        // 新增 displayInitialPlayerCards 函式，顯示玩家初始手牌
+        function displayInitialPlayerCards(hand) {
+            playerCardsPlaceholder.innerHTML = ''; // 清空原始手牌區域
+
+            hand.forEach(card => {
+                const cardElement = document.createElement('div');
+                cardElement.classList.add('card');
+                cardElement.textContent = getCardDisplay(card); // 顯示牌面文字 (例如: "K♥")
+                playerCardsPlaceholder.appendChild(cardElement); // 將牌 DOM 元素加入手牌區域
+            });
+        }
+
+
+        function getCardDisplay(card) {
+            return card.rank + card.suit;
         }
 
 
         function clearCards() {
-            // ... (清除牌面的程式碼 -  後續加入) ...
+            playerCardsPlaceholder.innerHTML = ''; // 清空玩家原始手牌顯示區域
+            playerFrontHandCardsArea.innerHTML = '';
+            playerMiddleHandCardsArea.innerHTML = '';
+            playerBackHandCardsArea.innerHTML = '';
+
+            opponent1FrontHandCardsArea.innerHTML = '';
+            opponent1MiddleHandCardsArea.innerHTML = '';
+            opponent1BackHandCardsArea.innerHTML = '';
+
+            opponent2FrontHandCardsArea.innerHTML = '';
+            opponent2MiddleHandCardsArea.innerHTML = '';
+            opponent2BackHandCardsArea.innerHTML = '';
+
+            opponent3FrontHandCardsArea.innerHTML = '';
+            opponent3MiddleHandCardsArea.innerHTML = '';
+            opponent3BackHandCardsArea.innerHTML = '';
         }
 
         function setStatus(message) {
