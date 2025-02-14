@@ -477,8 +477,29 @@
                 [deck[i], deck[j]] = [deck[j], deck[i]];
             }
         }
+        function displayInitialPlayerCards(hand) {
+            playerCardsPlaceholder.innerHTML = '';
+
+            //  **加入以下測試程式碼**  --- 開始 ---
+            const testCardElement = document.createElement('div');
+            testCardElement.classList.add('card');
+            testCardElement.textContent = "測試牌"; //  隨意設定牌面文字
+            testCardElement.draggable = true;
+            testCardElement.addEventListener('dragstart', dragStart);
+            playerCardsPlaceholder.appendChild(testCardElement);
+            //  **加入以下測試程式碼**  --- 結束 ---
 
 
+            hand.forEach(card => { //  原本的發牌顯示程式碼 (保持不變)
+                const cardElement = document.createElement('div');
+                cardElement.classList.add('card');
+                cardElement.textContent = getCardDisplay(card);
+                cardElement.draggable = true;
+                cardElement.addEventListener('dragstart', dragStart);
+                playerCardsPlaceholder.appendChild(cardElement);
+            });
+        }
+       /*
         function displayInitialPlayerCards(hand) {
             playerCardsPlaceholder.innerHTML = '';
 
@@ -491,6 +512,7 @@
                 playerCardsPlaceholder.appendChild(cardElement);
             });
         }
+        */
 
         function getCardDisplay(card) {
             return card.rank + card.suit;
@@ -537,6 +559,11 @@
 
         function dragOver(event) {
             event.preventDefault();
+            const handCardAreas = document.querySelectorAll('.player-cards');
+                handCardAreas.forEach(area => {
+                   area.addEventListener('dragover', dragOver);
+                   area.addEventListener('drop', dropCard);
+                });
         }
 
 
