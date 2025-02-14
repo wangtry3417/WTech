@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>網頁百家樂遊戲</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #228B22; /* 深綠色背景，模擬賭桌 */
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .game-container {
+            background-color: #336633; /* 更深綠色容器背景，模擬絨布 */
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6); /* 更強烈的陰影 */
+            padding: 30px;
+            text-align: center;
+            position: relative; /* 為了動畫元素的定位 */
+        }
+
+        .status-display {
+            font-size: 1.6em; /* 加大狀態訊息字體 */
+            margin-bottom: 25px;
+            text-shadow: 1px 1px 2px black; /* 增加文字陰影 */
+        }
+
+        .card-area {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            position: relative; /* 讓牌的動畫可以相對於 card-area 定位 */
+        }
+
+        .card-container { /* 包裹 card 元素，用於動畫定位 */
+            position: relative; /* 讓 card 元素可以絕對定位在其內部 */
+            perspective: 800px; /* 為 3D 動畫準備 */
+        }
+
+        .card {
+            width: 90px; /* 稍微加大牌的寬度 */
+            height: 135px; /* 稍微加大牌的高度 */
+            background-color: #fff;
+            border: 1px solid #bbb;
+            border-radius: 10px; /* 更圓潤的牌角 */
+            margin: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.2em; /* 加大牌面數字 */
+            color: black;
+            box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.4); /* 更立體的陰影 */
+            position: absolute; /* 絕對定位，用於動畫 */
+            top: 0;
+            left: 0;
+            transition: transform 0.5s ease, top 0.5s ease, left 0.5s ease, box-shadow 0.3s ease; /* 加入變形動畫過渡 */
+            backface-visibility: hidden; /* 背面不可見，準備製作翻牌動畫 (進階) */
+        }
+
+        .card.back {
+            background-color: #ddd; /* 牌背顏色 */
+            color: transparent; /* 隱藏牌面文字 */
+            border: 1px solid #aaa;
+            box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.2); /* 內陰影，模擬牌背紋路 */
+        }
+
+
+        .player-cards {
+            position: relative; /* 讓 player-cards 可以作為牌的相對定位容器 */
+        }
+
+        .banker-cards {
+             position: relative; /* 讓 banker-cards 可以作為牌的相對定位容器 */
+        }
+
+
+        .player-cards h3, .banker-cards h3 {
+            margin-bottom: 10px;
+            font-size: 1.3em;
+            text-shadow: 1px 1px 2px black;
+        }
+
+        .player-cards .card {
+            background-color: #f0f8ff; /* 閒家牌的背景色，淡藍色 */
+        }
+
+        .banker-cards .card {
+            background-color: #fffafa; /* 莊家牌的背景色，米白色 */
+        }
+
+        .betting-area {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .bet-button {
+            background-color: #f0e68c; /* 金色按鈕 */
+            color: #8B4513; /* 深棕色文字 */
+            border: none;
+            padding: 16px 30px; /* 加大按鈕內邊距 */
+            margin: 0 20px; /* 加大按鈕間距 */
+            border-radius: 10px; /* 更圓潤的按鈕 */
+            font-size: 1.2em; /* 加大按鈕文字 */
+            cursor: pointer;
+            box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.4); /* 更立體的陰影 */
+            transition: background-color 0.3s ease, transform 0.2s ease; /* 加入變形過渡 */
+            font-weight: bold; /* 文字加粗 */
+            text-shadow: 1px 1px 1px #c0b36e; /* 文字陰影 */
+        }
+
+        .bet-button:hover {
+            background-color: #ffd700; /* Hover 時顏色更亮 */
+            transform: translateY(-2px); /* Hover 時按鈕稍微上移，增加立體感 */
+            box-shadow: 3px 5px 7px rgba(0, 0, 0, 0.5); /* Hover 時陰影效果 */
+        }
+
+        .bet-button:active {
+            transform: translateY(0px); /* 按鈕按下時恢復原位 */
+            box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.4); /* 按鈕按下時陰影效果 */
+        }
+
+
+        .action-area {
+            margin-top: 25px;
+        }
+
+        .action-button {
+            background-color: #4682B4; /* 藍色按鈕 */
+            color: white;
+            border: none;
+            padding: 14px 22px;
+            border-radius: 8px;
+            font-size: 1.1em;
+            cursor: pointer;
+            box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.4);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            font-weight: bold;
+            text-shadow: 1px 1px 1px #2e5a7e;
+        }
+
+        .action-button:hover {
+            background-color: #6495ED; /* Hover 時顏色更亮 */
+            transform: translateY(-2px);
+            box-shadow: 3px 5px 7px rgba(0, 0, 0, 0.5);
+        }
+
+        .action-button:active {
+            transform: translateY(0px);
+            box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.4);
+        }
+
+
+        .chips-display {
+            font-size: 1.3em;
+            margin-top: 25px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px black;
+        }
+
+        .bet-input {
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            margin-left: 15px;
+            width: 100px; /* 加寬輸入框 */
+            text-align: right;
+            color: black;
+            font-size: 1.1em;
+        }
+
+        .bet-selection {
+            margin-bottom: 20px;
+            display: flex; /* 使用 Flexbox 讓選項水平排列 */
+            justify-content: center; /* 水平置中 */
+            gap: 30px; /* 選項之間間距 */
+        }
+
+        .bet-selection label {
+            font-weight: bold;
+            font-size: 1.1em;
+            text-shadow: 1px 1px 1px black;
+        }
+
+        .bet-selection input[type="radio"] {
+            margin-right: 8px;
+            transform: scale(1.2); /* 稍微放大 Radio 按鈕 */
+        }
+
+        /* 動畫相關 CSS 類別 */
+        .card-dealing .card {
+            transition: all 0.7s ease-in-out; /* 發牌動畫效果 */
+            top: -200px; /* 初始位置在上方 */
+            opacity: 0; /* 初始透明度 */
+        }
+
+        .card-dealing .player-cards .card:nth-child(1) {
+            transition-delay: 0.1s; /* 延遲動畫開始時間，營造依序發牌的效果 */
+        }
+        .card-dealing .banker-cards .card:nth-child(1) {
+            transition-delay: 0.3s;
+        }
+        .card-dealing .player-cards .card:nth-child(2) {
+            transition-delay: 0.5s;
+        }
+        .card-dealing .banker-cards .card:nth-child(2) {
+            transition-delay: 0.7s;
+        }
+        .card-dealing .player-cards .card:nth-child(3) { /* 第三張牌延遲 */
+            transition-delay: 0.9s;
+        }
+         .card-dealing .banker-cards .card:nth-child(3) { /* 莊家第三張牌延遲 */
+            transition-delay: 1.1s;
+        }
+
+
+        .card.dealt {
+            top: 0; /* 動畫結束位置 */
+            opacity: 1; /* 動畫結束透明度 */
+        }
+
+        .winner-highlight {
+            animation: pulse-highlight 1.5s ease-in-out infinite alternate; /* 勝方高亮動畫 */
+        }
+
+        @keyframes pulse-highlight {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.05); opacity: 0.9; } /* 稍微放大並降低透明度 */
+        }
+
+        .tie-highlight {
+            animation: tie-flash 2s steps(8) infinite; /* 和局閃爍動畫 */
+            color: yellow; /* 和局時狀態訊息文字顏色 */
+            text-shadow: 0 0 10px yellow, 0 0 20px yellow; /* 和局時文字發光效果 */
+        }
+
+        @keyframes tie-flash {
+            50% { opacity: 0.3; } /* 閃爍效果 */
+        }
+
+
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        <h1>網頁百家樂</h1>
+
+        <div class="status-display" id="status">請下注</div>
+
+        <div class="card-area">
+            <div class="player-cards card-container" id="playerCardAreaContainer">
+                <h3>閒家 (Player)</h3>
+                <div class="cards" id="playerCardArea">
+                    </div>
+            </div>
+            <div class="banker-cards card-container" id="bankerCardAreaContainer">
+                <h3>莊家 (Banker)</h3>
+                <div class="cards" id="bankerCardArea">
+                    </div>
+            </div>
+        </div>
+
+        <div class="bet-selection">
+            <label><input type="radio" name="betOption" value="player" checked>閒家 (Player)</label>
+            <label><input type="radio" name="betOption" value="banker">莊家 (Banker)</label>
+            <label><input type="radio" name="betOption" value="tie">和局 (Tie)</label>
+        </div>
+
+        <div class="betting-area">
+            <button class="bet-button" onclick="placeBet('player')">投注閒家</button>
+            <button class="bet-button" onclick="placeBet('banker')">投注莊家</button>
+            <button class="bet-button" onclick="placeBet('tie')">投注和局</button>
+            <input type="number" id="betAmount" class="bet-input" value="100" min="100">
+        </div>
+
+        <div class="action-area">
+            <button class="action-button" onclick="dealCards()">發牌</button>
+            <button class="action-button" onclick="resetGame()">重新開始</button>
+        </div>
+
+        <div class="chips-display">
+            您的籌碼: <span id="chips">500000</span>
+        </div>
+    </div>
+
+    <script>
+        let chips = 500000;
+        let betAmountInput = document.getElementById('betAmount');
+        let chipsDisplay = document.getElementById('chips');
+        let statusDisplay = document.getElementById('status');
+        let playerCardArea = document.getElementById('playerCardArea');
+        let bankerCardArea = document.getElementById('bankerCardArea');
+        let playerCardAreaContainer = document.getElementById('playerCardAreaContainer'); // 新增容器元素
+        let bankerCardAreaContainer = document.getElementById('bankerCardAreaContainer'); // 新增容器元素
+
+        let betOption = 'player';
+        let gameStarted = false;
+        let betPlaced = false;
+        let playerBetAmount = 0;
+        let bankerBetAmount = 0;
+        let tieBetAmount = 0;
+
+        chipsDisplay.textContent = chips;
+
+        document.querySelectorAll('input[name="betOption"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                betOption = this.value;
+            });
+        });
+
+
+        function placeBet(option) {
+            if (gameStarted || betPlaced) {
+                setStatus("請先完成當前牌局");
+                return;
+            }
+
+            let amount = parseInt(betAmountInput.value);
+            if (isNaN(amount) || amount < 100) {
+                setStatus("下注金額最少為 100");
+                return;
+            }
+            if (amount > chips) {
+                setStatus("籌碼不足");
+                return;
+            }
+
+            betOption = option;
+            playerBetAmount = (betOption === 'player') ? amount : 0;
+            bankerBetAmount = (betOption === 'banker') ? amount : 0;
+            tieBetAmount = (betOption === 'tie') ? amount : 0;
+
+
+            setStatus(`您已下注 ${amount} 於 ${getBetOptionText(option)}`);
+            betPlaced = true;
+        }
+
+        function getBetOptionText(option) {
+            switch (option) {
+                case 'player': return '閒家';
+                case 'banker': return '莊家';
+                case 'tie': return '和局';
+                default: return '';
+            }
+        }
+
+
+        function dealCards() {
+            if (!betPlaced) {
+                setStatus("請先下注");
+                return;
+            }
+            if (gameStarted) {
+                setStatus("牌局已開始，請稍後");
+                return;
+            }
+
+            gameStarted = true;
+            clearCards();
+            setStatus("發牌中...");
+            playerCardAreaContainer.classList.add('card-dealing'); // 加入發牌動畫 CSS class
+            bankerCardAreaContainer.classList.add('card-dealing'); // 莊家牌區也加入
+
+            let deck = createDeck();
+            shuffleDeck(deck);
+
+            let playerHand = [];
+            let bankerHand = [];
+
+            // 閒家和莊家各發兩張牌
+            playerHand.push(deck.pop());
+            bankerHand.push(deck.pop());
+            playerHand.push(deck.pop());
+            bankerHand.push(deck.pop());
+
+            // 延遲顯示牌，產生發牌動畫效果
+            setTimeout(() => {
+                displayCards('player', playerHand);
+                displayCards('banker', bankerHand);
+
+                let playerValue = calculateHandValue(playerHand);
+                let bankerValue = calculateHandValue(bankerHand);
+
+                // 補牌規則 (簡化)
+                let delay = 1200; // 延遲時間，毫秒
+
+                if (playerValue <= 5) {
+                    setTimeout(() => {
+                        playerHand.push(deck.pop());
+                        displayCards('player', playerHand);
+                        playerValue = calculateHandValue(playerHand);
+                         if (bankerValue <= 5) { // 莊家也可能需要補牌 (更簡化)
+                            setTimeout(() => {
+                                bankerHand.push(deck.pop());
+                                displayCards('banker', bankerHand);
+                                bankerValue = calculateHandValue(bankerHand);
+                                determineWinner(playerHand, bankerHand, playerValue, bankerValue);
+                            }, delay);
+                        } else {
+                            determineWinner(playerHand, bankerHand, playerValue, bankerValue);
+                        }
+                    }, delay);
+
+                } else if (bankerValue <= 5) { // 僅在閒家不補牌的情況下，莊家才可能補牌 (更簡化)
+                    setTimeout(() => {
+                        bankerHand.push(deck.pop());
+                        displayCards('banker', bankerHand);
+                        bankerValue = calculateHandValue(bankerHand);
+                        determineWinner(playerHand, bankerHand, playerValue, bankerValue);
+                    }, delay);
+                }
+                else {
+                     determineWinner(playerHand, bankerHand, playerValue, bankerValue);
+                }
+
+            }, 800); // 初始發牌動畫延遲
+
+             setTimeout(() => { // 動畫結束後移除 CSS class
+                playerCardAreaContainer.classList.remove('card-dealing');
+                bankerCardAreaContainer.classList.remove('card-dealing');
+            }, 2000); // 延遲時間要比最長的發牌動畫時間稍長
+        }
+
+        function createDeck() {
+            const suits = ['♥', '♦', '♣', '♠'];
+            const ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+            let deck = [];
+            for (let suit of suits) {
+                for (let rank of ranks) {
+                    deck.push({ suit: suit, rank: rank });
+                }
+            }
+            return deck;
+        }
+
+        function shuffleDeck(deck) {
+            for (let i = deck.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [deck[i], deck[j]] = [deck[j], deck[i]];
+            }
+        }
+
+        function calculateHandValue(hand) {
+            let value = 0;
+            let aceCount = 0;
+            for (let card of hand) {
+                let cardValue = parseInt(card.rank);
+                if (isNaN(cardValue)) {
+                    if (card.rank === 'A') {
+                        aceCount++;
+                        cardValue = 11;
+                    } else {
+                        cardValue = 10;
+                    }
+                }
+                value += cardValue;
+            }
+
+            while (value > 9 && aceCount > 0) {
+                value -= 10;
+                aceCount--;
+            }
+             return value % 10;
+        }
+
+
+        function displayCards(playerType, hand) {
+            const cardArea = (playerType === 'player') ? playerCardArea : bankerCardArea;
+            // cardArea.innerHTML = ''; //  不再清空，讓動畫效果更明顯
+
+            hand.forEach((card, index) => {
+                const cardElement = document.createElement('div');
+                cardElement.classList.add('card');
+                cardElement.classList.add('back'); // 初始顯示牌背
+                cardArea.appendChild(cardElement);
+
+                 setTimeout(() => { // 延遲顯示牌面，產生翻牌效果
+                    cardElement.textContent = getCardDisplay(card);
+                    cardElement.classList.remove('back'); // 移除牌背樣式，顯示牌面
+                    cardElement.classList.add('dealt'); // 加入 'dealt' class，觸發進場動畫
+                 }, 500 + index * 200); // 每個牌稍微延遲顯示
+            });
+        }
+
+        function getCardDisplay(card) {
+            return card.rank + card.suit;
+        }
+
+
+        function determineWinner(playerHand, bankerHand, playerValue, bankerValue) {
+            let resultText = "";
+            let winnings = 0;
+            playerCardAreaContainer.classList.remove('winner-highlight'); // 移除之前的贏家高亮
+            bankerCardAreaContainer.classList.remove('winner-highlight');
+            statusDisplay.classList.remove('tie-highlight');
+
+            if (playerValue > bankerValue) {
+                resultText = "閒家勝!";
+                playerCardAreaContainer.classList.add('winner-highlight'); // 閒家牌區高亮
+                if (betOption === 'player') {
+                    winnings = playerBetAmount * 2;
+                }
+            } else if (bankerValue > playerValue) {
+                resultText = "莊家勝!";
+                bankerCardAreaContainer.classList.add('winner-highlight'); // 莊家牌區高亮
+                if (betOption === 'banker') {
+                    winnings = bankerBetAmount * 1.95;
+                }
+            } else {
+                resultText = "和局!";
+                statusDisplay.classList.add('tie-highlight'); // 和局時狀態訊息閃爍
+                if (betOption === 'tie') {
+                    winnings = tieBetAmount * 9;
+                } else {
+                    winnings = betAmountInput.value;
+                }
+            }
+
+            chips += winnings - parseInt(betAmountInput.value);
+            chipsDisplay.textContent = chips.toFixed(0);
+
+            setStatus(`閒家點數 ${playerValue}，莊家點數 ${bankerValue}。${resultText} 您贏了 ${winnings.toFixed(0)} 籌碼!`);
+            betPlaced = false;
+            gameStarted = false;
+        }
+
+
+        function clearCards() {
+            playerCardArea.innerHTML = '';
+            bankerCardArea.innerHTML = '';
+        }
+
+        function setStatus(message) {
+            statusDisplay.textContent = message;
+        }
+
+        function resetGame() {
+            chips = 500000;
+            chipsDisplay.textContent = chips;
+            setStatus("請下注");
+            clearCards();
+            betPlaced = false;
+            gameStarted = false;
+            betAmountInput.value = 100;
+            playerBetAmount = 0;
+            bankerBetAmount = 0;
+            tieBetAmount = 0;
+            playerCardAreaContainer.classList.remove('winner-highlight'); // 清除高亮
+            bankerCardAreaContainer.classList.remove('winner-highlight');
+            statusDisplay.classList.remove('tie-highlight');
+        }
+
+
+    </script>
+
+</body>
+</html>
