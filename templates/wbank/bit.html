@@ -95,6 +95,50 @@
             background-color: #fffafa; /* 莊家牌的背景色，米白色 */
         }
 
+        .chips-area { /*  籌碼按鈕區域樣式  */
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px; /*  與下注按鈕區域隔開  */
+            gap: 10px; /*  籌碼按鈕間距  */
+        }
+
+        .chip-button { /*  籌碼按鈕通用樣式  */
+            width: 60px; /*  設定籌碼按鈕寬度  */
+            height: 60px; /*  設定籌碼按鈕高度，寬高相等使其為圓形  */
+            border-radius: 50%; /*  圓形按鈕  */
+            border: none; /*  移除邊框  */
+            color: white; /*  籌碼文字顏色  */
+            font-weight: bold; /*  文字加粗  */
+            cursor: pointer; /*  滑鼠游標樣式  */
+            box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4); /*  陰影效果  */
+            transition: transform 0.2s ease, box-shadow 0.2s ease; /*  加入變形和陰影過渡效果  */
+            font-size: 1em; /*  調整文字大小  */
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5); /*  文字陰影  */
+            display: flex; /*  Flexbox 佈局，讓文字置中  */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .chip-button:hover {
+            transform: scale(1.1); /*  hover 時放大  */
+            box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5); /*  hover 時陰影效果  */
+        }
+
+        .chip-button:active {
+            transform: scale(1.0); /*  active 時縮回原始大小  */
+            box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4); /*  active 時陰影效果  */
+        }
+
+
+        /* 不同面額籌碼按鈕的顏色 */
+        .chip-10 { background-color: #c0392b; } /* 紅色 */
+        .chip-100 { background-color: #27ae60; } /* 綠色 */
+        .chip-500 { background-color: #3498db; } /* 藍色 */
+        .chip-1000 { background-color: #f39c12; } /* 黃色 */
+        .chip-10000 { background-color: #9b59b6; } /* 紫色 */
+        .chip-allin { background-color: #e74c3c; font-size: 0.9em; /*  All In 按鈕顏色，字體稍微小一點 */ } /* 橙紅色 */
+
+
         .betting-area {
             display: flex;
             justify-content: center;
@@ -159,10 +203,15 @@
 
 
         .chips-display {
-            font-size: 1.3em;
+            font-size: 1.5em; /* 加大籌碼顯示字體 */
             margin-top: 25px;
             font-weight: bold;
             text-shadow: 1px 1px 2px black;
+            color: #ffd700; /*  籌碼顏色改為金色 */
+            background-color: rgba(0, 0, 0, 0.3); /*  增加半透明背景 */
+            padding: 10px 15px; /*  增加內邊距 */
+            border-radius: 8px; /*  增加圓角 */
+            display: inline-block; /*  讓背景只包覆文字內容 */
         }
 
         .bet-input {
@@ -245,7 +294,18 @@
             50% { opacity: 0.3; } /* 閃爍效果 */
         }
 
-
+        .score-container { /*  新增 score-container 樣式  */
+            font-size: 1.5em; /* 加大分數顯示字體 */
+            margin-bottom: 25px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px black;
+            color: #ffa07a; /*  分數顏色改為鮭魚粉色 */
+            background-color: rgba(0, 0, 0, 0.3); /*  增加半透明背景 */
+            padding: 10px 15px; /*  增加內邊距 */
+            border-radius: 8px; /*  增加圓角 */
+            display: inline-block; /*  讓背景只包覆文字內容 */
+            margin-bottom: 20px; /*  與遊戲盤面拉開距離 */
+        }
     </style>
 </head>
 <body>
@@ -272,6 +332,22 @@
             <label><input type="radio" name="betOption" value="player" checked>閒家 (Player)</label>
             <label><input type="radio" name="betOption" value="banker">莊家 (Banker)</label>
             <label><input type="radio" name="betOption" value="tie">和局 (Tie)</label>
+        </div>
+
+        <div class="chips-area">
+            <button class="chip-button chip-10" onclick="setBetAmount(10)">10</button>
+            <button class="chip-button chip-100" onclick="setBetAmount(100)">100</button>
+            <button class="chip-button chip-500" onclick="setBetAmount(500)">500</button>
+            <button class="chip-button chip-1000" onclick="setBetAmount(1000)">1000</button>
+            <button class="chip-button chip-10000" onclick="setBetAmount(10000)">10000</button>
+            <button class="chip-button chip-allin" onclick="setBetAmount('allin')">All In</button>
+        </div>
+
+        <div class="betting-area">
+            <button class="bet-button" onclick="placeBet('player')">投注閒家</button>
+            <button class="bet-button" onclick="placeBet('banker')">投注莊家</button>
+            <button class="bet-button" onclick="placeBet('tie')">投注和局</button>
+            <input type="number" id="betAmount" class="bet-input" value="100" min="100">
         </div>
 
         <div class="betting-area">
@@ -352,6 +428,24 @@
             }
         }
 
+        //  新增 setBetAmount 函式，處理籌碼按鈕點擊事件
+        function setBetAmount(amount) {
+            if (gameStarted || betPlaced) return; // 遊戲開始或已下注，不處理
+
+            let currentAmount = parseInt(betAmountInput.value) || 0; //  取得目前下注金額，預設為 0
+            if (isNaN(currentAmount)) currentAmount = 0;
+
+            if (amount === 'allin') { //  如果是 All In 按鈕
+                betAmountInput.value = chips; //  下注金額設為所有籌碼
+            } else {
+                let newAmount = currentAmount + amount; //  累加新的下注金額
+                if (newAmount > chips) {
+                    newAmount = chips; //  如果超過持有籌碼，則設為所有籌碼
+                }
+                betAmountInput.value = newAmount; //  更新下注金額輸入框
+            }
+        }
+
 
         function dealCards() {
             if (!betPlaced) {
@@ -366,8 +460,8 @@
             gameStarted = true;
             clearCards();
             setStatus("發牌中...");
-            playerCardAreaContainer.classList.add('card-dealing'); // 加入發牌動畫 CSS class
-            bankerCardAreaContainer.classList.add('card-dealing'); // 莊家牌區也加入
+            playerCardAreaContainer.classList.add('card-dealing');
+            bankerCardAreaContainer.classList.add('card-dealing');
 
             let deck = createDeck();
             shuffleDeck(deck);
@@ -554,7 +648,7 @@
             playerBetAmount = 0;
             bankerBetAmount = 0;
             tieBetAmount = 0;
-            playerCardAreaContainer.classList.remove('winner-highlight'); // 清除高亮
+            playerCardAreaContainer.classList.remove('winner-highlight');
             bankerCardAreaContainer.classList.remove('winner-highlight');
             statusDisplay.classList.remove('tie-highlight');
         }
