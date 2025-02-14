@@ -347,7 +347,7 @@
             <button class="bet-button" onclick="placeBet('player')">投注閒家</button>
             <button class="bet-button" onclick="placeBet('banker')">投注莊家</button>
             <button class="bet-button" onclick="placeBet('tie')">投注和局</button>
-            <input type="number" id="betAmount" class="bet-input" value="100" min="100">
+            <input type="number" id="betAmount" class="bet-input" value="0" min="100">
         </div>
 
         <div class="action-area">
@@ -393,8 +393,8 @@
             }
 
             let amount = parseInt(betAmountInput.value);
-            if (isNaN(amount) || amount < 100) {
-                setStatus("下注金額最少為 100");
+            if (isNaN(amount) || amount < 10) {
+                setStatus("下注金額最少為 10");
                 return;
             }
             if (amount > chips) {
@@ -637,7 +637,7 @@
             clearCards();
             betPlaced = false;
             gameStarted = false;
-            betAmountInput.value = 100;
+            betAmountInput.value = 0;
             playerBetAmount = 0;
             bankerBetAmount = 0;
             tieBetAmount = 0;
