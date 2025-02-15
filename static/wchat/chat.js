@@ -95,48 +95,118 @@ const socket = io();
             }
         };
 
-        const createMessageElement = (data) => {
-            const message = document.createElement('div');
-            //message.classList.add('message', data.type);
-            message.classList.add('message');
+const createMessageElement = (data) => {
+    const message = document.createElement('div');
+    message.classList.add('message');
 
-            // 根據消息來源設置類別
-            if (data.username === username) {
-                message.classList.add('sent'); // 自己的消息
-            } else {
-                message.classList.add('received'); // 對方的消息
-            }
-            const timestamp = new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            if (data.type === 'text') {
-                message.innerHTML = `<div class="username">${data.username}</div><div class="chat-text">${data.text}</div><div class="timestamp">${timestamp}</div>`;
-            } else if (data.type === 'image') {
-                message.innerHTML = `<div class="username">${data.username}</div><img src="${data.imageUrl}" alt="image" style="max-width: 100%; border-radius: 8px;"><div class="timestamp">${timestamp}</div>`;
-            }
+    if (data.username === username) {
+        message.classList.add('sent');
+    } else {
+        message.classList.add('received');
+    }
+    const timestamp = new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    if (data.type === 'text') {
+        message.innerHTML = `<div class="username">${data.username}</div><div class="chat-text">${data.text}</div><div class="timestamp">${timestamp}</div>`;
+    } else if (data.type === 'image') {
+        message.innerHTML = `<div class="username">${data.username}</div><img src="${data.imageData}" alt="image" style="max-width: 150px"><div class="timestamp">${timestamp}</div>`;
+    }
 
-            return message;
+    return message;
+};
+
+        // 圖片壓縮函式
+const compressImage = (imageFile, maxWidth = 800) => {
+    return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(imageFile);
+        reader.onload = (event) => {
+            const img = new Image();
+            img.src = event.target.result;
+            img.onload = () => {
+                let width = img.width;
+                let height = img.height;
+
+                if (width > maxWidth) {
+                    height = Math.round((height * maxWidth) / width);
+                    width = maxWidth;
+                }
+
+                const canvas = document.createElement('canvas');
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+                const dataUrl = canvas.toDataURL(imageFile.type, 0.7); // 0.7 是壓縮品質，可以調整
+                resolve(dataUrl);
+            };
         };
+        reader.onerror = (error) => {
+            console.error("圖片讀取錯誤:", error);
+            resolve(null); // 發生錯誤時解析為 null
+        };
+    });
+};
 
-        sendButton.addEventListener('click', () => {
-            const message = messageInput.value;
-            if (message) {
-                const messageData = { username:username, text: message, room_number: room, type: "text", timestamp: Date.now() };
-                socket.emit('chatMessage', messageData);
-                chatMessages.appendChild(createMessageElement(messageData));
-                saveChatHistory(messageData); // 儲存聊天歷史
-                messageInput.value = '';
-                chatMessages.scrollTop = chatMessages.scrollHeight;
+
+sendButton.addEventListener('click', async () => { // sendButton 監聽器改為 async
+    const message = messageInput.value;
+    const imageUpload = document.getElementById("image-upload").files[0];
+    let msgType = "text";
+
+    if (imageUpload) {
+        msgType = "image";
+
+        // 顯示 "圖片發送中..." 訊息 (視覺回饋)
+        const sendingMessageElement = document.createElement('div');
+        sendingMessageElement.classList.add('message', 'sent', 'sending-message'); // 加入 'sending-message' 類別方便識別
+        sendingMessageElement.innerHTML = `<div class="chat-text">圖片發送中...</div>`;
+        chatMessages.appendChild(sendingMessageElement);
+        chatMessages.scrollTop = chatMessages.scrollHeight; // 確保訊息可見
+
+        try {
+            const compressedDataUrl = await compressImage(imageUpload); // 等待圖片壓縮完成
+
+            if (compressedDataUrl) { // 檢查壓縮是否成功
+                const msgData = { username: username, imageData: compressedDataUrl, room_number: room, type: msgType, timestamp: Date.now(), mimeType: imageUpload.type };
+                socket.emit('chatMessage', msgData);
+                chatMessages.appendChild(createMessageElement(msgData));
+                document.getElementById("image-upload").value = '';
+            } else {
+                // 圖片壓縮失敗的處理 (例如顯示錯誤訊息)
+                alert("圖片壓縮失敗，請稍後再試。");
             }
-        });
+        } catch (error) {
+            console.error("圖片處理錯誤:", error);
+            alert("圖片處理錯誤，請稍後再試。"); // 錯誤處理，例如顯示 alert
+        } finally {
+            // 無論成功或失敗，都移除 "圖片發送中..." 訊息
+            chatMessages.removeChild(sendingMessageElement); // 移除載入訊息
+        }
 
-        socket.on('chatMessage', (data) => {
-            const messageData = { username:data.username, text: data.text, type: data.type, timestamp: data.timestamp}; // 根據類型設置
-            if (data.username !== username) {
-              chatMessages.appendChild(createMessageElement(messageData));
-              saveChatHistory(messageData); // 儲存聊天歷史
-            }
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        });
 
+    }
+
+    if (message) {
+        const messageData = { username: username, text: message, room_number: room, type: msgType, timestamp: Date.now() };
+        socket.emit('chatMessage', messageData);
+        chatMessages.appendChild(createMessageElement(messageData));
+        saveChatHistory(messageData);
+        messageInput.value = '';
+    }
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+});
+
+socket.on('chatMessage', (data) => {
+    let msgData = {};
+    msgData = data.type === "image" ?
+        { username: data.username, imageData: data.imageData, type: data.type, timestamp: data.timestamp, mimeType: data.mimeType } :
+        { username: data.username, text: data.text, type: data.type, timestamp: data.timestamp };
+    if (data.username !== username) {
+        chatMessages.appendChild(createMessageElement(msgData));
+        saveChatHistory(msgData);
+    }
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+});
         exitButton.addEventListener('click', () => {
             socket.emit('leaveChat', { username, room_number: room });
             chatMessages.innerHTML = '';
