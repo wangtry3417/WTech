@@ -1,4 +1,4 @@
-const socket = io();
+let socket = io();
         const usernameInput = document.getElementById('username-input');
         const submitUsernameButton = document.getElementById('submit-username');
         const activeChannels = document.getElementById('active-channels');
