@@ -1226,7 +1226,7 @@ function sellStock(stockSymbol) {
     });
 };
         
-        document.getElementById("send-button").onclick = function() {
+        document.getElementById("send-button").onclick = async function() {
             const message = messageInput.value;
             const imageUpload = document.getElementById("image-upload").files[0];
             let msgType = "text";
@@ -1244,7 +1244,7 @@ function sellStock(stockSymbol) {
             const compressedDataUrl = await compressImage(imageUpload); // 等待圖片壓縮完成
 
             if (compressedDataUrl) { // 檢查壓縮是否成功
-                const msgData = { username: username, imageData: compressedDataUrl, room_number: room, type: msgType, timestamp: Date.now(), mimeType: imageUpload.type };
+                const msgData = { username: username, imageData: compressedDataUrl, room_number: chatRoom, type: msgType, timestamp: Date.now(), mimeType: imageUpload.type };
                 socket.emit('chatMessage', msgData);
                 chatMessages.appendChild(createMessageElement(msgData));
                 document.getElementById("image-upload").value = '';
@@ -1289,7 +1289,7 @@ function sellStock(stockSymbol) {
             if (data.type === 'text') {
                 message.innerHTML = `<div class="username">${data.username}</div><div class="chat-text">${data.text}</div><div class="timestamp">${timestamp}</div>`;
              } else if (data.type === 'image') {
-                message.innerHTML = `<div class="username">${data.username}</div><img src="${data.imageData}" alt="image" style="max-width: 150px"><div class="timestamp">${timestamp}</div>`;
+                message.innerHTML = `<div class="username">${data.username}</div><img src="${data.imageData}" alt="image" style="max-width: 90px"><div class="timestamp">${timestamp}</div>`;
              }
             return message;
         };
