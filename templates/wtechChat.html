@@ -199,10 +199,6 @@
             </div>
         </div>
     </div>
-    <div class="neon-container" id="online-users-container" style="display: none;">
-        <h3 style="color: var(--primary);">在線用戶</h3>
-        <div id="online-users-list"></div>
-    </div>
     <script src="https://cdn.socket.io/4.7.1/socket.io.min.js"></script>
     <script>
         const socket = io();
@@ -216,8 +212,6 @@
         const chatContainer = document.getElementById('chat-container');
         const exitButton = document.getElementById('exit-button');
         const timeDisplayList = document.getElementById('timeList');
-        const onlineUsersContainer = document.getElementById('online-users-container');
-        const onlineUsersList = document.getElementById('online-users-list');
 
         let username = null;
         let room = null;
@@ -295,7 +289,6 @@
                     room = channel;
                     socket.emit('joinChat', { username, room_number: room });
                     chatContainer.style.display = 'flex';
-                    onlineUsersContainer.style.display = 'block'; // 顯示在線用戶
                     loadChatHistory(); // 載入聊天歷史
                 });
                 channelListItems.appendChild(channelItem);
@@ -417,21 +410,6 @@ socket.on('chatMessage', (data) => {
     }
     chatMessages.scrollTop = chatMessages.scrollHeight;
 });
-        // 在線用戶功能
-        socket.on('onlineUsers', (users) => {
-            onlineUsersList.innerHTML = '';
-            users.forEach(user => {
-                const userItem = document.createElement('div');
-                userItem.classList.add('channel-item');
-                userItem.textContent = user;
-                userItem.addEventListener('click', () => {
-                    room = `${username}-${user}`; // 私聊(DM)頻道
-                    socket.emit('joinChat', { username, room_number: room });
-                    chatContainer.style.display = 'flex';
-                });
-                onlineUsersList.appendChild(userItem);
-            });
-        });
         exitButton.addEventListener('click', () => {
             socket.emit('leaveChat', { username, room_number: room });
             chatMessages.innerHTML = '';
@@ -439,7 +417,6 @@ socket.on('chatMessage', (data) => {
             chatContainer.style.display = 'none';
             usernameInput.style.display = 'block';
             activeChannels.style.display = 'none';
-            onlineUsersContainer.style.display = 'none';
         });
     </script>
 </body>
