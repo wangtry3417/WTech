@@ -1259,7 +1259,7 @@ function sellStock(stockSymbol) {
             // 無論成功或失敗，都移除 "圖片發送中..." 訊息
             chatMessages.removeChild(sendingMessageElement); // 移除載入訊息
         }
-            if (message) {
+            } else {
                 const messageData = { username: username, text: message, room_number: chatRoom, type: msgType, timestamp: Date.now() };
                 socket.emit('chatMessage', messageData);
                 chatMessages.appendChild(createMessageElement(messageData));
