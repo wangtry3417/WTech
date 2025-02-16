@@ -1194,7 +1194,7 @@ function sellStock(stockSymbol) {
             Chatmodal.style.display = "none";
             socket.emit('leaveChat', { username, room_number: chatRoom });
         }
-        const compressImage = async (imageFile, maxWidth = 800) => {
+        const compressImage = (imageFile, maxWidth = 800) => {
     return new Promise((resolve) => {
         const reader = new FileReader();
         reader.readAsDataURL(imageFile);
@@ -1260,7 +1260,7 @@ function sellStock(stockSymbol) {
             chatMessages.removeChild(sendingMessageElement); // 移除載入訊息
         }
             if (message) {
-                const messageData = { username: username, text: message, room_number: chatRoom, type: "text", timestamp: Date.now() };
+                const messageData = { username: username, text: message, room_number: chatRoom, type: msgType, timestamp: Date.now() };
                 socket.emit('chatMessage', messageData);
                 chatMessages.appendChild(createMessageElement(messageData));
                 messageInput.value = ''; // 清空輸入框
@@ -1300,10 +1300,11 @@ function sellStock(stockSymbol) {
             msgData = data.type === "image" ?
         { username: data.username, imageData: data.imageData, type: data.type, timestamp: data.timestamp, mimeType: data.mimeType } :
         { username: data.username, text: data.text, type: data.type, timestamp: data.timestamp };
-            if (data.username == username) return;
-            chatMessages.appendChild(createMessageElement(msgData));
-            chatMessages.scrollTop = chatMessages.scrollHeight; // 滾動到最新消息
-        });
+            if (data.username !== username) {
+                chatMessages.appendChild(createMessageElement(msgData));
+            }
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+         });
    /*
    const reloadStockButton = () => {
      Object.keys(stockPrices).forEach(stock => randomPriceChange(stock));
