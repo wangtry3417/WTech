@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="/static/wbank/authpayment.css">
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -1068,16 +1070,15 @@ function buyStock(stockSymbol) {
 
     alert("Ok " + stockSymbol);
     balance -= totalCost;
-    if ('Notification' in window && Notification.permission !== 'denied') {
-        Notification.requestPermission().then(permission => {
-            if (permission === 'granted') {
-                let msg = `你已買入 ${stockSymbol} , 買入金額：${totalCost}`;
-                new Notification('股票通知', { body: msg, icon: "/static/IMG_7428.ico" });
-            } else {
-                alert("請允許通知");
-            }
-        });
-    }
+    let msg = "你已成功買入 " + stockSymbol + ", 共wtc$"+totalCost.toString()+", 共"+quantity.toString()+"手";
+    Toastify({
+            text: msg, // Toast 訊息內容
+            duration: 5000,        // 顯示時間 (毫秒)
+            gravity: "bottom",     // Toast 顯示的位置 (top, bottom, top-center, bottom-center, ...)
+            position: 'right',     // Toast 水平位置 (left, center, right)
+            className: "info-toast", // 自訂 CSS class (可以自訂樣式)
+            //backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)", // 自訂背景顏色 (可選)
+        }).showToast();
     
     updateBalance();
 
@@ -1131,16 +1132,15 @@ function sellStock(stockSymbol) {
 
     const totalGain = stock.price * stock.quantity;
 
-    if ('Notification' in window && Notification.permission !== 'denied') {
-        Notification.requestPermission().then(permission => {
-            if (permission === 'granted') {
-                let msg = `你已賣出 ${stockSymbol} , 賣出金額：${totalGain}`;
-                new Notification('股票通知', { body: msg, icon: "/static/IMG_7428.ico" });
-            } else {
-            alert('購買失敗，請稍後再試！');
-            }
-        });
-    }
+    let msg = "你已成功賣出 " + stockSymbol + ", 共wtc$"+totalGain.toString();
+    Toastify({
+            text: msg, // Toast 訊息內容
+            duration: 5000,        // 顯示時間 (毫秒)
+            gravity: "bottom",     // Toast 顯示的位置 (top, bottom, top-center, bottom-center, ...)
+            position: 'right',     // Toast 水平位置 (left, center, right)
+            className: "info-toast", // 自訂 CSS class (可以自訂樣式)
+            //backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)", // 自訂背景顏色 (可選)
+        }).showToast();
 
     // 更新餘額
     balance += totalGain;
@@ -1194,7 +1194,7 @@ function sellStock(stockSymbol) {
             Chatmodal.style.display = "none";
             socket.emit('leaveChat', { username, room_number: chatRoom });
         }
-        const compressImage = (imageFile, maxWidth = 800) => {
+        const compressImage = async (imageFile, maxWidth = 800) => {
     return new Promise((resolve) => {
         const reader = new FileReader();
         reader.readAsDataURL(imageFile);
