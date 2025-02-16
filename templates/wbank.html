@@ -408,7 +408,7 @@
         // 打開 modal
         openModalButton.onclick = function() {
             uname = prompt("您的WBank-username:");
-            if (!uname || uname == null) return;
+            if (!uname || uname == null) uname='匿名人士';
             Chatmodal.style.display = "block";
             chatArea.style.display = "block";
             socket.emit('joinChat', { username: uname, room_number: chatRoom });
