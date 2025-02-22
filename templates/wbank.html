@@ -82,6 +82,19 @@
             background-color: #f8d7da;
             color: #721c24;
         }
+        .flashes .flash-close {
+    position: absolute; /* 相對於 flash-item (li) 定位 */
+    top: 5px;
+    right: 5px;
+    color: #aaa;
+    font-size: 18px;
+    cursor: pointer;
+    line-height: 1; /* 調整行高，讓 "x" 垂直居中 */
+}
+
+.flashes .flash-close:hover {
+    color: #888;
+}
 
 .success {
     background-color: #d4edda;
@@ -236,13 +249,13 @@
 <body>
     <div id="top">
         {% with messages = get_flashed_messages(with_categories=True) %}
-        {% if messages %}
+          {% if messages %}
             <ul class="flashes">
             {% for category, message in messages %}
-                <li class="{{ category }}">{{ message }}</li>
+              <li class="flash-item {{ category }}">  <span class="flash-message">{{ message }}</span>  <span class="flash-close" data-category="{{ category }}" data-message="{{ message }}">&times;</span>  </li>
             {% endfor %}
             </ul>
-        {% endif %}
+          {% endif %}
         {% endwith %}
         <h2>WBank - 安全登入</h2>
         <!-- chat-modal -->
