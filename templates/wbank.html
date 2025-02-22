@@ -491,6 +491,23 @@
         };
         window.onload = checkSession;
         /*
+        document.addEventListener('DOMContentLoaded', function() {
+    // 取得所有 flash 訊息的關閉按鈕元素
+    const flashCloseButtons = document.querySelectorAll('.flashes .flash-close');
+
+    // 為每個關閉按鈕綁定點擊事件監聽器
+    flashCloseButtons.forEach(function(closeButton) {
+        closeButton.addEventListener('click', function(event) {
+            // 取得被點擊的關閉按鈕所在的 flash 訊息項目 (<li> 元素)
+            const flashItem = closeButton.closest('.flash-item');
+
+            if (flashItem) {
+                // 從 DOM 中移除 flash 訊息項目 (<li> 元素)，達到關閉 flash 訊息的效果
+                flashItem.remove();
+            }
+        });
+    });
+});
     </script>
 </body>
 </html>
