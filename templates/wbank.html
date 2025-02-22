@@ -83,14 +83,13 @@
             color: #721c24;
         }
         .flashes .flash-close {
-    position: absolute; /* 相對於 flash-item (li) 定位 */
-    top: 5px;
-    right: 5px;
-    color: #aaa;
-    font-size: 18px;
-    cursor: pointer;
-    line-height: 1; /* 調整行高，讓 "x" 垂直居中 */
-}
+            color: #aaa;
+            font-size: 18px;
+            cursor: pointer;
+            line-height: 1; /* 調整行高，讓 "x" 垂直居中 */
+            display: inline-block; /*  確保關閉符號是 inline-block 元素，可以水平排列 */
+            vertical-align: middle; /*  垂直置中對齊訊息文字 */
+         }
 
 .flashes .flash-close:hover {
     color: #888;
