@@ -1153,8 +1153,6 @@ def index():
       return redirect(f"/wtech/bockweb?place=cn&ip={ip_address}&org={org_info}")
     elif res.get("countryCode") == "TW":
       return redirect(f"/wtech/bockweb?place=tw&ip={ip_address}&org={org_info}")
-    elif res.get("countryCode") == "HK":
-      return redirect(f"/wtech/bockweb?place=hk&ip={ip_address}&org={org_info}")
     else:
       accessKey = hashlib.sha256("wtech->wtech888->true".encode("utf-8")).hexdigest()
       #return render_template("wtechHome.html")
@@ -1980,8 +1978,6 @@ def wbank():
       return redirect(f"/wtech/bockweb?place=cn&ip={ip_address}&org={org_info}")
     elif res.get("countryCode") == "TW":
       return redirect(f"/wtech/bockweb?place=tw&ip={ip_address}&org={org_info}")
-    elif res.get("countryCode") == "HK":
-      return redirect(f"/wtech/bockweb?place=hk&ip={ip_address}&org={org_info}")
     else:
       return render_template("wbank.html")
   else:
