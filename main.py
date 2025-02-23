@@ -2681,6 +2681,8 @@ def wbank_auth_client():
             
             tryTimes = session.get("tryTimes", 0)
             
+            session.get("verify-code",None)
+            
             if user:
                 if user.password == password:
                     if user.sub is None or user.sub == "":
