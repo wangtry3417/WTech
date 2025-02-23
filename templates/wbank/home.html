@@ -12,212 +12,219 @@
     <title>泓財數字銀行 WBank</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Noto Sans TC', Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #eef2f3;
+            background-color: #f7f7f7;
             color: #333;
+            line-height: 1.6;
         }
+
         header {
-            background: #007bff;
+            background-color: #007bff;
             color: #fff;
-            padding: 15px 20px;
+            padding: 20px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
+
+        h1 {
+            font-size: 28px;
+            margin: 0;
+        }
+
         nav {
             display: flex;
         }
+
         nav a {
             color: #fff;
             text-decoration: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            margin-left: 10px;
-            transition: background 0.3s;
-        }
-        nav a:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            background: #fff;
+            padding: 12px 20px;
             border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            animation: fadeIn 1s;
+            margin-left: 15px;
+            transition: background-color 0.3s ease;
         }
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
+
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.3);
         }
+
+        main {
+            max-width: 960px;
+            margin: 30px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1s ease-out;
+        }
+
         h2 {
             color: #007bff;
-            margin-bottom: 15px;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+            margin-bottom: 25px;
         }
+
         .feature {
             display: flex;
             align-items: center;
-            background: #f8f9fa;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 10px;
-            margin: 10px 0;
+            background-color: #fff;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
         }
+
         .feature img {
-            width: 40px;
-            height: 40px;
-            margin-right: 15px;
+            width: 50px;
+            height: 50px;
+            margin-right: 20px;
+            opacity: 0.8;
         }
+
         .btn-login {
-            display: block;
-            margin: 20px auto;
-            padding: 10px 20px;
-            background: #28a745;
+            display: inline-block;
+            margin: 30px auto;
+            padding: 12px 25px;
+            background-color: #28a745;
             color: white;
             text-align: center;
-            border-radius: 5px;
+            border-radius: 8px;
             text-decoration: none;
-            transition: background 0.3s;
+            transition: background-color 0.3s ease;
+            font-size: 18px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
+
         .btn-login:hover {
-            background: #218838;
+            background-color: #218838;
+            box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
         }
+
         footer {
             text-align: center;
-            margin: 20px 0;
+            margin-top: 40px;
+            padding: 20px 0;
             font-size: 0.9em;
-            color: #666;
-            padding: 10px 0;
-            border-top: 1px solid #ddd;
+            color: #777;
+            border-top: 1px solid #eee;
         }
+
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
+
+        /* Google Fonts 引入 */
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap');
     </style>
 </head>
 <body>
 
-<header>
-    <h1>泓財數字銀行 WBank</h1>
-    <nav>
-        <a href="#home">首頁</a>
-        <a href="#about">關於</a>
-        <a href="/wbank">登入</a>
-    </nav>
-</header>
+    <header>
+        <h1>泓財數字銀行 WBank</h1>
+        <nav>
+            <a href="#home">首頁</a>
+            <a href="#about">關於</a>
+            <a href="/wbank">登入</a>
+        </nav>
+    </header>
 
-<div class="container" id="home">
-    <h2>關於我們</h2>
-    <p>泓財數字銀行 WBank 旗下有泓幣 wcoins。</p>
-    <br> <p>WBank的後端主要用Flask庫，也很好用😂</p>
-    <p id="result"></p>
-    <!-- Modal -->
-    <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="false">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="ModalLabel">公告</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <b><h3>注意⚠️</h3></b>
-                    <br>
-                    <b><p>WBank系統將會更新為2.5版本，其後wcoins中心化系統及頁面將不會進行大更新。</p></b>
-                    <br>
-                    <b><p>WBank將會在 <span id="date"></span> 天後轉為維修模式。</p></b>
+    <main>
+        <section id="home" class="container">
+            <h2>關於我們</h2>
+            <p>泓財數字銀行 WBank 旗下有泓幣 wcoins。</p>
+            <br> <p>WBank的後端主要用Flask庫，也很好用😂</p>
+            <p id="result"></p>
+            <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="false">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="ModalLabel">公告</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <b><h3>注意⚠️</h3></b>
+                            <br>
+                            <b><p>WBank系統將會更新為2.5版本，其後wcoins中心化系統及頁面將不會進行大更新。</p></b>
+                            <br>
+                            <b><p>WBank將會在 <span id="date"></span> 天後轉為維修模式。</p></b>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
+        </section>
 
-    <!-- 以下為內容 -->
-    
-    <div class="feature">
-        <img src="https://cdn-icons-png.flaticon.com/512/888/888871.png" alt="QR Payment Icon">
-        <div>
-            <strong>QR Code 付款</strong>
-            <p>2-3 秒內完成付款，快速便捷。</p>
-        </div>
-    </div>
-    
-    <div class="feature">
-        <img src="https://cdn-icons-png.flaticon.com/512/888/888844.png" alt="AI Efficiency Icon">
-        <div>
-            <strong>98% 自動化</strong>
-            <p>幫助您輕鬆完成你想處理的事。</p>
-        </div>
-    </div>
-    <div class="feature">
-        <div>
-            <strong>開源系統</strong>
-            <p>如果有Docker的話，可以複製(git clone)。
+        <section class="container features">
+            <div class="feature">
+                <img src="https://cdn-icons-png.flaticon.com/512/888/888871.png" alt="QR Code 付款圖示">
+                <div>
+                    <strong>QR Code 付款</strong>
+                    <p>2-3 秒內完成付款，快速便捷。</p>
+                </div>
+            </div>
+
+            <div class="feature">
+                <img src="https://cdn-icons-png.flaticon.com/512/888/888844.png" alt="AI 自動化效率圖示">
+                <div>
+                    <strong>98% 自動化</strong>
+                    <p>幫助您輕鬆完成你想處理的事。</p>
+                </div>
+            </div>
+
+            <div class="feature">
+                <div>
+                    <strong>開源系統</strong>
+                    <p>如果有Docker的話，可以複製(git clone)。
+                        <br>
+                        可以用一下命令構建: <br>
+                        git clone https://github.com/wangtry3417/WTech.git
+                        <br>
+                        docker-compose up --build
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="container user-interface">
             <br>
-            可以用一下命令構建: <br>
-            git clone https://github.com/wangtry3417/WTech.git
+            <p>WBank用戶介面:</p>
+            <img src="/static/wbank/IMG_1929.jpeg" width="120" height="100" alt="WBank用戶介面截圖" />
             <br>
-            docker-compose up --build
-            </p>
-        </div>
-    </div>
-    <br>
-    <p>WBank用戶介面:</p>
-    <img src="/static/wbank/IMG_1929.jpeg" width="120" height="100" />
-    <br>
-    <a href="/wbank" class="btn-login">立即登入/開戶</a>
-</div>
+            <a href="/wbank" class="btn-login">立即登入/開戶</a>
+        </section>
+    </main>
 
-<footer>
-    <p>&copy; 2024-2025 泓財銀行有限公司 WBank. 版權所有.</p>
-    <p>聯絡方式: wangtry3417@gmail.com</p>
-    <p>Discord: https://discord.gg/GnVRXsdFW7</p>
-    <br>
-    <p>登記號碼: 1450417</p>
-    <p>登記日期: 9/10/2024</p>
-</footer>
-    
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-<script>
-   /*
-    const contract = Contract.init('wbank', 'wbank', '10000');
+    <footer>
+        <p>&copy; 2024-2025 泓財銀行有限公司 WBank. 版權所有.</p>
+        <p>聯絡方式: wangtry3417@gmail.com</p>
+        <p>Discord: https://discord.gg/GnVRXsdFW7</p>
+        <br>
+        <p>登記號碼: 1450417</p>
+        <p>登記日期: 9/10/2024</p>
+    </footer>
 
-        async function processPayment() {
-            const success = await contract.processPayment();
-            const resultElement = document.getElementById('result');
-            resultElement.textContent = success ? 'Payment Successful!' : 'Payment Failed!';
-        }
-
-        function cancelPayment() {
-            contract.hideModal();
-            alert('Payment cancelled.');
-        }
-
-        // 顯示模態框
-        contract.showModal();
-     */
-    // 這裡可以添加更多的 JavaScript 代碼
-    $(document).ready(function() {
-      $('#Modal').modal('show');
-    });
-    let datePlace = document.getElementById("date");
-    let dateNow = new Date();
-    let dateTaget = new Date("2025-02-25T21:00:00");
-    // 計算差異（毫秒）
-    const differenceInMilliseconds = dateTaget - dateNow;
-    // 將毫秒轉換為天
-    const differenceInDays = Math.ceil(differenceInMilliseconds / (1000 * 60 * 60 * 24));
-    datePlace.innerHTML = differenceInDays;
-</script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+       $(document).ready(function() {
+            $('#Modal').modal('show');
+        });
+        let datePlace = document.getElementById("date");
+        let dateNow = new Date();
+        let dateTaget = new Date("2025-02-25T21:00:00");
+        const differenceInMilliseconds = dateTaget - dateNow;
+        const differenceInDays = Math.ceil(differenceInMilliseconds / (1000 * 60 * 60 * 24));
+        datePlace.innerHTML = differenceInDays;
+    </script>
 
 </body>
 </html>
