@@ -3,41 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Email verify</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <title>驗證碼驗證</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
-            background-color: #f8f9fa;
+            font-family: sans-serif; /* 使用更通用的 sans-serif 字體 */
+            background-color: #f8f9fa; /* 更柔和的背景色 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
         }
+
         .container {
-            margin-top: 100px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            background-color: white;
+            background-color: #ffffff;
             padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* 更柔和的陰影 */
+            text-align: center;
+            max-width: 500px; /* 限制容器最大寬度 */
+            width: 100%;
         }
+
         h2 {
-            margin-bottom: 30px;
+            color: #343a40; /* 標題顏色 */
+            margin-bottom: 25px;
         }
+
+        .form-label {
+            display: block; /* label 佔據整行 */
+            margin-bottom: 8px;
+            color: #495057; /* label 文字顏色 */
+            text-align: left; /* label 文字靠左對齊 */
+        }
+
+        .form-control {
+            border-radius: 5px;
+            border: 1px solid #ced4da; /* 更柔和的邊框 */
+            padding: 12px;
+        }
+
+        .btn-primary {
+            background-color: #007bff; /* Bootstrap Primary 顏色 */
+            border-color: #007bff;
+            border-radius: 5px;
+            padding: 12px 25px;
+            font-weight: 500;
+            transition: background-color 0.3s ease; /* hover 動畫 */
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3; /* Hover 時顏色變深 */
+            border-color: #0056b3;
+        }
+
+        .text-muted {
+            color: #6c757d; /* muted text 顏色 */
+            font-size: 0.9rem;
+        }
+
+        #feedback-message {
+            margin-top: 20px;
+            color: #dc3545; /* 預設錯誤訊息顏色 */
+            font-weight: bold;
+        }
+
+        #feedback-message.success {
+            color: #28a745; /* 成功訊息顏色 */
+        }
+
     </style>
 </head>
 <body>
     <div class="container">
         <h2>請輸入驗證碼</h2>
-        <form method="POST">
-            <div class="mb-3">
-                <label for="verify_code" class="form-label">驗證碼(4位數字)</label>
-                <input type="text" class="form-control" id="verify_code" name="verify_code" required>
-            </div>
-            <button type="button" id="verify-btn" class="btn btn-primary">驗證verify</button>
+        <form method="GET" id="verify-form">  <div class="mb-3">
+                <label for="verify_code" class="form-label">驗證碼 (4 位數字)</label>
+                <input type="text" class="form-control" id="verify_code" name="verify_code" placeholder="請輸入郵件中的 4 位驗證碼" required>  </div>
+            <button type="button" id="verify-btn" class="btn btn-primary">驗證</button>
         </form>
-        <p class="mt-3 text-muted">注意：請打開郵箱(如 gmail)檢查（可能放在垃圾郵箱區域)。</p>
-    </div>
+        <p class="mt-3 text-muted">注意：請打開郵箱 (如 Gmail) 檢查 (可能放在垃圾郵箱區域)。</p>
+        <div id="feedback-message" class="mt-3"></div>  </div>
     <script>
-      document.getElementById("verify-btn").addEventListener("click",()=>{
-         if (!document.getElementById("verify_code").value || document.getElementById("verify_code").value == null) alert("請數字驗證碼");
-         fetch ("/wbank/v2/verify",{method:"GET",headers:{code:document.getElementById("verify_code").value}});
-      });
+        document.getElementById("verify-btn").addEventListener("click", () => {
+            const verifyCodeInput = document.getElementById("verify_code");
+            const feedbackMessageDiv = document.getElementById("feedback-message");
+            const verifyCode = verifyCodeInput.value;
+
+            if (!verifyCode || verifyCode.trim() === "") {
+                feedbackMessageDiv.textContent = "請輸入 4 位數字驗證碼。"; // 更友善的提示訊息
+                feedbackMessageDiv.className = "mt-3 text-danger"; // 可以使用 text-danger class 顯示紅色錯誤訊息
+                return; // 停止後續執行
+            }
+
+            feedbackMessageDiv.textContent = "驗證中..."; // 顯示驗證中訊息
+            feedbackMessageDiv.className = "mt-3 text-muted"; // 恢復為 muted 樣式
+
+            fetch("/wbank/v2/verify", {
+                method: "GET",
+                headers: { code: verifyCode }
+            })
+            .then(response => {
+                if (response.ok) { // 檢查 HTTP 狀態碼是否為 2xx (成功)
+                    feedbackMessageDiv.textContent = "驗證成功，正在跳轉..."; // 顯示成功訊息
+                    feedbackMessageDiv.className = "mt-3 text-success"; // 使用 text-success class 顯示綠色成功訊息
+                    setTimeout(() => {
+                        window.location.href = "/wbank/client"; // 延遲後跳轉
+                    }, 1500); // 延遲 1.5 秒後跳轉
+                } else {
+                    feedbackMessageDiv.textContent = "驗證碼錯誤，請檢查後重新輸入。"; // 顯示驗證碼錯誤訊息
+                    feedbackMessageDiv.className = "mt-3 text-danger"; // 使用 text-danger class 顯示紅色錯誤訊息
+                }
+            })
+            .catch(error => {
+                console.error("驗證請求錯誤:", error); // 記錄錯誤到 console，方便除錯
+                feedbackMessageDiv.textContent = "驗證過程中發生錯誤，請稍後再試。"; // 顯示一般錯誤訊息
+                feedbackMessageDiv.className = "mt-3 text-danger"; // 使用 text-danger class 顯示紅色錯誤訊息
+            });
+        });
     </script>
 </body>
 </html>
