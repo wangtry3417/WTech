@@ -2662,6 +2662,14 @@ def logout():
     flash('你已經登出.', 'success')
     return redirect('/wbank')
 
+@app.route("/wbank/v2/verify")
+def wbank_v2_email_verify():
+  code = str(request.headers.get("code"))
+  if code == session["verify-code"]:
+    return redirect("/wbank/client")
+  flash("驗證碼有誤","danger")
+  return redirect("/wbank")
+
 # 登錄視圖函數
 @app.route('/wbank/auth/login', methods=['GET', 'POST'])
 def wbank_auth_client():
@@ -2683,6 +2691,26 @@ def wbank_auth_client():
                         requests.post(url="https://bc.wtechhk.xyz/upload",data={"blockID":"128"+str(random.randint(1000,9999)),"data":f"login->{username}->{password}->success"})
                         session.permanent = True
                         flash('登入成功.', 'success')
+                        if user.email:
+                          if not session["verify-code"]:
+                            session["verify-code"] = None
+                          session["verify-code"] = random.randint(1000,9999)
+                          msg = MIMEText(f"""
+                          {user.email} 您好，
+                            聽説閣下登入，系統發現DataTable有閣下的電郵(Email-address),
+                            並且發送了驗證碼, verify-code: WB-{session["verify-code"]}
+                          ======電郵由自動程式發送，不用回覆======
+                          """, "plain", "utf-8")
+                          msg["Subject"] = f"WBank -- {users.username} 轉帳通知"
+                          msg["From"] = "1245server@gmail.com"
+                          msg["To"] = users.email
+                          s = smtplib.SMTP("smtp.gmail.com",587)
+                          s.starttls()
+                          s.login("1245server@gmail.com","suvh wpzj fqhe fjvj")
+                          #send_data = f"Subject: {subject} \n\n {content}"
+                          s.sendmail("1245server@gmail.com",[users.email],msg.as_string())
+                          s.quit()
+                          return render_template("wbank/verify.html")
                         return redirect(url_for('wbank_client'))
                     else:
                         if "銀行" in user.sub:
