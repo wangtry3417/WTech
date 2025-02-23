@@ -2694,9 +2694,8 @@ def wbank_auth_client():
                         session.permanent = True
                         flash('登入成功.', 'success')
                         if user.email:
-                          if not session["verify-code"]:
-                            session["verify-code"] = None
-                          session["verify-code"] = str(random.randint(1000,9999))
+                          vetify_code = str(random.randint(1000, 9999))
+                          session["verify-code"] = vetify_code
                           msg = MIMEText(f"""
                           {user.email} 您好，
                             聽説閣下登入，系統發現DataTable有閣下的電郵(Email-address),
@@ -2706,13 +2705,18 @@ def wbank_auth_client():
                           msg["Subject"] = f"WBank -- {user.username} 轉帳通知"
                           msg["From"] = "1245server@gmail.com"
                           msg["To"] = user.email
-                          s = smtplib.SMTP("smtp.gmail.com",587)
-                          s.starttls()
-                          s.login("1245server@gmail.com","suvh wpzj fqhe fjvj")
-                          #send_data = f"Subject: {subject} \n\n {content}"
-                          s.sendmail("1245server@gmail.com",[user.email],msg.as_string())
-                          s.quit()
-                          return render_template("wbank/verify.html")
+                           try:
+                            s = smtplib.SMTP("smtp.gmail.com",587)
+                             s.starttls()
+                             s.login("1245server@gmail.com","suvh wpzj fqhe fjvj")
+                             #send_data = f"Subject: {subject} \n\n {content}"
+                             s.sendmail("1245server@gmail.com",[user.email],msg.as_string())
+                             s.quit()
+                             return render_template("wbank/verify.html")
+                           except smtplib.SMTPException as e:
+                             app.logger.error(f"郵件發送失敗: {e}") # 記錄郵件發送錯誤
+                              flash('郵件驗證碼發送失敗，請稍後再試。', 'danger') # 提示用戶郵件發送失敗，但允許繼續登入
+                              return redirect(url_for('wbank_client')) #  即使郵件發送失敗，也允許使用者免驗證碼登入
                         return redirect(url_for('wbank_client'))
                     else:
                         if "銀行" in user.sub:
