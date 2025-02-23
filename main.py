@@ -1212,6 +1212,11 @@ def webCheckIsBlock():
   elif place == "cn":
     country = "中國大陸"
     return render_template("wtechBlock.html",country=country)
+  elif place == "hk":
+    country = "中國香港"
+    return render_template("wtechBlock.html",country=country)
+  else:
+    return jsonify(message="不好意思，由於沒有提供國家或地區名，WTech不會封禁")
     
 @app.route("/wtech/v2/staff")
 def wtechVStaff():
@@ -1965,6 +1970,8 @@ def wbank():
   if res["status"] != "fail":
     if res.get("countryCode") == "CN":
       return redirect("/wtech/bockweb?place=cn")
+    elif res.get("countryCode") == "HK":
+      return redirect("/wtech/bockweb?place=hk")
     else:
       return render_template("wbank.html")
   else:
