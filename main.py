@@ -2590,7 +2590,7 @@ def wbank_into_user():
   pw = request.form.get("pw")
   id = request.form.get("id")
   an = f"015-150-{random.randint(10000000,99999999)}"
-  db.session.add(wbankwallet(username=user,balance="0",password=pw,verify="no",sub=None,accnumber=an,openpay=False,role='NonVerify',setamount=20000,nowamount=0))
+  db.session.add(wbankwallet(username=user,balance="0",password=pw,verify="no",sub=None,accnumber=an,openpay=False,role='NonVerify',setamount=20000,nowamount=0,email='None'))
   db.session.commit()
   return render_template("wbank/kyc.html",user=user,id=id)
   return "Cannot do that!."
