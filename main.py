@@ -1151,6 +1151,8 @@ def index():
       return redirect("/wtech/bockweb?place=cn")
     elif res.get("countryCode") == "TW":
       return redirect("/wtech/bockweb?place=tw")
+    elif res.get("countryCode") == "HK":
+      return redirect("/wtech/bockweb?place=hk")
     else:
       session["code"] = hashlib.md5("I am a developer".encode()).hexdigest()
       session["fav"] = "cheapserver"
