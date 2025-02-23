@@ -1211,13 +1211,13 @@ def webCheckIsBlock():
   org_info = str(request.args.get("org"))
   if place == "tw":
     country = "中華民國（台灣)"
-    return render_template("wtechBlock.html",country=country,ip_addeess=ip_address,org_info=org_info)
+    return render_template("wtechBlock.html",country=country,ip_address=ip_address,org_info=org_info)
   elif place == "cn":
     country = "中國大陸"
-    return render_template("wtechBlock.html",country=country,ip_addeess=ip_address,org_info=org_info)
+    return render_template("wtechBlock.html",country=country,ip_address=ip_address,org_info=org_info)
   elif place == "hk":
     country = "中國香港"
-    return render_template("wtechBlock.html",country=country,ip_addeess=ip_address,org_info=org_info)
+    return render_template("wtechBlock.html",country=country,ip_address=ip_address,org_info=org_info)
   else:
     return jsonify(message="不好意思，由於沒有提供國家或地區名，WTech不會封禁")
     
