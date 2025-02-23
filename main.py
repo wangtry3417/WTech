@@ -162,7 +162,8 @@ class wbankwallet(db.Model,UserMixin):
     role = db.Column(db.String(60),nullable=False,default='NonVerify')
     setamount = db.Column(db.Integer,nullable=False,default=20000)
     nowamount = db.Column(db.Integer,nullable=False,default=0)
-    def __init__(self,username,balance,password,verify,sub,accnumber,openpay,role,setamount,nowamount):
+    email = db.Column(db.String(70),nullable=True)
+    def __init__(self,username,balance,password,verify,sub,accnumber,openpay,role,setamount,nowamount,email):
       self.username = username
       self.balance = balance
       self.password = password
@@ -173,6 +174,7 @@ class wbankwallet(db.Model,UserMixin):
       self.role = role
       self.setamount = setamount
       self.nowamount = nowamount
+      self.email = email
     def get_id(self):
         return self.username
 
@@ -292,6 +294,7 @@ class IDBrandForm(BaseForm):
     role = StringField('目前身分', validators=[DataRequired()])
     openpay = BooleanField('是否開啟Pay mode')
     nowamount = IntegerField("總共轉帳金額", validators=[NumberRange(min=0)])
+    email = StringField('電郵')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -2296,6 +2299,27 @@ def wbank_hash_transfer():
       """
       db.session.add(wbankrecord(username=user,action=bl,time=local_time))
       db.session.commit()
+      if users.email:
+        msg = MIMEText(f"""
+        {users.username} 您好,
+          剛剛有筆交易:
+          轉帳人: {users.username} (即閣下),
+          金額: {amount},
+          交易編號: {hash1}
+        如閣下是知情者，可不用理會。
+        
+        ======電郵由自動程式發送，不用回覆======
+        """, "plain", "utf-8")
+        msg["Subject"] = f"WBank -- {users.username} 轉帳通知"
+        msg["From"] = "1245server@gmail.com"
+        msg["To"] = users.email
+        s = smtplib.SMTP("smtp.gmail.com",587)
+        s.starttls()
+        s.login("1245server@gmail.com","jvbswpfesugcqazw")
+        #send_data = f"Subject: {subject} \n\n {content}"
+        s.sendmail("1245server@gmail.com",[users.email],msg.as_string())
+        s.quit()
+        
       # 查詢收款方餘額
       rece = wbankwallet.query.filter((wbankwallet.username == reviewer) | (wbankwallet.accnumber == reviewer)).first()
       if not rece:
@@ -2600,6 +2624,7 @@ def wbank_kyc_verify():
     fname = request.form.get("fname")
     address = request.form.get("address")
     career = request.form.get("career")
+    email = request.form.get("email")
 
     if not all([user, id_number, fname, address, career]):
         return f"所有字段都必須填寫 : {user} | {id_number} | {fname} | {address} | {career}"
@@ -2620,6 +2645,7 @@ def wbank_kyc_verify():
     if user_data:
         user_data.verify = 'yes'
         user_data.role = 'user'
+        user_data.email = email
         db.session.commit()
     else:
         return "用戶不存在"
