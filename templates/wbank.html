@@ -66,6 +66,31 @@
             outline: none; /* 移除 focus 狀態外框線 */
             border-bottom-color: #007bff; /* focus 狀態下劃線顏色 */
         }
+        .password-input-container {
+        position: relative; /* 設定容器為相對定位 */
+    }
+
+    .password-input-container input[type="password"],
+    .password-input-container input[type="text"] {
+        width: 100%; /* 輸入框寬度佔滿容器 */
+        padding-right: 40px; /*  為眼睛圖示預留右側空間 */
+    }
+
+    .password-toggle-button {
+        position: absolute; /* 相對於容器定位 */
+        top: 50%; /* 垂直置中 */
+        right: 10px; /* 距離容器右側 10px */
+        transform: translateY(-50%); /* 微調垂直位置，更精確置中 */
+        background: none; /* 移除按鈕預設背景 */
+        border: none; /* 移除按鈕邊框 */
+        cursor: pointer; /* 滑鼠游標改為手指 */
+        font-size: 1.2em; /* 眼睛圖示大小 */
+        color: #777; /* 眼睛圖示顏色 */
+    }
+
+    .password-toggle-button:focus {
+        outline: none; /* 移除 focus 狀態外框線 */
+    }
 
         button {
             width: 100%;
@@ -311,7 +336,7 @@
             <form id="login-stage" action="/wbank/auth/login" method="post">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 <input type="text" name="user" placeholder="用戶名稱" required>
-                <input type="password" name="pw" placeholder="密碼" required>
+                <div class="password-input-container"> <input type="password" name="pw" id="password" placeholder="密碼" required> <button type="button" id="togglePassword" class="password-toggle-button">👁️</button> </div>
                 <button type="submit" id="btn1">登入</button>
                 <p>沒有賬號？ <a href="/wbank/new_client">註冊賬號</a></p>
                 <p>忘記了密碼? <a href="#" data-toggle="modal" data-target="#resetPwModal">按此重設密碼</a></p>
@@ -337,7 +362,7 @@
                         </div>
                         <div class="form-group">
                             <label for="password">新密碼</label>
-                            <input type="password" class="form-control" id="pw" name="pw" required>
+                            <div class="password-input-container"> <input type="password" name="pw" id="password" placeholder="密碼" required> <button type="button" id="togglePassword" class="password-toggle-button">👁️</button> </div>
                         </div>
                         <button type="submit" class="btn btn-success btn-block">提交!</button>
                     </form>
@@ -542,6 +567,15 @@
     });
 });
         */
+const passwordInput = document.getElementById('password'); // 取得密碼輸入框元素
+    const togglePasswordButton = document.getElementById('togglePassword'); // 取得眼睛圖示按鈕元素
+
+    togglePasswordButton.addEventListener('click', function () { // 為按鈕綁定點擊事件監聽器
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password'; // 判斷目前 type 屬性並切換
+        passwordInput.setAttribute('type', type); // 設定 input 的 type 屬性
+        // 切換眼睛圖示 (可選，如果您想要更精緻的視覺反饋，可以更換 Icon 字元或圖片)
+        this.textContent = type === 'password' ? '👁️' : '👁'; // 根據 type 切換按鈕文字
+    });
     </script>
 
 </body>
