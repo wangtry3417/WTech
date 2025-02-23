@@ -2697,12 +2697,12 @@ def wbank_auth_client():
                           vetify_code = str(random.randint(1000, 9999))
                           session["verify-code"] = vetify_code
                           msg = MIMEText(f"""
-                          {user.email} 您好，
+                          {user.username} 您好，
                             聽説閣下登入，系統發現DataTable有閣下的電郵(Email-address),
                             並且發送了驗證碼, verify-code: WB-{session["verify-code"]}
                           ======電郵由自動程式發送，不用回覆======
                           """, "plain", "utf-8")
-                          msg["Subject"] = f"WBank -- {user.username} 轉帳通知"
+                          msg["Subject"] = f"WBank -- {user.username} 登入請求"
                           msg["From"] = "1245server@gmail.com"
                           msg["To"] = user.email
                           try:
