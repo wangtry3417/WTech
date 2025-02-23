@@ -2668,6 +2668,7 @@ def wbank_v2_email_verify():
   if code == session["verify-code"]:
     return redirect("/wbank/client")
   flash("驗證碼有誤","danger")
+  abort(500)
   return redirect("/wbank")
 
 # 登錄視圖函數
