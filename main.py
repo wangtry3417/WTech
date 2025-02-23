@@ -2701,14 +2701,14 @@ def wbank_auth_client():
                             並且發送了驗證碼, verify-code: WB-{session["verify-code"]}
                           ======電郵由自動程式發送，不用回覆======
                           """, "plain", "utf-8")
-                          msg["Subject"] = f"WBank -- {users.username} 轉帳通知"
+                          msg["Subject"] = f"WBank -- {user.username} 轉帳通知"
                           msg["From"] = "1245server@gmail.com"
-                          msg["To"] = users.email
+                          msg["To"] = user.email
                           s = smtplib.SMTP("smtp.gmail.com",587)
                           s.starttls()
                           s.login("1245server@gmail.com","suvh wpzj fqhe fjvj")
                           #send_data = f"Subject: {subject} \n\n {content}"
-                          s.sendmail("1245server@gmail.com",[users.email],msg.as_string())
+                          s.sendmail("1245server@gmail.com",[user.email],msg.as_string())
                           s.quit()
                           return render_template("wbank/verify.html")
                         return redirect(url_for('wbank_client'))
