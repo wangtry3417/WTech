@@ -2315,7 +2315,7 @@ def wbank_hash_transfer():
         msg["To"] = users.email
         s = smtplib.SMTP("smtp.gmail.com",587)
         s.starttls()
-        s.login("1245server@gmail.com","jvbswpfesugcqazw")
+        s.login("1245server@gmail.com","suvh wpzj fqhe fjvj")
         #send_data = f"Subject: {subject} \n\n {content}"
         s.sendmail("1245server@gmail.com",[users.email],msg.as_string())
         s.quit()
