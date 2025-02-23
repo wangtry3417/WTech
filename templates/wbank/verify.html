@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email verify</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 100px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            padding: 30px;
+        }
+        h2 {
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>請輸入驗證碼</h2>
+        <form method="POST">
+            <div class="mb-3">
+                <label for="verify_code" class="form-label">驗證碼(4位數字)</label>
+                <input type="text" class="form-control" id="verify_code" name="verify_code" required>
+            </div>
+            <button type="button" id="verify-btn" class="btn btn-primary">驗證verify</button>
+        </form>
+        <p class="mt-3 text-muted">注意：請打開郵箱(如 gmail)檢查（可能放在垃圾郵箱區域)。</p>
+    </div>
+    <script>
+      document.getElementById("verify-btn").addEventListener("click",()=>{
+         if (!document.getElementById("verify_code").value || document.getElementById("verify_code").value == null) alert("請數字驗證碼");
+         fetch ("/wbank/v2/verify",{method:"GET",headers:{code:document.getElementById("verify_code").value}});
+      });
+    </script>
+</body>
+</html>
