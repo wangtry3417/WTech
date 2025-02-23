@@ -2694,7 +2694,7 @@ def wbank_auth_client():
                         if user.email:
                           if not session["verify-code"]:
                             session["verify-code"] = None
-                          session["verify-code"] = random.randint(1000,9999)
+                          session["verify-code"] = str(random.randint(1000,9999))
                           msg = MIMEText(f"""
                           {user.email} 您好，
                             聽説閣下登入，系統發現DataTable有閣下的電郵(Email-address),
