@@ -1,29 +1,108 @@
-<html>
-  <head>
-    <title>WTech IP地址封禁</title>
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WTech IP 位址封鎖</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
     <style>
-      #top {
-       width: 300px;
-       margin: auto;
-       background-color: #fff;
-       padding: 20px;
-       border-radius: 5px;
-       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      }
+        body {
+            font-family: 'Noto Sans TC', Arial, sans-serif;
+            /* 漸層背景 (極淺灰色到白色) - 您可以替換成紋理背景或純色 */
+            background: linear-gradient(to bottom, #f9f9f9, #ffffff);
+            color: #555;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        main#top {
+            max-width: 500px;
+            width: 90%;
+            margin: auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            text-align: center;
+        }
+
+        h3 {
+            font-size: 2em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Icon 樣式 */
+        img.ban-icon {
+            width: 1.2em;
+            height: 1.2em;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        p {
+            font-size: 1.1em;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .ban-details {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f0f0f0;
+            border-radius: 8px;
+            font-size: 0.95em;
+            text-align: left;
+        }
+
+        .ban-details h4 {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #444;
+        }
+
+        .ban-details ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .ban-details li {
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+
+        .ban-details li:last-child {
+            margin-bottom: 0;
+        }
+
+        .ban-details li span {
+            font-weight: bold;
+            color: #555;
+        }
     </style>
-  </head>
-  <body>
-    <center>
-    <div id="top">
-      <h3>W Tech 限制使用</h3>
-      <br>
-      <p>W Tech泓技目前暫不開放給 {{country}} 使用。非常抱歉。||~</p>
-   </div>
-  </center>
-    <br>
-    <br>
-    <script>
-     
-    </script>
-  </body>
+</head>
+<body>
+    <main id="top">
+        <br>
+        <p>W Tech 泓技目前暫不開放給 {{country}} 使用。非常抱歉。||~</p>
+
+        <div class="ban-details">
+            <h4>詳情</h4>
+            <ul>
+                <li>您的 IP 位址： <span id="user-ip"> {{ip_address}} </span> </li>
+                <li>您的組織/AS： <span id="user-org"> {{org_info}} </span> </li>
+                <li>封鎖原因：  <span>  基於地區使用限制  </span> </li>
+            </ul>
+        </div>
+    </main>
+</body>
 </html>
