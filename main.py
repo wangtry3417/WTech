@@ -2705,18 +2705,18 @@ def wbank_auth_client():
                           msg["Subject"] = f"WBank -- {user.username} 轉帳通知"
                           msg["From"] = "1245server@gmail.com"
                           msg["To"] = user.email
-                           try:
+                          try:
                             s = smtplib.SMTP("smtp.gmail.com",587)
-                             s.starttls()
-                             s.login("1245server@gmail.com","suvh wpzj fqhe fjvj")
-                             #send_data = f"Subject: {subject} \n\n {content}"
-                             s.sendmail("1245server@gmail.com",[user.email],msg.as_string())
-                             s.quit()
-                             return render_template("wbank/verify.html")
-                           except smtplib.SMTPException as e:
-                             app.logger.error(f"郵件發送失敗: {e}") # 記錄郵件發送錯誤
-                              flash('郵件驗證碼發送失敗，請稍後再試。', 'danger') # 提示用戶郵件發送失敗，但允許繼續登入
-                              return redirect(url_for('wbank_client')) #  即使郵件發送失敗，也允許使用者免驗證碼登入
+                            s.starttls()
+                            s.login("1245server@gmail.com","suvh wpzj fqhe fjvj")
+                            #send_data = f"Subject: {subject} \n\n {content}"
+                            s.sendmail("1245server@gmail.com",[user.email],msg.as_string())
+                            s.quit()
+                            return render_template("wbank/verify.html")
+                          except smtplib.SMTPException as e:
+                            app.logger.error(f"郵件發送失敗: {e}") # 記錄郵件發送錯誤
+                            flash('郵件驗證碼發送失敗，請稍後再試。', 'danger') # 提示用戶郵件發送失敗，但允許繼續登入
+                            return redirect(url_for('wbank_client')) #  即使郵件發送失敗，也允許使用者免驗證碼登入
                         return redirect(url_for('wbank_client'))
                     else:
                         if "銀行" in user.sub:
