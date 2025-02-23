@@ -8,108 +8,136 @@
     <link rel="apple-touch-icon" href="{{ url_for('static',filename='IMG_7428.ico') }}" />
     <link rel="manifest" href="{{ url_for('static',filename='wbank.json') }}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"> <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js"></script>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
+            font-family: 'Roboto', sans-serif; /* 使用 Google Font - Roboto */
+            background-color: #f9f9f9; /* 更明亮的淺灰色背景 */
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            margin: 0;
+            padding: 20px; /* body 增加內邊距，避免內容貼邊 */
         }
+
+        main {
+            width: 100%;
+            max-width: 400px; /* 增大容器最大寬度 */
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* 更強烈的陰影效果 */
+        }
+
         #top {
-            width: 300px;
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 100%; /* 移除固定寬度 */
+            padding: 0; /* 移除內邊距，已在 main 容器設定 */
+            background-color: transparent; /* top 容器背景透明 */
+            box-shadow: none; /* 移除 top 容器陰影 */
         }
+
         h2 {
             text-align: center;
             color: #333;
-            margin-bottom: 20px;
+            margin-bottom: 30px; /* 增大標題下邊距 */
+            font-size: 2rem; /* 增大標題字體 */
+            font-weight: bold; /* 標題加粗 */
         }
+
         input[type="text"],
         input[type="password"] {
             width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 14px;
+            padding: 15px; /* 增大輸入框內邊距 */
+            margin-bottom: 20px; /* 增大輸入框下邊距 */
+            border: none; /* 移除默認邊框 */
+            border-bottom: 2px solid #ddd; /* 使用下劃線樣式 */
+            border-radius: 0; /* 移除圓角 */
+            font-size: 1.1rem; /* 增大輸入框字體 */
+            color: #555;
+            transition: border-bottom-color 0.3s ease; /* 添加下劃線過渡效果 */
         }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            outline: none; /* 移除 focus 狀態外框線 */
+            border-bottom-color: #007bff; /* focus 狀態下劃線顏色 */
+        }
+
         button {
-            background-color: #2e3c4d;
-            color: white;
-            padding: 12px;
-            font-size: 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
             width: 100%;
+            padding: 15px; /* 增大按鈕內邊距 */
+            background-color: #007bff; /* 使用更現代的藍色 */
+            color: white;
+            font-size: 1.2rem; /* 增大按鈕字體 */
+            border: none;
+            border-radius: 8px; /* 增大圓角 */
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* 按鈕增加陰影 */
+            transition: background-color 0.3s ease, box-shadow 0.3s ease; /* 添加過渡效果 */
         }
+
         button:hover {
-            background-color: #1c2530;
+            background-color: #0056b3; /* hover 顏色 */
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3); /* hover 時陰影更明顯 */
         }
+
         a {
             color: #007bff;
             text-decoration: none;
+            transition: color 0.3s ease; /* 添加顏色過渡效果 */
         }
+
         a:hover {
-            text-decoration: underline;
+            color: #0056b3; /* hover 顏色 */
+            text-decoration: underline; /* hover 時顯示下劃線 */
         }
+
         .flashes {
             list-style-type: none;
             padding: 0;
+            margin-bottom: 20px; /* flashes 訊息容器下邊距 */
         }
+
         .flashes li {
-            padding: 10px;
+            padding: 15px; /* 增大 flash 訊息內邊距 */
             margin-bottom: 10px;
-            border-radius: 5px;
+            border-radius: 8px; /* 增大 flash 訊息圓角 */
             font-weight: bold;
+            display: flex; /* 使用 flex 佈局，方便關閉按鈕對齊 */
+            justify-content: space-between; /* 關閉按鈕靠右 */
+            align-items: center; /* 垂直居中對齊 */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* flash 訊息增加陰影 */
         }
+
         .flashes li.success {
             background-color: #d4edda;
             color: #155724;
+            border-left: 5px solid #28a745; /* success 訊息左側綠色邊框 */
         }
+
         .flashes li.error {
             background-color: #f8d7da;
             color: #721c24;
+            border-left: 5px solid #dc3545; /* error 訊息左側紅色邊框 */
         }
+
         .flashes .flash-close {
             color: #aaa;
-            font-size: 18px;
+            font-size: 1.5rem; /* 增大關閉按鈕字體 */
             cursor: pointer;
-            line-height: 1; /* 調整行高，讓 "x" 垂直居中 */
-            display: inline-block; /*  確保關閉符號是 inline-block 元素，可以水平排列 */
-            vertical-align: middle; /*  垂直置中對齊訊息文字 */
-         }
+            line-height: 1;
+            transition: color 0.3s ease; /* 關閉按鈕顏色過渡效果 */
+        }
 
-.flashes .flash-close:hover {
-    color: #888;
-}
+        .flashes .flash-close:hover {
+            color: #888; /* 關閉按鈕 hover 顏色 */
+        }
 
-.success {
-    background-color: #d4edda;
-    color: #155724;
-}
-
-.error {
-    background-color: #f8d7da;
-    color: #721c24;
-}
-
-.info {
-    background-color: #cce5ff;
-    color: #004085;
-}
-       .modal {
+        .modal {
             display: none;
             position: fixed;
             top: 50%;
@@ -158,26 +186,28 @@
             width: 100%; /* 寬度100% */
             height: 100%; /* 高度100% */
             overflow: auto; /* 滾動 */
-            background-color: rgba(0, 0, 0, 0.7); /* 背景顏色 */
+            background-color: rgba(0, 0, 0, 0.5); /* 更柔和的半透明黑色背景 */
+            border-radius: 15px; /* chat modal 背景圓角 */
         }
-        
+
         .chat-modal-content {
             background-color: #fefefe; /* 背景色 */
-            margin: 10% auto; /* 上邊距 */
-            padding: 20px; /* 內邊距 */
+            margin: 15% auto; /* 上邊距 */
+            padding: 30px; /* 內邊距 */
             border: 1px solid #ccc; /* 邊框 */
             width: 80%; /* 寬度 */
             max-width: 500px; /* 最大寬度 */
             border-radius: 15px; /* 圓角 */
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* 陰影效果 */
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2); /* 更強烈的陰影效果 */
         }
 
         /* Chat關閉按鈕 */
         .chat-close {
             color: #d9534f; /* 顏色 */
             float: right; /* 右側 */
-            font-size: 30px; /* 字體大小 */
+            font-size: 2.5rem; /* 字體大小 */
             font-weight: bold; /* 粗體 */
+            transition: color 0.3s ease; /* chat 關閉按鈕顏色過渡效果 */
         }
 
         .chat-close:hover,
@@ -190,47 +220,49 @@
         /* 圓形按鈕樣式 */
         #open-chat-modal {
             position: fixed; /* 固定定位 */
-            bottom: 20px; /* 距離底部20px */
-            right: 20px; /* 距離右側20px */
-            width: 60px; /* 寬度 */
-            height: 60px; /* 高度 */
+            bottom: 30px; /* 距離底部30px */
+            right: 30px; /* 距離右側30px */
+            width: 70px; /* 寬度 */
+            height: 70px; /* 高度 */
             border-radius: 50%; /* 圓形 */
-            background-color: #7289da; /* 背景顏色 */
+            background-color: #007bff; /* 背景顏色 - 使用品牌藍色 */
             color: white; /* 文字顏色 */
             border: none; /* 去除邊框 */
-            font-size: 24px; /* 字體大小 */
+            font-size: 28px; /* 字體大小 */
             cursor: pointer; /* 鼠標樣式 */
             display: flex; /* 內聯彈性盒模型 */
             justify-content: center; /* 水平居中 */
             align-items: center; /* 垂直居中 */
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* 陰影效果 */
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4); /* 陰影效果 */
+            transition: background-color 0.3s ease, box-shadow 0.3s ease; /* chat 開啟按鈕過渡效果 */
         }
 
         #open-chat-modal:hover {
-            background-color: #5b6eae; /* 懸停顏色 */
+            background-color: #0056b3; /* 懸停顏色 */
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5); /* 懸停陰影 */
         }
 
         /* 自定義文字樣式 */
         .chat-modal-content h2 {
-            font-size: 1.5rem; /* 標題字體大小 */
+            font-size: 1.8rem; /* 標題字體大小 */
             color: #333; /* 標題顏色 */
-            margin: 0 0 10px; /* 邊距 */
+            margin: 0 0 20px; /* 邊距 */
         }
 
         .chat-modal-content p {
-            font-size: 1rem; /* 文字字體大小 */
+            font-size: 1.1rem; /* 文字字體大小 */
             color: #555; /* 文字顏色 */
-            line-height: 1.5; /* 行高 */
+            line-height: 1.6; /* 行高 */
         }
         .chat-area {
             display: block; /* 初始顯示聊天區域 */
         }
         .chat-messages {
-            border: 1px solid #ccc; 
-            height: 200px; 
-            overflow-y: auto; 
-            margin-bottom: 10px; 
-            padding: 10px; 
+            border: 1px solid #ccc;
+            height: 200px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            padding: 10px;
         }
         .message {
             margin: 5px 0;
@@ -246,45 +278,47 @@
     </style>
 </head>
 <body>
-    <div id="top">
-        {% with messages = get_flashed_messages(with_categories=True) %}
-          {% if messages %}
-            <ul class="flashes">
-            {% for category, message in messages %}
-              <li class="flash-item {{ category }}">  <span class="flash-message">{{ message }}</span>  <span class="flash-close" data-category="{{ category }}" data-message="{{ message }}">&times;</span>  </li>
-            {% endfor %}
-            </ul>
-          {% endif %}
-        {% endwith %}
-        <h2>WBank - 安全登入</h2>
-        <!-- chat-modal -->
-       <button id="open-chat-modal" class="send-button">🗨️</button>
-        <div id="chatModal" class="chat-modal">
-        <div class="chat-modal-content">
-            <span class="chat-close">&times;</span>
-            <h2>歡迎使用線上客服</h2>
-            <p>在對話時，請注意言詞</p>
-            <div id="chat-container">
-                <div class="chat-area" style="display: none;">
-                    <button id="exit-button" class="send-button">離開頻道</button>
-                    <div class="chat-messages" id="chat-messages"></div>
-                    <input type="text" id="message-input" placeholder="輸入訊息...">
-                    <button id="send-button" class="send-button">傳送訊息</button>
+    <main>
+        <div id="top">
+            {% with messages = get_flashed_messages(with_categories=True) %}
+              {% if messages %}
+                <ul class="flashes">
+                {% for category, message in messages %}
+                  <li class="flash-item {{ category }}">  <span class="flash-message">{{ message }}</span>  <span class="flash-close" data-category="{{ category }}" data-message="{{ message }}">&times;</span>  </li>
+                {% endfor %}
+                </ul>
+              {% endif %}
+            {% endwith %}
+            <h2>WBank - 安全登入</h2>
+            <button id="open-chat-modal" class="send-button">🗨️</button>
+            <div id="chatModal" class="chat-modal">
+            <div class="chat-modal-content">
+                <span class="chat-close">&times;</span>
+                <h2>歡迎使用線上客服</h2>
+                <p>在對話時，請注意言詞</p>
+                <div id="chat-container">
+                    <div class="chat-area" style="display: none;">
+                        <button id="exit-button" class="send-button">離開頻道</button>
+                        <div class="chat-messages" id="chat-messages"></div>
+                        <input type="text" id="message-input" placeholder="輸入訊息...">
+                        <button id="send-button" class="send-button">傳送訊息</button>
+                    </div>
                 </div>
+                <br />
+                <p style="color: gray;">本次chat應用使用wchat-api</p>
             </div>
-            <br />
-            <p style="color: gray;">本次chat應用使用wchat-api</p>
         </div>
-    </div>
-        <form id="login-stage" action="/wbank/auth/login" method="post">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-            <input type="text" name="user" placeholder="用戶名稱" required>
-            <input type="password" name="pw" placeholder="密碼" required>
-            <button type="submit" id="btn1">登入</button>
-            <p>沒有賬號？ <a href="/wbank/new_client">註冊賬號</a></p>
-            <p>忘記了密碼? <a href="#" data-toggle="modal" data-target="#resetPwModal">按此重設密碼</a></p>
-            <p>忘記賬戶名? <a href="#" data-toggle="modal" data-target="#findAccModal">按此找回賬戶</a></p>
-        </form>
+            <form id="login-stage" action="/wbank/auth/login" method="post">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <input type="text" name="user" placeholder="用戶名稱" required>
+                <input type="password" name="pw" placeholder="密碼" required>
+                <button type="submit" id="btn1">登入</button>
+                <p>沒有賬號？ <a href="/wbank/new_client">註冊賬號</a></p>
+                <p>忘記了密碼? <a href="#" data-toggle="modal" data-target="#resetPwModal">按此重設密碼</a></p>
+                <p>忘記賬戶名? <a href="#" data-toggle="modal" data-target="#findAccModal">按此找回賬戶</a></p>
+            </form>
+        </div>
+
         <div class="modal fade" id="resetPwModal" tabindex="-1" role="dialog" aria-labelledby="resetPwModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -311,7 +345,6 @@
             </div>
         </div>
     </div>
-    <!-- 找回賬戶 -->
     <div class="modal fade" id="findAccModal" tabindex="-1" role="dialog" aria-labelledby="findAccModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -334,8 +367,8 @@
             </div>
         </div>
     </div>
-</div>
-    
+    </main>
+
         <div id="lc" class="loading-container">
             <div class="loader"></div>
             <div class="loading-text">自動登入中...</div>
@@ -354,37 +387,37 @@
         }
         function resetPw() {
           if (users.value == "" && password.value == "" && password.value == "") {
-             alert("請填入所需資料");
-             return;
+                alert("請填入所需資料");
+                return;
           } else if (users.value == "" || password.value == "" || cpw.value == "") {
-             alert("請填入所需資料");
-             return;
+                alert("請填入所需資料");
+                return;
           }
           // 檢查密碼是否於確認密碼保持一致
           if (password.value !== cpw.value) {
-             alert("你的確認密碼跟密碼不一致，自動程式很難判決");
-             return;
+                alert("你的確認密碼跟密碼不一致，自動程式很難判決");
+                return;
           }
           var resetFormData = new FormData();
-                resetFormData.append("user", users.value);
-                resetFormData.append("pw", password.value);
-                fetch("/wbank/change/pw", {
-                    method: "POST",
-                    body: resetFormData
-                })
-                .then(res => {
-                    if (res.redirected) {
-                        window.location.href = res.url;
-                    } else {
-                        alert(res.text());
-                    }
-                })
-                .then(text => {
-                    alert(text);
-                })
-                .catch(error => {
-                    alert("發生錯誤: " + error);
-                });
+                    resetFormData.append("user", users.value);
+                    resetFormData.append("pw", password.value);
+                    fetch("/wbank/change/pw", {
+                        method: "POST",
+                        body: resetFormData
+                    })
+                    .then(res => {
+                        if (res.redirected) {
+                            window.location.href = res.url;
+                        } else {
+                            alert(res.text());
+                        }
+                    })
+                    .then(text => {
+                        alert(text);
+                    })
+                    .catch(error => {
+                        alert("發生錯誤: " + error);
+                    });
         }
         /*
         let user = "{{ session['username'] }}" || null;
@@ -508,6 +541,8 @@
         });
     });
 });
+        */
     </script>
+
 </body>
 </html>
