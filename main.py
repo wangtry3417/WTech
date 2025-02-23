@@ -1147,17 +1147,18 @@ def index():
     return abort(502)
     
   if res["status"] != "fail":
+    ip_address = res.get("query")
+    org_info = res.get("org")
     if res.get("countryCode") == "CN":
-      return redirect("/wtech/bockweb?place=cn")
+      return redirect(f"/wtech/bockweb?place=cn&ip={ip_address}&org={org_info}")
     elif res.get("countryCode") == "TW":
-      return redirect("/wtech/bockweb?place=tw")
+      return redirect(f"/wtech/bockweb?place=tw&ip={ip_address}&org={org_info}")
     elif res.get("countryCode") == "HK":
-      return redirect("/wtech/bockweb?place=hk")
+      return redirect(f"/wtech/bockweb?place=hk&ip={ip_address}&org={org_info}")
     else:
-      session["code"] = hashlib.md5("I am a developer".encode()).hexdigest()
-      session["fav"] = "cheapserver"
+      accessKey = hashlib.sha256("wtech->wtech888->true".encode("utf-8")).hexdigest()
       #return render_template("wtechHome.html")
-      return redirect("/wbank/home")
+      return redirect(f"/wbank/home?accessKey={accessKey}")
   else:
     return abort(502)
 
@@ -1206,15 +1207,17 @@ def data():
 @app.route("/wtech/bockweb",methods=["GET"])
 def webCheckIsBlock():
   place = str(request.args.get("place"))
+  ip_address = str(request.args.get("ip"))
+  org_info = str(request.args.get("org"))
   if place == "tw":
     country = "中華民國（台灣)"
-    return render_template("wtechBlock.html",country=country)
+    return render_template("wtechBlock.html",country=country,ip_addeess=ip_address,org_info=org_info)
   elif place == "cn":
     country = "中國大陸"
-    return render_template("wtechBlock.html",country=country)
+    return render_template("wtechBlock.html",country=country,ip_addeess=ip_address,org_info=org_info)
   elif place == "hk":
     country = "中國香港"
-    return render_template("wtechBlock.html",country=country)
+    return render_template("wtechBlock.html",country=country,ip_addeess=ip_address,org_info=org_info)
   else:
     return jsonify(message="不好意思，由於沒有提供國家或地區名，WTech不會封禁")
     
@@ -1947,7 +1950,10 @@ def bet_all():
 
 @app.route("/wbank/home")
 def wbank_home():
-  return render_template("wbank/home.html")
+  userKey = request.args.get("accessKey")
+  if userKey == hashlib.sha256("wtech->wtech888->true".encode("utf-8")).hexdigest():
+    return render_template("wbank/home.html")
+  return jsonify(message="AccessKey invalid",statusCode=401)
 
 @app.route("/wbank")
 def wbank():
@@ -1968,10 +1974,14 @@ def wbank():
     return abort(502)
     
   if res["status"] != "fail":
+    ip_address = res.get("query")
+    org_info = res.get("org")
     if res.get("countryCode") == "CN":
-      return redirect("/wtech/bockweb?place=cn")
+      return redirect(f"/wtech/bockweb?place=cn&ip={ip_address}&org={org_info}")
+    elif res.get("countryCode") == "TW":
+      return redirect(f"/wtech/bockweb?place=tw&ip={ip_address}&org={org_info}")
     elif res.get("countryCode") == "HK":
-      return redirect("/wtech/bockweb?place=hk")
+      return redirect(f"/wtech/bockweb?place=hk&ip={ip_address}&org={org_info}")
     else:
       return render_template("wbank.html")
   else:
