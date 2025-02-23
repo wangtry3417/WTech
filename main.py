@@ -2701,6 +2701,7 @@ def wbank_auth_client():
                           {user.username} 您好，
                             聽説閣下登入，系統發現DataTable有閣下的電郵(Email-address),
                             並且發送了驗證碼, verify-code: WB-{session["verify-code"]}
+                            注意‼️：驗證碼有效期為session-time: 10分鐘
                           ======電郵由自動程式發送，不用回覆======
                           """, "plain", "utf-8")
                           msg["Subject"] = f"WBank -- {user.username} 登入請求"
