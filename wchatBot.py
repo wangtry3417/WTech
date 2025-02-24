@@ -1,5 +1,6 @@
 import socketio, os
 from google import genai
+from datetime import datetime
 
 # 創建 SocketIO 客戶端
 sio = socketio.Client()
@@ -16,13 +17,13 @@ def connect():
 def on_chat_message(data):
     if data["type"] == "text":
         if data["text"] in "H" or data["text"] in "h" or data["text"] in "你好":
-            sio.emit("chatMessage",{ "username": "funGPT", "type":"text", "text":"您好，請問有什麼可以幫忙？", "room_number": "wbank客服" });
+            sio.emit("chatMessage",{ "username": "funGPT", "type":"text", "text":"您好，請問有什麼可以幫忙？", "room_number": "wbank客服", "timestamp": datetime.now()});
         else:
             response = client.models.generate_content(
                model='gemini-2.0-flash', 
                contents=str(data["text"])
              )
-            sio.emit("chatMessage",{ "username": "funGPT", "type":"text", "text":response.text, "room_number": "wbank客服" });
+            sio.emit("chatMessage",{ "username": "funGPT", "type":"text", "text":response.text, "room_number": "wbank客服" , "timestamp": datetime.now()});
 
 # 當斷開連接時的回調函數
 @sio.event
