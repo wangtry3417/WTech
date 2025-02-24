@@ -26,4 +26,4 @@ eventlet
 WTForms==2.3.3
 pandas
 Flask-Security
-google-generativeai
+google-genai
