@@ -3,7 +3,7 @@ from google import genai
 
 # 創建 SocketIO 客戶端
 sio = socketio.Client()
-client = genai.Client(api_key=os.envion.get("gkey"))
+client = genai.Client(api_key=os.environ.get("gkey"))
 
 # 當連接成功時的回調函數
 @sio.event
