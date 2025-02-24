@@ -30,8 +30,9 @@ def disconnect():
     print("Disconnected from the server")
     sio.emit('leaveChat', { "username": "funGPT", "room_number": "wbank客服" });
 
-# 連接到 Socket.IO 伺服器
-sio.connect('https://sites.wtechhk.xyz')
+def run_model():
+  # 連接到 Socket.IO 伺服器
+  sio.connect('https://sites.wtechhk.xyz')
 
-# 保持程序運行以接收消息
-sio.wait()
+  # 保持程序運行以接收消息
+  sio.wait()
