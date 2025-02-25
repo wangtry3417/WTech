@@ -2,7 +2,7 @@ import discord
 from discord import option
 import psycopg2
 import re,os,datetime,asyncio
-from requests import get
+from requests import get,post
 
 # Discord Bot 設定
 bot = discord.Bot()
@@ -169,6 +169,32 @@ async def check_transfer_blockchain(ctx:discord.ApplicationContext, key:str):
         await ctx.respond(fm)
       else:
         await ctx.respond("鑰匙🔑格式有誤")
+
+#Ask gemini
+@bot.slash_command(name="問問gemini",description="調用Gemini-api")
+@option("prompt",description="為Prompt，即請求文本。")
+async def ask_gemini(ctx:discord.ApplicationContext, prompt:str):
+    options = {
+  "contents": [
+    {
+      "role": "user",
+      "parts": [
+        {
+          "text": prompt
+        }
+      ]
+    }
+  ],
+  "generationConfig": {
+    "temperature": 1,
+    "topK": 40,
+    "topP": 0.95,
+    "maxOutputTokens": 2000,
+    "responseMimeType": "text/plain"
+  }
+}
+    resp = post(url="https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-thinking-exp-01-21:generateContent?key={os.environ.get('gkey')}", headers={"Content-Type":"application/json"}, json=options)
+    await ctx.respond(resp.json()["candidates"][0]["content"]["parts"][0]["text"])
 
 async def send_transfer(user,amount):
     channel = bot.get_channel(1308055112698298488)
