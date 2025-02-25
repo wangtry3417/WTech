@@ -174,6 +174,7 @@ async def check_transfer_blockchain(ctx:discord.ApplicationContext, key:str):
 @bot.slash_command(name="問問gemini",description="調用Gemini-api")
 @option("prompt",description="為Prompt，即請求文本。")
 async def ask_gemini(ctx:discord.ApplicationContext, prompt:str):
+    await ctx.defer()  # 這裡使用 defer() 來延遲響應
     options = {
   "contents": [
     {
@@ -194,6 +195,7 @@ async def ask_gemini(ctx:discord.ApplicationContext, prompt:str):
   }
 }
     resp = post(url=f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-thinking-exp-01-21:generateContent?key={os.environ.get('gkey')}", headers={"Content-Type":"application/json"}, json=options)
+    resp.raise_for_status()
     try:
       await ctx.respond(resp.json()["candidates"][0]["content"]["parts"][0]["text"])
     except:
