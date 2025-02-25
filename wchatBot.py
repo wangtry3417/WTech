@@ -14,6 +14,14 @@ generation_config = {
   "response_mime_type": "text/plain",
 }
 
+model = genai.GenerativeModel(
+               model_name="gemini-1.5-flash",
+               generation_config=generation_config,
+            )
+chat_session = model.start_chat(
+  history=[]
+)
+
 # 當連接成功時的回調函數
 @sio.event
 def connect():
@@ -27,13 +35,6 @@ def on_chat_message(data):
         if data["text"] in "H" or data["text"] in "h" or data["text"] in "你好":
             sio.emit("chatMessage",{ "username": "funGPT", "type":"text", "text":"您好，請問有什麼可以幫忙？", "room_number": "wbank客服", "timestamp": datetime.now()});
         else:
-            model = genai.GenerativeModel(
-               model_name="gemini-2.0-flash-thinking-exp-01-21",
-               generation_config=generation_config,
-            )
-            chat_session = model.start_chat(
-                history=[]
-            )
             response = chat_session.send_message(str(data["text"]))
             sio.emit("chatMessage",{ "username": "funGPT", "type":"text", "text":response.text, "room_number": "wbank客服" , "timestamp": datetime.now()});
 
