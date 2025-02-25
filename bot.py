@@ -194,7 +194,10 @@ async def ask_gemini(ctx:discord.ApplicationContext, prompt:str):
   }
 }
     resp = post(url="https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-thinking-exp-01-21:generateContent?key={os.environ.get('gkey')}", headers={"Content-Type":"application/json"}, json=options)
-    await ctx.respond(resp.json()["candidates"][0]["content"]["parts"][0]["text"])
+    try:
+      await ctx.respond(resp.json()["candidates"][0]["content"]["parts"][0]["text"])
+    except:
+      await ctx.respond(resp.json(), ephemeral=True)
 
 async def send_transfer(user,amount):
     channel = bot.get_channel(1308055112698298488)
