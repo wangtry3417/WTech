@@ -1,10 +1,18 @@
 import socketio, os
-from google import genai
+import google.generativeai as genai
 from datetime import datetime
 
 # 創建 SocketIO 客戶端
 sio = socketio.Client()
-client = genai.Client(api_key=os.environ.get("gkey"))
+client = genai.configure(api_key=os.environ.get("gkey"))
+
+generation_config = {
+  "temperature": 2,
+  "top_p": 0.95,
+  "top_k": 64,
+  "max_output_tokens": 8000,
+  "response_mime_type": "text/plain",
+}
 
 # 當連接成功時的回調函數
 @sio.event
@@ -19,10 +27,14 @@ def on_chat_message(data):
         if data["text"] in "H" or data["text"] in "h" or data["text"] in "你好":
             sio.emit("chatMessage",{ "username": "funGPT", "type":"text", "text":"您好，請問有什麼可以幫忙？", "room_number": "wbank客服", "timestamp": datetime.now()});
         else:
-            response = client.models.generate_content(
-               model='gemini-2.0-flash', 
-               contents=str(data["text"])
-             )
+            model = genai.GenerativeModel(
+               model_name="gemini-2.0-flash-thinking-exp-01-21",
+               generation_config=generation_config,
+            )
+            chat_session = model.start_chat(
+                history=[]
+            )
+            response = chat_session.send_message(str(data["text"]))
             sio.emit("chatMessage",{ "username": "funGPT", "type":"text", "text":response.text, "room_number": "wbank客服" , "timestamp": datetime.now()});
 
 # 當斷開連接時的回調函數
