@@ -193,7 +193,7 @@ async def ask_gemini(ctx:discord.ApplicationContext, prompt:str):
     "responseMimeType": "text/plain"
   }
 }
-    resp = post(url="https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-thinking-exp-01-21:generateContent?key={os.environ.get('gkey')}", headers={"Content-Type":"application/json"}, json=options)
+    resp = post(url=f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-thinking-exp-01-21:generateContent?key={os.environ.get('gkey')}", headers={"Content-Type":"application/json"}, json=options)
     try:
       await ctx.respond(resp.json()["candidates"][0]["content"]["parts"][0]["text"])
     except:
