@@ -30,7 +30,7 @@ options = {
 @sio.event
 def connect():
     print("Connected to the server")
-    sio.emit('joinChat', { "username": "funGPT", "room_number": "wbank客服" });
+    sio.emit('joinChat', { "username": "nelson", "room_number": "wbank客服" });
 
 # 當接收到 'chatMessage' 事件時的回調函數
 @sio.on('chatMessage')
