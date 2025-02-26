@@ -477,7 +477,7 @@
             const message = document.createElement('div');
             message.classList.add('message');
 
-            if (data.username === username) {
+            if (data.username === uname) {
                 message.classList.add('sent'); // 自己的消息
             } else {
                 message.classList.add('received'); // 對方的消息
@@ -491,7 +491,7 @@
         // 接收訊息
         socket.on('chatMessage', (data) => {
             const message = document.createElement('div');
-            if (data.username == username) return;
+            if (data.username == uname) return;
             message.textContent = `${data.username}: ${data.text}`;
             chatMessages.appendChild(message);
             chatMessages.scrollTop = chatMessages.scrollHeight; // 滾動到最新消息
