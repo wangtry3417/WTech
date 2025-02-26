@@ -5,7 +5,6 @@ from datetime import datetime
 
 # 創建 SocketIO 客戶端
 sio = socketio.Client()
-client = genai.configure(api_key=os.environ.get("gkey"))
 
 options = {
   "contents": [
