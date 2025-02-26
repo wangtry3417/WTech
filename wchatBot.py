@@ -6,26 +6,6 @@ from datetime import datetime
 # 創建 SocketIO 客戶端
 sio = socketio.Client()
 
-options = {
-  "contents": [
-    {
-      "role": "user",
-      "parts": [
-        {
-          "text": prompt
-        }
-      ]
-    }
-  ],
-  "generationConfig": {
-    "temperature": 1,
-    "topK": 40,
-    "topP": 0.95,
-    "maxOutputTokens": 900,
-    "responseMimeType": "text/plain"
-  }
-}
-
 # 當連接成功時的回調函數
 @sio.event
 def connect():
@@ -39,6 +19,25 @@ def on_chat_message(data):
         if data["text"] in "H" or data["text"] in "h" or data["text"] in "你好":
             sio.emit("chatMessage",{ "username": "nelson", "type":"text", "text":"您好，請問有什麼可以幫忙？", "room_number": "wbank客服", "timestamp": datetime.now()});
         else:
+            options = {
+  "contents": [
+    {
+      "role": "user",
+      "parts": [
+        {
+          "text": data["text"]
+        }
+      ]
+    }
+  ],
+  "generationConfig": {
+    "temperature": 1,
+    "topK": 40,
+    "topP": 0.95,
+    "maxOutputTokens": 900,
+    "responseMimeType": "text/plain"
+  }
+}
             resp = post(url=f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-thinking-exp-01-21:generateContent?key={os.environ.get('gkey')}", headers={"Content-Type":"application/json"}, json=options)
             resp.raise_for_status()
             try:
