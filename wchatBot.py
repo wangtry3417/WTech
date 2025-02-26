@@ -1,26 +1,31 @@
 import socketio, os
-import google.generativeai as genai
+#import google.generativeai as genai
+from requests import post
 from datetime import datetime
 
 # 創建 SocketIO 客戶端
 sio = socketio.Client()
 client = genai.configure(api_key=os.environ.get("gkey"))
 
-generation_config = {
-  "temperature": 2,
-  "top_p": 0.95,
-  "top_k": 64,
-  "max_output_tokens": 8000,
-  "response_mime_type": "text/plain",
+options = {
+  "contents": [
+    {
+      "role": "user",
+      "parts": [
+        {
+          "text": prompt
+        }
+      ]
+    }
+  ],
+  "generationConfig": {
+    "temperature": 1,
+    "topK": 40,
+    "topP": 0.95,
+    "maxOutputTokens": 900,
+    "responseMimeType": "text/plain"
+  }
 }
-
-model = genai.GenerativeModel(
-               model_name="gemini-1.5-flash",
-               generation_config=generation_config,
-            )
-chat_session = model.start_chat(
-  history=[]
-)
 
 # 當連接成功時的回調函數
 @sio.event
@@ -33,10 +38,14 @@ def connect():
 def on_chat_message(data):
     if data["type"] == "text":
         if data["text"] in "H" or data["text"] in "h" or data["text"] in "你好":
-            sio.emit("chatMessage",{ "username": "funGPT", "type":"text", "text":"您好，請問有什麼可以幫忙？", "room_number": "wbank客服", "timestamp": datetime.now()});
+            sio.emit("chatMessage",{ "username": "nelson", "type":"text", "text":"您好，請問有什麼可以幫忙？", "room_number": "wbank客服", "timestamp": datetime.now()});
         else:
-            response = chat_session.send_message(str(data["text"]))
-            sio.emit("chatMessage",{ "username": "funGPT", "type":"text", "text":response.text, "room_number": "wbank客服" , "timestamp": datetime.now()});
+            resp = post(url=f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-thinking-exp-01-21:generateContent?key={os.environ.get('gkey')}", headers={"Content-Type":"application/json"}, json=options)
+            resp.raise_for_status()
+            try:
+              sio.emit("chatMessage",{ "username": "nelson", "type":"text", "text":resp.json()["candidates"][0]["content"]["parts"][0]["text"], "room_number": "wbank客服" , "timestamp": datetime.now()});
+            except:
+              sio.emit("chatMessage",{ "username": "nelson", "type":"text", "text":resp.json(), "room_number": "wbank客服" , "timestamp": datetime.now()});
 
 # 當斷開連接時的回調函數
 @sio.event
