@@ -141,6 +141,15 @@ input:checked + .slider {
 input:checked + .slider:before {
   transform: translateX(2.8em) rotate(360deg);
 }
+.message {
+  color: red;
+  font-size: 0.9em;
+  margin-top: -5px;
+  margin-bottom: 10px;
+}
+.valid {
+  color: green;
+}
     </style>
 </head>
 <body>
@@ -157,7 +166,8 @@ input:checked + .slider:before {
                 <label>用戶名稱：</label>
                 <input type="text" name="user" placeholder="用戶名稱" required>
                 <label>密碼：</label>
-                <input type="password" name="pw" placeholder="Password" required>
+                <input type="password" name="pw" id="pw" placeholder="Password" required>
+                <div id="message" class="message"></div>
                 <label>開戶原因:</label>
                 <select id="createReason">
                     <option value="儲蓄或消費">儲蓄或消費</option>
@@ -230,6 +240,31 @@ input:checked + .slider:before {
             step2.classList.add('active');
             termsCheckbox.disabled = true; // Disable checkbox initially
             updateFields();
+        });
+        
+        document.getElementById('pw').addEventListener('input', function () {
+            const password = document.getElementById('pw').value;
+            let message = '';
+            let valid = true;
+
+            // 檢查最少8位
+            if (password.length < 8) {
+                message += '密碼最少需要8位。<br>';
+                valid = false;
+            }
+            // 檢查至少1位數字
+            if (!/\d/.test(password)) {
+                message += '密碼至少需要1位數字。<br>';
+                valid = false;
+            }
+            // 檢查至少1個特殊符號
+            if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+                message += '密碼至少需要1個特殊符號。<br>';
+                valid = false;
+            }
+
+            document.getElementById('message').innerHTML = message;
+            document.getElementById('message').className = valid ? 'message valid' : 'message';
         });
         
         selectReason.addEventListener('change',updateFields);
