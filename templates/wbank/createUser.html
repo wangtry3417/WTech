@@ -161,8 +161,8 @@ input:checked + .slider:before {
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 <label>你的名字：</label>
                 <input type="text" name="fname" placeholder="全名" required>
-                <label>你的身份證或證件號碼：</label>
-                <input type="text" name="id" placeholder="身份證及證件號碼" required>
+                <label>護照號碼：</label>
+                <input type="text" name="id" placeholder="護照號碼" required>
                 <label>用戶名稱：</label>
                 <input type="text" name="user" placeholder="用戶名稱" required>
                 <label>密碼：</label>
@@ -193,6 +193,8 @@ input:checked + .slider:before {
 1. 使用者必須年滿18歲，若未滿18歲，請先取得監護人同意。
 2. 使用者需自行承擔所有交易風險。
 3. 本銀行保留隨時變更條款的權利，請留意我們網站或通知上的更新資訊。
+3. 使用者確保不是信貸記錄很差（接近破產或已破產）的人士。
+4. 本銀行只服務香港、台灣、其他外國地方。
 
 若您的帳戶出現異常情況，WBank有權凍結或停止您的帳戶，並可能清空帳戶資金。我們保留這項權利以確保平台的安全及遵守法律法規。
 
@@ -210,7 +212,7 @@ input:checked + .slider:before {
             <div class="step" id="step4">
                 <h3>確認資料</h3>
                 <p><strong>名字：</strong><span id="confirmName"></span></p>
-                <p><strong>身份證號碼：</strong><span id="confirmId"></span></p>
+                <p><strong>護照號碼：</strong><span id="confirmId"></span></p>
                 <p><strong>用戶名稱：</strong><span id="confirmUser"></span></p>
                 <button type="submit" id="submitBtn" class="button">提交</button>
                 <button type="button" id="prevBtn4" class="button">上一步</button>
