@@ -266,7 +266,7 @@ class wbankkyc(db.Model):
     address = db.Column(db.String(255), nullable=False)
     career = db.Column(db.String(120), nullable=False)
     username = db.Column(db.String(64), db.ForeignKey('wbankwallet.username'), nullable=False)
-    pp_image = db.Column(db.String(255), nullable=True)
+    pp_image = db.Column(db.Text, nullable=True)
     @auth.login_required
     def is_accessible(self):
         return True  # 只要通過認證，就可以訪問
