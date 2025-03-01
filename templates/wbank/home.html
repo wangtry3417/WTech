@@ -222,6 +222,16 @@
         datePlace.innerHTML = differenceInDays;
         // Count user
         let userCount = document.getElementById("userCount");
+        let uc = {{ count | length }};
+        let count = 0;
+        const interval = setInterval(() => {
+                if (count < uc) {
+                    count++;
+                    userCount.textContent = count;
+                } else {
+                    clearInterval(interval);
+                }
+            }, 50); // 每50毫秒增加一次
     </script>
 
 </body>
