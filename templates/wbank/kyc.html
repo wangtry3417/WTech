@@ -227,7 +227,7 @@
                     let frender = new FileReader();
                     frender.readAsDataURL(fileInput.files[0]);
                     frender.onload = () => {
-                        sessionStage.ppImage = freader.result;
+                        sessionStage.ppImage = frender.result;
                     }
                     // sessionStage.photo = fileInput.files[0]; // 儲存照片
                 } else if (currentStep === 2) {
