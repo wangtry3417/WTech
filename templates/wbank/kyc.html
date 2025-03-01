@@ -230,6 +230,7 @@
                         const img = new Image();
                         img.src = frender.result;
                          img.onload = () => {
+                             alert("圖片壓縮中");
                             const canvas = document.createElement('canvas');
                             const ctx = canvas.getContext('2d');
                             const scale = Math.min(800 / img.width, 1);
@@ -237,9 +238,9 @@
                             canvas.height = img.height * scale;
                              ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                           sessionStage.ppImage = canvas.toDataURL('image/jpeg', 0.7);
+                           alert("圖片壓縮完成");
                          }
                     }
-                    return;
                     // sessionStage.photo = fileInput.files[0]; // 儲存照片
                 } else if (currentStep === 2) {
                     sessionStage.address = document.getElementById('address').value;
