@@ -155,7 +155,7 @@
                             <br>
                             <b><p>WBank系統將會更新為2.5版本，其後wcoins中心化系統及頁面將不會進行大更新。</p></b>
                             <br>
-                            <b><p>WBank將會在 <span id="date"></span> 天 / <span id="hrs"></span>小時後轉為維修模式。</p></b>
+                            <b><p>WBank將會在 <span id="date"></span> 天</p></b>
                         </div>
                     </div>
                 </div>
@@ -181,13 +181,8 @@
 
             <div class="feature">
                 <div>
-                    <strong>開源系統</strong>
-                    <p>如果有Docker的話，可以複製(git clone)。
-                        <br>
-                        可以用一下命令構建: <br>
-                        git clone https://github.com/wangtry3417/WTech.git
-                        <br>
-                        docker-compose up --build
+                    <strong>目前用戶</strong>
+                    <p>目前大概有 <span id="userCount"></span> 個成功開戶
                     </p>
                 </div>
             </div>
@@ -224,9 +219,9 @@
         let dateTaget = new Date("2025-03-04T8:00:00");
         const differenceInMilliseconds = dateTaget - dateNow;
         const differenceInDays = Math.ceil(differenceInMilliseconds / (1000 * 60 * 60 * 24));
-        const differenceInHrs = Math.Floor((differenceInMilliseconds % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         datePlace.innerHTML = differenceInDays;
-        hrs.innerHTML = differenceInHrs;
+        // Count user
+        let userCount = document.getElementById("userCount");
     </script>
 
 </body>
