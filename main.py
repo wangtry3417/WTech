@@ -266,6 +266,7 @@ class wbankkyc(db.Model):
     address = db.Column(db.String(255), nullable=False)
     career = db.Column(db.String(120), nullable=False)
     username = db.Column(db.String(64), db.ForeignKey('wbankwallet.username'), nullable=False)
+    pp_image = db.Column(db.String(255), nullable=True)
     @auth.login_required
     def is_accessible(self):
         return True  # 只要通過認證，就可以訪問
@@ -365,7 +366,7 @@ class walletView(ModelView):
                 return redirect("/wbank/code.html")
 
 class kycView(ModelView):
-  column_list = ('username','fname','id_number','address','career')
+  column_list = ('username','fname','id_number','address','career','pp_image')
   column_searchable_list = ('fname', 'id_number')
   form_args = {
     'username': {
@@ -383,6 +384,9 @@ class kycView(ModelView):
     'career' : {
       'validators' : [DataRequired()],
     },
+    'pp_image' : {
+      'validators' : [DataRequired()]
+    }
   }
   column_display_pk=True
   edit_modal=True
@@ -391,7 +395,8 @@ class kycView(ModelView):
         'fname': '全名',
         'id_number': '身份證或證件號碼',
         'address': '地址',
-        'career':'職業'
+        'career':'職業',
+        'pp_image':'護照b64Code'
     }
   def is_accessible(self):
     return (
@@ -2629,9 +2634,10 @@ def wbank_kyc_verify():
     address = request.form.get("address")
     career = request.form.get("career")
     email = request.form.get("email")
+    ppImage = request.form.get("ppImage")
 
-    if not all([user, id_number, fname, address, career]):
-        return f"所有字段都必須填寫 : {user} | {id_number} | {fname} | {address} | {career}"
+    if not all([user, id_number, fname, address, career, ppImage]):
+        return f"所有字段都必須填寫 : {user} | {id_number} | {fname} | {address} | {career} || {ppImage}"
 
     # Create a new KYC record
     new_kyc = wbankkyc(
@@ -2639,7 +2645,8 @@ def wbank_kyc_verify():
         id_number=id_number,
         address=address,
         career=career,
-        username=user
+        username=user,
+        pp_image=ppImage
     )
     
     db.session.add(new_kyc)
