@@ -227,7 +227,6 @@
                     let frender = new FileReader();
                     frender.readAsDataURL(fileInput.files[0]);
                     frender.onload = () => {
-                        progressBar.style.display="block";
                         const img = new Image();
                         img.src = frender.result;
                          img.onload = () => {
@@ -238,7 +237,6 @@
                             canvas.height = img.height * scale;
                              ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                           sessionStage.ppImage = canvas.toDataURL('image/jpeg', 0.7);
-                           progressBar.style.display="none";
                          }
                     }
                     return;
