@@ -819,10 +819,10 @@ function changeBGColor() {
 }
 let portfolio = JSON.parse(localStorage.getItem('portfolio')) || [];
 const stockPrices = {
-    "WBank內銀股": 80.98,
-    "泓國綜合指數": 22.34,
+    "WBank內銀股": 150.67,
+    "泓國綜合指數": 30.67,
     "經發集團": 15.60,
-    "WTC/HKD": 55.67,
+    "WTC/HKD": 76.88,
     "BEn-stock": 0.22
 };
 
@@ -1271,6 +1271,7 @@ function sellStock(stockSymbol) {
         // 離開頻道
         document.getElementById("exit-button").onclick = function() {
             Chatmodal.style.display = "none"; // 隱藏 chat-modal
+            chatMessages.innetHTML = "";
             socket.emit('leaveChat', { username, room_number: chatRoom });
         }
 
