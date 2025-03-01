@@ -120,7 +120,7 @@
             <label for="phone">電話號碼</label>
             <input type="tel" id="phone" name="phone" required>
 
-            <label for="id">身份證號碼</label>
+            <label for="id">護照號碼</label>
             <input type="text" id="id" name="id" required>
 
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
@@ -128,8 +128,8 @@
     </div>
 
     <div class="step" id="step2">
-        <h2>第二步：身份證</h2>
-        <p>請上傳您的身份證照片。</p>
+        <h2>第二步：護照</h2>
+        <p>請上傳您的護照照片。（資料頁便可）</p>
         <input type="file" id="idCardUpload" accept="image/*" required>
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     </div>
@@ -221,7 +221,7 @@
                 } else if (currentStep === 1) {
                     const fileInput = document.getElementById('idCardUpload');
                     if (!fileInput.files.length) {
-                        alert('請上傳身份證照片');
+                        alert('請上傳護照照片');
                         return;
                     }
                     sessionStage.photo = fileInput.files[0]; // 儲存照片
