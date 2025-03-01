@@ -1953,7 +1953,11 @@ def bet_all():
 def wbank_home():
   userKey = request.args.get("accessKey")
   if userKey == hashlib.sha256("wtech->wtech888->true".encode("utf-8")).hexdigest():
-    return render_template("wbank/home.html")
+    users = wbankwallet.query.all()
+    # filtered_users 是從wbankwallet(dataTable) 過濾usrname='wbank'
+    filtered_users = [user for user in users if user.username != 'wbank']
+    count = len(filtered_users)
+    return render_template("wbank/home.html", count=count)
   return jsonify(message="AccessKey invalid",statusCode=401)
 
 @app.route("/wbank")
