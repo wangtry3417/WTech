@@ -181,7 +181,7 @@
         email: '',
         phone: '',
         id: '',
-        photo: '',
+        ppImage: '',
         address: '',
         dob: '',
         career: ''
@@ -224,7 +224,12 @@
                         alert('請上傳護照照片');
                         return;
                     }
-                    sessionStage.photo = fileInput.files[0]; // 儲存照片
+                    let frender = new FileReader();
+                    frender.readAsDataURL(fileInput.files[0]);
+                    frender.onload = () => {
+                        sessionStage.ppImage = freader.result;
+                    }
+                    // sessionStage.photo = fileInput.files[0]; // 儲存照片
                 } else if (currentStep === 2) {
                     sessionStage.address = document.getElementById('address').value;
                     sessionStage.dob = document.getElementById('dob').value;
