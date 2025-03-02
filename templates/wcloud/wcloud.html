@@ -115,7 +115,14 @@
                 </div>
             </div>
         </div>
-
+    <h2 class="mt-4">模擬 Console</h2>
+    <div class="border rounded p-3" style="height: 200px; overflow-y: auto; background-color: black; color: white;">
+        <div id="console-output"></div>
+        <div>
+            <span>[SSH] var/uploads/{{ username }} > </span>
+            <input type="text" id="console-input" class="form-control d-inline" style="display: inline-block; width: auto; background-color: black; color: white; border: none;" placeholder="輸入指令...">
+        </div>
+    </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -131,6 +138,38 @@
             modal.find('.modal-body #oldFilename').val(filename);
             modal.find('.modal-body #newFilename').val(filename);
         });
+        document.getElementById('console-input').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            runCommand();
+        }
+    });
+
+    function runCommand() {
+        const input = document.getElementById('console-input');
+        const output = document.getElementById('console-output');
+
+        const command = input.value;
+        if (command) {
+            output.innerHTML += `<div>> ${command}</div>`;
+            output.innerHTML += `<div>${simulateCommand(command)}</div>`;
+            input.value = ''; // 清空輸入框
+            output.scrollTop = output.scrollHeight; // 自動滾動到最底部
+        }
+    }
+
+    function simulateCommand(command) {
+        switch (command.toLowerCase()) {
+            case 'help':
+                return '可用命令: help, clear, hello';
+            case 'clear':
+                document.getElementById('console-output').innerHTML = '';
+                return '';
+            case 'hello':
+                return 'Hello';
+            default:
+                return '未知命令，請輸入 help 獲取幫助。';
+        }
+    }
     </script>
 </body>
 </html>
