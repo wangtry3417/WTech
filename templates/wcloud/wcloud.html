@@ -51,6 +51,7 @@
                                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                 <button type="submit" class="btn btn-danger btn-sm">刪除</button>
                             </form>
+                            <button class="btn btn-success btn-sm" onclick="openModal('{{ file }}')">執行</button>
                         </div>
                     </li>
                     {% endfor %}
@@ -115,12 +116,37 @@
                 </div>
             </div>
         </div>
-    <h2 class="mt-4">模擬 Console</h2>
+    <h2 class="mt-4">Console</h2>
     <div class="border rounded p-3" style="height: 200px; overflow-y: auto; background-color: black; color: white;">
         <div id="console-output"></div>
         <div>
             <span>[SSH] var/uploads/{{ username }} > </span>
             <input type="text" id="console-input" class="form-control d-inline" style="display: inline-block; width: auto; background-color: black; color: white; border: none;" placeholder="輸入指令...">
+        </div>
+    </div>
+    <!-- 執行模態框 -->
+    <div class="modal" id="runModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">選擇語言</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>選擇執行語言:</p>
+                    <select id="language-select" class="form-control">
+                        <option value="python">Python/Py語言</option>
+                        <!-- 未來可能會添加更多語言選項 -->
+                    </select>
+                    <div id="console-output" class="border rounded p-2 mt-3" style="height: 100px; overflow-y: auto; background-color: black; color: white;"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="runFile()">Run</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                </div>
+            </div>
         </div>
     </div>
     </div>
@@ -169,6 +195,34 @@
             default:
                 return '未知命令，請輸入 help 獲取幫助。';
         }
+    }
+    // Run-code
+    function openModal(filename) {
+        $('#runModal').data('filename', filename).modal('show');
+    }
+
+    function runFile() {
+        const filename = $('#runModal').data('filename');
+        const language = $('#language-select').val();
+        const output = document.getElementById('console-output');
+
+        output.innerHTML = ''; // 清空之前的輸出
+
+        // 傳送請求給後端
+        fetch('/run_file', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ filename: filename, language: language })
+        })
+        .then(response => response.json())
+        .then(data => {
+            output.innerHTML += `<div>${data.output}</div>`; // 顯示執行結果
+        })
+        .catch(error => {
+            output.innerHTML += `<div>錯誤: ${error.message}</div>`;
+        });
     }
     </script>
 </body>
