@@ -27,7 +27,7 @@ def login():
     error = None
     if request.method == 'POST':
         if USERS.get(request.form['username']) == request.form['password']:
-            return redirect(url_for('wcloud_bp.wcloud')) # 登入成功後導向 /wcloud
+            return redirect("/wcloud") # 登入成功後導向 /wcloud
         error = 'Invalid credentials'
     return render_template('wcloud/login.html', error=error)
 
