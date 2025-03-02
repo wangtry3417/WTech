@@ -34,7 +34,8 @@ def login():
 @wcloud_bp.route('/') # 根路由設定為 /wcloud
 @login_required
 def wcloud():
-    return render_template('wcloud/wcloud.html') # 顯示雲端服務首頁
+    files = os.listdir(UPLOAD_FOLDER)
+    return render_template('wcloud/wcloud.html', files=files) # 顯示雲端服務首頁
 
 @wcloud_bp.route('/upload', methods=['POST'])
 @login_required
