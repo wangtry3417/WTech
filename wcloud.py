@@ -49,8 +49,10 @@ def login():
 @login_required
 def wcloud():
     username = session["wcloudUSERNAME"]
-    files = os.listdir(UPLOAD_FOLDER)
-    return render_template('wcloud/wcloud.html', files=files, username=username) # 顯示雲端服務首頁
+    if session["userUploadFolder"]:
+      files = os.listdir(session["userUploadFolder"])
+      return render_template('wcloud/wcloud.html', files=files, username=username) # 顯示雲端服務首頁
+    return redirect("/wcloud/login")
 
 @wcloud_bp.route("/getkey")
 def wcloud_getKey():
