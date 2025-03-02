@@ -20,7 +20,7 @@ def login_required(func):
     def wrapper(*args, **kwargs):
         auth = request.authorization
         if not auth or not USERS.get(auth.username) == auth.password:
-            return redirect(url_for('login'))
+            return redirect(url_for('wcloud_bp.login'))
         return func(*args, **kwargs)
     wrapper.__name__ = func.__name__
     return wrapper
@@ -30,7 +30,7 @@ def login():
     error = None
     if request.method == 'POST':
         if USERS.get(request.form['username']) == request.form['password']:
-            return redirect(url_for('wcloud')) # 登入成功後導向 /wcloud
+            return redirect(url_for('wcloud_bp.wcloud')) # 登入成功後導向 /wcloud
         error = 'Invalid credentials'
     return render_template('wcloud/login.html', error=error)
 
@@ -50,7 +50,7 @@ def upload_file():
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename) # 確保檔案名稱安全
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        return redirect(url_for('wcloud')) # 上傳成功後重新導向 /wcloud 首頁
+        return redirect(url_for('wcloud_bp.wcloud')) # 上傳成功後重新導向 /wcloud 首頁
     return 'Allowed file types are txt, pdf, png, jpg, jpeg, gif'
 
 @wcloud_bp.route('/download/<filename>')
