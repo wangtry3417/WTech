@@ -1,6 +1,7 @@
-from flask import Blueprint, request, redirect, url_for, send_from_directory, render_template
+from flask import Blueprint, request, redirect, url_for, send_from_directory, render_template, session
 import os
 from werkzeug.utils import secure_filename
+from hashlib import sha256
 
 wcloud_bp = Blueprint('wcloud_bp', __name__, template_folder='templates/wcloud')
 
@@ -10,7 +11,12 @@ ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'py', 'js'} # �
 os.makedirs(UPLOAD_FOLDER, exist_ok=True) # 確保目錄存在
 
 # 簡易使用者帳號密碼 (請替換成更安全的驗證方式在實際應用中)
-USERS = {'wtech': 'Abcd1234!'}
+USERS = {
+  "allowUser":{
+    "wtechProduct11202":sha256("Asd1230329#%299/").hexdigest(),
+    "wtechProduct10292":sha256("Asiiw10(/$88288)").hexdigest()
+  }
+}
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -25,8 +31,11 @@ def login_required(func):
 @wcloud_bp.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
+    if not session["wcloudUSERNAME"]:
+        session["wcloudUSERNAME"] = None
     if request.method == 'POST':
-        if USERS.get(request.form['username']) == request.form['password']:
+        if USERS["allowUser"].get(request.form['username']) == request.form['password']:
+            session["wcloudUSERNAME"] = request.form['username']
             return redirect("/wcloud") # 登入成功後導向 /wcloud
         error = 'Invalid credentials'
     return render_template('wcloud/login.html', error=error)
@@ -34,8 +43,11 @@ def login():
 @wcloud_bp.route('/') # 根路由設定為 /wcloud
 @login_required
 def wcloud():
+    if not session["wcloudUSERNAME"] or session["wcloudUSERNAME"] == None:
+        return redirect("/wcloud/login")
+    username = session["wcloudUSERNAME"]
     files = os.listdir(UPLOAD_FOLDER)
-    return render_template('wcloud/wcloud.html', files=files) # 顯示雲端服務首頁
+    return render_template('wcloud/wcloud.html', files=files, username=username) # 顯示雲端服務首頁
 
 @wcloud_bp.route('/upload', methods=['POST'])
 @login_required
