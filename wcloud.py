@@ -60,6 +60,3 @@ def download_file(filename):
 def list_files():
     files = os.listdir(UPLOAD_FOLDER)
     return redirect("/wcloud")
-
-if __name__ == '__main__':
-    app.run(debug=True) # 開啟 debug 模式方便開發，部署時需關閉
