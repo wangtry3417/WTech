@@ -192,7 +192,20 @@
             case 'hello':
                 return 'Hello';
             default:
-                return '未知命令，請輸入 help 獲取幫助。';
+                fetch('/run_cmds', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ filename: filename, language: language })
+        })
+        .then(response => response.json())
+        .then(data => {
+            return `<div>${data.output}</div>`; // 顯示執行結果
+        })
+        .catch(error => {
+            return `<div>錯誤: ${error.message}</div>`;
+        });
         }
     }
     // Run-code
