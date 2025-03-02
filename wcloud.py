@@ -86,6 +86,33 @@ def download_file(filename):
       return send_from_directory(session["userUploadFolder"], filename)
     return redirect("/wcloud/login")
 
+@wcloud_bp.route('/rename', methods=['POST'])
+@login_required
+def rename_file():
+    old_filename = request.form['old_filename']
+    new_filename = request.form['new_filename']
+    
+    if session["userUploadFolder"]:
+        old_file_path = os.path.join(session["userUploadFolder"], old_filename)
+        new_file_path = os.path.join(session["userUploadFolder"], secure_filename(new_filename))
+        
+        if os.path.exists(old_file_path):
+            os.rename(old_file_path, new_file_path)
+            return redirect(url_for('wcloud_bp.wcloud'))  # 重命名成功後重新導向
+        return 'File not found', 404
+    return redirect("/wcloud/login")
+
+@wcloud_bp.route('/delete/<filename>', methods=['POST'])
+@login_required
+def delete_file(filename):
+    if session["userUploadFolder"]:
+        file_path = os.path.join(session["userUploadFolder"], filename)
+        if os.path.exists(file_path):
+            os.remove(file_path)
+            return redirect(url_for('wcloud_bp.wcloud'))  # 刪除成功後重新導向
+        return 'File not found', 404
+    return redirect("/wcloud/login")
+
 @wcloud_bp.route('/files')
 @login_required
 def list_files():
