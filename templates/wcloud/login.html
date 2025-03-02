@@ -11,7 +11,7 @@
               <div class="alert alert-danger" role="alert"> <strong>錯誤：</strong> {{ error }}
               </div>
               {% endif %}
-              <form method="post">
+              <form action="/wcloud/login" method="post">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <div class="form-group"> <label for="username">使用者名稱</label>
                   <input type="text" class="form-control" id="username" name="username" required> </div>
