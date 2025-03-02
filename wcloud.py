@@ -62,7 +62,7 @@ def download_file(filename):
 @login_required
 def list_files():
     files = os.listdir(app.config['UPLOAD_FOLDER'])
-    return render_template('wcloud/files.html', files=files)
+    return render_template('wcloud/wcloud.html', files=files)
 
 if __name__ == '__main__':
     app.run(debug=True) # 開啟 debug 模式方便開發，部署時需關閉
