@@ -7,7 +7,6 @@ wcloud_bp = Blueprint('wcloud_bp', __name__, template_folder='templates/wcloud')
 # 設定檔案上傳目錄
 UPLOAD_FOLDER = '/'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'py', 'js'} # 允許上傳的檔案類型
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 os.makedirs(UPLOAD_FOLDER, exist_ok=True) # 確保目錄存在
 
 # 簡易使用者帳號密碼 (請替換成更安全的驗證方式在實際應用中)
