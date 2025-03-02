@@ -69,6 +69,8 @@ def upload_file():
         return 'No selected file'
     if file and allowed_file(file.filename):
         if session["userUploadFolder"]:
+          if not os.path.exists(usession["userUploadFolder"]):
+            os.makedirs(session["userUploadFolder"])
           filename = secure_filename(file.filename) # 確保檔案名稱安全
           file.save(os.path.join(session["userUploadFolder"], filename))
           return redirect(url_for('wcloud_bp.wcloud')) # 上傳成功後重新導向 /wcloud 首頁
