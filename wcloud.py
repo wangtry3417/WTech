@@ -1,4 +1,3 @@
-from main import app
 from flask import Blueprint, request, redirect, url_for, send_from_directory, render_template
 import os
 from werkzeug.utils import secure_filename
