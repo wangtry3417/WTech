@@ -77,6 +77,9 @@ app.config['OAUTH_CREDENTIALS'] = {
     'client_secret': 'Wt0001'  # 你的 OAuth 應用程式密鑰
 }
 
+UPLOAD_FOLDER = '/'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 app.register_blueprint(wcloud_bp, url_prefix='/wcloud') # 註冊 Blueprint 並設定 URL 前綴
 
 QRcode(app)
