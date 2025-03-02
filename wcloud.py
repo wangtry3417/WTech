@@ -1,7 +1,9 @@
 from main import app
-from flask import request, redirect, url_for, send_from_directory, render_template
+from flask import Blueprint, request, redirect, url_for, send_from_directory, render_template
 import os
 from werkzeug.utils import secure_filename
+
+wcloud_bp = Blueprint('wcloud_bp', __name__, template_folder='templates/wcloud')
 
 # 設定檔案上傳目錄
 UPLOAD_FOLDER = '/'
@@ -25,7 +27,7 @@ def login_required(func):
     wrapper.__name__ = func.__name__
     return wrapper
 
-@app.route('/wcloud/login', methods=['GET', 'POST'])
+@wcloud_bp.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
     if request.method == 'POST':
@@ -34,12 +36,12 @@ def login():
         error = 'Invalid credentials'
     return render_template('wcloud/login.html', error=error)
 
-@app.route('/wcloud') # 根路由設定為 /wcloud
+@wcloud_bp.route('/') # 根路由設定為 /wcloud
 @login_required
 def wcloud():
     return render_template('wcloud/wcloud.html') # 顯示雲端服務首頁
 
-@app.route('/wcloud/upload', methods=['POST'])
+@wcloud_bp.route('/upload', methods=['POST'])
 @login_required
 def upload_file():
     if 'file' not in request.files:
@@ -53,16 +55,16 @@ def upload_file():
         return redirect(url_for('wcloud')) # 上傳成功後重新導向 /wcloud 首頁
     return 'Allowed file types are txt, pdf, png, jpg, jpeg, gif'
 
-@app.route('/wcloud/download/<filename>')
+@wcloud_bp.route('/download/<filename>')
 @login_required
 def download_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
-@app.route('/wcloud/files')
+@wcloud_bp.route('/files')
 @login_required
 def list_files():
     files = os.listdir(app.config['UPLOAD_FOLDER'])
-    return render_template('wcloud/wcloud.html', files=files)
+    return redirect("/wcloud")
 
 if __name__ == '__main__':
     app.run(debug=True) # 開啟 debug 模式方便開發，部署時需關閉
