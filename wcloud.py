@@ -69,7 +69,7 @@ def upload_file():
         return 'No selected file'
     if file and allowed_file(file.filename):
         if session["userUploadFolder"]:
-          if not os.path.exists(usession["userUploadFolder"]):
+          if not os.path.exists(session["userUploadFolder"]):
             os.makedirs(session["userUploadFolder"])
           filename = secure_filename(file.filename) # 確保檔案名稱安全
           file.save(os.path.join(session["userUploadFolder"], filename))
