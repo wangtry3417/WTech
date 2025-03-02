@@ -96,10 +96,14 @@ def rename_file():
         old_file_path = os.path.join(session["userUploadFolder"], old_filename)
         new_file_path = os.path.join(session["userUploadFolder"], secure_filename(new_filename))
         
-        if os.path.exists(old_file_path):
-            os.rename(old_file_path, new_file_path)
-            return redirect(url_for('wcloud_bp.wcloud'))  # 重命名成功後重新導向
-        return 'File not found', 404
+        # 檢查舊檔案是否存在且是檔案
+        if os.path.isfile(old_file_path):
+            # 檢查新檔案名稱是否已存在
+            if not os.path.exists(new_file_path):
+                os.rename(old_file_path, new_file_path)
+                return redirect(url_for('wcloud_bp.wcloud'))  # 重命名成功後重新導向
+            return 'New filename already exists', 400
+        return 'File not found or is a directory', 404
     return redirect("/wcloud/login")
 
 @wcloud_bp.route('/delete/<filename>', methods=['POST'])
