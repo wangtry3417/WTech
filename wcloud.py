@@ -51,6 +51,7 @@ def wcloud():
 def wcloud_getKey():
   pid = request.args.get("pid")
   if not pid or pid == None:
+    pid = str(pid)
     return USERS["allowUser"].get(pid)
   return "Key not found", 400
 
