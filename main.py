@@ -3359,5 +3359,3 @@ thread1.join()
 thread2.join()
 thread3.join()
 thread4.join()
-
-__all__ = ["app"]
