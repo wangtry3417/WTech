@@ -13,8 +13,8 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True) # 確保目錄存在
 # 簡易使用者帳號密碼 (請替換成更安全的驗證方式在實際應用中)
 USERS = {
   "allowUser":{
-    "wtechProduct11202":sha256("Asd1230329#%299/").hexdigest(),
-    "wtechProduct10292":sha256("Asiiw10(/$88288)").hexdigest()
+    "wtechProduct11202":sha256("Asd1230329#%299/".encode("utf-8")).hexdigest(),
+    "wtechProduct10292":sha256(b"Asiiw10(/$88288)".encode("utf-8")).hexdigest()
   }
 }
 
