@@ -1,4 +1,4 @@
-from flask import Blueprint, request, redirect, url_for, send_from_directory, render_template, session
+from flask import Blueprint, request, redirect, url_for, send_from_directory, render_template, session, jsonify
 import os
 from werkzeug.utils import secure_filename
 from hashlib import sha256
@@ -51,7 +51,7 @@ def wcloud():
 def wcloud_getKey():
   pid = request.args.get("pid")
   if pid:
-    return USERS["allowUser"].get(pid)
+    return jsonify(code=USERS["allowUser"].get(pid))
   return "Key not found", 400
 
 @wcloud_bp.route('/upload', methods=['POST'])
