@@ -36,6 +36,11 @@ def login():
     if request.method == 'POST':
         if USERS["allowUser"].get(request.form['username']) == request.form['password']:
             session["wcloudUSERNAME"] = request.form['username']
+            user_upload_folder = os.path.join(UPLOAD_FOLDER, session["wcloudUSERNAME"])
+            session["userUploadFolder"] = user_upload_folder
+            # 如果需要，可以在這裡創建該文件夾
+            if not os.path.exists(user_upload_folder):
+                os.makedirs(user_upload_folder)
             return redirect("/wcloud") # 登入成功後導向 /wcloud
         error = 'Invalid credentials'
     return render_template('wcloud/login.html', error=error)
@@ -63,8 +68,9 @@ def upload_file():
     if file.filename == '':
         return 'No selected file'
     if file and allowed_file(file.filename):
-        filename = secure_filename(file.filename) # 確保檔案名稱安全
-        file.save(os.path.join(UPLOAD_FOLDER, filename))
+        if session["userUploadFolder"]:
+          filename = secure_filename(file.filename) # 確保檔案名稱安全
+          file.save(os.path.join(session["userUploadFolder"], filename))
         return redirect(url_for('wcloud_bp.wcloud')) # 上傳成功後重新導向 /wcloud 首頁
     return 'Allowed file types are txt, pdf, png, jpg, jpeg, gif, py, js'
 
