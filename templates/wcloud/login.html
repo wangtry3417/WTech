@@ -13,10 +13,10 @@
               {% endif %}
               <form action="/wcloud/login" method="post">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                <div class="form-group"> <label for="username">使用者名稱</label>
+                <div class="form-group"> <label for="username">wtech產品名稱 (ProductID)</label>
                   <input type="text" class="form-control" id="username" name="username" required> </div>
                 <div class="form-group">
-                  <label for="password">密碼</label>
+                  <label for="password">產品密鑰 (ProductSercet)</label>
                   <input type="password" class="form-control" id="password" name="password" required>
                 </div>
                 <div class="text-center"> <button type="submit" class="btn btn-primary">登入</button> </div>
