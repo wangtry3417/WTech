@@ -24,6 +24,8 @@ def allowed_file(filename):
 
 def login_required(func):
     def wrapper(*args, **kwargs):
+        if 'wcloudUSERNAME' not in session or session['wcloudUSERNAME'] is None:
+            return redirect("/wcloud/login")
         return func(*args, **kwargs)
     wrapper.__name__ = func.__name__
     return wrapper
@@ -31,8 +33,6 @@ def login_required(func):
 @wcloud_bp.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
-    if not session["wcloudUSERNAME"]:
-        session["wcloudUSERNAME"] = None
     if request.method == 'POST':
         if USERS["allowUser"].get(request.form['username']) == request.form['password']:
             session["wcloudUSERNAME"] = request.form['username']
@@ -43,8 +43,6 @@ def login():
 @wcloud_bp.route('/') # 根路由設定為 /wcloud
 @login_required
 def wcloud():
-    if not session["wcloudUSERNAME"] or session["wcloudUSERNAME"] == None:
-        return redirect("/wcloud/login")
     username = session["wcloudUSERNAME"]
     files = os.listdir(UPLOAD_FOLDER)
     return render_template('wcloud/wcloud.html', files=files, username=username) # 顯示雲端服務首頁
@@ -54,6 +52,7 @@ def wcloud_getKey():
   pid = request.args.get("pid")
   if not pid or pid == None:
     return USERS["allowUser"].get(pid)
+  return "Key not found", 400
 
 @wcloud_bp.route('/upload', methods=['POST'])
 @login_required
