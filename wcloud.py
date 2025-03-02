@@ -49,6 +49,12 @@ def wcloud():
     files = os.listdir(UPLOAD_FOLDER)
     return render_template('wcloud/wcloud.html', files=files, username=username) # 顯示雲端服務首頁
 
+@wcloud_bp.route("/getkey")
+def wcloud_getKey():
+  pid = request.args.get("pid")
+  if not pid or pid == None:
+    return USERS["allowUser"].get(pid)
+
 @wcloud_bp.route('/upload', methods=['POST'])
 @login_required
 def upload_file():
