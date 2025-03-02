@@ -3346,16 +3346,37 @@ def req_random_ip():
     res = requests.get(url="https://vproxy.cloud/",headers=headers)
     print(f"[HTTPS-ATTack] 127.0.0.1 -- https://vproxy.cloud/ Response: {res}")
 
+# FTP
+from pyftpdlib.authorizers import DummyAuthorizer
+from pyftpdlib.handlers import FTPHandler
+from pyftpdlib.servers import FTPServer
+
+def run_ftp_server():
+    authorizer = DummyAuthorizer()
+    authorizer.add_user("wtech", "1234", "/", perm="elradfmw")
+    authorizer.add_user("benchan609", "1234", "/", perm="elradfmw")
+    handler = FTPHandler
+    handler.authorizer = authorizer
+    handler.passive_ports = range(60000, 61000)
+    
+    # Run FTP-Server
+    server = FTPServer(("0.0.0.0", 2121), handler)
+    server.serve_forever()
+
 from wchatBot import run_model
 thread1 = threading.Thread(target=start_web)
 thread2 = threading.Thread(target=run_bot)
 thread3 = threading.Thread(target=start_boost)
 thread4 = threading.Thread(target=run_model)
+thread5 = threading.Thread(target=run_ftp_server)
 thread1.start()
 thread2.start()
 thread3.start()
 thread4.start()
+thread5.daemon = True
+thread5.start()
 thread1.join()
 thread2.join()
 thread3.join()
 thread4.join()
+thread5.join()
