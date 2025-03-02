@@ -14,7 +14,7 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True) # 確保目錄存在
 USERS = {
   "allowUser":{
     "wtechProduct11202":sha256("Asd1230329#%299/".encode("utf-8")).hexdigest(),
-    "wtechProduct10292":sha256(b"Asiiw10(/$88288)".encode("utf-8")).hexdigest()
+    "wtechProduct10292":sha256("Asiiw10(/$88288)".encode("utf-8")).hexdigest()
   }
 }
 
