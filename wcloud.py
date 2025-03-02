@@ -53,12 +53,12 @@ def upload_file():
 @wcloud_bp.route('/download/<filename>')
 @login_required
 def download_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+    return send_from_directory("/", filename)
 
 @wcloud_bp.route('/files')
 @login_required
 def list_files():
-    files = os.listdir(app.config['UPLOAD_FOLDER'])
+    files = os.listdir("/")
     return redirect("/wcloud")
 
 if __name__ == '__main__':
