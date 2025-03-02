@@ -51,7 +51,8 @@ def wcloud():
 def wcloud_getKey():
   pid = request.args.get("pid")
   if pid:
-    return str(USERS["allowUser"].get(pid))
+    pid = str(pid).encode("utf-8").decode("utf-8")
+    return USERS["allowUser"].get(pid)
   return "Key not found", 400
 
 @wcloud_bp.route('/upload', methods=['POST'])
