@@ -18,9 +18,6 @@ def allowed_file(filename):
 
 def login_required(func):
     def wrapper(*args, **kwargs):
-        auth = request.authorization
-        if not auth or not USERS.get(auth.username) == auth.password:
-            return redirect(url_for('wcloud_bp.login'))
         return func(*args, **kwargs)
     wrapper.__name__ = func.__name__
     return wrapper
