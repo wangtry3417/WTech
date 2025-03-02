@@ -3373,7 +3373,6 @@ thread1.start()
 thread2.start()
 thread3.start()
 thread4.start()
-thread5.daemon = True
 thread5.start()
 thread1.join()
 thread2.join()
