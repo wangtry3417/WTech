@@ -117,6 +117,25 @@ def delete_file(filename):
         return 'File not found', 404
     return redirect("/wcloud/login")
 
+@wcloud_bp.route('/run_file', methods=['POST'])
+def run_file():
+    data = request.get_json()
+    filename = data['filename']
+    language = data['language']
+
+    output = ''
+    try:
+        if language == 'python':
+            # 使用 os.system 執行 Python 檔案並將輸出重定向到 output.txt
+            os.system(f'python {filename} > output.txt 2>&1')
+            with open('output.txt', 'r') as f:
+                output = f.read()
+        # 可根據需要添加其他語言的執行邏輯
+    except Exception as e:
+        output = str(e)
+
+    return jsonify({'output': output})
+
 @wcloud_bp.route('/files')
 @login_required
 def list_files():
