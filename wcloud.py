@@ -5,7 +5,7 @@ from werkzeug.utils import secure_filename
 wcloud_bp = Blueprint('wcloud_bp', __name__, template_folder='templates/wcloud')
 
 # 設定檔案上傳目錄
-UPLOAD_FOLDER = '/'
+UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'py', 'js'} # 允許上傳的檔案類型
 os.makedirs(UPLOAD_FOLDER, exist_ok=True) # 確保目錄存在
 
@@ -46,19 +46,19 @@ def upload_file():
         return 'No selected file'
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename) # 確保檔案名稱安全
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        file.save(os.path.join(UPLOAD_FOLDER, filename))
         return redirect(url_for('wcloud_bp.wcloud')) # 上傳成功後重新導向 /wcloud 首頁
     return 'Allowed file types are txt, pdf, png, jpg, jpeg, gif'
 
 @wcloud_bp.route('/download/<filename>')
 @login_required
 def download_file(filename):
-    return send_from_directory("/", filename)
+    return send_from_directory(UPLOAD_FOLDER, filename)
 
 @wcloud_bp.route('/files')
 @login_required
 def list_files():
-    files = os.listdir("/")
+    files = os.listdir(UPLOAD_FOLDER)
     return redirect("/wcloud")
 
 if __name__ == '__main__':
