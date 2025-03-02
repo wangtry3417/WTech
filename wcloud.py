@@ -136,6 +136,21 @@ def run_file():
 
     return jsonify({'output': output})
 
+@wcloud_bp.route('/run_cmds', methods=['POST'])
+def run_cmds():
+    data = request.get_json()
+    c = data['command']
+
+    output = ''
+    try:
+      os.system(f'{c} > output.txt 2>&1')
+      with open('output.txt', 'r') as f:
+        output = f.read()
+    except Exception as e:
+        output = str(e)
+
+    return jsonify({'output': output})
+
 @wcloud_bp.route('/files')
 @login_required
 def list_files():
