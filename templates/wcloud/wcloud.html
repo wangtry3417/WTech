@@ -197,7 +197,7 @@
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ filename: filename, language: language })
+            body: JSON.stringify({ command: command.toLowerCase() })
         })
         .then(response => response.json())
         .then(data => {
