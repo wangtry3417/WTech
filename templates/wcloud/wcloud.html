@@ -22,7 +22,11 @@
 
     <div class="container mt-4">
         <div class="jumbotron">
-            <h1 class="display-4">歡迎使用 WCloud 雲端服務！</h1>
+            {% if username %}
+            <h1 class="display-4">您好 {{username}} , 歡迎使用 WCloud 雲端服務！</h1>
+            {% else %}
+            <h1 class="display-4">您好 什麼人(ㄙㄢ ㄒㄧㄠ人) , 歡迎使用 WCloud 雲端服務！</h1>
+            {% endif %}
             <p class="lead">在這裡您可以安全地儲存和管理您的檔案。</p>
             <hr class="my-4">
             <p>開始將您的檔案和資料夾交給我們吧！</p>
