@@ -1,5 +1,6 @@
 from flask import Flask,render_template,jsonify,request,abort,url_for,redirect,make_response,send_file,flash,session,Response
 from flask_cors import CORS,cross_origin
+from wcloud import wcloud_bp # 導入 Blueprint
 from cryptography.fernet import Fernet
 import hashlib
 import os
@@ -75,6 +76,8 @@ app.config['OAUTH_CREDENTIALS'] = {
     'client_id': 'WC00001',  # 你的 OAuth 應用程式 ID
     'client_secret': 'Wt0001'  # 你的 OAuth 應用程式密鑰
 }
+
+app.register_blueprint(wcloud_bp, url_prefix='/wcloud') # 註冊 Blueprint 並設定 URL 前綴
 
 QRcode(app)
 
