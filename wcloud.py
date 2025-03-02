@@ -48,7 +48,7 @@ def upload_file():
         filename = secure_filename(file.filename) # 確保檔案名稱安全
         file.save(os.path.join(UPLOAD_FOLDER, filename))
         return redirect(url_for('wcloud_bp.wcloud')) # 上傳成功後重新導向 /wcloud 首頁
-    return 'Allowed file types are txt, pdf, png, jpg, jpeg, gif'
+    return 'Allowed file types are txt, pdf, png, jpg, jpeg, gif, py, js'
 
 @wcloud_bp.route('/download/<filename>')
 @login_required
