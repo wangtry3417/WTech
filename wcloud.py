@@ -13,8 +13,8 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True) # 確保目錄存在
 # 簡易使用者帳號密碼 (請替換成更安全的驗證方式在實際應用中)
 USERS = {
   "allowUser":{
-    "wtechProduct11202":sha256("Asd1230329#%299/".encode("utf-8")).hexdigest(),
-    "wtechProduct10292":sha256("Asiiw10(/$88288)".encode("utf-8")).hexdigest()
+    "wtechProduct11202":sha256("Asd1230329299".encode("utf-8")).hexdigest(),
+    "wtechProduct10292":sha256("Asiiw1088288".encode("utf-8")).hexdigest()
   }
 }
 
@@ -51,7 +51,6 @@ def wcloud():
 def wcloud_getKey():
   pid = request.args.get("pid")
   if pid:
-    pid = str(pid).encode("utf-8").decode("utf-8")
     return USERS["allowUser"].get(pid)
   return "Key not found", 400
 
