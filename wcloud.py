@@ -85,5 +85,7 @@ def download_file(filename):
 @wcloud_bp.route('/files')
 @login_required
 def list_files():
-    files = os.listdir(UPLOAD_FOLDER)
-    return redirect("/wcloud")
+    if session["userUploadFolder"]:
+      files = os.listdir(session["userUploadFolder"])
+      return redirect("/wcloud")
+    return redirect("/wcloud/login")
