@@ -7,14 +7,14 @@
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="{{ url_for('wcloud') }}">WCloud 服務</a>
+      <a class="navbar-brand" href="{{ url_for('wcloud_bp.wcloud') }}">WCloud 服務</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('list_files') }}">檔案列表</a>
+            <a class="nav-link" href="{{ url_for('wcloud_bp.list_files') }}">檔案列表</a>
           </li>
         </ul>
       </div>
@@ -51,7 +51,7 @@
       <ul class="list-group">
         {% for file in files %}
         <li class="list-group-item">
-          <i class="fas fa-file"></i> <a href="{{ url_for('download_file', filename=file) }}">{{ file }}</a>
+          <i class="fas fa-file"></i> <a href="{{ url_for('wcloud_bp.download_file', filename=file) }}">{{ file }}</a>
         </li>
         {% endfor %}
       </ul>
