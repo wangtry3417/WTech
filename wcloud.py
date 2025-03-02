@@ -71,13 +71,16 @@ def upload_file():
         if session["userUploadFolder"]:
           filename = secure_filename(file.filename) # 確保檔案名稱安全
           file.save(os.path.join(session["userUploadFolder"], filename))
-        return redirect(url_for('wcloud_bp.wcloud')) # 上傳成功後重新導向 /wcloud 首頁
+          return redirect(url_for('wcloud_bp.wcloud')) # 上傳成功後重新導向 /wcloud 首頁
+        return redirect("/wcloud/login")
     return 'Allowed file types are txt, pdf, png, jpg, jpeg, gif, py, js'
 
 @wcloud_bp.route('/download/<filename>')
 @login_required
 def download_file(filename):
-    return send_from_directory(UPLOAD_FOLDER, filename)
+    if session["userUploadFolder"]:
+      return send_from_directory(session["userUploadFolder"], filename)
+    return redirect("/wcloud/login")
 
 @wcloud_bp.route('/files')
 @login_required
