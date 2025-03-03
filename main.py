@@ -142,6 +142,11 @@ socketio.server.instrument(auth=True,namespace="/admin")
 CORS(app)
 #CORS(app, resources={r"/*": {"origins": "https://bc.wtechhk.xyz"}})
 
+@app.before_request
+def before_request():
+    if not hasattr(g, 'uploadTimes'):
+        g.uploadTimes = ["Ok", 0]  # 初始化 uploadTimes
+
 @app.after_request
 def add_cors_headers(response):
     response.headers['Access-Control-Allow-Origin'] = '*'
