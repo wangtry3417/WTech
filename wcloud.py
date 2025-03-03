@@ -39,6 +39,7 @@ def login():
             session["wcloudUSERNAME"] = request.form['username']
             user_upload_folder = os.path.join(UPLOAD_FOLDER, session["wcloudUSERNAME"])
             session["userUploadFolder"] = user_upload_folder
+            g.uploadTimes = ["Ok",0]
             if session["wcloudUSERNAME"] == "wtechProduct11202":
               g.uploadTimes = ["wtechProduct11202",20]
             elif session["wcloudUSERNAME"] == "wtechProduct10292":
