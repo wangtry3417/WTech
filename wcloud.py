@@ -83,7 +83,7 @@ def upload_file():
             os.makedirs(session["userUploadFolder"])
           if int(g.uploadTimes[1]) == 0:
             return redirect("/wcloud")
-          int(g.uploadTimes[1]) -= 0
+          g.uploadTimes[1] = int(g.uploadTimes[1]) - 1
           filename = secure_filename(file.filename) # 確保檔案名稱安全
           file.save(os.path.join(session["userUploadFolder"], filename))
           return redirect(url_for('wcloud_bp.wcloud')) # 上傳成功後重新導向 /wcloud 首頁
@@ -127,15 +127,15 @@ def delete_file(filename):
             if session["wcloudUSERNAME"] == "wtechProduct11202":
               if int(g.uploadTimes[1]) == 20:
                 pass
-              int(g.uploadTimes[1]) += 1
+              g.uploadTimes[1] = int(g.uploadTimes[1]) + 1
             elif session["wcloudUSERNAME"] == "wtechProduct10292":
               if int(g.uploadTimes[1]) == 5:
                 pass
-              int(g.uploadTimes[1]) += 1
+              g.uploadTimes[1] = int(g.uploadTimes[1]) + 1
             elif session["wcloudUSERNAME"] == "wtechProduct09819":
               if int(g.uploadTimes[1]) == 10:
                 pass
-              int(g.uploadTimes[1]) += 1
+              g.uploadTimes[1] = int(g.uploadTimes[1]) + 1
             return redirect(url_for('wcloud_bp.wcloud'))  # 刪除成功後重新導向
         return 'File not found', 404
     return redirect("/wcloud/login")
