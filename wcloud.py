@@ -1,4 +1,4 @@
-from flask import Blueprint, request, redirect, url_for, send_from_directory, render_template, session, jsonify
+from flask import Blueprint, request, redirect, url_for, send_from_directory, render_template, session, jsonify, g
 import os
 from werkzeug.utils import secure_filename
 from hashlib import sha256
@@ -14,7 +14,8 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True) # 確保目錄存在
 USERS = {
   "allowUser":{
     "wtechProduct11202":sha256("Asd1230329299".encode("utf-8")).hexdigest(),
-    "wtechProduct10292":sha256("Asiiw1088288".encode("utf-8")).hexdigest()
+    "wtechProduct10292":sha256("Asiiw1088288".encode("utf-8")).hexdigest(),
+    "wtechProduct09819":sha256("Asdoehsj101099".encode("utf-8")).hexdigest()
   }
 }
 
@@ -24,7 +25,7 @@ def allowed_file(filename):
 
 def login_required(func):
     def wrapper(*args, **kwargs):
-        if 'wcloudUSERNAME' not in session or session['wcloudUSERNAME'] is None:
+        if 'wcloudUSERNAME' not in session or session['wcloudUSERNAME'] is None and 'uploadTimes' not in g:
             return redirect("/wcloud/login")
         return func(*args, **kwargs)
     wrapper.__name__ = func.__name__
@@ -38,6 +39,12 @@ def login():
             session["wcloudUSERNAME"] = request.form['username']
             user_upload_folder = os.path.join(UPLOAD_FOLDER, session["wcloudUSERNAME"])
             session["userUploadFolder"] = user_upload_folder
+            if session["wcloudUSERNAME"] == "wtechProduct11202":
+              g.uploadTimes = ["wtechProduct11202",20]
+            elif session["wcloudUSERNAME"] == "wtechProduct10292":
+              g.uploadTimes = ["wtechProduct10292",5]
+            elif session["wcloudUSERNAME"] == "wtechProduct09819":
+              g.uploadTimes = ["wtechProduct09819",10]
             # 如果需要，可以在這裡創建該文件夾
             if not os.path.exists(user_upload_folder):
                 os.makedirs(user_upload_folder)
@@ -50,8 +57,9 @@ def login():
 def wcloud():
     username = session["wcloudUSERNAME"]
     if session["userUploadFolder"]:
+      count = int(g.uploadTimes[1])
       files = os.listdir(session["userUploadFolder"])
-      return render_template('wcloud/wcloud.html', files=files, username=username) # 顯示雲端服務首頁
+      return render_template('wcloud/wcloud.html', files=files, username=username, count=count) # 顯示雲端服務首頁
     return redirect("/wcloud/login")
 
 @wcloud_bp.route("/getkey")
@@ -73,6 +81,9 @@ def upload_file():
         if session["userUploadFolder"]:
           if not os.path.exists(session["userUploadFolder"]):
             os.makedirs(session["userUploadFolder"])
+          if int(g.uploadTimes[1]) == 0:
+            return redirect("/wcloud")
+          int(g.uploadTimes[1]) -= 0
           filename = secure_filename(file.filename) # 確保檔案名稱安全
           file.save(os.path.join(session["userUploadFolder"], filename))
           return redirect(url_for('wcloud_bp.wcloud')) # 上傳成功後重新導向 /wcloud 首頁
@@ -113,6 +124,18 @@ def delete_file(filename):
         file_path = os.path.join(session["userUploadFolder"], filename)
         if os.path.exists(file_path):
             os.remove(file_path)
+            if session["wcloudUSERNAME"] == "wtechProduct11202":
+              if int(g.uploadTimes[1]) == 20:
+                pass
+              int(g.uploadTimes[1]) += 1
+            elif session["wcloudUSERNAME"] == "wtechProduct10292":
+              if int(g.uploadTimes[1]) == 5:
+                pass
+              int(g.uploadTimes[1]) += 1
+            elif session["wcloudUSERNAME"] == "wtechProduct09819":
+              if int(g.uploadTimes[1]) == 10:
+                pass
+              int(g.uploadTimes[1]) += 1
             return redirect(url_for('wcloud_bp.wcloud'))  # 刪除成功後重新導向
         return 'File not found', 404
     return redirect("/wcloud/login")
