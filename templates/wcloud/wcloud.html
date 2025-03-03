@@ -31,9 +31,12 @@
             <hr class="my-4">
             <p>開始將您的檔案和資料夾交給我們吧！</p>
         </div>
-
+        {% if count %}
+              <div class="alert alert-info" role="alert"> 您有{{ count }}次次數可以上傳檔案!.
+              </div>
+        {% endif %}
         <div class="mb-3">
-            <button type="button" class="btn btn-success">新增資料夾</button>
+            <!-- button type="button" class="btn btn-success">新增資料夾</button> -->
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#uploadModal">上傳檔案</button>
         </div>
 
