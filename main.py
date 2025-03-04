@@ -2320,7 +2320,33 @@ def wbank_hash_transfer():
       db.session.add(wbankrecord(username=user,action=bl,time=local_time))
       db.session.commit()
       if users.email:
-        msg = MIMEText(f"""
+        if "w.gov" in str(reviewer):
+          if "w.gov/tax" in str(reviewer):
+            msg = MIMEText(f"""
+        {users.username} 您好,
+          剛剛有筆關於政府帳單:
+          轉帳人: {users.username} (即閣下),
+          收款單位：{reviewer} (稅務局)
+          金額: {amount},
+          交易編號: {hash1}
+        如閣下是知情者，可不用理會。
+        
+        ======電郵由自動程式發送，不用回覆======
+        """, "plain", "utf-8")
+          else:
+            msg = MIMEText(f"""
+        {users.username} 您好,
+          剛剛有筆關於政府帳單:
+          轉帳人: {users.username} (即閣下),
+          收款單位：{reviewer}
+          金額: {amount},
+          交易編號: {hash1}
+        如閣下是知情者，可不用理會。
+        
+        ======電郵由自動程式發送，不用回覆======
+        """, "plain", "utf-8")
+        else:
+          msg = MIMEText(f"""
         {users.username} 您好,
           剛剛有筆交易:
           轉帳人: {users.username} (即閣下),
