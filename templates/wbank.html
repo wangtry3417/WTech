@@ -401,7 +401,6 @@
           cpw.value = '';
         }
         password.addEventListener('input', function () {
-            const password = document.getElementById('pw').value;
             let message = '';
             let valid = true;
 
@@ -425,7 +424,6 @@
             document.getElementById('hint').className = valid ? 'message valid' : 'message';
         });
         cpw.addEventListener('input', function () {
-            const password = document.getElementById('pw').value;
             let message = '';
             let valid = true;
 
