@@ -278,6 +278,15 @@
             text-align: left;
             color: green;
         }
+        .hint {
+            color: red;
+            font-size: 0.9em;
+            margin-top: -5px;
+            margin-bottom: 10px;
+        }
+        .valid {
+            color: green;
+        }
     </style>
 </head>
 <body>
@@ -332,18 +341,21 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" action="/wbank/change/pw">
                         <div class="form-group">
-                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                            <!--<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>-->
                             <label for="name">用戶名</label>
                             <input type="text" class="form-control" id="name" name="user" required>
                         </div>
                         <div class="form-group">
                             <label for="password">新密碼</label>
-                           <input type="password" name="pw" id="password" placeholder="密碼" required>
+                           <input type="password" name="pw" id="pw" placeholder="密碼" required>
                         </div>
-                        <button type="submit" class="btn btn-success btn-block">提交!</button>
-                    </form>
+                        <div class="form-group">
+                            <label for="password">確認密碼</label>
+                           <input type="password" name="pw" id="cpw" placeholder="密碼" required>
+                        </div>
+                        <div id="hint" class="hint"></div>
+                        <button onclick="resetPw()" class="btn btn-success btn-block">提交!</button>
                 </div>
             </div>
         </div>
@@ -364,7 +376,7 @@
                             <label for="id">身分證或證件號碼:</label>
                             <input type="text" class="form-control" id="id" name="id" required>
                         </div>
-                        <button type="submit" class="btn btn-success btn-block">按此找回</button>
+                        <button class="btn btn-success btn-block">按此找回</button>
                     </form>
                 </div>
             </div>
@@ -388,6 +400,54 @@
           password.value = '';
           cpw.value = '';
         }
+        password.addEventListener('input', function () {
+            const password = document.getElementById('pw').value;
+            let message = '';
+            let valid = true;
+
+            // 檢查最少8位
+            if (password.length < 8) {
+                message += '密碼最少需要8位。<br>';
+                valid = false;
+            }
+            // 檢查至少1位數字
+            if (!/\d/.test(password)) {
+                message += '密碼至少需要1位數字。<br>';
+                valid = false;
+            }
+            // 檢查至少1個特殊符號
+            if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+                message += '密碼至少需要1個特殊符號。<br>';
+                valid = false;
+            }
+
+            document.getElementById('hint').innerHTML = message;
+            document.getElementById('hint').className = valid ? 'message valid' : 'message';
+        });
+        cpw.addEventListener('input', function () {
+            const password = document.getElementById('pw').value;
+            let message = '';
+            let valid = true;
+
+            // 檢查最少8位
+            if (password.length < 8) {
+                message += '密碼最少需要8位。<br>';
+                valid = false;
+            }
+            // 檢查至少1位數字
+            if (!/\d/.test(password)) {
+                message += '密碼至少需要1位數字。<br>';
+                valid = false;
+            }
+            // 檢查至少1個特殊符號
+            if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+                message += '密碼至少需要1個特殊符號。<br>';
+                valid = false;
+            }
+
+            document.getElementById('hint').innerHTML = message;
+            document.getElementById('hint').className = valid ? 'message valid' : 'message';
+        });
         function resetPw() {
           if (users.value == "" && password.value == "" && password.value == "") {
                 alert("請填入所需資料");
@@ -402,6 +462,7 @@
                 return;
           }
           var resetFormData = new FormData();
+                     resetFormData.append("csrf_token", "{{ csrf_token() }}");
                     resetFormData.append("user", users.value);
                     resetFormData.append("pw", password.value);
                     fetch("/wbank/change/pw", {
