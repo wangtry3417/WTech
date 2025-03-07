@@ -410,7 +410,7 @@ class kycView(ModelView):
         'pp_image':'護照b64Code'
     }  
   def _format_passport_image(view, ctx, model, name):
-    if model.ppImage:
+    if model.pp_image:
       return f"<img src={model.pp_image} style='width: 50px; height: 50px;' />"
     return "沒有護照圖片或翻譯失敗"
   column_formatters = {
