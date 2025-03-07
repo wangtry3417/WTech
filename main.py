@@ -374,7 +374,7 @@ class walletView(ModelView):
                 return jsonify({"msg":u"非管理人員不能訪問"})
             else:
                 # login
-                return redirect("/wbank/code.html")
+                return redirect("/wbank")
 
 class kycView(ModelView):
   column_list = ('username','fname','id_number','address','career','pp_image')
@@ -396,7 +396,7 @@ class kycView(ModelView):
       'validators' : [DataRequired()],
     },
     'pp_image' : {
-      'validators' : [DataRequired()]
+      'validators' : []
     }
   }
   column_display_pk=True
@@ -409,6 +409,13 @@ class kycView(ModelView):
         'career':'職業',
         'pp_image':'護照b64Code'
     }
+  column_formatters = {
+    'ppImage' : _format_passport_image
+  }
+  def _format_passport_image(view, ctx, model, name):
+    if model.ppImage:
+      return f"<img src={model.ppImage} style='width: 50px; height: 50px;' />"
+    return "沒有護照圖片或翻譯失敗"
   def is_accessible(self):
     return (
             current_user.is_active
@@ -423,7 +430,7 @@ class kycView(ModelView):
         if not self.is_accessible():
             if current_user.is_authenticated:
                 # permission denied
-                return jsonify({"msg":u"非管理人員不能訪問"})
+                return jsonify({"msg":"非管理人員不能訪問"})
             else:
                 # login
                 return redirect("/wbank")
@@ -2692,7 +2699,7 @@ def wbank_kyc_verify():
     user_data = wbankwallet.query.get(user)
     if user_data:
         user_data.verify = 'yes'
-        user_data.role = 'user'
+        user_data.role = 'pendingUser'
         user_data.email = email
         db.session.commit()
     else:
@@ -2810,6 +2817,9 @@ def wbank_client():
       return redirect("/admin/wbankkyc")
     if current_user.role == "staff":
       return redirect("/admin/wbankwallet")
+    if current_user.role == "pendingUser":
+      flash("請等2到3個工作天 等待審核","info")
+      return redirect("/wbank")
     if user_data:
         if user_data.verify == "no":
             return render_template("wbank/kyc.html",user=user)
