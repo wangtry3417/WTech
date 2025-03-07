@@ -343,8 +343,8 @@
                 <div class="modal-body">
                         <div class="form-group">
                             <!--<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>-->
-                            <label for="name">用戶名</label>
-                            <input type="text" class="form-control" id="name" name="user" required>
+                            <label for="uname">用戶名</label>
+                            <input type="text" class="form-control" id="uname" name="user" required>
                         </div>
                         <div class="form-group">
                             <label for="pw">新密碼</label>
@@ -391,7 +391,7 @@
     <script>
         //密碼UI部分
         const modal = document.getElementById('modal');
-        const users = document.getElementById('username');
+        const users = document.getElementById('uname');
         const password = document.getElementById('pw');
         const cpw = document.getElementById('cpw');
         function closeUI() {
@@ -452,7 +452,7 @@
             document.getElementById('hint').className = valid ? 'message valid' : 'message';
         });
         function resetPw() {
-          if (users.value == "" && password.value == "" && password.value == "") {
+          if (users.value == "" && password.value == "" && cpw.value == "") {
                 alert("請填入所需資料");
                 return;
           } else if (users.value == "" || password.value == "" || cpw.value == "") {
@@ -527,6 +527,7 @@
 
         // 離開頻道
         document.getElementById("exit-button").onclick = function() {
+            chatMessages.innerHTML = '';
             Chatmodal.style.display = "none"; // 隱藏 chat-modal
             socket.emit('leaveChat', { username: uname, room_number: chatRoom });
         }
