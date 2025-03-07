@@ -411,10 +411,10 @@ class kycView(ModelView):
     }  
   def _format_passport_image(view, ctx, model, name):
     if model.ppImage:
-      return f"<img src={model.ppImage} style='width: 50px; height: 50px;' />"
+      return f"<img src={model.pp_image} style='width: 50px; height: 50px;' />"
     return "沒有護照圖片或翻譯失敗"
   column_formatters = {
-    'ppImage' : _format_passport_image
+    'pp_image' : _format_passport_image
   }
   def is_accessible(self):
     return (
