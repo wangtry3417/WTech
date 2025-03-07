@@ -1,4 +1,4 @@
-from flask import Flask,render_template,jsonify,request,abort,url_for,redirect,make_response,send_file,flash,session,Response,g
+from flask import Flask,render_template,jsonify,request,abort,url_for,redirect,make_response,send_file,flash,session,Response,g,Markup
 from flask_cors import CORS,cross_origin
 from wcloud import wcloud_bp # 導入 Blueprint
 from cryptography.fernet import Fernet
@@ -404,14 +404,14 @@ class kycView(ModelView):
   column_labels = {
         'username': '用戶名或帳戶號碼',
         'fname': '全名',
-        'id_number': '身份證或證件號碼',
+        'id_number': '護照號碼',
         'address': '地址',
         'career':'職業',
         'pp_image':'護照b64Code'
     }  
   def _format_passport_image(view, ctx, model, name):
     if model.pp_image:
-      return f"<img src={model.pp_image} style='width: 50px; height: 50px;' />"
+      return Markup(f"<img src={model.pp_image} style='width: 50px; height: 50px;' />")
     return "沒有護照圖片或翻譯失敗"
   column_formatters = {
     'pp_image' : _format_passport_image
