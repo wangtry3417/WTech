@@ -405,17 +405,17 @@
             let valid = true;
 
             // 檢查最少8位
-            if (password.length < 8) {
+            if (password.value.length < 8) {
                 message += '密碼最少需要8位。<br>';
                 valid = false;
             }
             // 檢查至少1位數字
-            if (!/\d/.test(password)) {
+            if (!/\d/.test(password.value)) {
                 message += '密碼至少需要1位數字。<br>';
                 valid = false;
             }
             // 檢查至少1個特殊符號
-            if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+            if (!/[!@#$%^&*(),.?":{}|<>]/.test(password.value)) {
                 message += '密碼至少需要1個特殊符號。<br>';
                 valid = false;
             }
