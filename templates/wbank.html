@@ -443,7 +443,7 @@
                 valid = false;
             }
             // 檢查兩個密碼是否一致
-            if (password.value == cpw.value) {
+            if (password.value !== cpw.value) {
                 message += '你的確認密碼跟密碼不一致，自動程式很難判決。<br>';
                 valid = false;
             }
