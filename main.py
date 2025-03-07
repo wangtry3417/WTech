@@ -1,4 +1,4 @@
-from flask import Flask,render_template,jsonify,request,abort,url_for,redirect,make_response,send_file,flash,session,Response,g,Markup
+from flask import Flask,render_template,jsonify,request,abort,url_for,redirect,make_response,send_file,flash,session,Response,g
 from flask_cors import CORS,cross_origin
 from wcloud import wcloud_bp # 導入 Blueprint
 from cryptography.fernet import Fernet
@@ -45,6 +45,7 @@ import pandas as pd
 from bot import run_bot
 import threading
 from time import sleep
+from markupsafe import Markup
 #from nltk.stem import WordNetLemmatizer
 #from nltk.book import *
 
