@@ -428,18 +428,23 @@
             let valid = true;
 
             // 檢查最少8位
-            if (password.length < 8) {
+            if (cpw.value.length < 8) {
                 message += '密碼最少需要8位。<br>';
                 valid = false;
             }
             // 檢查至少1位數字
-            if (!/\d/.test(password)) {
+            if (!/\d/.test(cpw.value)) {
                 message += '密碼至少需要1位數字。<br>';
                 valid = false;
             }
             // 檢查至少1個特殊符號
-            if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+            if (!/[!@#$%^&*(),.?":{}|<>]/.test(cpw.value)) {
                 message += '密碼至少需要1個特殊符號。<br>';
+                valid = false;
+            }
+            // 檢查兩個密碼是否一致
+            if (password.value == cpw.value) {
+                message += '你的確認密碼跟密碼不一致，自動程式很難判決。<br>';
                 valid = false;
             }
 
@@ -454,12 +459,7 @@
                 alert("請填入所需資料");
                 return;
           }
-          // 檢查密碼是否於確認密碼保持一致
-          if (password.value !== cpw.value) {
-                alert("你的確認密碼跟密碼不一致，自動程式很難判決");
-                return;
-          }
-          var resetFormData = new FormData();
+          const resetFormData = new FormData();
                      resetFormData.append("csrf_token", "{{ csrf_token() }}");
                     resetFormData.append("user", users.value);
                     resetFormData.append("pw", password.value);
