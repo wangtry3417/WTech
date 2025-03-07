@@ -2744,6 +2744,9 @@ def wbank_auth_client():
                 if user.password == password:
                     if user.sub is None or user.sub == "":
                         login_user(user)
+                        if user.role == "pendingUser":
+                          flash("請等2到3個工作天 等待資料審核","info")
+                          return redirect("/wbank")
                         session.pop("tryTimes", None)
                         session["username"] = username
                         session["pw"] = password
@@ -2819,7 +2822,7 @@ def wbank_client():
     if current_user.role == "staff":
       return redirect("/admin/wbankwallet")
     if current_user.role == "pendingUser":
-      flash("請等2到3個工作天 等待審核","info")
+      flash("請等2到3個工作天 等待資料審核","info")
       return redirect("/wbank")
     if user_data:
         if user_data.verify == "no":
