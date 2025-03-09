@@ -1,0 +1,78 @@
+<html>
+  <head>
+    <style>
+     #productForm {
+       background-color: #6C6C6C;
+       border: 2px soild black;
+       display: none;
+     }
+    </style>
+  </head>
+  <body>
+    <center>
+        <br>
+        <br>
+       <table border="2px" id="table">
+         <thead>
+            <th>產品名稱</th>
+            <th>價格</th>
+            <th>Stock</th>
+         </thead>
+         <tbody id="products">
+            <!-- 這裡顯示產品資訊 -->
+         </tbody>
+        </table>
+        <button onclick="document.getElementById('productForm').style.display='block';">添加Product</button>
+        <br>
+        <br>
+        <div id="productForm">
+            <label>產品名:</label>
+            <input type="text" id="pname" />
+            <br>
+            <label>產品價格:</label>
+            HKD$<input type="number" id="pprice" />
+            <br>
+            <label>產品貨存:</label>
+            <input type="number" id="pstock" value="100" max="3400" />
+            <br>
+            <button id="reset">Reset</button>
+            <button id="add">Add</button>
+        </div>
+    </center>
+    <script>
+      let productList = document.getElementById("products");
+      let addProductButton = document.getElementById("add");
+      // Form
+      let pname = document.getElementById("pname");
+      let price = document.getElementById("pprice");
+      let stock = document.getElementById("pstock");
+      // Function area
+      addProductButton.addEventListener("click", ()=> {
+        if (pname.value == null && price.value == null && stock.value == null) alert("不要留空");
+        if (pname.value == null || price.value == null || stock.value == null) alert("不要留空");
+        let newRows = document.createElement("tr");
+        let aname = document.createElement("td");
+        let aprice = document.createElement("td");
+        let astock = document.createElement("td");
+        aname.innerHTML = pname.value;
+        aprice.innerHTML = price.value;
+        astock.innerHTML = stock.value;
+        newRows.appendChild(aname);
+        newRows.appendChild(aprice);
+        newRows.appendChild(astock);
+        productList.appendChild(newRows);
+        alert("添加成功");
+        pname.value = '';
+        price.value = '';
+        stock.value = '';
+        // Close productForm
+        document.getElementById('productForm').style.display='none';
+      });
+      document.getElementById("reset").addEventListener("click", ()=> {
+        pname.value = '';
+        price.value = '';
+        stock.value = '';
+      });
+    </script>
+  </body>
+</html>
