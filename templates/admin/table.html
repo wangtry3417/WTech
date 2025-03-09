@@ -15,8 +15,9 @@
        <table border="2px" id="table">
          <thead>
             <th>產品名稱</th>
-            <th>價格</th>
+            <th>價格(HKD$)</th>
             <th>Stock</th>
+            <th>Action</th>
          </thead>
          <tbody id="products">
             <!-- 這裡顯示產品資訊 -->
@@ -48,18 +49,22 @@
       let stock = document.getElementById("pstock");
       // Function area
       addProductButton.addEventListener("click", ()=> {
-        if (pname.value == null && price.value == null && stock.value == null) alert("不要留空");
-        if (pname.value == null || price.value == null || stock.value == null) alert("不要留空");
+        if (pname.value == null && price.value == null) alert("不要留空");
+        if (pname.value == null || price.value == null) alert("不要留空");
         let newRows = document.createElement("tr");
         let aname = document.createElement("td");
         let aprice = document.createElement("td");
         let astock = document.createElement("td");
+        let edit = document.createElement("td");
         aname.innerHTML = pname.value;
         aprice.innerHTML = price.value;
         astock.innerHTML = stock.value;
+        edit.innerHTML = '✍️';
+        edit.id = pname.value;
         newRows.appendChild(aname);
         newRows.appendChild(aprice);
         newRows.appendChild(astock);
+        newRows.appendChild(edit);
         productList.appendChild(newRows);
         alert("添加成功");
         pname.value = '';
