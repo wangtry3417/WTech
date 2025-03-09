@@ -5,8 +5,25 @@
     <title>WBank -- 用戶流水</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+      #wbank-admin-menu {
+        background-color: rgb(0,0,255);
+        color: rgb(255,255,255);
+        display: flex;
+        font-size: 28%;
+        margin-right: 52%;
+      }
+    </style>
 </head>
 <body>
+
+<div id="wbank-admin-menu">
+    <p id="wbank-admin-alink-home">首頁</p>
+    <p id="wbank-admin-alink-this">銀行流水</p>
+    <p id="wbank-admin-alink-users">用戶表</p>
+    <p id="wbank-admin-alink-kyc">KYC表</p>
+</div>
+<br>
 
 <div class="container mt-4">
     <h1>查詢 WBankRecord</h1>
@@ -65,6 +82,18 @@
 
     $('#sortDesc').click(function() {
         sortResults('desc');
+    });
+    $('wbank-admin-alink-home').click(()=>{
+      window.location.href="/admin";
+    });
+    $('wbank-admin-alink-this').click(()=>{
+      window.location.reload();
+    });
+    $('wbank-admin-alink-users').click(()=>{
+      window.location.href="/admin/wbankwallet";
+    });
+    $('wbank-admin-alink-kyc').click(()=>{
+      window.location.href="/admin/wbankkyc";
     });
 </script>
 
