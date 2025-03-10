@@ -358,7 +358,7 @@
             <tr>
                 <th>理財項目</th>
                 <th>當前價格</th>
-                <th>升降情況</th>
+                <th>預估升降</th>
                 <th>百分比%</th>
                 <th>操作</th>
             </tr>
@@ -819,10 +819,10 @@ function changeBGColor() {
 }
 let portfolio = JSON.parse(localStorage.getItem('portfolio')) || [];
 const stockPrices = {
-    "WBank內銀股": 120.30,
+    "WBank內銀股": 130.56,
     "泓國綜合指數": 30.67,
-    "經發集團": 18.67,
-    "WTC/HKD": 90.88,
+    "經發集團": 20.27,
+    "WTC/HKD": 120.20,
     "BEn-stock": 0.22
 };
 
@@ -869,7 +869,7 @@ function fetchStockPrice(stockSymbol) {
 function randomPriceChange(stockSymbol) {
     let currentPrice = stockPrices[stockSymbol];
     currentPrice = parseFloat(currentPrice);
-    const change = (currentPrice * (1 + 0.1)).toFixed(0); // 收取10%手續費
+    const change = ((currentPrice * (1 + 0.1) - currentPrice) / currentPrice * 100 ).toFixed(1); // 收取10%手續費(公式：(新-舊)除舊*100%)
     //const change = currentPrice*100/100;
     let newPrice = currentPrice.toFixed(2); // 確保價格不低於 0，因為價格不可能為0
     // let newPrice;
@@ -995,14 +995,14 @@ if (currentPeriod) {
         priceElement.innerText = newPrice; // 更新價格
         
         // 計算並顯示變動百分比
-        const percentageChange = (change * 100).toFixed(1);
+        // const percentageChange = (change * 100).toFixed(1);
         if (percentageElement) {
-            percentageElement.innerText = `${percentageChange}%`;
+            percentageElement.innerText = `${change}%`;
         }
         
         // 更新三角形顏色
         if (triangleElement) {
-            if (percentageChange >= (newPrice+80)*100) {
+            if (change >= 58) {
                 triangleElement.style.borderBottom = "10px solid green"; // 上升顏色
             } else {
                 triangleElement.style.borderBottom = "10px solid red"; // 下降顏色
