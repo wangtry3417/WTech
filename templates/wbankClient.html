@@ -995,7 +995,7 @@ if (currentPeriod) {
         priceElement.innerText = newPrice; // 更新價格
         
         // 計算並顯示變動百分比
-        const percentageChange = (newPrice * change).toFixed(1);
+        const percentageChange = (parseFloat(newPrice) * change).toFixed(1);
         if (percentageElement) {
             percentageElement.innerText = `${percentageChange}%`;
         }
