@@ -869,7 +869,7 @@ function fetchStockPrice(stockSymbol) {
 function randomPriceChange(stockSymbol) {
     let currentPrice = stockPrices[stockSymbol];
     currentPrice = parseFloat(currentPrice);
-    const change = (Math.random() * 2 - 1) * 0.05; // 隨機變動 -5% 到 +5%
+    const change = (currentPrice * (1 + 0.1)).toFixed(0); // 收取10%手續費
     //const change = currentPrice*100/100;
     let newPrice = currentPrice.toFixed(2); // 確保價格不低於 0，因為價格不可能為0
     // let newPrice;
@@ -995,14 +995,14 @@ if (currentPeriod) {
         priceElement.innerText = newPrice; // 更新價格
         
         // 計算並顯示變動百分比
-        const percentageChange = (change * 100).toFixed(2);
+        const percentageChange = (change * 100).toFixed(1);
         if (percentageElement) {
             percentageElement.innerText = `${percentageChange}%`;
         }
         
         // 更新三角形顏色
         if (triangleElement) {
-            if (change > 0) {
+            if (percentageChange >= (newPrice+80)*100) {
                 triangleElement.style.borderBottom = "10px solid green"; // 上升顏色
             } else {
                 triangleElement.style.borderBottom = "10px solid red"; // 下降顏色
