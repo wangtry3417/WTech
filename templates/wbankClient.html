@@ -995,14 +995,14 @@ if (currentPeriod) {
         priceElement.innerText = newPrice; // 更新價格
         
         // 計算並顯示變動百分比
-        // const percentageChange = (change * 100).toFixed(1);
+        const percentageChange = (newPrice * change).toFixed(1);
         if (percentageElement) {
-            percentageElement.innerText = `${change}%`;
+            percentageElement.innerText = `${percentageChange}%`;
         }
         
         // 更新三角形顏色
         if (triangleElement) {
-            if (change >= 58) {
+            if (percentageChange >= 58) {
                 triangleElement.style.borderBottom = "10px solid green"; // 上升顏色
             } else {
                 triangleElement.style.borderBottom = "10px solid red"; // 下降顏色
