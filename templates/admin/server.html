@@ -3,8 +3,57 @@
 <head>
 <title>wnet伺服器頁面</title>
 <style>
-  body { font-family: Arial, sans-serif; background-color: #f4f4f4; }
-  .container { width: 700px; margin: 30px auto; padding: 30px; border: 1px solid #ddd; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+  body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; } /* 移除 body margin */
+
+  /*  -------  整體排版 (CSS Grid Layout)  -------  */
+  .container {
+    display: grid; /* 啟用 Grid Layout */
+    grid-template-columns: 1fr; /* 單欄式佈局 */
+    grid-template-rows: auto 1fr; /* 選單列 + 主要內容區 */
+    grid-template-areas:
+      "header"
+      "main";
+    max-width: 960px; /* 限制最大寬度 */
+    margin: 30px auto; /* 水平置中，上下 margin */
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    overflow: hidden; /* 確保圓角效果 */
+  }
+
+  /*  -------  頁首選單列  -------  */
+  .header {
+    grid-area: header;
+    background-color: #f0f0f0;
+    padding: 15px 20px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: flex-start; /* 選單項目靠左對齊 */
+    align-items: center;
+  }
+
+  .menu-button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    background-color: #e0e0e0;
+    color: #333;
+    font-size: 15px;
+    cursor: pointer;
+    margin-right: 10px; /* 選單項目間距 */
+    transition: background-color 0.3s ease;
+  }
+
+  .menu-button:hover, .menu-button.active {
+    background-color: #d0d0d0;
+  }
+
+  /*  -------  主要內容區  -------  */
+  .main-content {
+    grid-area: main;
+    padding: 30px;
+  }
+
   .section { margin-bottom: 25px; }
   .section h2 { margin-top: 0; color: #333; border-bottom: 2px solid #eee; padding-bottom: 10px; }
   #status-display { padding: 12px; border: 1px solid #eee; margin-top: 15px; border-radius: 4px; background-color: #f9f9f9; color: #555; }
@@ -66,7 +115,7 @@
     color: #777;
   }
 
-  /*  -------  以下為 CSS 繪製的載入動畫圖示樣式  -------  */
+  /*  -------  以下為 CSS 繪製的載入動畫圖示樣式 (與之前版本相同) -------  */
 
   /* 機殼圖示 */
   .loading-chassis-icon {
@@ -174,18 +223,12 @@
     font-weight: bold;
     text-shadow: 0 0 5px lightgreen; /* 文字發光 */
   }
-  .loading-server-complete-icon::before {
-    content: '✓'; /* 完成符號 */
-  }
 
-
-  /* 伺服器外觀顯示區塊樣式 (以下樣式與之前版本相同，可根據需求進一步調整) */
+  /* 伺服器外觀顯示區塊樣式 (以下樣式與之前版本相同) */
   #server-appearance {
-    display: none;
     text-align: center;
     margin-top: 30px;
   }
-  #server-appearance.show { display: block; }
 
   /* 真實感伺服器動畫容器樣式 */
   #server-animation {
@@ -423,134 +466,160 @@
     to { opacity: 1; transform: translateY(0); } /* 完全不透明並回到原位 */
   }
 
+  /*  -------  UI 區塊樣式  -------  */
+  .ui-section {
+    display: none; /* 預設隱藏所有 UI 區塊 */
+  }
+
+  .ui-section.active {
+    display: block; /* 顯示目前 active 的 UI 區塊 */
+  }
+
 </style>
 </head>
 <body>
 
 <div class="container">
-  <h1>wnet伺服器頁面</h1>
-
-  <div class="section">
-    <h2>電源控制</h2>
-    <button id="power-button">開啟</button>
-    <button id="os-start-button" disabled>啟動 OS</button>
-    <div id="status-display">狀態: 關閉</div>
+  <div class="header">
+    <button class="menu-button active" data-ui="start">啟動</button>
+    <button class="menu-button" data-ui="server">Server UI</button>
+    <button class="menu-button" data-ui="settings">設定</button>
   </div>
 
-  <div class="section">
-    <h2>模擬狀態</h2>
-    <textarea id="simulation-status" rows="6" cols="50" placeholder="伺服器模擬狀態將顯示在這裡..." readonly></textarea>
-  </div>
+  <div class="main-content">
 
-  <div class="section">
-    <h2>自訂配置</h2>
-    <div class="config-item">
-      <label for="cpu-select">CPU:</label>
-      <select id="cpu-select">
-        <option value="intel-i3">Intel Core i3</option>
-        <option value="intel-i5">Intel Core i5</option>
-        <option value="intel-i7">Intel Core i7</option>
-        <option value="amd-ryzen5">AMD Ryzen 5</option>
-        <option value="amd-ryzen7">AMD Ryzen 7</option>
-      </select>
-    </div>
-
-    <div class="config-item">
-      <label for="ram-input">記憶體 (GB):</label>
-      <input type="number" id="ram-input" value="16">
-    </div>
-
-    <div class="config-item">
-      <label for="storage-input">儲存空間 (TB):</label>
-      <input type="number" id="storage-input" value="1">
-    </div>
-
-    <div class="config-item">
-      <label for="host-input">Motherboard:</label>
-      <input type="text" id="host-input" value="Dell PowerEdge">
-    </div>
-
-    <button id="create-server-button">建立你的伺服器</button>
-    <div id="loading-indicator">
-      <div id="loading-animation-container">
-        <div class="loading-step" id="step-chassis">
-          <div class="loading-icon loading-chassis-icon"></div>
-          <div class="loading-text">安裝機殼</div>
-        </div>
-        <div class="loading-step" id="step-motherboard">
-          <div class="loading-icon loading-motherboard-icon"></div>
-          <div class="loading-text">安裝主機板</div>
-        </div>
-        <div class="loading-step" id="step-cpu">
-          <div class="loading-icon loading-cpu-icon"></div>
-          <div class="loading-text">安裝處理器</div>
-        </div>
-        <div class="loading-step" id="step-ram">
-          <div class="loading-icon loading-ram-icon"></div>
-          <div class="loading-text">安裝記憶體</div>
-        </div>
-        <div class="loading-step" id="step-drives">
-          <div class="loading-icon loading-hard-drive-icon"></div>
-          <div class="loading-text">安裝硬碟</div>
-        </div>
-        <div class="loading-step" id="step-psu">
-          <div class="loading-icon loading-power-supply-icon"></div>
-          <div class="loading-text">安裝電源供應器(火牛)</div>
-        </div>
-        <div class="loading-step" id="step-network">
-          <div class="loading-icon loading-network-card-icon"></div>
-          <div class="loading-text">安裝網路卡</div>
-        </div>
-        <div class="loading-step" id="step-complete">
-          <div class="loading-icon loading-server-complete-icon"></div>
-          <div class="loading-text">組裝完成！</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="server-appearance" class="section">
-    <h2>伺服器外觀</h2>
-    <div id="server-animation">
-      <div class="server-chassis"></div>
-      <div class="drive-bay">
-        <div class="drive"><div class="drive-indicator" id="drive-indicator-1"></div></div>
-        <div class="drive"><div class="drive-indicator" id="drive-indicator-2"></div></div>
-        <div class="drive"><div class="drive-indicator" id="drive-indicator-3"></div></div>
-        <div class="drive"><div class="drive-indicator" id="drive-indicator-4"></div></div>
-      </div>
-      <div class="power-supply">
-        <div class="psu-fan">
-          <div class="fan-center"></div>
-          <div class="fan-blade"></div>
-          <div class="fan-blade"></div>
-          <div class="fan-blade"></div>
-          <div class="fan-blade"></div>
-        </div>
-        <div style="color: #eee; font-size: 12px;">Power</div>
-      </div>
-      <div class="motherboard-area">
-        <div class="ram-slots">
-          <div class="ram-module"></div>
-          <div class="ram-module"></div>
-        </div>
-        <div class="cpu-socket">
-          <div class="cpu">
-            <div class="cpu-line"></div>
-            <div class="cpu-line"></div>
-            <div class="cpu-line"></div>
-            <div class="cpu-line"></div>
+    <div id="start-ui-section" class="ui-section active">
+      <div class="section">
+        <h2>建立你的伺服器</h2>
+        <p>歡迎使用 wnet 伺服器服務。 點擊下方按鈕開始建立你的專屬伺服器。</p>
+        <button id="create-server-button">建立你的伺服器</button>
+        <div id="loading-indicator">
+          <div id="loading-animation-container">
+            <div class="loading-step" id="step-chassis">
+              <div class="loading-icon loading-chassis-icon"></div>
+              <div class="loading-text">安裝機殼</div>
+            </div>
+            <div class="loading-step" id="step-motherboard">
+              <div class="loading-icon loading-motherboard-icon"></div>
+              <div class="loading-text">安裝主機板</div>
+            </div>
+            <div class="loading-step" id="step-cpu">
+              <div class="loading-icon loading-cpu-icon"></div>
+              <div class="loading-text">安裝處理器</div>
+            </div>
+            <div class="loading-step" id="step-ram">
+              <div class="loading-icon loading-ram-icon"></div>
+              <div class="loading-text">安裝記憶體</div>
+            </div>
+            <div class="loading-step" id="step-drives">
+              <div class="loading-icon loading-hard-drive-icon"></div>
+              <div class="loading-text">安裝硬碟</div>
+            </div>
+            <div class="loading-step" id="step-psu">
+              <div class="loading-icon loading-power-supply-icon"></div>
+              <div class="loading-text">安裝電源供應器(火牛)</div>
+            </div>
+            <div class="loading-step" id="step-network">
+              <div class="loading-icon loading-network-card-icon"></div>
+              <div class="loading-text">安裝網路卡</div>
+            </div>
+            <div class="loading-step" id="step-complete">
+              <div class="loading-icon loading-server-complete-icon"></div>
+              <div class="loading-text">組裝完成！</div>
+            </div>
           </div>
         </div>
       </div>
-      <div class="network-ports">
-        <div class="port"></div>
-        <div class="port"></div>
-        <div style="color: #eee; font-size: 12px;">Network</div>
+    </div>
+
+    <div id="server-ui-section" class="ui-section">
+      <div class="section">
+        <h2>電源控制</h2>
+        <button id="power-button">開啟</button>
+        <button id="os-start-button" disabled>啟動 OS</button>
+        <div id="status-display">狀態: 關閉</div>
+      </div>
+
+      <div class="section">
+        <h2>模擬狀態</h2>
+        <textarea id="simulation-status" rows="6" cols="50" placeholder="伺服器模擬狀態將顯示在這裡..." readonly></textarea>
+      </div>
+
+      <div id="server-appearance" class="section">
+        <h2>伺服器外觀 (真實感 CSS 繪製)</h2>
+        <div id="server-animation">
+          <div class="server-chassis"></div>
+          <div class="drive-bay">
+            <div class="drive"><div class="drive-indicator" id="drive-indicator-1"></div></div>
+            <div class="drive"><div class="drive-indicator" id="drive-indicator-2"></div></div>
+            <div class="drive"><div class="drive-indicator" id="drive-indicator-3"></div></div>
+            <div class="drive"><div class="drive-indicator" id="drive-indicator-4"></div></div>
+          </div>
+          <div class="power-supply">
+            <div class="psu-fan">
+              <div class="fan-center"></div>
+              <div class="fan-blade"></div>
+              <div class="fan-blade"></div>
+              <div class="fan-blade"></div>
+              <div class="fan-blade"></div>
+            </div>
+            <div style="color: #eee; font-size: 12px;">Power</div>
+          </div>
+          <div class="motherboard-area">
+            <div class="ram-slots">
+              <div class="ram-module"></div>
+              <div class="ram-module"></div>
+            </div>
+            <div class="cpu-socket">
+              <div class="cpu">
+                <div class="cpu-line"></div>
+                <div class="cpu-line"></div>
+                <div class="cpu-line"></div>
+                <div class="cpu-line"></div>
+              </div>
+            </div>
+          </div>
+          <div class="network-ports">
+            <div class="port"></div>
+            <div class="port"></div>
+            <div style="color: #eee; font-size: 12px;">Network</div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
 
+    <div id="settings-ui-section" class="ui-section">
+      <div class="section">
+        <h2>自訂配置</h2>
+        <div class="config-item">
+          <label for="cpu-select">CPU:</label>
+          <select id="cpu-select">
+            <option value="intel-i3">Intel Core i3</option>
+            <option value="intel-i5">Intel Core i5</option>
+            <option value="intel-i7">Intel Core i7</option>
+            <option value="amd-ryzen5">AMD Ryzen 5</option>
+            <option value="amd-ryzen7">AMD Ryzen 7</option>
+          </select>
+        </div>
+
+        <div class="config-item">
+          <label for="ram-input">記憶體 (GB):</label>
+          <input type="number" id="ram-input" value="16">
+        </div>
+
+        <div class="config-item">
+          <label for="storage-input">儲存空間 (TB):</label>
+          <input type="number" id="storage-input" value="1">
+        </div>
+
+        <div class="config-item">
+          <label for="host-input">Motherboard:</label>
+          <input type="text" id="host-input" value="Dell PowerEdge">
+        </div>
+      </div>
+    </div>
+
+  </div>
 </div>
 
 <script>
@@ -584,6 +653,15 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('drive-indicator-4')
   ];
 
+  // UI 區塊元素
+  const uiSections = {
+    start: document.getElementById('start-ui-section'),
+    server: document.getElementById('server-ui-section'),
+    settings: document.getElementById('settings-ui-section')
+  };
+
+  // 選單按鈕元素
+  const menuButtons = document.querySelectorAll('.menu-button');
 
   let serverOn = false;
   let osStarted = false;
@@ -592,21 +670,20 @@ document.addEventListener('DOMContentLoaded', function() {
   function startServerAnimation() {
     function animateDrives() {
       driveIndicators.forEach(indicator => indicator.classList.remove('active'));
-      const activeCount = Math.floor(Math.random() * (driveIndicators.length + 1)); // 隨機啟動 0 到 4 個指示燈
+      const activeCount = Math.floor(Math.random() * (driveIndicators.length + 1));
       for (let i = 0; i < activeCount; i++) {
         const randomIndex = Math.floor(Math.random() * driveIndicators.length);
         driveIndicators[randomIndex].classList.add('active');
       }
     }
-    animateDrives(); // 立即執行一次
-    animationInterval = setInterval(animateDrives, 300); // 每 300 毫秒更新硬碟指示燈動畫
+    animateDrives();
+    animationInterval = setInterval(animateDrives, 300);
   }
 
   function stopServerAnimation() {
     clearInterval(animationInterval);
-    driveIndicators.forEach(indicator => indicator.classList.remove('active')); // 關閉所有硬碟指示燈
+    driveIndicators.forEach(indicator => indicator.classList.remove('active'));
   }
-
 
   function updateServerStatus() {
     if (serverOn) {
@@ -676,36 +753,64 @@ document.addEventListener('DOMContentLoaded', function() {
     osStarted = false;
 
     // 顯示載入動畫步驟，每個步驟延遲一段時間
-    let stepDelay = 1000; // 步驟延遲時間 (毫秒)
+    let stepDelay = 1500; // 延長步驟延遲時間至 1.5 秒 (更長組裝時間)
     let currentStep = 0;
-    const stepOrder = ['chassis', 'motherboard', 'cpu', 'ram', 'drives', 'psu', 'network', 'complete']; // 步驟順序
+    const stepOrder = ['chassis', 'motherboard', 'cpu', 'ram', 'drives', 'psu', 'network', 'complete'];
 
     function animateLoadingSteps() {
       if (currentStep < stepOrder.length) {
         const stepName = stepOrder[currentStep];
-        loadingSteps[stepName].classList.add('active'); // 顯示目前步驟
+        loadingSteps[stepName].classList.add('active');
 
         if (currentStep > 0) {
           const prevStepName = stepOrder[currentStep - 1];
-          loadingSteps[prevStepName].classList.remove('active'); // 隱藏前一個步驟 (可選，如果不需要淡出效果就移除)
+          loadingSteps[prevStepName].classList.remove('active');
         }
 
         currentStep++;
-        setTimeout(animateLoadingSteps, stepDelay); // 延遲後執行下一個步驟
+        setTimeout(animateLoadingSteps, stepDelay);
       } else {
         // 所有步驟完成後
-        loadingIndicator.classList.remove('show'); // 隱藏載入動畫
-        serverAppearanceSection.classList.add('show'); // 顯示伺服器外觀
-        updateServerStatus(); // 顯示伺服器狀態
+        loadingIndicator.classList.remove('show');
+        serverAppearanceSection.classList.add('show');
+        updateServerStatus();
+
+        // 組裝完成後自動切換到 Server UI 頁面
+        switchUI('server');
       }
     }
 
-    loadingIndicator.classList.add('show'); // 顯示載入動畫容器
-    animateLoadingSteps(); // 開始載入動畫步驟
+    loadingIndicator.classList.add('show');
+    animateLoadingSteps();
   });
+
+  // UI 切換功能
+  function switchUI(uiName) {
+    // 隱藏所有 UI 區塊
+    for (const section in uiSections) {
+      uiSections[section].classList.remove('active');
+    }
+    // 移除所有選單按鈕的 active 狀態
+    menuButtons.forEach(button => button.classList.remove('active'));
+
+    // 顯示指定的 UI 區塊
+    uiSections[uiName].classList.add('active');
+    // 設定對應的選單按鈕為 active 狀態
+    document.querySelector(`.menu-button[data-ui="${uiName}"]`).classList.add('active');
+  }
+
+  // 選單按鈕事件監聽器
+  menuButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      const uiName = this.dataset.ui; // 取得 data-ui 屬性值
+      switchUI(uiName); // 切換到對應的 UI
+    });
+  });
+
 
   // 初始化狀態
   updateServerStatus();
+  switchUI('start'); // 預設顯示 "啟動" UI
 });
 </script>
 
