@@ -923,10 +923,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
       const bootMessages = [
         "檢查硬體...",
+        "安裝wnet-ubuntu",
         "載入核心...",
         "啟動服務...",
         "網路設定...",
-        "等待使用者登入..."
+        "等待使用者操作..."
       ];
       let messageIndex = 0;
       function displayBootMessage() {
@@ -978,7 +979,7 @@ document.addEventListener('DOMContentLoaded', function() {
         switchUI('server');
 
         // 產生並顯示啟動 command
-        const generatedStartupCommand = `serverctl start wnet-server --cpu=${document.getElementById('cpu-select').value} --ram=${document.getElementById('ram-input').value}GB --storage=${document.getElementById('storage-input').value}TB --host="${document.getElementById('host-input').value}"`;
+        const generatedStartupCommand = `apt update && apt install wnet && wnet start vm --cpu=${document.getElementById('cpu-select').value} --ram=${document.getElementById('ram-input').value}GB --storage=${document.getElementById('storage-input').value}TB --host="${document.getElementById('host-input').value}"`;
         startupCommandDisplay.value = generatedStartupCommand;
       }
     }
