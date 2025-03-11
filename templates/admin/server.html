@@ -3,20 +3,20 @@
 <head>
 <title>wnet伺服器頁面</title>
 <style>
-  body { font-family: Arial, sans-serif; background-color: #f4f4f4; } /* 淡灰色背景 */
-  .container { width: 700px; margin: 30px auto; padding: 30px; border: 1px solid #ddd; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); } /* 容器樣式調整 */
-  .section { margin-bottom: 25px; } /* 區塊間距增加 */
-  .section h2 { margin-top: 0; color: #333; border-bottom: 2px solid #eee; padding-bottom: 10px; } /* 標題樣式 */
-  #status-display { padding: 12px; border: 1px solid #eee; margin-top: 15px; border-radius: 4px; background-color: #f9f9f9; color: #555; } /* 狀態顯示樣式 */
-  .config-item { margin-bottom: 15px; } /* 配置項目間距增加 */
-  .config-item label { display: inline-block; width: 140px; text-align: right; margin-right: 15px; color: #666; } /* 配置標籤樣式 */
-  .config-item input, .config-item select { padding: 10px; width: 220px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; } /* 配置輸入框和選單樣式 */
-  #power-button, #os-start-button, #create-server-button { padding: 12px 25px; border: none; border-radius: 6px; color: white; font-size: 15px; cursor: pointer; transition: background-color 0.3s ease; } /* 按鈕通用樣式 */
+  body { font-family: Arial, sans-serif; background-color: #f4f4f4; }
+  .container { width: 700px; margin: 30px auto; padding: 30px; border: 1px solid #ddd; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+  .section { margin-bottom: 25px; }
+  .section h2 { margin-top: 0; color: #333; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+  #status-display { padding: 12px; border: 1px solid #eee; margin-top: 15px; border-radius: 4px; background-color: #f9f9f9; color: #555; }
+  .config-item { margin-bottom: 15px; }
+  .config-item label { display: inline-block; width: 140px; text-align: right; margin-right: 15px; color: #666; }
+  .config-item input, .config-item select { padding: 10px; width: 220px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
+  #power-button, #os-start-button, #create-server-button { padding: 12px 25px; border: none; border-radius: 6px; color: white; font-size: 15px; cursor: pointer; transition: background-color 0.3s ease; }
   #power-button { background-color: #4CAF50; }
   #power-button.off { background-color: #f44336; }
   #os-start-button { background-color: #ffc107; color: black; margin-left: 10px; }
   #os-start-button:disabled { background-color: #cccccc; color: #666666; cursor: not-allowed; }
-  #create-server-button { background-color: #008CBA; margin-top: 10px; display: block; margin-left: auto; margin-right: auto; } /* 建立伺服器按鈕置中 */
+  #create-server-button { background-color: #008CBA; margin-top: 10px; display: block; margin-left: auto; margin-right: auto; }
   #create-server-button:hover { background-color: #0077a3; }
 
   /* 載入動畫樣式 - 技術人員砌機 */
@@ -58,6 +58,7 @@
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
+    /*  移除 background-image: url(...)  */
   }
 
   .loading-text {
@@ -65,7 +66,120 @@
     color: #777;
   }
 
-  /* 伺服器外觀顯示區塊樣式 */
+  /*  -------  以下為 CSS 繪製的載入動畫圖示樣式  -------  */
+
+  /* 機殼圖示 */
+  .loading-chassis-icon {
+    background-color: #ddd;
+    border-radius: 6px;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+  }
+
+  /* 主機板圖示 */
+  .loading-motherboard-icon {
+    background-color: #bbb;
+    border-radius: 4px;
+    position: relative; /* 方便定位插槽 */
+    overflow: hidden; /* 隱藏超出邊界的插槽 */
+  }
+  .loading-motherboard-icon::before, .loading-motherboard-icon::after {
+    content: '';
+    position: absolute;
+    background-color: #999;
+    border-radius: 2px;
+  }
+  .loading-motherboard-icon::before {
+    top: 10%; left: 10%; width: 80%; height: 10%;
+  }
+  .loading-motherboard-icon::after {
+    bottom: 10%; left: 10%; width: 80%; height: 10%;
+  }
+
+  /* CPU 圖示 */
+  .loading-cpu-icon {
+    background-color: #eee;
+    border-radius: 6px;
+    box-shadow: 0 0 8px rgba(255,255,255,0.6);
+    position: relative; /* 方便定位線條 */
+  }
+  .loading-cpu-icon::before {
+    content: '';
+    position: absolute;
+    top: 20%; left: 10%; width: 80%; height: 2px; background-color: #ccc;
+  }
+
+  /* 記憶體圖示 */
+  .loading-ram-icon {
+    background-color: #ccc;
+    border-radius: 4px;
+    box-shadow: inset 0 0 3px rgba(0,0,0,0.1);
+  }
+
+  /* 硬碟圖示 */
+  .loading-hard-drive-icon {
+    background-color: #ddd;
+    border-radius: 4px;
+    position: relative; /* 方便定位 label */
+  }
+  .loading-hard-drive-icon::before {
+    content: 'HDD';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 10px;
+    color: #666;
+  }
+
+  /* 電源供應器圖示 */
+  .loading-power-supply-icon {
+    background-color: #ccc;
+    border-radius: 6px;
+    position: relative; /* 方便定位風扇 */
+    overflow: hidden; /* 隱藏超出邊界的風扇 */
+  }
+  .loading-power-supply-icon::before { /* 風扇 */
+    content: '';
+    position: absolute;
+    top: 20%; left: 20%;
+    width: 60%; height: 60%;
+    border-radius: 50%;
+    background-color: #bbb;
+  }
+
+  /* 網路卡圖示 */
+  .loading-network-card-icon {
+    background-color: #ccc;
+    border-radius: 4px;
+    position: relative; /* 方便定位連接埠 */
+  }
+  .loading-network-card-icon::before { /* 連接埠 */
+    content: '';
+    position: absolute;
+    bottom: 15%; left: 15%;
+    width: 70%; height: 10%;
+    background-color: #aaa;
+    border-radius: 2px;
+  }
+
+  /* 組裝完成圖示 */
+  .loading-server-complete-icon {
+    width: 100%; height: 100%; /* 填滿容器 */
+    border-radius: 50%; /* 圓形外框 */
+    border: 6px solid lightgreen; /* 綠色外框 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: lightgreen;
+    font-size: 24px;
+    font-weight: bold;
+    text-shadow: 0 0 5px lightgreen; /* 文字發光 */
+  }
+  .loading-server-complete-icon::before {
+    content: '✓'; /* 完成符號 */
+  }
+
+
+  /* 伺服器外觀顯示區塊樣式 (以下樣式與之前版本相同，可根據需求進一步調整) */
   #server-appearance {
     display: none;
     text-align: center;
@@ -75,10 +189,10 @@
 
   /* 真實感伺服器動畫容器樣式 */
   #server-animation {
-    width: 300px; /* 增加寬度 */
-    height: 220px; /* 增加高度 */
+    width: 300px;
+    height: 220px;
     margin: 20px auto;
-    position: relative; /* 方便內部組件絕對定位 */
+    position: relative;
     /* border: 1px dashed #ccc;  除錯用邊框 */
   }
 
@@ -318,7 +432,8 @@
 
   <div class="section">
     <h2>電源控制</h2>
-    <button id="power-button">開啟</button> <button id="os-start-button" disabled>啟動 OS</button>
+    <button id="power-button">開啟</button>
+    <button id="os-start-button" disabled>啟動 OS</button>
     <div id="status-display">狀態: 關閉</div>
   </div>
 
@@ -359,35 +474,35 @@
     <div id="loading-indicator">
       <div id="loading-animation-container">
         <div class="loading-step" id="step-chassis">
-          <div class="loading-icon" style="background-image: url('icon-server-chassis.png');"></div>
+          <div class="loading-icon loading-chassis-icon"></div>
           <div class="loading-text">安裝機殼</div>
         </div>
         <div class="loading-step" id="step-motherboard">
-          <div class="loading-icon" style="background-image: url('icon-motherboard.png');"></div>
+          <div class="loading-icon loading-motherboard-icon"></div>
           <div class="loading-text">安裝主機板</div>
         </div>
         <div class="loading-step" id="step-cpu">
-          <div class="loading-icon" style="background-image: url('icon-cpu.png');"></div>
+          <div class="loading-icon loading-cpu-icon"></div>
           <div class="loading-text">安裝處理器</div>
         </div>
         <div class="loading-step" id="step-ram">
-          <div class="loading-icon" style="background-image: url('icon-ram.png');"></div>
+          <div class="loading-icon loading-ram-icon"></div>
           <div class="loading-text">安裝記憶體</div>
         </div>
         <div class="loading-step" id="step-drives">
-          <div class="loading-icon" style="background-image: url('icon-hard-drive.png');"></div>
+          <div class="loading-icon loading-hard-drive-icon"></div>
           <div class="loading-text">安裝硬碟</div>
         </div>
         <div class="loading-step" id="step-psu">
-          <div class="loading-icon" style="background-image: url('icon-power-supply.png');"></div>
+          <div class="loading-icon loading-power-supply-icon"></div>
           <div class="loading-text">安裝電源供應器(火牛)</div>
         </div>
         <div class="loading-step" id="step-network">
-          <div class="loading-icon" style="background-image: url('icon-network-card.png');"></div>
+          <div class="loading-icon loading-network-card-icon"></div>
           <div class="loading-text">安裝網路卡</div>
         </div>
         <div class="loading-step" id="step-complete">
-          <div class="loading-icon" style="background-image: url('icon-server-complete.png');"></div>
+          <div class="loading-icon loading-server-complete-icon"></div>
           <div class="loading-text">組裝完成！</div>
         </div>
       </div>
