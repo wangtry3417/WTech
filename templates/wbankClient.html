@@ -430,6 +430,7 @@
                 <div id="fuc1">
                     <p id="pp" class="paypal"><img src="{{ url_for('static',filename='IMG_9742.jpeg') }}" alt="paypal" width="30" height="35"><br>用Paypal買入</p>
                     <p id="so" class="spend-out"><img src="{{ url_for('static',filename='IMG_9744.png') }}" alt="spend-out" width="30" height="35"><br>查看錢包地址</p>
+                    <p id="vc" class='vc'>💳泓通卡</p>
                 </div>
                 <br>
                 <div id="fuc1">
@@ -452,6 +453,19 @@
     </div>
 </div>
         <!-- End qr screen-->
+        <!-- 虛擬卡 -->
+        <div id="vcardModal" class="model">
+    <div class="model-content">
+        <span class="close" onclick="document.getElementById('vcardModal').style.display='none';">&times;</span>
+        <h3>泓通卡</h3>
+        <div id="vcard">
+            <label>卡號: </label>{{ hash_card_number }}
+            <br>
+            <p style="color: gray;">密碼是你的密碼</p>
+        </div>
+    </div>
+</div>
+        <!-- End of virual-card screen -->
         <div id="myPage" class="page">
             <div class="card">
                 <h2>我的</h2>
@@ -759,6 +773,9 @@
       document.getElementById("so").addEventListener("click",() => {
         //window.location.href="/wbank/sellCoins?user=" + "{{ user }}";
         document.getElementById('qrModal').style.display = 'flex'; 
+      });
+      document.getElementById("vc").addEventListener("click",() => {
+        document.getElementById('vcardModal').style.display = 'flex'; 
       });
      // Cash-in
      document.getElementById("ap").addEventListener("click",()=> {
