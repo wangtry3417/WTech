@@ -3,86 +3,310 @@
 <head>
 <title>wnet伺服器頁面</title>
 <style>
-  body { font-family: Arial, sans-serif; }
-  .container { width: 600px; margin: 20px auto; padding: 20px; border: 1px solid #ccc; }
-  .section { margin-bottom: 20px; }
-  .section h2 { margin-top: 0; }
-  #status-display { padding: 10px; border: 1px solid #ddd; margin-top: 10px; }
-  .config-item { margin-bottom: 10px; }
-  .config-item label { display: inline-block; width: 120px; text-align: right; margin-right: 10px; }
-  .config-item input, .config-item select { padding: 8px; width: 200px; }
-  #power-button { padding: 10px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
-  #power-button.off { background-color: #f44336; } /* Red when off */
-
-  /* 建立伺服器按鈕樣式 */
-  #create-server-button { padding: 10px 20px; background-color: #008CBA; color: white; border: none; cursor: pointer; }
+  body { font-family: Arial, sans-serif; background-color: #f4f4f4; } /* 淡灰色背景 */
+  .container { width: 700px; margin: 30px auto; padding: 30px; border: 1px solid #ddd; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); } /* 容器樣式調整 */
+  .section { margin-bottom: 25px; } /* 區塊間距增加 */
+  .section h2 { margin-top: 0; color: #333; border-bottom: 2px solid #eee; padding-bottom: 10px; } /* 標題樣式 */
+  #status-display { padding: 12px; border: 1px solid #eee; margin-top: 15px; border-radius: 4px; background-color: #f9f9f9; color: #555; } /* 狀態顯示樣式 */
+  .config-item { margin-bottom: 15px; } /* 配置項目間距增加 */
+  .config-item label { display: inline-block; width: 140px; text-align: right; margin-right: 15px; color: #666; } /* 配置標籤樣式 */
+  .config-item input, .config-item select { padding: 10px; width: 220px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; } /* 配置輸入框和選單樣式 */
+  #power-button, #os-start-button, #create-server-button { padding: 12px 25px; border: none; border-radius: 6px; color: white; font-size: 15px; cursor: pointer; transition: background-color 0.3s ease; } /* 按鈕通用樣式 */
+  #power-button { background-color: #4CAF50; }
+  #power-button.off { background-color: #f44336; }
+  #os-start-button { background-color: #ffc107; color: black; margin-left: 10px; }
+  #os-start-button:disabled { background-color: #cccccc; color: #666666; cursor: not-allowed; }
+  #create-server-button { background-color: #008CBA; margin-top: 10px; display: block; margin-left: auto; margin-right: auto; } /* 建立伺服器按鈕置中 */
   #create-server-button:hover { background-color: #0077a3; }
 
-  /* 載入動畫樣式 */
+  /* 載入動畫樣式 - 技術人員砌機 */
   #loading-indicator {
     display: none;
     text-align: center;
-    margin-top: 20px;
+    margin-top: 25px;
   }
   #loading-indicator.show { display: block; }
-  .spinner {
-    border: 5px solid #f3f3f3;
-    border-top: 5px solid #3498db;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    animation: spin 2s linear infinite;
-    margin: 0 auto;
+  #loading-animation-container {
+    position: relative; /* 建立相對定位容器 */
+    width: 250px; /* 動畫容器寬度 */
+    height: 180px; /* 動畫容器高度 */
+    margin: 20px auto;
   }
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+
+  .loading-step {
+    position: absolute; /* 絕對定位，方便控制每個步驟的位置和顯示 */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0; /* 初始完全透明 */
+    transition: opacity 0.5s ease-in-out; /* 淡入淡出效果 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .loading-step.active {
+    opacity: 1; /* 顯示目前步驟 */
+  }
+
+  .loading-icon {
+    width: 60px; /* 圖示大小 */
+    height: 60px;
+    margin-bottom: 10px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+  }
+
+  .loading-text {
+    font-size: 14px;
+    color: #777;
   }
 
   /* 伺服器外觀顯示區塊樣式 */
   #server-appearance {
     display: none;
     text-align: center;
-    margin-top: 20px;
+    margin-top: 30px;
   }
   #server-appearance.show { display: block; }
 
-  /* 伺服器動畫容器樣式 (調整大小以容納 CSS 伺服器) */
+  /* 真實感伺服器動畫容器樣式 */
   #server-animation {
-    width: 200px; /* 調整寬度 */
-    height: 150px; /* 調整高度，增加垂直空間 */
-    border: 1px dashed #ccc;
-    margin: 10px auto;
-    display: flex; /* 使用 Flexbox 垂直排列伺服器元件 */
-    flex-direction: column; /* 垂直排列 */
-    align-items: center; /* 水平置中對齊 */
-    justify-content: space-around; /*  垂直平均分配元件間距 */
-    overflow: hidden; /* 隱藏超出容器範圍的動畫 */
+    width: 300px; /* 增加寬度 */
+    height: 220px; /* 增加高度 */
+    margin: 20px auto;
+    position: relative; /* 方便內部組件絕對定位 */
+    /* border: 1px dashed #ccc;  除錯用邊框 */
   }
 
-  /* CSS 伺服器元件樣式 */
-  .server-component {
-    width: 80%; /* 元件寬度相對於容器 */
-    height: 20px; /* 元件高度 */
-    background-color: #ddd; /* 元件預設背景色 */
-    border-radius: 5px; /* 圓角 */
-    margin-bottom: 5px; /* 元件間距 */
-    display: flex; /* 內部使用 Flexbox 水平排列指示燈 */
-    justify-content: space-around; /* 平均分配指示燈間距 */
-    align-items: center; /* 垂直置中對齊指示燈 */
-    padding: 0 10px; /* 左右內邊距 */
-    box-sizing: border-box; /* 包含 padding 在內的寬度計算方式 */
+  /* 伺服器機殼 */
+  .server-chassis {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, #555, #333); /* 深灰色金屬漸層 */
+    border-radius: 8px;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
   }
 
-  .indicator-light {
-    width: 8px; /* 指示燈大小 */
+  /* 硬碟插槽區域 */
+  .drive-bay {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 60px;
+    height: 80%; /* 高度佔機殼主要部分 */
+    background-color: #222; /* 深黑色 */
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px 0;
+  }
+
+  /* 硬碟 */
+  .drive {
+    width: 40px;
+    height: 60px;
+    background-color: #777; /* 淺灰色硬碟本體 */
+    border-radius: 4px;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end; /* 指示燈靠下方 */
+  }
+  .drive:nth-child(even) { background-color: #888; } /* 偶數硬碟顏色略淺 */
+
+  /* 硬碟指示燈 */
+  .drive-indicator {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #880000; /* 紅色指示燈 (預設暗紅色) */
+    margin-bottom: 5px;
+  }
+  .drive-indicator.active {
+    background-color: #ff0000; /* 指示燈啟動時鮮紅色 */
+    box-shadow: 0 0 5px #ff0000; /* 發光效果 */
+  }
+
+  /* 電源供應器區域 */
+  .power-supply {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 80px;
+    height: 40%; /* 高度佔機殼上半部 */
+    background-color: #444; /* 深灰色 */
+    border-radius: 6px;
+    box-shadow: inset 0 0 8px rgba(0,0,0,0.4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    padding: 10px 0;
+  }
+
+  /* 電源供應器風扇 */
+  .psu-fan {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #666; /* 中灰色風扇 */
+    position: relative; /* 建立定位點，方便製作扇葉 */
+    overflow: hidden; /* 隱藏超出風扇範圍的扇葉 */
+    animation: fan-spin 1s linear infinite; /* 風扇旋轉動畫 */
+  }
+
+  /* 風扇中心點 */
+  .fan-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px;
     height: 8px;
-    border-radius: 50%; /* 圓形指示燈 */
-    background-color: #aaa; /* 指示燈預設顏色 (灰色) */
+    border-radius: 50%;
+    background-color: #333; /* 深灰色中心點 */
   }
 
-  .indicator-light.active {
-    background-color: lightgreen; /* 指示燈啟動顏色 (綠色) */
+  /* 風扇葉片 */
+  .fan-blade {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 0;
+    height: 50%;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-bottom: 15px solid #555; /* 葉片顏色 */
+    transform-origin: top center; /* 旋轉中心點設定在頂部中心 */
+  }
+  .fan-blade:nth-child(1) { transform: rotate(0deg); }
+  .fan-blade:nth-child(2) { transform: rotate(90deg); }
+  .fan-blade:nth-child(3) { transform: rotate(180deg); }
+  .fan-blade:nth-child(4) { transform: rotate(270deg); }
+
+
+  /* 主機板區域 */
+  .motherboard-area {
+    position: absolute;
+    top: 20px;
+    left: 100px; /* 避開硬碟插槽 */
+    right: 120px; /* 避開電源供應器 */
+    height: 60%; /* 高度佔機殼中部 */
+    background-color: #333; /* 深灰色主機板底色 */
+    border-radius: 6px;
+    box-shadow: inset 0 0 8px rgba(0,0,0,0.4);
+    display: flex;
+    flex-direction: row; /* 水平排列組件 */
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  /* 記憶體插槽 */
+  .ram-slots {
+    width: 30%;
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  /* 記憶體條 */
+  .ram-module {
+    width: 20px;
+    height: 50px;
+    background-color: #aaa; /* 淺灰色記憶體模組 */
+    border-radius: 4px;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
+  }
+  .ram-module:nth-child(even) { background-color: #bbb; } /* 偶數記憶體顏色略淺 */
+
+
+  /* CPU 插槽 */
+  .cpu-socket {
+    width: 40%;
+    height: 60%;
+    background-color: #555; /* 深灰色 CPU 插槽底座 */
+    border-radius: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative; /* 方便製作 CPU */
+  }
+
+  /* CPU 本體 */
+  .cpu {
+    width: 80%;
+    height: 70%;
+    background-color: #ccc; /* 銀色 CPU 本體 */
+    border-radius: 4px;
+    box-shadow: 0 0 8px rgba(255,255,255,0.5); /* 高光 */
+    position: relative; /* 方便製作 CPU 頂蓋線條 */
+  }
+
+  /* CPU 頂蓋線條 */
+  .cpu-line {
+    position: absolute;
+    top: 15%;
+    left: 10%;
+    width: 80%;
+    height: 2px;
+    background-color: #999; /* 較深灰色線條 */
+  }
+  .cpu-line:nth-child(2) { top: 35%; }
+  .cpu-line:nth-child(3) { top: 55%; }
+  .cpu-line:nth-child(4) { top: 75%; }
+
+
+  /* 網路連接埠區域 */
+  .network-ports {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 80px;
+    height: 30%; /* 高度佔機殼下半部 */
+    background-color: #444; /* 深灰色 */
+    border-radius: 6px;
+    box-shadow: inset 0 0 8px rgba(0,0,0,0.4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    padding: 10px 0;
+  }
+
+  /* 網路連接埠 */
+  .port {
+    width: 60px;
+    height: 15px;
+    background-color: #777; /* 淺灰色連接埠 */
+    border-radius: 3px;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
+  }
+  .port:nth-child(even) { background-color: #888; } /* 偶數連接埠顏色略淺 */
+
+
+  /* 動畫關鍵影格 - 風扇旋轉 */
+  @keyframes fan-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+
+  /* 載入動畫關鍵影格 - 組件淡入 */
+  @keyframes component-fade-in {
+    from { opacity: 0; transform: translateY(20px); } /* 初始透明並從下方移入 */
+    to { opacity: 1; transform: translateY(0); } /* 完全不透明並回到原位 */
   }
 
 </style>
@@ -90,17 +314,17 @@
 <body>
 
 <div class="container">
-  <h1>伺服器</h1>
+  <h1>wnet伺服器頁面</h1>
 
   <div class="section">
     <h2>電源控制</h2>
-    <button id="power-button">開啟</button>
+    <button id="power-button">開啟</button> <button id="os-start-button" disabled>啟動 OS</button>
     <div id="status-display">狀態: 關閉</div>
   </div>
 
   <div class="section">
     <h2>模擬狀態</h2>
-    <textarea id="simulation-status" rows="4" cols="50" placeholder="伺服器模擬狀態將顯示在這裡..." readonly></textarea>
+    <textarea id="simulation-status" rows="6" cols="50" placeholder="伺服器模擬狀態將顯示在這裡..." readonly></textarea>
   </div>
 
   <div class="section">
@@ -132,26 +356,82 @@
     </div>
 
     <button id="create-server-button">建立你的伺服器</button>
-    <div id="loading-indicator"><div class="spinner"></div> 載入中...</div>
+    <div id="loading-indicator">
+      <div id="loading-animation-container">
+        <div class="loading-step" id="step-chassis">
+          <div class="loading-icon" style="background-image: url('icon-server-chassis.png');"></div>
+          <div class="loading-text">安裝機殼</div>
+        </div>
+        <div class="loading-step" id="step-motherboard">
+          <div class="loading-icon" style="background-image: url('icon-motherboard.png');"></div>
+          <div class="loading-text">安裝主機板</div>
+        </div>
+        <div class="loading-step" id="step-cpu">
+          <div class="loading-icon" style="background-image: url('icon-cpu.png');"></div>
+          <div class="loading-text">安裝處理器</div>
+        </div>
+        <div class="loading-step" id="step-ram">
+          <div class="loading-icon" style="background-image: url('icon-ram.png');"></div>
+          <div class="loading-text">安裝記憶體</div>
+        </div>
+        <div class="loading-step" id="step-drives">
+          <div class="loading-icon" style="background-image: url('icon-hard-drive.png');"></div>
+          <div class="loading-text">安裝硬碟</div>
+        </div>
+        <div class="loading-step" id="step-psu">
+          <div class="loading-icon" style="background-image: url('icon-power-supply.png');"></div>
+          <div class="loading-text">安裝電源供應器(火牛)</div>
+        </div>
+        <div class="loading-step" id="step-network">
+          <div class="loading-icon" style="background-image: url('icon-network-card.png');"></div>
+          <div class="loading-text">安裝網路卡</div>
+        </div>
+        <div class="loading-step" id="step-complete">
+          <div class="loading-icon" style="background-image: url('icon-server-complete.png');"></div>
+          <div class="loading-text">組裝完成！</div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div id="server-appearance" class="section">
     <h2>伺服器外觀</h2>
     <div id="server-animation">
-      <div class="server-component">
-        <div class="indicator-light" id="light-cpu"></div>
-        <div class="indicator-light" id="light-ram"></div>
-        <div class="indicator-light" id="light-storage"></div>
+      <div class="server-chassis"></div>
+      <div class="drive-bay">
+        <div class="drive"><div class="drive-indicator" id="drive-indicator-1"></div></div>
+        <div class="drive"><div class="drive-indicator" id="drive-indicator-2"></div></div>
+        <div class="drive"><div class="drive-indicator" id="drive-indicator-3"></div></div>
+        <div class="drive"><div class="drive-indicator" id="drive-indicator-4"></div></div>
       </div>
-      <div class="server-component">
-        <div class="indicator-light" id="light-network1"></div>
-        <div class="indicator-light" id="light-network2"></div>
-        <div class="indicator-light" id="light-power"></div>
+      <div class="power-supply">
+        <div class="psu-fan">
+          <div class="fan-center"></div>
+          <div class="fan-blade"></div>
+          <div class="fan-blade"></div>
+          <div class="fan-blade"></div>
+          <div class="fan-blade"></div>
+        </div>
+        <div style="color: #eee; font-size: 12px;">Power</div>
       </div>
-      <div class="server-component">
-        <div class="indicator-light"></div>
-        <div class="indicator-light"></div>
-        <div class="indicator-light"></div>
+      <div class="motherboard-area">
+        <div class="ram-slots">
+          <div class="ram-module"></div>
+          <div class="ram-module"></div>
+        </div>
+        <div class="cpu-socket">
+          <div class="cpu">
+            <div class="cpu-line"></div>
+            <div class="cpu-line"></div>
+            <div class="cpu-line"></div>
+            <div class="cpu-line"></div>
+          </div>
+        </div>
+      </div>
+      <div class="network-ports">
+        <div class="port"></div>
+        <div class="port"></div>
+        <div style="color: #eee; font-size: 12px;">Network</div>
       </div>
     </div>
   </div>
@@ -161,51 +441,55 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const powerButton = document.getElementById('power-button');
+  const osStartButton = document.getElementById('os-start-button');
   const statusDisplay = document.getElementById('status-display');
   const simulationStatusDisplay = document.getElementById('simulation-status');
   const createServerButton = document.getElementById('create-server-button');
   const loadingIndicator = document.getElementById('loading-indicator');
   const serverAppearanceSection = document.getElementById('server-appearance');
-  const serverAnimation = document.getElementById('server-animation'); // 獲取動畫容器
+  const serverAnimation = document.getElementById('server-animation');
 
-  // 獲取指示燈元素
-  const lightCPU = document.getElementById('light-cpu');
-  const lightRAM = document.getElementById('light-ram');
-  const lightStorage = document.getElementById('light-storage');
-  const lightNetwork1 = document.getElementById('light-network1');
-  const lightNetwork2 = document.getElementById('light-network2');
-  const lightPower = document.getElementById('light-power');
-  const indicatorLights = [lightCPU, lightRAM, lightStorage, lightNetwork1, lightNetwork2, lightPower]; // 指示燈陣列
+  // 載入動畫步驟元素
+  const loadingSteps = {
+    chassis: document.getElementById('step-chassis'),
+    motherboard: document.getElementById('step-motherboard'),
+    cpu: document.getElementById('step-cpu'),
+    ram: document.getElementById('step-ram'),
+    drives: document.getElementById('step-drives'),
+    psu: document.getElementById('step-psu'),
+    network: document.getElementById('step-network'),
+    complete: document.getElementById('step-complete')
+  };
+
+  // 硬碟指示燈元素
+  const driveIndicators = [
+    document.getElementById('drive-indicator-1'),
+    document.getElementById('drive-indicator-2'),
+    document.getElementById('drive-indicator-3'),
+    document.getElementById('drive-indicator-4')
+  ];
+
 
   let serverOn = false;
-  let animationInterval; // 儲存 setInterval 的 ID，用於清除間隔動畫
+  let osStarted = false;
+  let animationInterval;
 
-  // 啟動伺服器動畫 (JavaScript 間隔動畫 - 閃爍指示燈)
   function startServerAnimation() {
-    let lightIndex = 0;
-
-    function animateLights() {
-      // 關閉所有指示燈
-      indicatorLights.forEach(light => light.classList.remove('active'));
-
-      // 隨機啟動幾個指示燈
-      for (let i = 0; i < 3; i++) { // 每次隨機啟動 3 個指示燈
-        const randomIndex = Math.floor(Math.random() * indicatorLights.length);
-        indicatorLights[randomIndex].classList.add('active');
+    function animateDrives() {
+      driveIndicators.forEach(indicator => indicator.classList.remove('active'));
+      const activeCount = Math.floor(Math.random() * (driveIndicators.length + 1)); // 隨機啟動 0 到 4 個指示燈
+      for (let i = 0; i < activeCount; i++) {
+        const randomIndex = Math.floor(Math.random() * driveIndicators.length);
+        driveIndicators[randomIndex].classList.add('active');
       }
-
-      lightIndex = (lightIndex + 1) % indicatorLights.length; // 循環指示燈索引
     }
-
-    animateLights(); // 立即執行一次，避免開始時空白
-    animationInterval = setInterval(animateLights, 500); // 每 500 毫秒執行一次動畫
+    animateDrives(); // 立即執行一次
+    animationInterval = setInterval(animateDrives, 300); // 每 300 毫秒更新硬碟指示燈動畫
   }
 
-
-  // 停止伺服器動畫 (JavaScript 間隔動畫)
   function stopServerAnimation() {
-    clearInterval(animationInterval); // 清除間隔動畫
-    indicatorLights.forEach(light => light.classList.remove('active')); // 關閉所有指示燈
+    clearInterval(animationInterval);
+    driveIndicators.forEach(indicator => indicator.classList.remove('active')); // 關閉所有硬碟指示燈
   }
 
 
@@ -214,17 +498,25 @@ document.addEventListener('DOMContentLoaded', function() {
       statusDisplay.textContent = '狀態: 開啟';
       powerButton.textContent = '關閉';
       powerButton.classList.remove('off');
+      osStartButton.disabled = false;
       simulationStatusDisplay.value = '伺服器已啟動並正常運行中...\nCPU: ' + document.getElementById('cpu-select').value +
                                     '\n記憶體: ' + document.getElementById('ram-input').value + 'GB' +
                                     '\n儲存空間: ' + document.getElementById('storage-input').value + 'TB' +
-                                    '\n主機型號: ' + document.getElementById('host-input').value;
-      startServerAnimation(); // 伺服器開啟時啟動動畫
+                                    '\nMotherboard: ' + document.getElementById('host-input').value;
+      startServerAnimation();
+      if (!osStarted) {
+        simulationStatusDisplay.value += '\n等待啟動作業系統...';
+      } else {
+        simulationStatusDisplay.value += '\n作業系統已啟動。';
+      }
     } else {
       statusDisplay.textContent = '狀態: 關閉';
       powerButton.textContent = '開啟';
       powerButton.classList.add('off');
+      osStartButton.disabled = true;
       simulationStatusDisplay.value = '伺服器已關閉。';
-      stopServerAnimation(); // 伺服器關閉時停止動畫
+      stopServerAnimation();
+      osStarted = false;
     }
   }
 
@@ -233,16 +525,68 @@ document.addEventListener('DOMContentLoaded', function() {
     updateServerStatus();
   });
 
+  osStartButton.addEventListener('click', function() {
+    if (serverOn && !osStarted) {
+      osStartButton.disabled = true;
+      simulationStatusDisplay.value = '系統啟動中...\n';
+
+      const bootMessages = [
+        "檢查硬體...",
+        "載入核心...",
+        "啟動服務...",
+        "網路設定...",
+        "等待使用者登入..."
+      ];
+      let messageIndex = 0;
+      function displayBootMessage() {
+        if (messageIndex < bootMessages.length) {
+          simulationStatusDisplay.value += bootMessages[messageIndex] + '\n';
+          messageIndex++;
+          setTimeout(displayBootMessage, 800);
+        } else {
+          osStarted = true;
+          osStartButton.disabled = false;
+          updateServerStatus();
+        }
+      }
+      displayBootMessage();
+    }
+  });
+
+
   createServerButton.addEventListener('click', function() {
     loadingIndicator.classList.add('show');
     serverAppearanceSection.classList.remove('show');
-    stopServerAnimation(); // 點擊建立伺服器按鈕時，先停止動畫，避免動畫重複
+    stopServerAnimation();
+    osStarted = false;
 
-    setTimeout(function() {
-      loadingIndicator.classList.remove('show');
-      serverAppearanceSection.classList.add('show');
-      updateServerStatus(); // 顯示伺服器外觀後，根據伺服器狀態決定是否啟動動畫 (預設關閉)
-    }, 2000);
+    // 顯示載入動畫步驟，每個步驟延遲一段時間
+    let stepDelay = 1000; // 步驟延遲時間 (毫秒)
+    let currentStep = 0;
+    const stepOrder = ['chassis', 'motherboard', 'cpu', 'ram', 'drives', 'psu', 'network', 'complete']; // 步驟順序
+
+    function animateLoadingSteps() {
+      if (currentStep < stepOrder.length) {
+        const stepName = stepOrder[currentStep];
+        loadingSteps[stepName].classList.add('active'); // 顯示目前步驟
+
+        if (currentStep > 0) {
+          const prevStepName = stepOrder[currentStep - 1];
+          loadingSteps[prevStepName].classList.remove('active'); // 隱藏前一個步驟 (可選，如果不需要淡出效果就移除)
+        }
+
+        currentStep++;
+        setTimeout(animateLoadingSteps, stepDelay); // 延遲後執行下一個步驟
+      } else {
+        // 所有步驟完成後
+        loadingIndicator.classList.remove('show'); // 隱藏載入動畫
+        serverAppearanceSection.classList.add('show'); // 顯示伺服器外觀
+        updateServerStatus(); // 顯示伺服器狀態
+      }
+    }
+
+    loadingIndicator.classList.add('show'); // 顯示載入動畫容器
+    animateLoadingSteps(); // 開始載入動畫步驟
   });
 
   // 初始化狀態
