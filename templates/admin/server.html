@@ -56,19 +56,49 @@
 
   .section { margin-bottom: 25px; }
   .section h2 { margin-top: 0; color: #333; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+  .section h3 { margin-top: 15px; color: #555; border-bottom: 1px solid #eee; padding-bottom: 5px; } /* 命令列介面標題 */
   #status-display { padding: 12px; border: 1px solid #eee; margin-top: 15px; border-radius: 4px; background-color: #f9f9f9; color: #555; }
   .config-item { margin-bottom: 15px; }
   .config-item label { display: inline-block; width: 140px; text-align: right; margin-right: 15px; color: #666; }
   .config-item input, .config-item select { padding: 10px; width: 220px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
-  #power-button, #os-start-button, #create-server-button { padding: 12px 25px; border: none; border-radius: 6px; color: white; font-size: 15px; cursor: pointer; transition: background-color 0.3s ease; }
+  .config-item textarea { padding: 10px; width: 100%; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; resize: vertical; font-family: monospace; } /* 設定介面 command 顯示區域 */
+  #power-button, #os-start-button, #create-server-button, #execute-command-button { padding: 12px 25px; border: none; border-radius: 6px; color: white; font-size: 15px; cursor: pointer; transition: background-color 0.3s ease; }
   #power-button { background-color: #4CAF50; }
   #power-button.off { background-color: #f44336; }
   #os-start-button { background-color: #ffc107; color: black; margin-left: 10px; }
   #os-start-button:disabled { background-color: #cccccc; color: #666666; cursor: not-allowed; }
   #create-server-button { background-color: #008CBA; margin-top: 10px; display: block; margin-left: auto; margin-right: auto; }
   #create-server-button:hover { background-color: #0077a3; }
+  #execute-command-button { background-color: #555; margin-left: 10px; } /* 命令列執行按鈕 */
+  #execute-command-button:hover { background-color: #666; }
 
-  /* 載入動畫樣式 - 技術人員砌機 */
+  /* 命令列介面樣式 */
+  #command-interface { margin-top: 20px; }
+  #command-output {
+    width: 100%;
+    height: 150px; /* 命令輸出區域高度 */
+    margin-bottom: 10px;
+    background-color: #222; /* 深色背景 */
+    color: #eee; /* 淺色文字 */
+    border: 1px solid #333;
+    padding: 10px;
+    border-radius: 4px;
+    font-family: monospace; /* 等寬字型 */
+    font-size: 14px;
+    overflow-y: scroll; /* 垂直捲軸 */
+    white-space: pre-wrap; /* 保留空白和換行 */
+  }
+  #command-input-area { display: flex; align-items: center; }
+  #command-input {
+    flex-grow: 1; /* 輸入欄位佔滿剩餘空間 */
+    margin-right: 10px;
+    background-color: #333; /* 輸入欄位背景色 */
+    color: #eee;
+    border: 1px solid #444;
+  }
+
+
+  /* 載入動畫樣式 (與之前版本相同) */
   #loading-indicator {
     display: none;
     text-align: center;
@@ -226,22 +256,21 @@
     content: '✓';
   }
 
-  /* 伺服器外觀顯示區塊樣式 (以下樣式大幅度更新，增加真實感) */
+  /* 伺服器外觀顯示區塊樣式 (與之前版本相同) */
   #server-appearance {
     text-align: center;
     margin-top: 30px;
   }
 
-  /* 真實感伺服器動畫容器樣式 */
+  /* 真實感伺服器動畫容器樣式 (與之前版本相同) */
   #server-animation {
-    width: 320px; /* 略微增加寬度 */
-    height: 240px; /* 略微增加高度 */
+    width: 320px;
+    height: 240px;
     margin: 20px auto;
     position: relative;
-    /* border: 1px dashed #ccc;  除錯用邊框 */
   }
 
-  /*  -------  更真實的伺服器主機外觀 CSS 繪製  -------  */
+  /*  -------  更真實的伺服器主機外觀 CSS 繪製 (與之前版本相同) -------  */
 
   /* 伺服器機殼 */
   .server-chassis {
@@ -250,10 +279,10 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to bottom, #666, #444); /* 更深的灰色金屬漸層 */
+    background: linear-gradient(to bottom, #666, #444);
     border-radius: 8px;
-    box-shadow: inset 0 0 12px rgba(0,0,0,0.6); /* 更強烈的內陰影 */
-    border: 1px solid #222; /* 增加邊框線條 */
+    box-shadow: inset 0 0 12px rgba(0,0,0,0.6);
+    border: 1px solid #222;
   }
 
   /* 前面板 */
@@ -263,9 +292,9 @@
     left: 10px;
     width: 30px;
     height: calc(100% - 20px);
-    background-color: #555; /* 前面板顏色 */
+    background-color: #555;
     border-radius: 6px;
-    box-shadow: inset 3px 0 5px rgba(0,0,0,0.3); /* 前面板右側陰影 */
+    box-shadow: inset 3px 0 5px rgba(0,0,0,0.3);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -278,27 +307,25 @@
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    background-color: #777; /* 按鈕底色 */
-    border: 2px solid #666; /* 按鈕邊框 */
-    box-shadow: 0 1px 2px rgba(0,0,0,0.4); /* 按鈕陰影 */
+    background-color: #777;
+    border: 2px solid #666;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.4);
     cursor: pointer;
   }
-  .panel-button#power-btn-front { background-color: #4CAF50; border-color: #449d48; } /* 電源按鈕綠色 */
-  .panel-button#reset-btn-front { background-color: #ffc107; border-color: #f0b400; } /* 重置按鈕黃色 */
-
+  .panel-button#power-btn-front { background-color: #4CAF50; border-color: #449d48; }
+  .panel-button#reset-btn-front { background-color: #ffc107; border-color: #f0b400; }
 
   /* 前面板指示燈 */
   .panel-indicator {
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background-color: #888; /* 指示燈預設灰色 */
+    background-color: #888;
     box-shadow: inset 0 0 2px rgba(0,0,0,0.5);
   }
-  .panel-indicator.active { background-color: #00ff00; box-shadow: 0 0 5px #00ff00; } /* 活動指示燈綠色發光 */
-  .panel-indicator#hdd-indicator-front.active { background-color: #ff0000; box-shadow: 0 0 5px #ff0000; } /* 硬碟指示燈紅色發光 */
-  .panel-indicator#network-indicator-front.active { background-color: #0000ff; box-shadow: 0 0 5px #0000ff; } /* 網路指示燈藍色發光 */
-
+  .panel-indicator.active { background-color: #00ff00; box-shadow: 0 0 5px #00ff00; }
+  .panel-indicator#hdd-indicator-front.active { background-color: #ff0000; box-shadow: 0 0 5px #ff0000; }
+  .panel-indicator#network-indicator-front.active { background-color: #0000ff; box-shadow: 0 0 5px #0000ff; }
 
   /* 前面板 Logo 或標識 (簡化為文字) */
   .front-logo {
@@ -310,111 +337,106 @@
     margin-bottom: 5px;
   }
 
-
-  /* 硬碟插槽區域 */
+  /* 硬碟插槽區域 (與之前版本相同) */
   .drive-bay {
     position: absolute;
     top: 20px;
-    left: 50px; /* 調整位置避開前面板 */
-    width: 70px; /* 略微增加寬度 */
+    left: 50px;
+    width: 70px;
     height: 80%;
-    background-color: #333; /* 硬碟插槽區域顏色 */
+    background-color: #333;
     border-radius: 6px;
     box-shadow: inset 0 0 8px rgba(0,0,0,0.5);
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
-    padding: 8px 0; /* 略微縮小 padding */
+    padding: 8px 0;
   }
 
-
-  /* 硬碟 */
+  /* 硬碟 (與之前版本相同) */
   .drive {
-    width: 45px; /* 略微增加寬度 */
-    height: 65px; /* 略微增加高度 */
-    background: linear-gradient(to bottom, #999, #777); /* 硬碟本體金屬漸層 */
+    width: 45px;
+    height: 65px;
+    background: linear-gradient(to bottom, #999, #777);
     border-radius: 4px;
     box-shadow: inset 0 0 5px rgba(0,0,0,0.4);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-end;
-    padding-bottom: 3px; /* 指示燈下移一點 */
-    border: 1px solid #666; /* 增加硬碟邊框 */
+    padding-bottom: 3px;
+    border: 1px solid #666;
   }
-  .drive:nth-child(even) { background: linear-gradient(to bottom, #aaa, #888); } /* 偶數硬碟顏色略淺 */
+  .drive:nth-child(even) { background: linear-gradient(to bottom, #aaa, #888); }
 
-
-  /* 硬碟指示燈 */
+  /* 硬碟指示燈 (與之前版本相同) */
   .drive-indicator {
-    width: 7px; /* 略微增加指示燈大小 */
+    width: 7px;
     height: 7px;
     border-radius: 50%;
     background-color: #880000;
-    margin-bottom: 4px; /* 指示燈間距略微縮小 */
-    border: 1px solid #600000; /* 指示燈增加邊框 */
+    margin-bottom: 4px;
+    border: 1px solid #600000;
   }
   .drive-indicator.active {
     background-color: #ff0000;
-    box-shadow: 0 0 6px #ff0000; /* 發光效果略微增強 */
+    box-shadow: 0 0 6px #ff0000;
   }
 
-
-  /* 電源供應器區域 */
+  /* 電源供應器區域 (與之前版本相同) */
   .power-supply {
     position: absolute;
     top: 20px;
     right: 20px;
-    width: 90px; /* 略微增加寬度 */
-    height: 45%; /* 略微增加高度 */
-    background-color: #555; /* 電源供應器區域顏色 */
+    width: 90px;
+    height: 45%;
+    background-color: #555;
     border-radius: 6px;
     box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
-    padding: 8px 0; /* 略微縮小 padding */
-    border: 1px solid #444; /* 增加邊框 */
+    padding: 8px 0;
+    border: 1px solid #444;
   }
 
-
-  /* 電源供應器風扇 */
+  /* 電源供應器風扇 (與之前版本相同) */
   .psu-fan {
-    width: 35px; /* 略微增加風扇大小 */
+    width: 35px;
     height: 35px;
     border-radius: 50%;
     background-color: #777;
     position: relative;
     overflow: hidden;
     animation: fan-spin 1s linear infinite;
-    border: 1px solid #666; /* 增加風扇邊框 */
+    border: 1px solid #666;
   }
 
-  /* 風扇中心點 */
+  /* 風扇中心點 (與之前版本相同) */
   .fan-center {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 10px; /* 略微增加中心點大小 */
+    width: 10px;
     height: 10px;
     border-radius: 50%;
     background-color: #444;
-    border: 1px solid #333; /* 增加中心點邊框 */
+    border: 1px solid #333;
   }
 
-  /* 風扇葉片 */
+  /* 風扇葉片 (與之前版本相同) */
   .fan-blade {
     position: absolute;
     top: 0;
     left: 50%;
     width: 0;
     height: 50%;
-    border-left: 5px solid transparent; /* 略微增加葉片寬度 */
+    border-left: 5px solid transparent;
     border-right: 5px solid transparent;
-    border-bottom: 18px solid #666; /* 略微增加葉片長度 */
+    border-bottom: 18px solid #666;
     transform-origin: top center;
   }
   .fan-blade:nth-child(1) { transform: rotate(0deg); }
@@ -422,151 +444,144 @@
   .fan-blade:nth-child(3) { transform: rotate(180deg); }
   .fan-blade:nth-child(4) { transform: rotate(270deg); }
 
-
-  /* 主機板區域 */
+  /* 主機板區域 (與之前版本相同) */
   .motherboard-area {
     position: absolute;
     top: 20px;
-    left: 130px; /* 調整位置避開硬碟插槽和前面板 */
-    right: 130px; /* 調整位置避開電源供應器 */
-    height: 65%; /* 略微增加高度 */
-    background-color: #444; /* 主機板區域顏色 */
+    left: 130px;
+    right: 130px;
+    height: 65%;
+    background-color: #444;
     border-radius: 6px;
     box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
-    border: 1px solid #333; /* 增加邊框 */
+    border: 1px solid #333;
   }
 
-
-  /* 記憶體插槽 */
+  /* 記憶體插槽 (與之前版本相同) */
   .ram-slots {
-    width: 35%; /* 略微增加寬度 */
-    height: 85%; /* 略微增加高度 */
+    width: 35%;
+    height: 85%;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
   }
 
-  /* 記憶體條 */
+  /* 記憶體條 (與之前版本相同) */
   .ram-module {
-    width: 22px; /* 略微增加寬度 */
-    height: 55px; /* 略微增加高度 */
-    background: linear-gradient(to bottom, #bbb, #999); /* 記憶體模組金屬漸層 */
+    width: 22px;
+    height: 55px;
+    background: linear-gradient(to bottom, #bbb, #999);
     border-radius: 4px;
     box-shadow: inset 0 0 5px rgba(0,0,0,0.4);
-    border: 1px solid #888; /* 增加邊框 */
-    position: relative; /* 準備製作金手指 */
-    overflow: hidden; /* 隱藏超出邊界的金手指 */
+    border: 1px solid #888;
+    position: relative;
+    overflow: hidden;
   }
-  .ram-module:nth-child(even) { background: linear-gradient(to bottom, #ccc, #aaa); } /* 偶數記憶體顏色略淺 */
+  .ram-module:nth-child(even) { background: linear-gradient(to bottom, #ccc, #aaa); }
 
-  /* 記憶體金手指 */
+  /* 記憶體金手指 (與之前版本相同) */
   .ram-module::before {
     content: '';
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 8px; /* 金手指高度 */
-    background: linear-gradient(to right, #d4af37, #daa520); /* 金色漸層 */
+    height: 8px;
+    background: linear-gradient(to right, #d4af37, #daa520);
     border-radius: 0 0 3px 3px;
     box-shadow: inset 0 0 3px rgba(0,0,0,0.5);
   }
 
-
-  /* CPU 插槽 */
+  /* CPU 插槽 (與之前版本相同) */
   .cpu-socket {
-    width: 45%; /* 略微增加寬度 */
-    height: 70%; /* 略微增加高度 */
-    background-color: #666; /* CPU 插槽底座顏色 */
+    width: 45%;
+    height: 70%;
+    background-color: #666;
     border-radius: 6px;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
-    border: 1px solid #555; /* 增加邊框 */
-    box-shadow: inset 0 0 5px rgba(0,0,0,0.3); /* 增加內陰影 */
+    border: 1px solid #555;
   }
 
-  /* CPU 本體 */
+  /* CPU 本體 (與之前版本相同) */
   .cpu {
-    width: 85%; /* 略微增加寬度 */
-    height: 75%; /* 略微增加高度 */
-    background: linear-gradient(to bottom, #ddd, #bbb); /* CPU 本體金屬漸層 */
+    width: 85%;
+    height: 75%;
+    background: linear-gradient(to bottom, #ddd, #bbb);
     border-radius: 4px;
-    box-shadow: 0 0 10px rgba(255,255,255,0.7); /* 更強烈的高光 */
+    box-shadow: 0 0 10px rgba(255,255,255,0.7);
     position: relative;
-    border: 1px solid #aaa; /* 增加邊框 */
+    border: 1px solid #aaa;
   }
 
-  /* CPU 頂蓋線條 */
+  /* CPU 頂蓋線條 (與之前版本相同) */
   .cpu-line {
     position: absolute;
     top: 15%;
     left: 10%;
     width: 80%;
     height: 2px;
-    background-color: #aaa; /* 線條顏色略微調淺 */
+    background-color: #aaa;
   }
   .cpu-line:nth-child(2) { top: 35%; }
   .cpu-line:nth-child(3) { top: 55%; }
   .cpu-line:nth-child(4) { top: 75%; }
 
-
-  /* 網路連接埠區域 */
+  /* 網路連接埠區域 (與之前版本相同) */
   .network-ports {
     position: absolute;
     bottom: 20px;
     right: 20px;
-    width: 90px; /* 略微增加寬度 */
-    height: 35%; /* 略微增加高度 */
-    background-color: #555; /* 網路連接埠區域顏色 */
+    width: 90px;
+    height: 35%;
+    background-color: #555;
     border-radius: 6px;
     box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
-    padding: 8px 0; /* 略微縮小 padding */
-    border: 1px solid #444; /* 增加邊框 */
+    padding: 8px 0;
+    border: 1px solid #444;
   }
 
-
-  /* 網路連接埠 */
+  /* 網路連接埠 (與之前版本相同) */
   .port {
-    width: 65px; /* 略微增加寬度 */
-    height: 18px; /* 略微增加高度 */
-    background: linear-gradient(to bottom, #888, #666); /* 連接埠金屬漸層 */
+    width: 65px;
+    height: 18px;
+    background: linear-gradient(to bottom, #888, #666);
     border-radius: 3px;
     box-shadow: inset 0 0 5px rgba(0,0,0,0.4);
-    border: 1px solid #555; /* 增加邊框 */
-    position: relative; /* 準備製作種類指示 */
+    border: 1px solid #555;
+    position: relative;
   }
-  .port:nth-child(even) { background: linear-gradient(to bottom, #999, #777); } /* 偶數連接埠顏色略淺 */
+  .port:nth-child(even) { background: linear-gradient(to bottom, #999, #777); }
 
-  /* 網路連接埠種類指示 (RJ-45, Fiber Channel 等) */
+  /* 網路連接埠種類指示 (與之前版本相同) */
   .port::before {
     content: '';
     position: absolute;
-    top: 2px; right: 2px; /* 調整位置 */
+    top: 2px; right: 2px;
     width: 8px; height: 8px;
     border-radius: 50%;
-    background-color: #00aa00; /* RJ-45 綠色指示 (預設) */
+    background-color: #00aa00;
     box-shadow: inset 0 0 2px rgba(0,0,0,0.5);
   }
-  .port:nth-child(even)::before { background-color: #aa0000; } /* Fiber Channel 紅色指示 (偶數連接埠) */
-
+  .port:nth-child(even)::before { background-color: #aa0000; }
 
   /* 動畫關鍵影格 - 風扇旋轉 (與之前版本相同) */
   @keyframes fan-spin {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
   }
-
 
   /* 載入動畫關鍵影格 - 組件淡入 (與之前版本相同) */
   @keyframes component-fade-in {
@@ -590,7 +605,8 @@
 <div class="container">
   <div class="header">
     <button class="menu-button active" data-ui="start">啟動</button>
-    <button class="menu-button" data-ui="server">控制面板</button>  <button class="menu-button" data-ui="settings">設定</button>
+    <button class="menu-button" data-ui="server">控制面板</button>
+    <button class="menu-button" data-ui="settings">設定</button>
   </div>
 
   <div class="main-content">
@@ -641,7 +657,9 @@
 
     <div id="server-ui-section" class="ui-section">
       <div class="section">
-        <h2>伺服器控制面板</h2>  <p>歡迎使用伺服器控制面板。 在這裡您可以管理伺服器的電源、監控伺服器狀態，並查看伺服器的真實外觀。</p> </div>
+        <h2>伺服器控制面板</h2>
+        <p>歡迎使用伺服器控制面板。 在這裡您可以管理伺服器的電源、監控伺服器狀態，操作命令列介面，並查看伺服器的真實外觀。</p>
+      </div>
 
       <div class="section">
         <h3>電源控制</h3>
@@ -650,18 +668,29 @@
         <div id="status-display">狀態: 關閉</div>
       </div>
 
+      <div class="section" id="command-interface">
+        <h3>命令列介面(CLI)</h3>
+        <div id="command-output" readonly></div>
+        <div id="command-input-area">
+          <input type="text" id="command-input" placeholder="輸入命令">
+          <button id="execute-command-button">執行</button>
+        </div>
+      </div>
+
       <div class="section">
         <h3>狀態</h3>
-        <textarea id="simulation-status" rows="6" cols="50" placeholder="伺服器狀態將顯示在這裡..." readonly></textarea>
+        <textarea id="simulation-status" rows="6" cols="50" placeholder="伺服器模擬狀態將顯示在這裡..." readonly></textarea>
       </div>
 
       <div id="server-appearance" class="section">
         <h3>伺服器外觀</h3>
         <div id="server-animation">
           <div class="server-chassis">
-            <div class="front-panel">  <div class="panel-button" id="power-btn-front"></div>
+            <div class="front-panel">
+              <div class="panel-button" id="power-btn-front"></div>
               <div class="panel-button" id="reset-btn-front"></div>
-              <div class="panel-indicator active" id="power-indicator-front"></div> <div class="panel-indicator" id="hdd-indicator-front"></div>
+              <div class="panel-indicator active" id="power-indicator-front"></div>
+              <div class="panel-indicator" id="hdd-indicator-front"></div>
               <div class="panel-indicator" id="network-indicator-front"></div>
               <div class="front-logo">wnet</div>
             </div>
@@ -714,6 +743,8 @@
             <option value="intel-i3">Intel Core i3</option>
             <option value="intel-i5">Intel Core i5</option>
             <option value="intel-i7">Intel Core i7</option>
+            <option value="intel-i9">Intel Core i9</option>
+            <option value="intel-i12">Intel Core i12</option>
             <option value="amd-ryzen5">AMD Ryzen 5</option>
             <option value="amd-ryzen7">AMD Ryzen 7</option>
           </select>
@@ -721,7 +752,7 @@
 
         <div class="config-item">
           <label for="ram-input">記憶體 (GB):</label>
-          <input type="number" id="ram-input" value="23">
+          <input type="number" id="ram-input" value="7">
         </div>
 
         <div class="config-item">
@@ -732,6 +763,11 @@
         <div class="config-item">
           <label for="host-input">Motherboard:</label>
           <input type="text" id="host-input" value="Dell PowerEdge">
+        </div>
+
+        <div class="config-item">
+          <label>啟動 Command:</label>
+          <textarea id="startup-command-display" rows="2" readonly></textarea>
         </div>
       </div>
     </div>
@@ -749,6 +785,11 @@ document.addEventListener('DOMContentLoaded', function() {
   const loadingIndicator = document.getElementById('loading-indicator');
   const serverAppearanceSection = document.getElementById('server-appearance');
   const serverAnimation = document.getElementById('server-animation');
+  const commandOutput = document.getElementById('command-output'); // 命令輸出區域
+  const commandInput = document.getElementById('command-input');   // 命令輸入欄位
+  const executeCommandButton = document.getElementById('execute-command-button'); // 執行按鈕
+  const startupCommandDisplay = document.getElementById('startup-command-display'); // 啟動 command 顯示區域
+
 
   // 載入動畫步驟元素 (與之前版本相同)
   const loadingSteps = {
@@ -770,7 +811,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('drive-indicator-4')
   ];
 
-  // 前面板指示燈元素
+  // 前面板指示燈元素 (與之前版本相同)
   const frontPanelIndicators = {
     power: document.getElementById('power-indicator-front'),
     hdd: document.getElementById('hdd-indicator-front'),
@@ -791,6 +832,30 @@ document.addEventListener('DOMContentLoaded', function() {
   let serverOn = false;
   let osStarted = false;
   let animationInterval;
+  let currentDirectory = '/'; // 模擬檔案系統目前目錄
+  const fileSystem = { // 模擬檔案系統結構
+    '/': { // 根目錄
+      type: 'directory',
+      contents: {
+        'home': {
+          type: 'directory',
+          contents: {
+            'user': {
+              type: 'directory',
+              contents: {
+                'documents': { type: 'directory', contents: {} },
+                'downloads': { type: 'directory', contents: {} },
+                'pictures': { type: 'directory', contents: {} }
+              }
+            }
+          }
+        },
+        'etc': { type: 'directory', contents: {} },
+        'var': { type: 'directory', contents: {} }
+      }
+    }
+  };
+
 
   function startServerAnimation() {
     function animateDrives() {
@@ -822,9 +887,9 @@ document.addEventListener('DOMContentLoaded', function() {
                                     '\n儲存空間: ' + document.getElementById('storage-input').value + 'TB' +
                                     '\nMotherboard: ' + document.getElementById('host-input').value;
       startServerAnimation();
-      frontPanelIndicators.power.classList.add('active'); // 開啟電源指示燈
-      frontPanelIndicators.network.classList.add('active'); // 開啟網路指示燈
-      frontPanelIndicators.hdd.classList.add('active'); // 開啟硬碟指示燈 (模擬活動)
+      frontPanelIndicators.power.classList.add('active');
+      frontPanelIndicators.network.classList.add('active');
+      frontPanelIndicators.hdd.classList.add('active');
 
 
       if (!osStarted) {
@@ -839,9 +904,9 @@ document.addEventListener('DOMContentLoaded', function() {
       osStartButton.disabled = true;
       simulationStatusDisplay.value = '伺服器已關閉。';
       stopServerAnimation();
-      frontPanelIndicators.power.classList.remove('active'); // 關閉電源指示燈
-      frontPanelIndicators.network.classList.remove('active'); // 關閉網路指示燈
-      frontPanelIndicators.hdd.classList.remove('active'); // 關閉硬碟指示燈
+      frontPanelIndicators.power.classList.remove('active');
+      frontPanelIndicators.network.classList.remove('active');
+      frontPanelIndicators.hdd.classList.remove('active');
       osStarted = false;
     }
   }
@@ -911,6 +976,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // 組裝完成後自動切換到 Server UI 頁面
         switchUI('server');
+
+        // 產生並顯示啟動 command
+        const generatedStartupCommand = `serverctl start wnet-server --cpu=${document.getElementById('cpu-select').value} --ram=${document.getElementById('ram-input').value}GB --storage=${document.getElementById('storage-input').value}TB --host="${document.getElementById('host-input').value}"`;
+        startupCommandDisplay.value = generatedStartupCommand;
       }
     }
 
@@ -934,6 +1003,154 @@ document.addEventListener('DOMContentLoaded', function() {
       const uiName = this.dataset.ui;
       switchUI(uiName);
     });
+  });
+
+
+  // 命令處理函式
+  function handleCommand(command) {
+    const parts = command.trim().split(/\s+/); // 使用正則表達式處理多個空格
+    const baseCommand = parts[0];
+    const args = parts.slice(1);
+
+    switch (baseCommand) {
+      case 'cd':
+        if (args.length > 0) {
+          const path = args[0];
+          if (path === '..') {
+            // 上層目錄
+            const pathParts = currentDirectory.split('/').filter(part => part !== '');
+            pathParts.pop();
+            currentDirectory = '/' + pathParts.join('/');
+            if (currentDirectory === '/') currentDirectory = '/'; // 防止變為空字串
+          } else if (path.startsWith('/')) {
+            // 絕對路徑
+            if (isValidPath(path, fileSystem['/'])) {
+               currentDirectory = path;
+            } else {
+              return `路徑不存在: ${path}`;
+            }
+          }
+          else {
+            // 相對路徑
+            const newPath = currentDirectory + (currentDirectory === '/' ? '' : '/') + path;
+            if (isValidPath(newPath, fileSystem['/'])) {
+              currentDirectory = newPath;
+            } else {
+              return `路徑不存在: ${path}`;
+            }
+          }
+        } else {
+          currentDirectory = '/'; // cd without arguments goes to root
+        }
+        return `目前目錄: ${currentDirectory}\n`;
+
+      case 'ls':
+        let listPath = currentDirectory;
+        if (args.length > 0) {
+          listPath = args[0];
+        }
+
+        let targetDir = getDirectory(listPath);
+
+        if (!targetDir) {
+          return `路徑不存在: ${listPath}\n`;
+        }
+
+        if (targetDir.type === 'directory') {
+          const contents = Object.keys(targetDir.contents).join('\t');
+          return `${contents}\n`;
+        } else {
+          return `不是目錄: ${listPath}\n`; // 如果 ls 目標不是目錄
+        }
+
+
+      case 'apt':
+      case 'apt-get': // 支援 apt 和 apt-get
+        if (args[0] === 'install' && args.length > 1) {
+          const packageName = args[1];
+          return simulateInstall(packageName); // 調用模擬安裝函式
+        } else {
+          return `用法: apt install <package>\n`;
+        }
+
+      default:
+        return `命令 "${baseCommand}" 未找到\n`;
+    }
+  }
+
+  // 驗證路徑是否有效
+  function isValidPath(path, root) {
+      const pathParts = path.split('/').filter(part => part !== '');
+      let current = root;
+
+      for (const part of pathParts) {
+          if (!current.contents[part] || current.contents[part].type !== 'directory') {
+              return false;
+          }
+          current = current.contents[part];
+      }
+      return true;
+  }
+
+  // 取得目錄物件
+  function getDirectory(path) {
+      if (path === '/') return fileSystem['/']; // 根目錄特殊處理
+
+      const pathParts = path.split('/').filter(part => part !== '');
+      let current = fileSystem['/'];
+
+      for (const part of pathParts) {
+          if (!current.contents[part] || current.contents[part].type !== 'directory') {
+              return null;
+          }
+          current = current.contents[part];
+      }
+      return current;
+  }
+
+
+  // 模擬 apt install 函式
+  function simulateInstall(packageName) {
+    let outputText = '';
+    outputText += `正在安裝套件 ${packageName}...\n`;
+    outputText += `正在讀取套件列表...\n`;
+    outputText += `正在分析套件相依性...\n`;
+
+    let progress = 0;
+    const interval = setInterval(() => {
+      progress += 10;
+      outputText += `下載中... ${progress}%\n`;
+      commandOutput.value = outputText; // 即時更新輸出
+
+      if (progress >= 100) {
+        clearInterval(interval);
+        outputText += `完成套件 ${packageName} 安裝。\n`;
+        commandOutput.value = outputText;
+      }
+    }, 200); // 每 200ms 更新一次進度
+
+    return outputText; // 初始訊息，後續訊息會透過 setInterval 更新
+  }
+
+
+  // 執行命令按鈕事件監聽器
+  executeCommandButton.addEventListener('click', function() {
+    const command = commandInput.value;
+    if (command.trim() !== '') {
+      commandOutput.value += `> ${command}\n`; // 顯示輸入的命令
+      const result = handleCommand(command);
+      commandOutput.value += result; // 顯示命令結果
+      commandInput.value = ''; // 清空輸入欄位
+      commandOutput.scrollTop = commandOutput.scrollHeight; // 捲動到最底部
+    }
+  });
+
+  // Enter 鍵執行命令
+  commandInput.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+      event.preventDefault(); // 阻止 Enter 鍵預設換行行為
+      executeCommandButton.click(); // 觸發執行按鈕點擊事件
+    }
   });
 
 
