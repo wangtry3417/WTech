@@ -2949,28 +2949,29 @@ def wbank_v1_post_cash_out():
     return redirect("/wbank/client")
 
 # Card
-@app.route("/wbank/card/action", methods=["GET","POST","PATCH"])
+@app.route("/wbank/card/action", methods=["GET","PATCH"])
 def wbank_card_hash_action():
-  data = request.json
-  if not data:
-    return jsonify(error="Not allowed")
-  if not data["accessKey"]:
-    return jsonify(error="Not allowed")
   if request.method == "GET":
-    if not data["cardNumber"]:
+    da = request.headers
+    if not da["cardNumber"]:
       return jsonify(error="Card not found")
-    if not data["password"]:
+    if not da["password"]:
       return jsonify(error="It cannot verify to you")
     users = wbankwallet.query.all()
     for user in users:
       cardno = f"{user.accnumber}->{user.password}"
       hash_code = hashlib.sha256(cardno.encode()).hexdigest()
-      if user.password != data["password"]:
+      if user.password != da["password"]:
         return jsonify(error="Password invalid", code=403), 403
-      if hash_code == data["cardNumber"]:
+      if hash_code == da["cardNumber"]:
         return jsonify(loginUser=user.username, loginPw=user.password, balance=user.balance, accnumber=user.accnumber)
     return jsonify(error="User not found")
-  elif request.method == "POST":
+  elif request.method == "PATCH":
+    data = request.json
+    if not data:
+      return jsonify(error="Not allowed")
+    if not data["accessKey"]:
+      return jsonify(error="Not allowed")
     if not data["cardNumber"]:
       return jsonify(error="Card not found")
     if not data["reviewer"]:
@@ -2992,8 +2993,6 @@ def wbank_card_hash_action():
         db.session.commit()
         return jsonify(message="Payment successfully", code=200)
     return jsonify(error="User not found, Since your card is invaild!.", code=404), 404
-  elif request.method == "PATCH":
-    return jsonify(error="Request method is not support")
   else:
     return jsonify(error="Request method is not support")
 
