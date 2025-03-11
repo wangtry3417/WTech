@@ -979,7 +979,7 @@ document.addEventListener('DOMContentLoaded', function() {
         switchUI('server');
 
         // 產生並顯示啟動 command
-        const generatedStartupCommand = `apt update && apt install wnet && wnet start vm --cpu=${document.getElementById('cpu-select').value} --ram=${document.getElementById('ram-input').value}GB --storage=${document.getElementById('storage-input').value}TB --host="${document.getElementById('host-input').value}"`;
+        const generatedStartupCommand = `apt update && apt install wnet && wnet start vm --cpu=${document.getElementById('cpu-select').value} --ram=${document.getElementById('ram-input').value}GB --storage=${document.getElementById('storage-input').value}ZB --motherboard="${document.getElementById('host-input').value}"`;
         startupCommandDisplay.value = generatedStartupCommand;
       }
     }
