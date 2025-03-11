@@ -2948,6 +2948,57 @@ def wbank_v1_post_cash_out():
     flash("出金申請已提交","success")
     return redirect("/wbank/client")
 
+# Card
+@app.route("/wbank/card/action", methods=["GET","POST","PATCH"])
+def wbank_card_hash_action():
+  data = request.json
+  if not data:
+    return jsonify(error="Not allowed")
+  if not data["accessKey"]:
+    return jsonify(error="Not allowed")
+  if request.method == "GET":
+    if not data["cardNumber"]:
+      return jsonify(error="Card not found")
+    if not data["password"]:
+      return jsonify(error="It cannot verify to you")
+    users = wbankwallet.query.all()
+    for user in users:
+      cardno = f"{user.accnumber}->{user.password}"
+      hash_code = hashlib.sha256(cardno.encode()).hexdigest()
+      if user.password != data["password"]:
+        return jsonify(error="Password invalid", code=403), 403
+      if hash_code == data["cardNumber"]:
+        return jsonify(loginUser=user.username, loginPw=user.password, balance=user.balance, accnumber=user.accnumber)
+    return jsonify(error="User not found")
+  elif request.method == "POST":
+    if not data["cardNumber"]:
+      return jsonify(error="Card not found")
+    if not data["reviewer"]:
+      return jsonify(error="Receiver not found")
+    if not data["amount"]:
+      return jsonify(error="Amount not found")
+    if not data["password"]:
+      return jsonify(error="It cannot verify to you")
+    users = wbankwallet.query.all()
+    for user in users:
+      cardno = f"{user.accnumber}->{user.password}"
+      hash_code = hashlib.sha256(cardno.encode()).hexdigest()
+      if hash_code == data["cardNumber"]:
+        if user.password != data["password"]:
+          return jsonify(error="Password invalid"), 403
+        if user.balance < int(data["amount"]):
+          return jsonify(error="The card has insufficient balance")
+        user.balance = user.balance - int(data["amount"])
+        db.session.commit()
+        return jsonify(message="Payment successfully", code=200)
+    return jsonify(error="User not found, Since your card is invaild!.", code=404), 404
+  elif request.method == "PATCH":
+    return jsonify(error="Request method is not support")
+  else:
+    return jsonify(error="Request method is not support")
+
+# Card end
+
 @app.route("/wbank/recordPage")
 @login_required
 def wbank_record_page_v2():
