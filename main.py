@@ -2855,7 +2855,7 @@ def wbank_client():
             # 泓通卡
             card_number = f"{user_data.accnumber}->{user_data.password}"
             hash_card_number = hashlib.sha256(card_number.encode()).hexdigest()
-            return render_template("wbankClient.html", user=user, balance=balance, HK_Value=HK_Value, tw_value=tw_value, US_value=US_value, img=qr_b64, acc_number=acc_number, openpay=openpay, setAmount=setAmount, nowAmount=nowAmount, hash_card_number=haah_card_number)
+            return render_template("wbankClient.html", user=user, balance=balance, HK_Value=HK_Value, tw_value=tw_value, US_value=US_value, img=qr_b64, acc_number=acc_number, openpay=openpay, setAmount=setAmount, nowAmount=nowAmount, hash_card_number=hash_card_number)
     else:
         error_message = "找不到該用戶"
     
