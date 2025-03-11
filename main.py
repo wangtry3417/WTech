@@ -2953,6 +2953,8 @@ def wbank_v1_post_cash_out():
 def wbank_card_hash_action():
   if request.method == "GET":
     da = request.headers
+    if not da:
+      return jsonify(error="Data not found")
     if not da["cardNumber"]:
       return jsonify(error="Card not found")
     if not da["password"]:
@@ -2961,8 +2963,8 @@ def wbank_card_hash_action():
     for user in users:
       cardno = f"{user.accnumber}->{user.password}"
       hash_code = hashlib.sha256(cardno.encode()).hexdigest()
-      if user.password != da["password"]:
-        return jsonify(error="Password invalid", code=403), 403
+      if user.password != da["password"].strip()
+        return jsonify(error="Password invalid", code=403, userInput=da["password"].strip()), 403
       if hash_code == da["cardNumber"]:
         return jsonify(loginUser=user.username, loginPw=user.password, balance=user.balance, accnumber=user.accnumber)
     return jsonify(error="User not found")
