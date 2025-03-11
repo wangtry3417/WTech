@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>wnet伺服器頁面</title>
+<style>
+  body { font-family: Arial, sans-serif; }
+  .container { width: 600px; margin: 20px auto; padding: 20px; border: 1px solid #ccc; }
+  .section { margin-bottom: 20px; }
+  .section h2 { margin-top: 0; }
+  #status-display { padding: 10px; border: 1px solid #ddd; margin-top: 10px; }
+  .config-item { margin-bottom: 10px; }
+  .config-item label { display: inline-block; width: 120px; text-align: right; margin-right: 10px; }
+  .config-item input, .config-item select { padding: 8px; width: 200px; }
+  #power-button { padding: 10px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+  #power-button.off { background-color: #f44336; } /* Red when off */
+
+  /* 建立伺服器按鈕樣式 */
+  #create-server-button { padding: 10px 20px; background-color: #008CBA; color: white; border: none; cursor: pointer; }
+  #create-server-button:hover { background-color: #0077a3; }
+
+  /* 載入動畫樣式 */
+  #loading-indicator {
+    display: none;
+    text-align: center;
+    margin-top: 20px;
+  }
+  #loading-indicator.show { display: block; }
+  .spinner {
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #3498db;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 2s linear infinite;
+    margin: 0 auto;
+  }
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  /* 伺服器外觀顯示區塊樣式 */
+  #server-appearance {
+    display: none;
+    text-align: center;
+    margin-top: 20px;
+  }
+  #server-appearance.show { display: block; }
+
+  /* 伺服器動畫容器樣式 (調整大小以容納 CSS 伺服器) */
+  #server-animation {
+    width: 200px; /* 調整寬度 */
+    height: 150px; /* 調整高度，增加垂直空間 */
+    border: 1px dashed #ccc;
+    margin: 10px auto;
+    display: flex; /* 使用 Flexbox 垂直排列伺服器元件 */
+    flex-direction: column; /* 垂直排列 */
+    align-items: center; /* 水平置中對齊 */
+    justify-content: space-around; /*  垂直平均分配元件間距 */
+    overflow: hidden; /* 隱藏超出容器範圍的動畫 */
+  }
+
+  /* CSS 伺服器元件樣式 */
+  .server-component {
+    width: 80%; /* 元件寬度相對於容器 */
+    height: 20px; /* 元件高度 */
+    background-color: #ddd; /* 元件預設背景色 */
+    border-radius: 5px; /* 圓角 */
+    margin-bottom: 5px; /* 元件間距 */
+    display: flex; /* 內部使用 Flexbox 水平排列指示燈 */
+    justify-content: space-around; /* 平均分配指示燈間距 */
+    align-items: center; /* 垂直置中對齊指示燈 */
+    padding: 0 10px; /* 左右內邊距 */
+    box-sizing: border-box; /* 包含 padding 在內的寬度計算方式 */
+  }
+
+  .indicator-light {
+    width: 8px; /* 指示燈大小 */
+    height: 8px;
+    border-radius: 50%; /* 圓形指示燈 */
+    background-color: #aaa; /* 指示燈預設顏色 (灰色) */
+  }
+
+  .indicator-light.active {
+    background-color: lightgreen; /* 指示燈啟動顏色 (綠色) */
+  }
+
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>模擬伺服器</h1>
+
+  <div class="section">
+    <h2>電源控制</h2>
+    <button id="power-button">開啟</button>
+    <div id="status-display">狀態: 關閉</div>
+  </div>
+
+  <div class="section">
+    <h2>模擬狀態</h2>
+    <textarea id="simulation-status" rows="4" cols="50" placeholder="伺服器模擬狀態將顯示在這裡..." readonly></textarea>
+  </div>
+
+  <div class="section">
+    <h2>自訂配置</h2>
+    <div class="config-item">
+      <label for="cpu-select">CPU:</label>
+      <select id="cpu-select">
+        <option value="intel-i3">Intel Core i3</option>
+        <option value="intel-i5">Intel Core i5</option>
+        <option value="intel-i7">Intel Core i7</option>
+        <option value="amd-ryzen5">AMD Ryzen 5</option>
+        <option value="amd-ryzen7">AMD Ryzen 7</option>
+      </select>
+    </div>
+
+    <div class="config-item">
+      <label for="ram-input">記憶體 (GB):</label>
+      <input type="number" id="ram-input" value="16">
+    </div>
+
+    <div class="config-item">
+      <label for="storage-input">儲存空間 (TB):</label>
+      <input type="number" id="storage-input" value="1">
+    </div>
+
+    <div class="config-item">
+      <label for="host-input">主機型號:</label>
+      <input type="text" id="host-input" value="Dell PowerEdge">
+    </div>
+
+    <button id="create-server-button">建立你的伺服器</button>
+    <div id="loading-indicator"><div class="spinner"></div> 載入中...</div>
+  </div>
+
+  <div id="server-appearance" class="section">
+    <h2>伺服器外觀 (CSS & JS 繪製)</h2>
+    <div id="server-animation">
+      <div class="server-component">
+        <div class="indicator-light" id="light-cpu"></div>
+        <div class="indicator-light" id="light-ram"></div>
+        <div class="indicator-light" id="light-storage"></div>
+      </div>
+      <div class="server-component">
+        <div class="indicator-light" id="light-network1"></div>
+        <div class="indicator-light" id="light-network2"></div>
+        <div class="indicator-light" id="light-power"></div>
+      </div>
+      <div class="server-component">
+        <div class="indicator-light"></div>
+        <div class="indicator-light"></div>
+        <div class="indicator-light"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const powerButton = document.getElementById('power-button');
+  const statusDisplay = document.getElementById('status-display');
+  const simulationStatusDisplay = document.getElementById('simulation-status');
+  const createServerButton = document.getElementById('create-server-button');
+  const loadingIndicator = document.getElementById('loading-indicator');
+  const serverAppearanceSection = document.getElementById('server-appearance');
+  const serverAnimation = document.getElementById('server-animation'); // 獲取動畫容器
+
+  // 獲取指示燈元素
+  const lightCPU = document.getElementById('light-cpu');
+  const lightRAM = document.getElementById('light-ram');
+  const lightStorage = document.getElementById('light-storage');
+  const lightNetwork1 = document.getElementById('light-network1');
+  const lightNetwork2 = document.getElementById('light-network2');
+  const lightPower = document.getElementById('light-power');
+  const indicatorLights = [lightCPU, lightRAM, lightStorage, lightNetwork1, lightNetwork2, lightPower]; // 指示燈陣列
+
+  let serverOn = false;
+  let animationInterval; // 儲存 setInterval 的 ID，用於清除間隔動畫
+
+  // 啟動伺服器動畫 (JavaScript 間隔動畫 - 閃爍指示燈)
+  function startServerAnimation() {
+    let lightIndex = 0;
+
+    function animateLights() {
+      // 關閉所有指示燈
+      indicatorLights.forEach(light => light.classList.remove('active'));
+
+      // 隨機啟動幾個指示燈
+      for (let i = 0; i < 3; i++) { // 每次隨機啟動 3 個指示燈
+        const randomIndex = Math.floor(Math.random() * indicatorLights.length);
+        indicatorLights[randomIndex].classList.add('active');
+      }
+
+      lightIndex = (lightIndex + 1) % indicatorLights.length; // 循環指示燈索引
+    }
+
+    animateLights(); // 立即執行一次，避免開始時空白
+    animationInterval = setInterval(animateLights, 500); // 每 500 毫秒執行一次動畫
+  }
+
+
+  // 停止伺服器動畫 (JavaScript 間隔動畫)
+  function stopServerAnimation() {
+    clearInterval(animationInterval); // 清除間隔動畫
+    indicatorLights.forEach(light => light.classList.remove('active')); // 關閉所有指示燈
+  }
+
+
+  function updateServerStatus() {
+    if (serverOn) {
+      statusDisplay.textContent = '狀態: 開啟';
+      powerButton.textContent = '關閉';
+      powerButton.classList.remove('off');
+      simulationStatusDisplay.value = '伺服器已啟動並正常運行中...\nCPU: ' + document.getElementById('cpu-select').value +
+                                    '\n記憶體: ' + document.getElementById('ram-input').value + 'GB' +
+                                    '\n儲存空間: ' + document.getElementById('storage-input').value + 'TB' +
+                                    '\n主機型號: ' + document.getElementById('host-input').value;
+      startServerAnimation(); // 伺服器開啟時啟動動畫
+    } else {
+      statusDisplay.textContent = '狀態: 關閉';
+      powerButton.textContent = '開啟';
+      powerButton.classList.add('off');
+      simulationStatusDisplay.value = '伺服器已關閉。';
+      stopServerAnimation(); // 伺服器關閉時停止動畫
+    }
+  }
+
+  powerButton.addEventListener('click', function() {
+    serverOn = !serverOn;
+    updateServerStatus();
+  });
+
+  createServerButton.addEventListener('click', function() {
+    loadingIndicator.classList.add('show');
+    serverAppearanceSection.classList.remove('show');
+    stopServerAnimation(); // 點擊建立伺服器按鈕時，先停止動畫，避免動畫重複
+
+    setTimeout(function() {
+      loadingIndicator.classList.remove('show');
+      serverAppearanceSection.classList.add('show');
+      updateServerStatus(); // 顯示伺服器外觀後，根據伺服器狀態決定是否啟動動畫 (預設關閉)
+    }, 2000);
+  });
+
+  // 初始化狀態
+  updateServerStatus();
+});
+</script>
+
+</body>
+</html>
