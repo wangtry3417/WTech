@@ -2985,17 +2985,17 @@ def wbank_card_hash_action():
       return jsonify(error="It cannot verify to you")
     users = wbankwallet.query.all()
     for user in users:
+      if user.password != data["password"].strip():
+          continue
       cardno = f"{user.accnumber}->{user.password}"
       hash_code = hashlib.sha256(cardno.encode()).hexdigest()
       if hash_code == data["cardNumber"]:
-        if user.password != data["password"]:
-          return jsonify(error="Password invalid"), 403
         if user.balance < int(data["amount"]):
           return jsonify(error="The card has insufficient balance")
         user.balance = user.balance - int(data["amount"])
         db.session.commit()
         return jsonify(message="Payment successfully", code=200)
-    return jsonify(error="User not found, Since your card is invaild!.", code=404), 404
+    return jsonify(error="User not found, or invaild credentials", code=404), 404
   else:
     return jsonify(error="Request method is not support")
 
