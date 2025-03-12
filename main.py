@@ -2950,6 +2950,7 @@ def wbank_v1_post_cash_out():
 
 # Card
 @app.route("/wbank/card/action", methods=["GET","PATCH"])
+@csrf.exempt
 def wbank_card_hash_action():
   if request.method == "GET":
     da = request.headers
