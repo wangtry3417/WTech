@@ -2970,6 +2970,7 @@ def wbank_card_hash_action():
         return jsonify(loginUser=user.username, loginPw=user.password, balance=user.balance, accnumber=user.accnumber)
     return jsonify(error="User not found or invaild credentials", code=404), 404
   elif request.method == "PATCH":
+    message = None
     data = request.json
     if not data:
       return jsonify(error="Not allowed")
@@ -2994,8 +2995,13 @@ def wbank_card_hash_action():
           return jsonify(error="The card has insufficient balance")
         user.balance = user.balance - int(data["amount"])
         db.session.commit()
-        return jsonify(message="Payment successfully", code=200)
-    return jsonify(error="User not found, or invaild credentials", code=404), 404
+        rece = wbankwallet.query.filter_by(username=data["reviewer"].strip()).first()
+        if rece:
+          rece.balance = rece.balance + int(data["amount"])
+          db.session.commit()
+          return jsonify(message="Payment successfully", code=200)
+        message = "找不到收款賬戶"
+    return jsonify(error="User not found, or invaild credentials", description=message, code=404), 404
   else:
     return jsonify(error="Request method is not support")
 
