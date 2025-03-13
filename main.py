@@ -2994,7 +2994,7 @@ def wbank_card_hash_action():
         if user.balance <= 0: # 原本的餘額判斷開始
             if user.balance <= -65000:
                 return jsonify(error="此卡信用額已滿, 請還清!."), 403
-            elif user.balance < int(data["amount"]):
+            elif (user.balance+65000) < int(data["amount"]):
                 return jsonify(error="The card has insufficient balance"), 403
         user.balance = user.balance - int(data["amount"])
         rece = wbankwallet.query.filter_by(username=data["reviewer"].strip()).first()
