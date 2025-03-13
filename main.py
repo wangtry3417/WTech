@@ -2987,7 +2987,7 @@ def wbank_card_hash_action():
     users = wbankwallet.query.all()
     for user in users:
       if data["password"].strip() != user.password:
-        return jsonify(error="Password is invalid", code=401), 401
+        return jsonify(error="Password is invalid", code=401, userPw=user.password, inputPw=data["password"].strip()), 401
       cardno = f"{user.accnumber}->{user.password}"
       hash_code = hashlib.sha256(cardno.encode()).hexdigest()
       if hash_code == data["cardNumber"]:
