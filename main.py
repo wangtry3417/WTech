@@ -2984,18 +2984,18 @@ def wbank_card_hash_action():
       return jsonify(error="Amount not found")
     if not data["password"]:
       return jsonify(error="It cannot verify to you")
-    users = wbankwallet.query.all()
-    for user in users:
-      if user.password != data["password"].strip():
-          continue
+    user = wbankwallet.query.filter_by(accnumber=data["cardNumber"].strip()).first()
+    if user:
+      if data["password"] != user.password:
+        return jsonify(error="Password is invalid", code=401), 401
       cardno = f"{user.accnumber}->{user.password}"
       hash_code = hashlib.sha256(cardno.encode()).hexdigest()
       if hash_code == data["cardNumber"]:
-        if user.balance <= 0:
-          if user.balance <= -65000:
-            return jsonify(error="此卡信用額已滿, 請還清!."), 403
-        elif user.balance < int(data["amount"]):
-          return jsonify(error="The card has insufficient balance"), 403
+        if user.balance <= 0: # 原本的餘額判斷開始
+            if user.balance <= -65000:
+                return jsonify(error="此卡信用額已滿, 請還清!."), 403
+            elif user.balance < int(data["amount"]):
+                return jsonify(error="The card has insufficient balance"), 403
         user.balance = user.balance - int(data["amount"])
         rece = wbankwallet.query.filter_by(username=data["reviewer"].strip()).first()
         if rece:
