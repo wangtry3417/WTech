@@ -2991,10 +2991,12 @@ def wbank_card_hash_action():
       cardno = f"{user.accnumber}->{user.password}"
       hash_code = hashlib.sha256(cardno.encode()).hexdigest()
       if hash_code == data["cardNumber"]:
-        if user.balance < int(data["amount"]):
-          return jsonify(error="The card has insufficient balance")
+        if user.balance <= 0:
+          if user.balance <= -65000:
+            return jsonify(error="此卡信用額已滿, 請還清!."), 403
+        elif user.balance < int(data["amount"]):
+          return jsonify(error="The card has insufficient balance"), 403
         user.balance = user.balance - int(data["amount"])
-        db.session.commit()
         rece = wbankwallet.query.filter_by(username=data["reviewer"].strip()).first()
         if rece:
           rece.balance = rece.balance + int(data["amount"])
