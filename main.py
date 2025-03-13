@@ -2984,8 +2984,8 @@ def wbank_card_hash_action():
       return jsonify(error="Amount not found")
     if not data["password"]:
       return jsonify(error="It cannot verify to you")
-    user = wbankwallet.query.filter_by(accnumber=data["cardNumber"].strip()).first()
-    if user:
+    users = wbankwallet.query.all()
+    for user in users:
       if data["password"] != user.password:
         return jsonify(error="Password is invalid", code=401), 401
       cardno = f"{user.accnumber}->{user.password}"
