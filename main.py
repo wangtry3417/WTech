@@ -563,19 +563,19 @@ conn = psycopg2.connect(database="verceldb", user="default",
 password="Gd2MsST3QYWF", host="ep-hidden-salad-a1a7pob9-pooler.ap-southeast-1.aws.neon.tech", 
 port=5432,sslmode="""
 
-"""
 paypalrestsdk.configure({
   'mode': 'sandbox', 
   'client_id': 'ASK8RjfrdCzGvCQRDvnfa321S_5OBGMK4KDGac5PreKf6NU-0d0MUPPrYe_S-fq4tcoHN22P8Nz4xZs3',
   'client_secret': 'EB1-tdfv74XcCxkdDWjueV19ePB4Wf8uMKwdhE2robSWQF21i6nC6pm57zzVARTzJ03ah6X4ARc1GhBQ'
 })
-"""
 
+"""
 paypalrestsdk.configure({
   'mode': 'live', 
   'client_id': 'AZsh7JUNnTOO2eYLuwhfwMltWUUCcDS--qf2TzNVDCvlDK20lhbUrbRXYfZgfJEaDskmPi5nmssIQWme',
   'client_secret': 'ELlPg1idvYkNyzL1nBip5r2qL-fLBhHUpuz_aFQUD6OC7D1AlYj7qxPislk8_0igdkcp0afgPw2O5K0a'
 })
+"""
 
 def hash_value(user):
   u = user.encode()
