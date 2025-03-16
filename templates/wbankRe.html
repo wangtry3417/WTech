@@ -72,7 +72,7 @@
        spinner.style.animation = "spin 6s linear infinite";
        fetch('/wbank/hash/transfer', {
     headers: {
-      username: 'wbank',
+      user: 'wbank',
       reviewer: '{{ user }}',
       amount: {{ count }}
     }
