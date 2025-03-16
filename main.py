@@ -2032,8 +2032,8 @@ def wbank_paypal():
           "payment_method": "paypal"
       },
       "redirect_urls": {
-          "return_url": f"/wbank/v1/paypal/done?user={user}&amount={count}",
-          "cancel_url": "/wbank/home"
+          "return_url": f"https://wtechhk.xyz/wbank/v1/paypal/done?user={user}&amount={count}",
+          "cancel_url": "https://wtechhk.xyz/wbank/client"
       },
       "transactions": [{
           "amount": {
