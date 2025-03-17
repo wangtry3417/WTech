@@ -2031,7 +2031,16 @@ def wbank_paypal():
   paym = paypalrestsdk.Payment({
       "intent": "sale",
       "payer": {
-          "payment_method": "applepay"
+          "payment_method": "credit_card",
+          "funding_instruments": [{
+      "credit_card": {
+        "type": "visa",
+        "number": "4166556612345678",
+        "expire_month": "12",
+        "expire_year": "2028",
+        "cvv2": "123",
+        "first_name": "Nelson",
+        "last_name": "Chao" }}]}
       },
       "redirect_urls": {
           "return_url": f"https://wtechhk.xyz/wbank/v1/paypal/done?user={user}&amount={count}",
