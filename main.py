@@ -2031,7 +2031,7 @@ def wbank_paypal():
   paym = paypalrestsdk.Payment({
       "intent": "sale",
       "payer": {
-          "payment_method": "paypal"
+          "payment_method": "applepay"
       },
       "redirect_urls": {
           "return_url": f"https://wtechhk.xyz/wbank/v1/paypal/done?user={user}&amount={count}",
