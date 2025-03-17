@@ -659,7 +659,8 @@ def handle_connect():
 def handle_transfer(data):
   """處理轉帳請求"""
   user = data['useracc']  # 取得轉帳方帳戶名稱
-  amount = int(data['amount'])  # 取得轉帳金額
+  amount = float(data['amount'])  # 取得轉帳金額
+  amount = int(amount)
   reviewer = data['revacc']  # 取得收款方帳戶名稱
   # cur = conn.cursor()  # 取得資料庫游標
 
