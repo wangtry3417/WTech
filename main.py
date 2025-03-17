@@ -764,6 +764,7 @@ def send_error_to_discord(error_message, user, amount, reviewer, detail=None):
 def handle_nfc_detected(data):
   user = data['useracc']  # 取得轉帳方帳戶名稱
   amount = float(data['amount'])  # 取得轉帳金額
+  amount = int(amount)
   reviewer = data['revacc']  # 取得收款方帳戶名稱
   # cur = conn.cursor()  # 取得資料庫游標
 
