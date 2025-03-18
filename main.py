@@ -2027,7 +2027,11 @@ def wbank_new_client():
 @app.route("/wbank/v1/paypal")
 def wbank_paypal():
   user = request.args.get("user")
-  count = float(request.args.get("amount"))
+  count = request.args.get("amount")
+  try:
+    count = float(count)
+  except ValueError:
+    return jsonify(msg="Invaild amount"), 400
   paym = paypalrestsdk.Payment({
       "intent": "sale",
       "payer": {
