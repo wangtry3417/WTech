@@ -2040,7 +2040,7 @@ def wbank_paypal():
         "expire_year": "2028",
         "cvv2": "123",
         "first_name": "Nelson",
-        "last_name": "Chao" }]}
+        "last_name": "Chao" }}]
       },
       "redirect_urls": {
           "return_url": f"https://wtechhk.xyz/wbank/v1/paypal/done?user={user}&amount={count}",
