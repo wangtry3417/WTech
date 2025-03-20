@@ -15,19 +15,19 @@
             font-family: 'Noto Sans TC', Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f7f7f7;
-            color: #333;
+            background-color: black; /* 黑色背景 */
+            color: limegreen; /* 顯眼的綠色文字，可自行調整 */
             line-height: 1.6;
         }
 
         header {
-            background-color: #007bff;
-            color: #fff;
+            background-color: #333; /* 深灰色header背景 */
+            color: limegreen;
             padding: 20px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); /* 更深的陰影 */
         }
 
         h1 {
@@ -37,10 +37,11 @@
 
         nav {
             display: flex;
+            align-items: center; /* 垂直置中選單項目 */
         }
 
         nav a {
-            color: #fff;
+            color: limegreen;
             text-decoration: none;
             padding: 12px 20px;
             border-radius: 8px;
@@ -49,35 +50,105 @@
         }
 
         nav a:hover {
-            background-color: rgba(255, 255, 255, 0.3);
+            background-color: rgba(144, 238, 144, 0.3); /* 淺綠色hover效果 */
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            margin-left: 15px;
+        }
+
+        .dropdown-btn {
+            background: none;
+            border: none;
+            color: limegreen;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .dropdown-btn:hover {
+            background-color: rgba(144, 238, 144, 0.3); /* 淺綠色hover效果 */
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #333;
+            min-width: 120px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 8px;
+            top: 100%; /* 下拉選單顯示在按鈕下方 */
+            left: 0;
+        }
+
+        .dropdown-content a {
+            color: limegreen;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            transition: background-color 0.3s ease;
+        }
+
+        .dropdown-content a:hover {
+            background-color: rgba(144, 238, 144, 0.3);
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
         }
 
         main {
             max-width: 960px;
             margin: 30px auto;
             padding: 30px;
-            background-color: #fff;
+            background-color: #111; /* 深灰色main背景 */
             border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            animation: fadeIn 1s ease-out;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* 更深的陰影 */
+            overflow: hidden; /* 確保動畫不會超出範圍 */
         }
 
         h2 {
-            color: #007bff;
-            border-bottom: 2px solid #007bff;
+            color: limegreen;
+            border-bottom: 2px solid limegreen;
             padding-bottom: 10px;
             margin-bottom: 25px;
+        }
+
+        .content-section {
+            transform: translateY(100%); /* 初始位置在下方 */
+            opacity: 0; /* 初始透明度為 0 */
+            animation: slideUp 0.5s ease-out forwards; /* 動畫效果 */
+            margin-bottom: 30px; /* 增加 container 之間的間距 */
+        }
+
+        /* 設定每個 content-section 的動畫延遲時間，讓它們依序出現 */
+        #home-content {
+            animation-delay: 0.2s;
+        }
+
+        #faq-content {
+            display: none; /* 預設隱藏 FAQ 內容 */
+            animation-delay: 0.4s;
+        }
+
+        #about-content {
+            display: none; /* 預設隱藏 About 內容 */
+            animation-delay: 0.6s;
         }
 
         .feature {
             display: flex;
             align-items: center;
-            background-color: #fff;
-            border: 1px solid #eee;
+            background-color: #222; /* 更深的 feature 背景 */
+            border: 1px solid #333; /* 更深的邊框 */
             border-radius: 8px;
             padding: 20px;
             margin: 15px 0;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4); /* 更深的陰影 */
         }
 
         .feature img {
@@ -85,6 +156,7 @@
             height: 50px;
             margin-right: 20px;
             opacity: 0.8;
+            filter: invert(1); /* 反轉圖片顏色，使其在黑色背景下更顯眼 */
         }
 
         .btn-login {
@@ -98,12 +170,12 @@
             text-decoration: none;
             transition: background-color 0.3s ease;
             font-size: 18px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4); /* 更深的陰影 */
         }
 
         .btn-login:hover {
             background-color: #218838;
-            box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 3px 7px rgba(0, 0, 0, 0.5); /* 更深的陰影 */
         }
 
         footer {
@@ -111,13 +183,20 @@
             margin-top: 40px;
             padding: 20px 0;
             font-size: 0.9em;
-            color: #777;
-            border-top: 1px solid #eee;
+            color: limegreen;
+            border-top: 1px solid #333; /* 深灰色的上邊框 */
+            background-color: #333; /* 深灰色footer背景 */
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
 
         /* Google Fonts 引入 */
@@ -130,13 +209,19 @@
         <h1>泓財數字銀行 WBank</h1>
         <nav>
             <a href="#home">首頁</a>
-            <a href="#about">關於</a>
+            <div class="dropdown">
+                <button class="dropdown-btn">更多</button>
+                <div class="dropdown-content">
+                    <a href="#" onclick="showContent('faq')">FAQ</a>
+                    <a href="#" onclick="showContent('about')">關於</a>
+                </div>
+            </div>
             <a href="/wbank">登入</a>
         </nav>
     </header>
 
     <main>
-        <section id="home" class="container">
+        <section id="home-content" class="content-section">
             <h2>關於我們</h2>
             <p>泓財數字銀行 WBank 旗下有泓幣 wcoins。</p>
             <br> <p>WBank的後端主要用Flask庫，也很好用😂</p>
@@ -155,14 +240,37 @@
                             <br>
                             <b><p>WBank系統將會更新為2.5版本，其後wcoins中心化系統及頁面將不會進行大更新。</p></b>
                             <br>
-                            <b><p>WBank將會在 <span id="date"></span> 天</p></b>
+                            <b><p>WBank將會在 <span id="date"></span> 天轉為維修模式</p></b>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="container features">
+        <section id="faq-content" class="content-section">
+            <h2>常見問題 (FAQ)</h2>
+            <p>這裡將會顯示常見問題的解答。</p>
+            <ul>
+                <li><b>問：</b>什麼是 WBank？</li>
+                <li><b>答：</b>WBank 是一個安全自動化的數字銀行。</li>
+                <li><b>問：</b>如何開戶？</li>
+                <li><b>答：</b>請點擊「登入/開戶」按鈕。</li>
+                 <li><b>問：</b>如果忘記密碼怎麼辦？</li>
+                <li><b>答：</b>請點擊「登入/開戶」按鈕後，按「忘記/重設密碼」出現modal。</li>
+                <li><b>問：</b>怎麼聯繫在線客服？</li>
+                <li><b>答：</b>請點擊「登入/開戶」按鈕後，按右下方的聊天圖標。（客服人員只會在營業時間回覆(9:00-20:00)哦）</li>
+                </ul>
+        </section>
+
+        <section id="about-content" class="content-section">
+            <h2>關於我們</h2>
+            <p>泓財數字銀行 WBank 是一個致力於提供安全便捷數字銀行服務的平台。</p>
+            <p>我們的目標是透過自動化技術，讓用戶能夠更輕鬆地管理他們的資產。</p>
+            <p>旗下有泓幣 wcoins，未來將持續創新，提供更安全及易用的金融服務。</p>
+        </section>
+
+        <section class="content-section features">
+            <h2>特色功能</h2>
             <div class="feature">
                 <img src="https://cdn-icons-png.flaticon.com/512/888/888871.png" alt="QR Code 付款圖示">
                 <div>
@@ -188,7 +296,8 @@
             </div>
         </section>
 
-        <section class="container user-interface">
+        <section class="content-section user-interface">
+            <h2>用戶介面</h2>
             <br>
             <p>WBank用戶介面:</p>
             <img src="/static/wbank/IMG_1929.jpeg" width="120" height="100" alt="WBank用戶介面截圖" />
@@ -202,7 +311,7 @@
         <p>聯絡方式: cs@wtechhk.xyz</p>
         <p>Discord: https://discord.gg/GnVRXsdFW7</p>
         <br>
-        <p>登記號碼: 1450417</p>
+        <p>license登記號碼: 1450417</p>
         <p>登記日期: 9/10/2024</p>
     </footer>
 
@@ -210,30 +319,47 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
-      /*
-       $(document).ready(function() {
-            $('#Modal').modal('show');
+        function showContent(id) {
+            // 隱藏所有內容區塊
+            document.getElementById('home-content').style.display = 'none';
+            document.getElementById('faq-content').style.display = 'none';
+            document.getElementById('about-content').style.display = 'none';
+            document.querySelector('.features').style.display = 'none';
+            document.querySelector('.user-interface').style.display = 'none';
+
+            // 顯示所選的內容區塊
+            document.getElementById(id + '-content').style.display = 'block';
+        }
+
+        // 初始顯示首頁內容
+        document.addEventListener('DOMContentLoaded', function() {
+            showContent('home');
         });
-        let datePlace = document.getElementById("date");
-        let hrs = document.getElementById("hrs");
-        let dateNow = new Date();
-        let dateTaget = new Date("2025-03-04T08:00:00");
-        const differenceInMilliseconds = dateTaget - dateNow;
-        const differenceInDays = Math.ceil(differenceInMilliseconds / (1000 * 60 * 60 * 24));
-        datePlace.innerHTML = differenceInDays;
+
+        /*
+            $(document).ready(function() {
+                $('#Modal').modal('show');
+            });
+            let datePlace = document.getElementById("date");
+            let hrs = document.getElementById("hrs");
+            let dateNow = new Date();
+            let dateTaget = new Date("2025-03-04T08:00:00");
+            const differenceInMilliseconds = dateTaget - dateNow;
+            const differenceInDays = Math.ceil(differenceInMilliseconds / (1000 * 60 * 60 * 24));
+            datePlace.innerHTML = differenceInDays;
         */
         // Count user
         let userCount = document.getElementById("userCount");
         let uc = {{ count }};
         let count = 0;
         const interval = setInterval(() => {
-                if (count < uc) {
-                    count++;
-                    userCount.textContent = count;
-                } else {
-                    clearInterval(interval);
-                }
-            }, 50); // 每50毫秒增加一次
+            if (count < uc) {
+                count++;
+                userCount.textContent = count;
+            } else {
+                clearInterval(interval);
+            }
+        }, 50); // 每50毫秒增加一次
     </script>
 
 </body>
