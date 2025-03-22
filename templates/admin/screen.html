@@ -295,7 +295,7 @@
             });
             // 顯示充值視圖
     $('.balance-actions .top-up').on('click', function() {
-        showView('topUP-view');
+        showView('topup-view');
     });
 
     // 顯示提現視圖
@@ -314,7 +314,7 @@
             }
             alert(`成功充值 ${amount} 元！`);
             $('#topup-amount').val(''); // 清空輸入框
-            $('.back-button[data-target="topUP-view"]').trigger('click'); // 返回我的頁面
+            $('.back-button[data-target="topup-view"]').trigger('click'); // 返回我的頁面
         } else {
             alert('請輸入有效的充值金額。');
         }
