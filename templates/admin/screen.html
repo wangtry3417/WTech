@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>現代化介面</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding-bottom: 60px; /* 為頁底選單預留空間 */
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container {
+            flex-grow: 1;
+            padding: 20px;
+            overflow: hidden; /* 確保滑入的介面不會超出容器 */
+            position: relative; /* 允許子元素絕對定位 */
+        }
+
+        /* 初始內容區域 */
+        .current-view {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* 頁底選單 */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #333;
+            color: #fff;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            z-index: 100; /* 確保選單在最上層 */
+        }
+
+        .bottom-nav a, .bottom-nav button {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 15px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .bottom-nav a:hover, .bottom-nav button:hover {
+            background-color: #555;
+        }
+
+        /* 新的介面樣式 */
+        .new-view {
+            position: absolute;
+            top: 0;
+            left: 100%; /* 初始位置在右側 */
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: left 0.3s ease-in-out; /* 滑動動畫效果 */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .new-view.active {
+            left: 0; /* 滑動到可見位置 */
+        }
+
+        .new-view-header {
+            background-color: #eee;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 5px 10px;
+            margin-right: auto; /* 將標題推向中間 */
+        }
+
+        .new-view-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 0 auto; /* 將標題置中 */
+        }
+
+        .new-view-content {
+            padding: 20px;
+            flex-grow: 1; /* 讓內容區域佔滿剩餘空間 */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="current-view" id="home-view">
+            <h2>首頁</h2>
+            <!-- Content -->
+            <p>這是首頁的內容。</p>
+        </div>
+
+        <div class="new-view" id="function1-view">
+            <div class="new-view-header">
+                <button class="back-button" data-target="function1-view">返回</button>
+                <h2 class="new-view-title">功能1</h2>
+                <div></div> </div>
+            <div class="new-view-content">
+                <p>這是功能1的內容。</p>
+            </div>
+        </div>
+
+        <div class="new-view" id="function2-view">
+            <div class="new-view-header">
+                <button class="back-button" data-target="function2-view">返回</button>
+                <h2 class="new-view-title">功能2</h2>
+                <div></div> </div>
+            <div class="new-view-content">
+                <p>這是功能2的內容。</p>
+            </div>
+        </div>
+
+        <div class="new-view" id="my-view">
+            <div class="new-view-header">
+                <button class="back-button" data-target="my-view">返回</button>
+                <h2 class="new-view-title">我的</h2>
+                <div></div> </div>
+            <div class="new-view-content">
+                <p>這是我的頁面內容。</p>
+            </div>
+        </div>
+    </div>
+
+    <nav class="bottom-nav">
+        <button data-target="home-view">首頁</button>
+        <button data-target="function1-view">功能1</button>
+        <button data-target="function2-view">功能2</button>
+        <button data-target="my-view">我的</button>
+    </nav>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // 顯示視圖的函數
+            function showView(viewId) {
+                // 隱藏所有新的介面
+                $('.new-view').removeClass('active');
+
+                // 顯示對應的介面
+                const viewToShow = $('#' + viewId);
+                if (viewToShow.length) {
+                    viewToShow.addClass('active');
+                }
+
+                // 隱藏首頁內容 (如果需要)
+                const homeView = $('#home-view');
+                if (homeView.length && viewId !== 'home-view') {
+                    homeView.hide();
+                } else if (homeView.length && viewId === 'home-view') {
+                    homeView.show();
+                    // 移除其他 active 類別，確保只有首頁可見
+                    $('.new-view').removeClass('active');
+                }
+            }
+
+            // 返回按鈕的點擊事件
+            $('.back-button').on('click', function() {
+                const targetViewId = $(this).data('target');
+                $('#' + targetViewId).removeClass('active');
+                $('#home-view').show();
+            });
+
+            // 頁底選單按鈕的點擊事件
+            $('.bottom-nav button').on('click', function() {
+                const targetViewId = $(this).data('target');
+                showView(targetViewId);
+            });
+
+            // 初始顯示首頁
+            showView('home-view');
+        });
+    </script>
+</body>
+</html>
