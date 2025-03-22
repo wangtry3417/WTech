@@ -200,7 +200,7 @@
                       </div>
                    </div>
                 <div class="my-links">
-                   <a href="#">設置</a>
+                   <a data-target="setting-view">設置</a>
                    <a href="#">登出</a>
                 </div>
                 <p>這是我的頁面內容的其他部分。</p>
@@ -259,8 +259,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
         $(document).ready(function() {
-            $('#topup-view').hide();
-            $('#withdraw-view').hide()
             // 顯示視圖的函數
             function showView(viewId) {
                 // 隱藏所有新的介面
@@ -280,6 +278,12 @@
                     homeView.show();
                     // 移除其他 active 類別，確保只有首頁可見
                     $('.new-view').removeClass('active');
+                }
+                if (viewId == 'topup-view') {
+                    $('topup-view').show();
+                }
+                if (viewId == 'withdraw-view') {
+                    $('withdraw-view').show();
                 }
             }
 
@@ -311,12 +315,12 @@
         if (amount && parseFloat(amount) > 0) {
             let currentBalance = parseFloat($('#bal').text()); // 取得目前的餘額（假設餘額顯示在元素的 text 中）
             if (!isNaN(currentBalance)) {
-               currentBalance += amount;
+               currentBalance -= amount;
                $('#bal').text(currentBalance.toFixed(2)); // 更新頁面上的餘額，並保留兩位小數
             }
             alert(`成功充值 ${amount} 元！`);
             $('#topup-amount').val(''); // 清空輸入框
-            $('.back-button[data-target="topup-view"]').trigger('click'); // 返回我的頁面
+            $('.back-button[data-target="home-view"]').trigger('click'); // 返回我的頁面
         } else {
             alert('請輸入有效的充值金額。');
         }
@@ -347,7 +351,7 @@
                      }
                     alert(`成功提現 ${amount} 元，收款方式：${method}！`);
                     $('#withdraw-amount').val(''); // 清空金額輸入框
-                    $('.back-button[data-target="withdraw-view"]').trigger('click'); // 返回我的頁面
+                    $('.back-button[data-target="home-view"]').trigger('click'); // 返回我的頁面
                 }
             }, 300); // 模擬 3 秒的載入時間
         } else {
