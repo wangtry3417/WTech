@@ -105,6 +105,56 @@
             padding: 20px;
             flex-grow: 1; /* 讓內容區域佔滿剩餘空間 */
         }
+        /* 我的頁面專屬樣式 */
+.my-balance {
+    background-color: #ff8c00; /* 橙色 */
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    position: relative; /* 為按鈕定位 */
+    text-align: right; /* 餘額文字靠右 */
+}
+
+.balance-text {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.balance-actions button {
+    background-color: rgba(0, 0, 0, 0.3); /* 模糊背景 */
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 10px;
+    position: absolute; /* 相對於 .my-balance 定位 */
+    bottom: 10px;
+    right: 10px;
+}
+
+.balance-actions button:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.my-links {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.my-links a {
+    color: #333;
+    text-decoration: none;
+    margin: 0 10px;
+    font-size: 16px;
+}
+
+.my-links a:hover {
+    text-decoration: underline;
+}
     </style>
 </head>
 <body>
@@ -141,11 +191,64 @@
                 <h2 class="new-view-title">我的</h2>
                 <div></div> </div>
             <div class="new-view-content">
-                <p>這是我的頁面內容。</p>
+                <!-- Content -->
+                <div class="my-balance">
+                   <div class="balance-text">餘額：<span id="bal">0</span> 元</div>
+                      <div class="balance-actions">
+                         <button class="top-up" data-target="topup-view">充值</button>
+                         <button class="withdraw">提現</button>
+                      </div>
+                   </div>
+                <div class="my-links">
+                   <a data-target="setting-view">設置</a>
+                   <a href="#">登出</a>
+                </div>
+                <p>這是我的頁面內容的其他部分。</p>
             </div>
         </div>
     </div>
-
+    
+    <!-- TopUp-view -->
+    <div class="new-view" id="topup-view">
+        <!-- Content -->
+        <div class="new-view-header">
+                <button class="back-button" data-target="my-view">返回</button>
+                <h2 class="new-view-title">充值</h2>
+                <div></div> </div>
+            <div class="new-view-content">
+                <div style="margin-bottom: 20px;">
+                    <label for="topup-amount" style="display: block; margin-bottom: 5px;">充值金額：</label>
+                    <input type="number" id="topup-amount" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                </div>
+                <button id="topup-button" style="background-color: #007bff; color: white; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; font-size: 16px;">確認充值</button>
+            </div>
+    </div>
+    <!-- WithDraw -->
+    <div class="new-view" id="withdraw-view">
+    <div class="new-view-header">
+        <button class="back-button" data-target="withdraw-view">返回</button>
+        <h2 class="new-view-title">提現</h2>
+        <div></div>
+    </div>
+    <div class="new-view-content">
+        <div style="margin-bottom: 15px;">
+            <label for="withdraw-amount" style="display: block; margin-bottom: 5px;">提現金額：</label>
+            <input type="number" id="withdraw-amount" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+        </div>
+        <div style="margin-bottom: 20px;">
+            <label for="withdraw-method" style="display: block; margin-bottom: 5px;">收款方式：</label>
+            <select id="withdraw-method" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                <option value="bank">銀行轉帳</option>
+                <option value="paypal">PayPal</option>
+                <option value="bitpay">BitPay</option>
+            </select>
+        </div>
+        <button id="withdraw-button" style="background-color: #28a745; color: white; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; font-size: 16px; margin-bottom: 15px;">確認提現</button>
+        <div id="loading-bar-container" style="width: 100%; height: 10px; background-color: #f0f0f0; border-radius: 5px; overflow: hidden; display: none;">
+            <div id="loading-bar" style="width: 0%; height: 100%; background-color: #007bff; border-radius: 5px;"></div>
+        </div>
+    </div>
+</div>
     <nav class="bottom-nav">
         <button data-target="home-view">首頁</button>
         <button data-target="function1-view">功能1</button>
@@ -190,7 +293,65 @@
                 const targetViewId = $(this).data('target');
                 showView(targetViewId);
             });
+            // 顯示充值視圖
+    $('.balance-actions .top-up').on('click', function() {
+        showView('topUP-view');
+    });
 
+    // 顯示提現視圖
+    $('.balance-actions .withdraw').on('click', function() {
+        showView('withdraw-view');
+    });
+
+    // 充值按鈕點擊事件
+    $('#topup-button').on('click', function() {
+        const amount = $('#topup-amount').val();
+        if (amount && parseFloat(amount) > 0) {
+            let currentBalance = parseFloat($('#bal').text()); // 取得目前的餘額（假設餘額顯示在元素的 text 中）
+            if (!isNaN(currentBalance)) {
+               currentBalance -= amount;
+               $('#bal').text(currentBalance.toFixed(2)); // 更新頁面上的餘額，並保留兩位小數
+            }
+            alert(`成功充值 ${amount} 元！`);
+            $('#topup-amount').val(''); // 清空輸入框
+            $('.back-button[data-target="topUP-view"]').trigger('click'); // 返回我的頁面
+        } else {
+            alert('請輸入有效的充值金額。');
+        }
+    });
+
+    // 提現按鈕點擊事件
+    $('#withdraw-button').on('click', function() {
+        const amount = $('#withdraw-amount').val();
+        const method = $('#withdraw-method').val();
+        if (parseFloat($('#bal').text()) == 0) return;
+        if (amount && parseFloat(amount) > 0) {
+            // 顯示載入條
+            $('#loading-bar-container').show();
+            $('#loading-bar').css('width', '0%');
+
+            // 模擬載入過程
+            let progress = 0;
+            const interval = setInterval(function() {
+                progress += 10;
+                $('#loading-bar').css('width', progress + '%');
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    $('#loading-bar-container').hide();
+                    let currentBalance = parseFloat($('#bal').text()); // 取得目前的餘額（假設餘額顯示在元素的 text 中）
+                     if (!isNaN(currentBalance)) {
+                        currentBalance -= amount;
+                        $('#bal').text(currentBalance.toFixed(2)); // 更新頁面上的餘額，並保留兩位小數
+                     }
+                    alert(`成功提現 ${amount} 元，收款方式：${method}！`);
+                    $('#withdraw-amount').val(''); // 清空金額輸入框
+                    $('.back-button[data-target="withdraw-view"]').trigger('click'); // 返回我的頁面
+                }
+            }, 300); // 模擬 3 秒的載入時間
+        } else {
+            alert('請輸入有效的提現金額。');
+        }
+    });
             // 初始顯示首頁
             showView('home-view');
         });
