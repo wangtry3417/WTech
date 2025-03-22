@@ -295,11 +295,13 @@
             });
             // 顯示充值視圖
     $('.balance-actions .top-up').on('click', function() {
+        $('#topup-view').style('display', 'block');
         showView('topup-view');
     });
 
     // 顯示提現視圖
     $('.balance-actions .withdraw').on('click', function() {
+        $('#withdraw-view').style('display', 'block');
         showView('withdraw-view');
     });
 
