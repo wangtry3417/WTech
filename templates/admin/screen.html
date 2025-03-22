@@ -279,12 +279,6 @@
                     // 移除其他 active 類別，確保只有首頁可見
                     $('.new-view').removeClass('active');
                 }
-                if (viewId == 'topup-view') {
-                    $('topup-view').show();
-                }
-                if (viewId == 'withdraw-view') {
-                    $('withdraw-view').show();
-                }
             }
 
             // 返回按鈕的點擊事件
@@ -315,7 +309,7 @@
         if (amount && parseFloat(amount) > 0) {
             let currentBalance = parseFloat($('#bal').text()); // 取得目前的餘額（假設餘額顯示在元素的 text 中）
             if (!isNaN(currentBalance)) {
-               currentBalance -= amount;
+               currentBalance += amount;
                $('#bal').text(currentBalance.toFixed(2)); // 更新頁面上的餘額，並保留兩位小數
             }
             alert(`成功充值 ${amount} 元！`);
