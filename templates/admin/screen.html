@@ -261,24 +261,11 @@
         $(document).ready(function() {
             // 顯示視圖的函數
             function showView(viewId) {
-                // 隱藏所有新的介面
                 $('.new-view').removeClass('active');
-
-                // 顯示對應的介面
-                const viewToShow = $('#' + viewId);
-                if (viewToShow.length) {
-                    viewToShow.addClass('active');
-                }
-
-                // 隱藏首頁內容 (如果需要)
-                const homeView = $('#home-view');
-                if (homeView.length && viewId !== 'home-view') {
-                    homeView.hide();
-                } else if (homeView.length && viewId === 'home-view') {
-                    homeView.show();
-                    // 移除其他 active 類別，確保只有首頁可見
-                    $('.new-view').removeClass('active');
-                }
+                $('#home-view').toggle(viewId === 'home-view');
+                
+                const $view = $('#' + viewId);
+                $view.addClass('active');
             }
 
             // 返回按鈕的點擊事件
@@ -295,14 +282,12 @@
             });
             // 顯示充值視圖
     $('.balance-actions .top-up').on('click', function() {
-        $('#topup-view').style('display', 'block');
-        showView('topup-view');
+        $('#topup-view').addClass('active');
     });
 
     // 顯示提現視圖
     $('.balance-actions .withdraw').on('click', function() {
-        $('#withdraw-view').style('display', 'block');
-        showView('withdraw-view');
+        ('#withdraw-view').addClass('active');
     });
 
     // 充值按鈕點擊事件
