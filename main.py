@@ -619,8 +619,6 @@ def wbank_v1_auth_session():
   password = request.form['pw']
   url = request.form['url']
   user = wbankwallet.query.filter_by(username=username).first()
-  if not user:
-    return jsonify(msg="The user not found")
   if user and url:
     if user.password == password:
         if user.sub == None or user.sub == "":
@@ -632,8 +630,9 @@ def wbank_v1_auth_session():
           flash(user.sub,'error')
           return render_template("/wbank/login.html")
     else:
-       flash('密碼錯誤.', 'error')
+       flash('用戶名或密碼錯誤.', 'error')
        return render_template('wbank/login.html')
+  return jsonify(msg="User and url were not found")
 
 @app.route("/wbank/auth/v1/userinfo")
 @login_required
