@@ -2959,6 +2959,10 @@ def wbank_v1_post_cash_out():
 @csrf.exempt
 def wbank_card_hash_action():
   if request.method == "GET":
+    if current_user:
+      cardno = f"{current_user.accnumber}->{current_user.password}"
+      hash_code = hashlib.sha256(cardno.encode()).hexdigest()
+      return jsonify(loginUser=current_user.username, loginPw=current_user.password, balance=current_user.balance, accnumber=current_user.accnumber)
     da = request.headers
     if not da:
       return jsonify(error="Data not found")
