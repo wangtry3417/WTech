@@ -128,7 +128,7 @@ def delete_file(filename):
             if session["wcloudUSERNAME"] == "wtechProduct11202":
               if int(session['uploadTimes'][1]) == 20:
                 pass
-              session['uploadTimes'] = int(session['uploadTimes'][1]) + 1
+              session['uploadTimes'][1] = int(session['uploadTimes'][1]) + 1
             elif session["wcloudUSERNAME"] == "wtechProduct10292":
               if int(session['uploadTimes']) == 5:
                 pass
@@ -136,7 +136,7 @@ def delete_file(filename):
             elif session["wcloudUSERNAME"] == "wtechProduct09819":
               if int(session['uploadTimes']) == 10:
                 pass
-              session['uploadTimes'] = int(session['uploadTimes'][1]) + 1
+              session['uploadTimes'][1] = int(session['uploadTimes'][1]) + 1
             return redirect(url_for('wcloud_bp.wcloud'))  # 刪除成功後重新導向
         return 'File not found', 404
     return redirect("/wcloud/login")
