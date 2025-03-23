@@ -222,7 +222,6 @@
                 if (!paymentResponse.ok) {
                     throw new Error('支付失敗');
                 }
-                let pr = paymentResponse.json();
                 const pr = await paymentResponse.json();
                 pr.code == 200 ? showMessage('支付成功！', 'success') : showMessage(`錯誤：${pr.error}`, 'error');
             } catch (error) {
