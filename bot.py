@@ -200,11 +200,11 @@ async def custom_embed(ctx:discord.ApplicationContext, title:str, content:str, f
         embed_content = {
            "embeds": [
            {
-           "title": title,
-           "description": content,
-           "color": 3447003,
+             "title": title,
+             "description": content,
+             "color": 3447003,
            "author": {
-           "name": "fungpt-v2"
+             "name": "fungpt-v2"
            },
            {
             "fields" : [
@@ -226,7 +226,8 @@ async def custom_embed(ctx:discord.ApplicationContext, title:str, content:str, f
            ]
          }
     headers = {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      "Authorization": f"Bot {os.environ.get('discordToken')}"
     }
     resp = post(url="https://discord.com/api/v10/channels/1305093023046307860/messages", headers=headers, json=embed_content)
     await ctx.respond("已經發送訊息✅")
