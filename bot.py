@@ -187,7 +187,7 @@ async def custom_embed(ctx:discord.ApplicationContext, title:str, content:str, f
         embed_content = {
            "embeds": [
            {
-           "title": title
+           "title": title,
            "description": content,
            "color": 3447003,
            "author": {
@@ -200,7 +200,7 @@ async def custom_embed(ctx:discord.ApplicationContext, title:str, content:str, f
         embed_content = {
            "embeds": [
            {
-           "title": title
+           "title": title,
            "description": content,
            "color": 3447003,
            "author": {
