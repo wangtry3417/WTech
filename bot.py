@@ -170,6 +170,67 @@ async def check_transfer_blockchain(ctx:discord.ApplicationContext, key:str):
       else:
         await ctx.respond("鑰匙🔑格式有誤")
 
+# Embed good
+@bot.slash_command(name="嵌入信息", description="以嵌入的形式發送信息")
+@option("title", description="主題")
+@option("content", description="內容")
+@option("f1name", description="小主題(如沒有，可輸入None)")
+@option("f1value", description="小主題對應的值(如沒有，可輸入None)")
+@option("f2name", description="小主題(如沒有，可輸入None)")
+@option("f2value", description="小主題對應的值(如沒有，可輸入None)")
+@option("f3name", description="小主題(如沒有，可輸入None)")
+@option("f3value", description="小主題對應的值(如沒有，可輸入None)")
+async def custom_embed(ctx:discord.ApplicationContext, title:str, content:str, f1name:str, f1value:str, f2name:str, f2value:str, f3name:str, f3value:str):
+    await ctx.defer()
+    embed_content = {}
+    if f1name == "None" or f1value == "None" or f2name == "None" or f2value == "None" or f3name == "None" or f3value == "None":
+        embed_content = {
+           "embeds": [
+           {
+           "title": title
+           "description": content,
+           "color": 3447003,
+           "author": {
+           "name": "fungpt-v2"
+           }
+           }
+           ]
+         }
+    else:
+        embed_content = {
+           "embeds": [
+           {
+           "title": title
+           "description": content,
+           "color": 3447003,
+           "author": {
+           "name": "fungpt-v2"
+           },
+           {
+            "fields" : [
+              {
+                "name": f1name,
+                "value": f1value
+              },
+              {
+                "name": f2name,
+                "value": f2value
+              },
+              {
+                "name": f3name,
+                "value": f3value
+              }
+            ]
+           }
+           }
+           ]
+         }
+    headers = {
+      "Content-Type": "application/json"
+    }
+    resp = post(url="https://discord.com/api/v10/channels/1305093023046307860/messages", headers=headers, json=embed_content)
+    await ctx.respond("已經發送訊息✅")
+
 #Ask gemini
 @bot.slash_command(name="問問gemini",description="調用Gemini-api")
 @option("prompt",description="為Prompt，即請求文本。")
