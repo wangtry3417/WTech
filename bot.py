@@ -206,7 +206,6 @@ async def custom_embed(ctx:discord.ApplicationContext, title:str, content:str, f
            "author": {
              "name": "fungpt-v2"
            },
-           {
             "fields" : [
               {
                 "name": f1name,
@@ -221,7 +220,6 @@ async def custom_embed(ctx:discord.ApplicationContext, title:str, content:str, f
                 "value": f3value
               }
             ]
-           }
            }
            ]
          }
