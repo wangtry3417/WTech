@@ -754,6 +754,7 @@
       let pmnAmount = document.getElementById("pmn-amount").value;
       let pmnSelector = document.getElementById("npSelector");
       let pmnReceiver = "wbank";
+      if (pmnAmount == "" || pmnAmount == null) return;
       if (pmnSelector.value == "pm-tax") pmnReceiver="w.gov/tax";
       else if (pmnSelector.value == "pm-nsgov") pmnReceiver="w.gov/nan.sheng";
       else {
@@ -780,7 +781,7 @@
             pmnSelector.value = 'def';
             document.getElementById('needPayModal').style.display = 'none';
          } else {
-            alert("付款失敗: "+data.message+" ,狀態碼: "+data.code);
+            if (data.error == "The card has insufficient balance") alert("付款失敗: 您的泓通卡信用額已滿，請還清再付款");
             pmnAmount = '';
             pmnSelector.value = 'def';
             document.getElementById('needPayModal').style.display = 'none';
