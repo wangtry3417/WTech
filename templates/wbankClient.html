@@ -471,7 +471,7 @@
     <div class="model-content">
         <span class="close" onclick="document.getElementById('needPayModal').style.display='none';">&times;</span>
         <h3>繳費</h3>
-        <div id="vcard">
+        <div id="wnp">
             <label>WBank用戶名: </label>
             <input type="text" value="{{user}}">
             <br>
@@ -483,7 +483,7 @@
             </select>
             <br>
             <label>應付金額: </label>
-            <input type="number" min="100">
+            <input type="number" id="pmn-amount" min="100">
             <br>
             <button class="button" onclick="paymentNeed()">確認交易</button>
             <br>
@@ -749,6 +749,45 @@
       });
      window.location.href="/wbank";
     };
+    const paymentNeed = () => {
+      // pmn = Payment-Need
+      let pmnAmount = document.getElemenById("pmn-amount").value;
+      let pmnSelector = document.getElementById("npSelector");
+      let pmnReceiver = "wbank";
+      if (pmnSelector.value == "pm-tax") pmnReceiver="w.gov/tax";
+      else if (pmnSelector.value == "pm-nsgov") pmnReceiver="w.gov/nan.sheng";
+      else {
+        alert("找不到收款單位");
+        return;
+      }
+      if (pmnSelector.value == "def") alert("請選擇繳付帳單單位");
+      let pmnRequestFormat = {
+        cardNumber: "{{ hash_card_number }}",
+        password: "{{ session['pw'] }}",
+        accessKey: "****",
+        reviewer: pmnReceiver,
+        amount: pmnAmount
+      };
+      let pmnRequestHeaders = {
+        "Content-Type": "application/json"
+      };
+      fetch ("/wbank/card/action", { method: "PATCH", headers: pmnRequestHeaders, body: JSON.stringify(pmnRequestFormat) })
+       .then (res=>res.json())
+       .then (data => {
+         if (data.code == 200) {
+            alert("付款成功");
+            pmnAmount = '';
+            pmnSelector.value = 'def';
+            document.getElementById('needPayModal').style.display = 'none';
+         } else {
+            alert("付款失敗: "+data.message+" ,狀態碼: "+data.code);
+            pmnAmount = '';
+            pmnSelector.value = 'def';
+            document.getElementById('needPayModal').style.display = 'none';
+        }
+       })
+       .catch(err => alert("WBankCardAPI錯誤: "+err.message));
+    };
     //可以控制交易
     function paymentChange() {
             const toggleSwitch = document.getElementById('toggleSwitch');
@@ -793,8 +832,8 @@
       document.getElementById("loan").addEventListener("click",() => {
         window.location.href="/wbank/loan?user=" + accnumber;
       });
-      document.getElementById("cash-out").addEventListener("click",() => {
-        window.location.href="/wbank/v1/cashout?user=" + "{{ user }}";
+      document.getElementById("np-pay").addEventListener("click",() => {
+        document.getElementById('needPayModal').style.display = 'flex'; 
       });
       document.getElementById("so").addEventListener("click",() => {
         //window.location.href="/wbank/sellCoins?user=" + "{{ user }}";
