@@ -751,7 +751,7 @@
     };
     const paymentNeed = () => {
       // pmn = Payment-Need
-      let pmnAmount = document.getElemenById("pmn-amount").value;
+      let pmnAmount = document.getElementById("pmn-amount").value;
       let pmnSelector = document.getElementById("npSelector");
       let pmnReceiver = "wbank";
       if (pmnSelector.value == "pm-tax") pmnReceiver="w.gov/tax";
