@@ -466,6 +466,25 @@
     </div>
 </div>
         <!-- End of virual-card screen -->
+        <!-- 交費用 -->
+        <div id="needPayModal" class="model">
+    <div class="model-content">
+        <span class="close" onclick="document.getElementById('needPayModal').style.display='none';">&times;</span>
+        <h3>繳費</h3>
+        <div id="vcard">
+            <label>WBank用戶名: </label>
+            <input type="text" value="{{user}}">
+            <br>
+            <label>繳費目的: </label>
+            <select id="npSelector">
+                <option value="def">--請選擇繳費目的--</option>
+                <!-- Do -->
+            </select>
+            <p style="color: gray;">密碼是你的密碼</p>
+        </div>
+    </div>
+</div>
+        <!-- End screen -->
         <div id="myPage" class="page">
             <div class="card">
                 <h2>我的</h2>
