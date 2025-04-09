@@ -2818,7 +2818,7 @@ def wbank_auth_client():
         
         except Exception as e:
             db.session.rollback()  # 在查詢或提交時發生錯誤時回滾
-            flash('系統錯誤，請稍後再試。', 'error')
+            flash('系統錯誤，請稍後再試。 e:'+str(e), 'error')
             return redirect("/wbank")
     
     return render_template('wbank.html')
