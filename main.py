@@ -2785,16 +2785,16 @@ def wbank_auth_client():
                             return render_template("wbank/verify.html")
                           except smtplib.SMTPException as e:
                             app.logger.error(f"郵件發送失敗: {e}") # 記錄郵件發送錯誤
-                            flash('郵件驗證碼發送失敗，請稍後再試。', 'danger') # 提示用戶郵件發送失敗，但允許繼續登入
-                            return redirect(url_for('wbank_client')) #  即使郵件發送失敗，也允許使用者免驗證碼登入
+                            flash('驗證失敗 : 郵件驗證碼發送失敗，請稍後再試。', 'danger') # 提示用戶郵件發送失敗，但允許繼續登入
+                            return redirect('/wbank')
                         return redirect(url_for('wbank_client'))
                     else:
                         if "銀行" in user.sub:
                             flash("抱歉，非泓財銀行帳戶不能登入", "error")
                             return redirect("/wbank")
                         if "凍結" in user.sub:
-                          login_user(user)
-                          return redirect("/wbank/client")
+                          flash(user.sub, "error")
+                          return redirect("/wbank")
                         flash(user.sub, 'error')
                         return redirect("/wbank")
                 else:
@@ -2834,6 +2834,8 @@ def wbank_client():
       return redirect("/admin/wbankwallet")
     if current_user.role == "pendingUser":
       flash("請等2到3個工作天 等待資料審核","info")
+      logout_user()
+      session.clear()
       return redirect("/wbank")
     if "凍結" in current_user.sub:
       return render_template("block.html", user=user)
