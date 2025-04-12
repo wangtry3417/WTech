@@ -1188,6 +1188,7 @@ function buyStock(stockSymbol) {
     .catch(error => {
         console.error('錯誤:', error);
         alert('購買過程中發生錯誤。');
+        balance += totalCost;
     });
 }
         
