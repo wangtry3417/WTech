@@ -903,9 +903,9 @@ function changeBGColor() {
 let portfolio = JSON.parse(localStorage.getItem('portfolio')) || [];
 const stockPrices = {
     "WBank內銀股": 150.40,
-    "泓國綜合指數": Math.floor(Math.random() * (89 - 30 + 1)) + 30,
-    "經發集團": Math.floor(Math.random() * (135 - 78 + 1)) + 78,
-    "WTC/HKD": Math.floor(Math.random() * (1000 - 456 + 1)) + 456,
+    "泓國綜合指數": Math.floor(Math.random() * (54 - 8 + 1)) + 8,
+    "經發集團": Math.floor(Math.random() * (45 - 12 + 1)) + 12,
+    "WTC/HKD": Math.floor(Math.random() * (800 - 245 + 1)) + 245,
     "BEn-stock": 0.39
 };
 
@@ -986,7 +986,7 @@ for (let i = 0; i < targetTimes.length; i++) {
         break;
     }
 }
-
+/*
 if (currentPeriod) {
     if (currentPeriod.hour == 9) {
         if (stockSymbol == "WBank內銀股") {
@@ -1054,7 +1054,7 @@ if (currentPeriod) {
 } else {
     newPrice += 0.03;
 }
-
+*/
     stockPrices[stockSymbol] = newPrice;
 
 
