@@ -14,7 +14,7 @@ wpay.on("paymentCreate", ()=> {
       accessKey: wpay.apiKey,
       reviewer: "benchan",
       amount: 1000,
-      curency: "HKD"
+      currency: "HKD"
     });
   wpay.redirect("wbank/cardPayment",method="PATCH",pm);
   wpay.closeConnect();
