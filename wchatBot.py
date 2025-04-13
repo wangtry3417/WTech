@@ -10,7 +10,7 @@ sio = socketio.Client()
 @sio.event
 def connect():
     print("Connected to the server")
-    sio.emit('joinChat', { "username": "nelson", "room_number": "wbank客服" });
+    sio.emit('joinChat', { "username": "123客服", "room_number": "wbank客服" });
 
 # 當接收到 'chatMessage' 事件時的回調函數
 @sio.on('chatMessage')
@@ -31,29 +31,29 @@ def on_chat_message(data):
     }
   ],
   "generationConfig": {
-    "temperature": 1,
+    "temperature": 2,
     "topK": 40,
     "topP": 0.95,
-    "maxOutputTokens": 900,
+    "maxOutputTokens": 150,
     "responseMimeType": "text/plain"
   }
 }
             resp = post(url=f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-thinking-exp-01-21:generateContent?key={os.environ.get('gkey')}", headers={"Content-Type":"application/json"}, json=options)
             resp.raise_for_status()
             try:
-              sio.emit("chatMessage",{ "username": "nelson", "type":"text", "text":resp.json()["candidates"][0]["content"]["parts"][0]["text"], "room_number": "wbank客服" , "timestamp": datetime.now()});
+              sio.emit("chatMessage",{ "username": "123客服", "type":"text", "text":resp.json()["candidates"][0]["content"]["parts"][0]["text"], "room_number": "wbank客服" , "timestamp": datetime.now()});
             except:
-              sio.emit("chatMessage",{ "username": "nelson", "type":"text", "text":resp.json(), "room_number": "wbank客服" , "timestamp": datetime.now()});
+              sio.emit("chatMessage",{ "username": "123客服", "type":"text", "text":resp.json(), "room_number": "wbank客服" , "timestamp": datetime.now()});
 
 # 當斷開連接時的回調函數
 @sio.event
 def disconnect():
     print("Disconnected from the server")
-    sio.emit('leaveChat', { "username": "funGPT", "room_number": "wbank客服" });
+    sio.emit('leaveChat', { "username": "123客服", "room_number": "wbank客服" });
 
 def run_model():
   # 連接到 Socket.IO 伺服器
-  sio.connect('https://sites.wtechhk.xyz')
+  sio.connect('https://wtech-nbqx.onrender.com')
 
   # 保持程序運行以接收消息
   sio.wait()
