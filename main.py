@@ -2757,6 +2757,8 @@ def wbank_auth_client():
                         login_user(user)
                         if user.role == "pendingUser":
                           flash("請等2到3個工作天 等待資料審核","info")
+                          logout_user()
+                          session.clear()
                           return redirect("/wbank")
                         session.pop("tryTimes", None)
                         session["username"] = username
@@ -2786,6 +2788,8 @@ def wbank_auth_client():
                             return render_template("wbank/verify.html")
                           except smtplib.SMTPException as e:
                             app.logger.error(f"郵件發送失敗: {e}") # 記錄郵件發送錯誤
+                            logout_user()
+                            session.clear()
                             flash('驗證失敗 : 郵件驗證碼發送失敗，請稍後再試。', 'danger') # 提示用戶郵件發送失敗，但允許繼續登入
                             return redirect('/wbank')
                         return redirect(url_for('wbank_client'))
