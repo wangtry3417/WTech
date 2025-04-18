@@ -237,6 +237,8 @@ async def custom_embed(ctx:discord.ApplicationContext, title:str, content:str, f
 async def ask_deepseek(ctx:discord.ApplicationContext, prompt:str):
     await ctx.defer()  # 這裡使用 defer() 來延遲響應
     try:
+      global pipe
+      pipe = pipeline("text-generation", model="deepseek-ai/DeepSeek-V3", trust_remote_code=True, device_map="cpu") # 強制使用 CPU
       messages = [
         {"role": "user", "content": prompt}
       ]
@@ -260,10 +262,7 @@ async def on_ready():
 @bot.event
 async def on_ready():
     print(f"Bot 已登入為 {bot.user}")
-    # 在 Bot 啟動時初始化 pipeline，避免每次調用指令時都重新載入模型
-    global pipe
-    pipe = pipeline("text-generation", model="deepseek-ai/DeepSeek-V3", trust_remote_code=True, device_map="cpu") # 強制使用 CPU
-
+    
 # 啟動 Bot
 def run_bot():
   bot.run(os.environ.get('discordToken'))  # 替換為您的 Discord Bot Token
