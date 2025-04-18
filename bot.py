@@ -3,6 +3,7 @@ from discord import option
 import psycopg2
 import re,os,datetime,asyncio
 from requests import get,post
+from transformers import pipeline
 
 # Discord Bot 設定
 bot = discord.Bot()
@@ -230,71 +231,38 @@ async def custom_embed(ctx:discord.ApplicationContext, title:str, content:str, f
     resp = post(url="https://discord.com/api/v10/channels/1305093023046307860/messages", headers=headers, json=embed_content)
     await ctx.respond("已經發送訊息✅")
 
-#Ask gemini
-@bot.slash_command(name="問問gemini",description="調用Gemini-api")
+#Ask deepseek
+@bot.slash_command(name="問問deepseek",description="調用deepseek-model")
 @option("prompt",description="為Prompt，即請求文本。")
-async def ask_gemini(ctx:discord.ApplicationContext, prompt:str):
+async def ask_deepseek(ctx:discord.ApplicationContext, prompt:str):
     await ctx.defer()  # 這裡使用 defer() 來延遲響應
-    options = {
-  "contents": [
-    {
-      "role": "user",
-      "parts": [
-        {
-          "text": prompt
-        }
-      ]
-    }
-  ],
-  "generationConfig": {
-    "temperature": 2,
-    "topK": 40,
-    "topP": 0.95,
-    "maxOutputTokens": 4500,
-    "responseMimeType": "text/plain"
-  }
-}
-    resp = post(url=f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-thinking-exp-01-21:generateContent?key={os.environ.get('gkey')}", headers={"Content-Type":"application/json"}, json=options)
-    resp.raise_for_status()
     try:
-      await ctx.respond(resp.json()["candidates"][0]["content"]["parts"][0]["text"])
-    except:
-      await ctx.respond(resp.json(), ephemeral=True)
+      messages = [
+        {"role": "user", "content": prompt}
+      ]
+      output = pipe(prompt, max_length=120, num_return_sequences=1)
+      await ctx.respond(output[0]['generated_text'])
+    except Exception as e:
+      await ctx.respond(f"有錯誤： {e}", ephemeral=True)
+    
 
 async def send_transfer(user,amount):
     channel = bot.get_channel(1308055112698298488)
     fm = f"謝謝 {user} 捐 WTC${amount}, 非常感謝你🙏"
     await channel.send(fm)
 
-
-async def check_new_block():
-  while True:
-    try:
-      resp = get(url="https://bc.wtechhk.xyz/get/chain").json()
-      utc_8_times = datetime.datetime.utcnow() + datetime.timedelta(hours=8)
-      times_seconds = utc_8_times - datetime.timedelta(seconds=3)
-      for res in resp:
-        rawData = res["rawData"].split("--")
-        if str(rawData[0]).startswith("127"):
-          tradeData = rawData[1].split("->")
-          username = tradeData[0]
-          reviewer = tradeData[1]
-          amount = tradeData[2]
-          times = rawData[2]
-          ftimes = datetime.datetime.strptime(times,"%Y/%m/%d, %H:%M:%S")
-          if ftimes >= times_seconds:
-            if reviewer == "wbank":
-              await send_transfer(username,amount)
-    except Exception as e:
-        raise Exception(e)
-    await asyncio.sleep(1)
-
 # 啟動 Discord Bot
 @bot.event
 async def on_ready():
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="WBank的運作"))
     print(f'Logged in as {bot.user}!')
-    await check_new_block()
+    # 初始化 pipeline (在 Bot 啟動時)
+@bot.event
+async def on_ready():
+    print(f"Bot 已登入為 {bot.user}")
+    # 在 Bot 啟動時初始化 pipeline，避免每次調用指令時都重新載入模型
+    global pipe
+    pipe = pipeline("text-generation", model="deepseek-ai/DeepSeek-V3", trust_remote_code=True, device_map="cpu") # 強制使用 CPU
 
 # 啟動 Bot
 def run_bot():
