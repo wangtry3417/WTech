@@ -26,7 +26,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import pytz
 from discord import Bot,Embed,Option
 import discord
-from flask_socketio import SocketIO,emit,join_room,leave_room
+from flask_socketio import SocketIO,emit,join_room,leave_room,rooms
 from flask_admin import Admin,expose, BaseView
 from flask_admin.contrib.sqla import ModelView
 from flask_sqlalchemy import SQLAlchemy
@@ -886,42 +886,18 @@ def check_new_order():
 
 @socketio.on('get_active_channels')
 def handle_get_active_channels(data):
-    print(f'收到獲取活躍頻道請求 (直接查詢 Rooms)')
-
-    relevant_channels = []
-    # 假設您只需要查詢默認命名空間 '/' 的房間
-
+    """ 使用官方 rooms() 方法替代直接訪問 manager """
     try:
-        # socketio.server.manager.rooms 是一個字典 {namespace: {room_name: {sid1, sid2, ...}}}
-        if "/" in socketio.server.manager.rooms:
-            # 獲取該命名空間下所有房間的名稱列表
-            all_room_names_in_namespace = list(socketio.server.manager.rooms[default_namespace].keys())
-
-            print(f"在命名空間 '{default_namespace}' 找到所有房間名稱 (可能包含內部或不相關的): {all_room_names_in_namespace}") # Log for debugging
-
-            # 過濾房間名稱，只保留含有「客戶服務」字樣的
-            for room_name in all_room_names_in_namespace:
-                 # 簡單檢查是否包含特定字樣
-                if '客戶服務' in room_name:
-                    # 可選的額外檢查: 排除 SocketIO 為每個單獨連接創建的、房間名等於 SID 的房間
-                    # 這些通常不是您要列出的「頻道」
-                    #if room_name != request.sid and room_name not in socketio.server.manager.sids:
-                         #relevant_channels.append(room_name)
-                    # 如果您確定房間名格式都是 '客服服務-...'，使用 startswith 更精確
-                    if room_name.startswith('客服服務-'):
-                      relevant_channels.append(room_name)
-
-
-        print(f'過濾後相關頻道列表: {relevant_channels}')
-        emit("active_channels", channels=relevant_channels, broadcast=True)
-
+        all_rooms = rooms(namespace='/')  # 獲取當前命名空間所有房間
+        relevant_channels = [
+            room for room in all_rooms 
+            if room.startswith('客服服務-')  # 嚴格前綴匹配
+            and room != request.sid       # 排除連接專用房間
+        ]
+        emit('active_channels', relevant_channels, to=request.sid)  # 僅返回給請求者
     except Exception as e:
-        print(f"Error accessing SocketIO rooms: {e}")
-        # 處理 potential 錯誤
-        relevant_channels = [] # 發生錯誤時返回空列表
-
-    # 將過濾後的列表發送給發起請求的客戶端 (客服)
-    emit('active_channels', [])
+        print(f"獲取房間列表失敗: {e}")
+        emit('active_channels', [], to=request.sid)
 
 @socketio.on('joinChat')
 def handle_join_chat(data):
