@@ -905,11 +905,11 @@ def handle_get_active_channels(data):
                 if '客戶服務' in room_name:
                     # 可選的額外檢查: 排除 SocketIO 為每個單獨連接創建的、房間名等於 SID 的房間
                     # 這些通常不是您要列出的「頻道」
-                    if room_name != request.sid and room_name not in socketio.server.manager.sids:
-                         relevant_channels.append(room_name)
+                    #if room_name != request.sid and room_name not in socketio.server.manager.sids:
+                         #relevant_channels.append(room_name)
                     # 如果您確定房間名格式都是 '客服服務-...'，使用 startswith 更精確
-                    # if room_name.startswith('客服服務-'):
-                    #      relevant_channels.append(room_name)
+                    if room_name.startswith('客服服務-'):
+                      relevant_channels.append(room_name)
 
 
         print(f'過濾後相關頻道列表: {relevant_channels}')
