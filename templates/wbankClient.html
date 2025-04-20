@@ -1264,7 +1264,7 @@ function sellStock(stockSymbol) {
         let messageInput = document.getElementById('message-input');
         let chatArea = document.querySelector('.chat-area');
         let username = user;
-        let chatRoom = "wbank客服";
+        let chatRoom = "客戶服務--" + username + "#" + Math.floor(Math.random() * (1999 - 11 + 1)) + 11;
 
         // 打開 modal
         openModalButton.onclick = function() {
