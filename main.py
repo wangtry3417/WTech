@@ -136,7 +136,7 @@ SOCKET_CONFIG = {
 socketio = SocketIO(app,**SOCKET_CONFIG)
 
 socketio.init_app(app)
-socketio.server.instrument(auth=True,namespace="/socketio")
+socketio.server.instrument(auth=False,namespace="/")
 
 #CORS(app,resources={r"/*": {"origins": "*"}})
 #CORS(app,resources={r"/wbank/hash/transfer": {"origins": "http://223.19.115.182:5000"}})
@@ -893,7 +893,7 @@ def handle_get_active_channels(data):
 
     try:
         # socketio.server.manager.rooms 是一個字典 {namespace: {room_name: {sid1, sid2, ...}}}
-        if "/socketio" in socketio.server.manager.rooms:
+        if "/" in socketio.server.manager.rooms:
             # 獲取該命名空間下所有房間的名稱列表
             all_room_names_in_namespace = list(socketio.server.manager.rooms[default_namespace].keys())
 
