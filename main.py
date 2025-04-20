@@ -136,7 +136,7 @@ SOCKET_CONFIG = {
 socketio = SocketIO(app,**SOCKET_CONFIG)
 
 socketio.init_app(app)
-socketio.server.instrument(auth=True,namespace="/socketio/admin")
+socketio.server.instrument(auth=True,namespace="/socketio")
 
 #CORS(app,resources={r"/*": {"origins": "*"}})
 #CORS(app,resources={r"/wbank/hash/transfer": {"origins": "http://223.19.115.182:5000"}})
@@ -883,6 +883,45 @@ def check_new_order():
   rows = cur.fetchall()
   for row in rows:
     emit("updateOrder",{"username":row[0],"amount":row[1],"payment":row[2]})
+
+@socketio.on('get_active_channels')
+def handle_get_active_channels(data):
+    print(f'收到獲取活躍頻道請求 (直接查詢 Rooms)')
+
+    relevant_channels = []
+    # 假設您只需要查詢默認命名空間 '/' 的房間
+
+    try:
+        # socketio.server.manager.rooms 是一個字典 {namespace: {room_name: {sid1, sid2, ...}}}
+        if "/socketio" in socketio.server.manager.rooms:
+            # 獲取該命名空間下所有房間的名稱列表
+            all_room_names_in_namespace = list(socketio.server.manager.rooms[default_namespace].keys())
+
+            print(f"在命名空間 '{default_namespace}' 找到所有房間名稱 (可能包含內部或不相關的): {all_room_names_in_namespace}") # Log for debugging
+
+            # 過濾房間名稱，只保留含有「客戶服務」字樣的
+            for room_name in all_room_names_in_namespace:
+                 # 簡單檢查是否包含特定字樣
+                if '客戶服務' in room_name:
+                    # 可選的額外檢查: 排除 SocketIO 為每個單獨連接創建的、房間名等於 SID 的房間
+                    # 這些通常不是您要列出的「頻道」
+                    if room_name != request.sid and room_name not in socketio.server.manager.sids:
+                         relevant_channels.append(room_name)
+                    # 如果您確定房間名格式都是 '客服服務-...'，使用 startswith 更精確
+                    # if room_name.startswith('客服服務-'):
+                    #      relevant_channels.append(room_name)
+
+
+        print(f'過濾後相關頻道列表: {relevant_channels}')
+        emit("active_channels", channels=relevant_channels, broadcast=True)
+
+    except Exception as e:
+        print(f"Error accessing SocketIO rooms: {e}")
+        # 處理 potential 錯誤
+        relevant_channels = [] # 發生錯誤時返回空列表
+
+    # 將過濾後的列表發送給發起請求的客戶端 (客服)
+    emit('active_channels', relevant_channels)
 
 @socketio.on('joinChat')
 def handle_join_chat(data):
