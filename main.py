@@ -921,7 +921,7 @@ def handle_get_active_channels(data):
         relevant_channels = [] # 發生錯誤時返回空列表
 
     # 將過濾後的列表發送給發起請求的客戶端 (客服)
-    emit('active_channels', relevant_channels)
+    emit('active_channels', [])
 
 @socketio.on('joinChat')
 def handle_join_chat(data):
