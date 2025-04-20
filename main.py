@@ -891,13 +891,12 @@ def handle_get_active_channels(data):
         all_rooms = rooms(namespace='/')  # 獲取當前命名空間所有房間
         relevant_channels = [
             room for room in all_rooms 
-            if room.startswith('客服服務-')  # 嚴格前綴匹配
-            and room != request.sid       # 排除連接專用房間
+            if room.startswith('客服服務')  # 嚴格前綴匹配
         ]
-        emit('active_channels', relevant_channels, to=request.sid)  # 僅返回給請求者
+        emit('active_channels', relevant_channels)
     except Exception as e:
         print(f"獲取房間列表失敗: {e}")
-        emit('active_channels', [], to=request.sid)
+        emit('active_channels', [])
 
 @socketio.on('joinChat')
 def handle_join_chat(data):
