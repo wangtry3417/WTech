@@ -493,10 +493,10 @@
 
             // 過濾出符合「含有客服服務開頭」的頻道 (這步也可以完全在後端做)
             // 這裡以前端過濾作為一個例子，假設後端可能返回其他類型頻道
-             const customerServiceChannels = channels.filter(channelName => channelName);
+             // const customerServiceChannels = channels.filter(channelName => channelName);
 
 
-            if (customerServiceChannels && customerServiceChannels.length > 0) {
+            if (channels && channels.length > 0) {
                 customerServiceChannels.forEach(channel => {
                     const channelItem = document.createElement('div');
                     channelItem.classList.add('channel-item');
