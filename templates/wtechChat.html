@@ -496,7 +496,7 @@
              // const customerServiceChannels = channels.filter(channelName => channelName);
 
 
-            if (channels) {
+            if (channels && channels.length > 0) {
                 customerServiceChannels.forEach(channel => {
                     const channelItem = document.createElement('div');
                     channelItem.classList.add('channel-item');
