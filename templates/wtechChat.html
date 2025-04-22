@@ -448,10 +448,10 @@
             const history = JSON.parse(sessionStorage.getItem(`chatHistory_${roomName}`)) || [];
             history.push(messageData);
              // 只儲存最近的 N 條訊息，避免 sessionStorage 過大 (可選)
-             // const maxMessages = 100;
-             // if (history.length > maxMessages) {
-             //     history = history.slice(history.length - maxMessages);
-             // }
+             const maxMessages = 30;
+             if (history.length > maxMessages) {
+               history = history.slice(history.length - maxMessages);
+             }
             sessionStorage.setItem(`chatHistory_${roomName}`, JSON.stringify(history));
         };
 
@@ -536,7 +536,6 @@
                 });
                  noChannelsMessage.style.display = 'none'; // 隱藏無頻道提示
             } else {
-                 alert(channel);
                  channelListItems.innerHTML = ''; // 確保列表清空
                  noChannelsMessage.style.display = 'block'; // 顯示無頻道提示
             }
