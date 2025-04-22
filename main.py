@@ -2771,12 +2771,10 @@ def wbank_auth_client():
             if user:
                 if user.password == password:
                     if user.sub is None or user.sub == "":
-                        login_user(user)
                         if user.role == "pendingUser":
                           flash("請等2到3個工作天 等待資料審核","info")
-                          logout_user()
-                          session.clear()
                           return redirect("/wbank")
+                        login_user(user)
                         session.pop("tryTimes", None)
                         session["username"] = username
                         session["pw"] = password
