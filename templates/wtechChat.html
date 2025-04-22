@@ -721,23 +721,6 @@
             }
         });
 
-        // --- 處理加入或離開房間的 SocketIO 事件 (可選，後端可以發送通知) ---
-         socket.on('status_message', (data) => {
-             // 例如：{ type: 'join', username: '用戶名', room_number: '房間號' }
-             // 或者：{ type: 'leave', username: '用戶名', room_number: '房間號' }
-             console.log('狀態訊息:', data);
-             if (data.room_number === room) {
-                 const statusElement = document.createElement('div');
-                 statusElement.style.textAlign = 'center';
-                 statusElement.style.opacity = 0.6;
-                 statusElement.style.fontStyle = 'italic';
-                 statusElement.style.margin = '10px 0';
-                 statusElement.textContent = `${data.username} ${data.type === 'join' ? '加入了' : '離開了'} 頻道。`;
-                 chatMessages.appendChild(statusElement);
-                 chatMessages.scrollTop = chatMessages.scrollHeight;
-             }
-         });
-
          // 監聽後端通知有新的客戶頻道可用 (可選，用於即時更新列表而不是只靠輪詢)
          // socket.on('new_channel_available', (newChannelName) => {
          //      console.log('收到新頻道通知:', newChannelName);
@@ -782,11 +765,7 @@
         // --- SocketIO 連接與斷開事件 (可選) ---
         socket.on('connect', () => {
             console.log('Socket.IO 連接成功!');
-             // 客服連接成功後，可以向後端註冊其在線狀態
-             if (username) {
-                 socket.emit('agent_online', { username: username });
-             }
-             // 如果之前在聊天中斷線，這裡的邏輯需要處理是否嘗試重新加入房間
+            socket.emit("get_active_channels");
         });
 
         socket.on('disconnect', () => {
