@@ -894,7 +894,7 @@ def handle_get_active_channels(data):
         all_rooms = rooms(namespace='/')  # 獲取當前命名空間所有房間
         relevant_channels = [
             room for room in all_rooms 
-            if room.startswith('客戶服務')  # 嚴格前綴匹配
+            if '客戶服務' in room
         ]
         emit('active_channels', relevant_channels)
     except Exception as e:
