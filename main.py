@@ -321,7 +321,7 @@ class IDBrandForm(BaseForm):
 
     def get_dynamic_choices(self):
         # 根據需要返回選項列表
-        return [('', ''), ('由於閣下的資料存在問題，因此將會被暫時凍結', 'freeze001'), ('由於閣下的帳戶存在洗錢，因此將被暫時凍結', 'freeze002'), ('可能存在不明原因，建議尋找WBank分行解決此問題','freeze003')]
+        return [('', ''), ('由於閣下的資料存在問題，因此將會被暫時凍結', '資料問題凍結'), ('由於閣下的帳戶存在洗錢，因此將被暫時凍結', '使錢凍結'), ('可能存在不明原因，建議尋找WBank分行解決此問題','不明原因凍結')]
       
 class walletView(ModelView):
   #column_list = ('username','balance','password','verify','sub')
@@ -374,13 +374,13 @@ class walletView(ModelView):
         Override builtin _handle_view in order to redirect users when a view is not
         accessible.
         """
-        if not self.is_accessible():
+        if self.is_accessible():
             if current_user.is_authenticated:
                 # permission denied
                 return jsonify({"msg":u"非管理人員不能訪問"})
             else:
                 # login
-                return redirect("/wbank")
+                return redirect("/wbank/auth/v1?/admin")
 
 class kycView(ModelView):
   column_list = ('username','fname','id_number','address','career','pp_image')
@@ -433,13 +433,13 @@ class kycView(ModelView):
         Override builtin _handle_view in order to redirect users when a view is not
         accessible.
         """
-        if not self.is_accessible():
+        if self.is_accessible():
             if current_user.is_authenticated:
                 # permission denied
                 return jsonify({"msg":"非管理人員不能訪問"})
             else:
                 # login
-                return redirect("/wbank")
+                return redirect("/wbank/auth/v1?/admin")
 """
 class CustomModelView(ModelView):
     column_display_all_fields = True
