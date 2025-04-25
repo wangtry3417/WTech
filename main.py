@@ -627,17 +627,17 @@ def wbank_v1_auth_session():
   user = wbankwallet.query.filter_by(username=username).first()
   if user and url:
     if user.password == password:
-        if current_user.role == "admin":
-           flash("職員不能作弊","info")
-           return redirect(f"/wbank/auth/v1?url={url}")
-        if current_user.role == "staff":
-           flash("職員不能作弊","info")
-           return redirect(f"/wbank/auth/v1?url={url}")
-        if current_user.role == "pendingUser":
-           flash("請等待資料審核，暫不能用api","info")
-           return redirect(f"/wbank/auth/v1?url={url}")
         if user.sub == None or user.sub == "":
           login_user(user)
+          if current_user.role == "admin":
+           flash("職員不能作弊","info")
+           return redirect(f"/wbank/auth/v1?url={url}")
+          if current_user.role == "staff":
+            flash("職員不能作弊","info")
+            return redirect(f"/wbank/auth/v1?url={url}")
+          if current_user.role == "pendingUser":
+            flash("請等待資料審核，暫不能用api","info")
+            return redirect(f"/wbank/auth/v1?url={url}")
           flash('登入成功.', 'success')
           urll = url+"?username="+user.username+"&intent=login"
           return redirect(urll)
