@@ -436,10 +436,10 @@ class kycView(ModelView):
         if self.is_accessible():
             if current_user.is_authenticated:
                 # permission denied
-                return jsonify({"msg":"非管理人員不能訪問"})
+                return jsonify({"msg":"Only authenticated user can use"})
             else:
                 # login
-                return redirect("/wbank/auth/v1?/admin")
+                return redirect("/wbank/auth/v1?url=/admin")
 """
 class CustomModelView(ModelView):
     column_display_all_fields = True
@@ -496,6 +496,7 @@ class cashView(ModelView):
             current_user.is_active
             and current_user.is_authenticated
             and current_user.role=="staff"
+            or current_user.role=="admin"
     )
   def _handle_view(self, name, **kwargs):
         """
