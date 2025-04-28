@@ -2857,7 +2857,7 @@ def wbank_client():
       logout_user()
       session.clear()
       return redirect("/wbank")
-    if "凍結" in current_user.sub:
+    if current_user.sub is not None and "凍結" in current_user.sub:
       return render_template("block.html", user=user)
     if user_data:
         if user_data.verify == "no":
