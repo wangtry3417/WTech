@@ -473,8 +473,8 @@
 
             // 開始定期載入有效頻道
             loadAndDisplayChannels();
-            // 每 10 秒檢查一次頻道列表 (避免太頻繁，可根據需求調整間隔)
-            channelFetchInterval = setInterval(loadAndDisplayChannels, 10000); // 儲存 Interval ID
+            // 每 2 秒檢查一次頻道列表
+            channelFetchInterval = setInterval(loadAndDisplayChannels, 2000); // 儲存 Interval ID
         });
 
         // --- 獲取並顯示有效頻道列表 ---
@@ -483,10 +483,12 @@
             // 向後端發送請求，獲取所有包含 "客服服務" 開頭的活躍頻道
             // 注意：這裡假設後端知道要返回哪些頻道。您可能需要傳遞某個標識（例如客服部門ID）
             socket.emit('get_active_channels', { type: 'customer_service_channels' });
+            loadActiveChannels();
         };
 
         // 監聽後端發送的有效頻道列表事件
         // 後端應該發送一個包含頻道名稱字符串的陣列
+        const loadActiveChannels = () => {
         socket.on('active_channels', (channels) => {
              console.log('收到有效客戶頻道列表:', channels);
             channelListItems.innerHTML = ''; // 清空現有列表
@@ -540,7 +542,7 @@
                  noChannelsMessage.style.display = 'block'; // 顯示無頻道提示
             }
         });
-
+        }
 
         // --- 建立訊息元素 (共用函式) ---
         const createMessageElement = (data) => {
