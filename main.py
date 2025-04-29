@@ -900,7 +900,7 @@ def handle_get_active_channels(data):
         emit('active_channels', relevant_channels)
     except Exception as e:
         print(f"獲取房間列表失敗: {e}")
-        emit('active_channels', [])
+        emit('active_channels', ["沒有工作"])
 
 @socketio.on('joinChat')
 def handle_join_chat(data):
