@@ -238,7 +238,7 @@ async def ask_deepseek(ctx:discord.ApplicationContext, prompt:str):
     await ctx.defer()  # 這裡使用 defer() 來延遲響應
     try:
       global pipe
-      pipe = pipeline("text-generation", model="deepseek-ai/DeepSeek-V3", trust_remote_code=True, device_map="cpu") # 強制使用cpu
+      pipe = pipeline("text-generation", model="deepseek-ai/DeepSeek-V3", trust_remote_code=True, device=-1) # 強制使用cpu
       messages = [
         {"role": "user", "content": prompt}
       ]
