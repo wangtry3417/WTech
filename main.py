@@ -374,13 +374,13 @@ class walletView(ModelView):
         Override builtin _handle_view in order to redirect users when a view is not
         accessible.
         """
-        if self.is_accessible():
+        if not self.is_accessible():
             if current_user.is_authenticated:
                 # permission denied
                 return jsonify({"msg":u"非管理人員不能訪問"})
             else:
                 # login
-                return redirect("/wbank/auth/v1?/admin")
+                return redirect("/wbank")
 
 class kycView(ModelView):
   column_list = ('username','fname','id_number','address','career','pp_image')
@@ -433,13 +433,13 @@ class kycView(ModelView):
         Override builtin _handle_view in order to redirect users when a view is not
         accessible.
         """
-        if self.is_accessible():
+        if not self.is_accessible():
             if current_user.is_authenticated:
                 # permission denied
                 return jsonify({"msg":"Only authenticated user can use"})
             else:
                 # login
-                return redirect("/wbank/auth/v1?url=/admin")
+                return redirect("/wbank")
 """
 class CustomModelView(ModelView):
     column_display_all_fields = True
