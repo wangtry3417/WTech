@@ -4,6 +4,7 @@ import psycopg2
 import re,os,datetime,asyncio
 from requests import get,post
 from transformers import pipeline
+from datetime import datetime
 
 # Discord Bot 設定
 bot = discord.Bot()
@@ -256,7 +257,7 @@ async def send_transfer(user,amount):
 # 啟動 Discord Bot
 @bot.event
 async def on_ready():
-    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="WBank的運作"))
+    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="WBank的運作", url="https://wtechhk.com", start=datetime(1993, 6, 18, 16, 18)))
     print(f'Logged in as {bot.user}!')
     # 初始化 pipeline (在 Bot 啟動時)
 @bot.event
