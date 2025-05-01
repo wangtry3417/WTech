@@ -260,9 +260,7 @@ async def on_ready():
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="WBank的運作", url="https://wtechhk.com", start=datetime(1993, 6, 18, 16, 18)))
     print(f'Logged in as {bot.user}!')
     # 初始化 pipeline (在 Bot 啟動時)
-@bot.event
-async def on_ready():
-    print(f"Bot 已登入為 {bot.user}")
+    #print(f"Bot 已登入為 {bot.user}")
     
 # 啟動 Bot
 def run_bot():
