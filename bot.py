@@ -288,7 +288,7 @@ async def 股票分析(
     
     try:
         # 獲取公開市場數據
-        url = f"https://query1.finance.yahoo.com/v8/finance/chart/{代號}?interval=1d&range=3mo"
+        url = f"https://query1.finance.yahoo.com/v8/finance/chart/{stock}?interval=1d&range=3mo"
         data = requests.get(url).json()["chart"]["result"][0]
         meta = data["meta"]
         指標 = data["indicators"]["quote"][0]
@@ -306,7 +306,7 @@ async def 股票分析(
         
         # 建立分析報告
         embed = discord.Embed(
-            title=f"{代號} 分析報告",
+            title=f"{stock} 分析報告",
             description=f"**{建議}**\n{理由}",
             color=0x109319 if 買入機率 >=55 else 0xeb4034 if 買入機率 <45 else 0xf5a623
         )
