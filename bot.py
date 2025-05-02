@@ -5,6 +5,7 @@ import re,os,datetime,asyncio
 from requests import get,post
 from transformers import pipeline
 from datetime import datetime
+import random
 
 # Discord Bot 設定
 bot = discord.Bot()
