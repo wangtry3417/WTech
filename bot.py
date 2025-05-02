@@ -13,6 +13,32 @@ bot = discord.Bot()
 def get_db_connection():
     return psycopg2.connect(str(os.environ.get("dataurl")))
 
+# 模擬股票
+async def 股票代號自動補全(ctx: discord.AutocompleteContext):
+    return ["0050.TW", "2330.TW", "AAPL", "MSFT", "00941.HK", "BTC-USD"]
+
+def 技術分析模擬(當前價, 歷史高, 歷史低):
+    """基於價格位置的模擬技術分析"""
+    位置比例 = (當前價 - 歷史低) / (歷史高 - 歷史低)
+    
+    if 位置比例 < 0.3:
+        return "超賣區域", random.randint(70, 85)  # 買入機率
+    elif 位置比例 > 0.7:
+        return "超買區域", random.randint(15, 30)  # 買入機率
+    else:
+        return "中性區域", random.randint(40, 60)
+
+def 生成買賣建議(買入機率):
+    """根據機率生成建議"""
+    if 買入機率 >= 70:
+        return "🟢 強力買入", "當前價格處於有利位置，風險回報比佳"
+    elif 買入機率 >= 55:
+        return "🟡 考慮買入", "價格合理但需注意市場波動"
+    elif 買入機率 >= 45:
+        return "⚪ 保持觀望", "價格處於均衡區間，建議等待更明確信號"
+    else:
+        return "🔴 考慮減倉", "價格可能過高，注意回調風險。另外，如果持有，應考慮部分或全部減倉"
+
 @bot.slash_command(name="trydb", description="執行 tryDB 指令")
 @option("query", description="查詢Query")
 async def trydb(
@@ -233,6 +259,7 @@ async def custom_embed(ctx:discord.ApplicationContext, title:str, content:str, f
     await ctx.respond("已經發送訊息✅")
 
 #Ask deepseek
+"""
 @bot.slash_command(name="問問deepseek",description="調用deepseek-model")
 @option("prompt",description="為Prompt，即請求文本。")
 async def ask_deepseek(ctx:discord.ApplicationContext, prompt:str):
@@ -247,7 +274,63 @@ async def ask_deepseek(ctx:discord.ApplicationContext, prompt:str):
       await ctx.respond(output[0]['generated_text'])
     except Exception as e:
       await ctx.respond(f"有錯誤： {e}", ephemeral=True)
+"""
+
+# 股票分析指令
+@bot.slash_command(name="股票分析", description="免API金鑰的股票分析與買賣建議")
+async def 股票分析(
+    ctx: discord.ApplicationContext,
+    代號: Option(str, "股票代號（例：AAPL）", required=True, autocomplete=股票代號自動補全)
+):
+    await ctx.defer()
     
+    try:
+        # 獲取公開市場數據
+        url = f"{YAHOO_FINANCE_API}{代號}?interval=1d&range=3mo"
+        data = requests.get(url).json()["chart"]["result"][0]
+        meta = data["meta"]
+        指標 = data["indicators"]["quote"][0]
+        
+        # 提取關鍵數據
+        當前價 = meta["regularMarketPrice"]
+        歷史高 = meta["fiftyTwoWeekHigh"]
+        歷史低 = meta["fiftyTwoWeekLow"]
+        成交量 = sum(指標["volume"][-5:])/5  # 5日平均成交量
+        
+        # 模擬分析
+        技術狀態, 買入機率 = 技術分析模擬(當前價, 歷史高, 歷史低)
+        建議, 理由 = 生成買賣建議(買入機率)
+        沽出機率 = 100 - 買入機率
+        
+        # 建立分析報告
+        embed = discord.Embed(
+            title=f"{代號} 分析報告",
+            description=f"**{建議}**\n{理由}",
+            color=0x109319 if 買入機率 >=55 else 0xeb4034 if 買入機率 <45 else 0xf5a623
+        )
+        
+        embed.add_field(name="📈 當前價格", value=f"{當前價:.2f}", inline=True)
+        embed.add_field(name="📊 52週範圍", value=f"{歷史低:.2f} ~ {歷史高:.2f}", inline=True)
+        embed.add_field(name="🔄 近期成交量", value=f"{成交量:,.0f}", inline=True)
+        
+        embed.add_field(
+            name="🤖 此Bot建議機率", 
+            value=f"```diff\n+ 買入: {買入機率}%\n- 沽出: {沽出機率}%\n```", 
+            inline=False
+        )
+        
+        embed.add_field(
+            name="📉 技術狀態", 
+            value=f"```{技術狀態} ({(當前價-歷史低)/(歷史高-歷史低)*100:.1f}%區間)```", 
+            inline=False
+        )
+        
+        embed.set_footer(text="⚠️ 此為模擬分析，實際投資需自行判斷")
+        
+        await ctx.followup.send(embed=embed)
+        
+    except Exception as e:
+        await ctx.followup.send(f"❌ 分析失敗：{str(e)}")
 
 async def send_transfer(user,amount):
     channel = bot.get_channel(1308055112698298488)
