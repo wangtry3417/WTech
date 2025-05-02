@@ -278,7 +278,7 @@ async def ask_deepseek(ctx:discord.ApplicationContext, prompt:str):
 
 # 股票分析指令
 @bot.slash_command(name="股票分析", description="免API金鑰的股票分析與買賣建議")
-@option("stockNo", description="股票代號（例：AAPL）", required=True)
+@option("stock", description="股票代號（例：AAPL）", required=True)
 async def 股票分析(
     ctx: discord.ApplicationContext,
     #代號: Option(str, "股票代號（例：AAPL）", required=True, autocomplete=股票代號自動補全)
