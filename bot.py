@@ -289,7 +289,7 @@ async def 股票分析(
     try:
         # 獲取公開市場數據
         url = f"https://query1.finance.yahoo.com/v8/finance/chart/{stock}?interval=1d&range=3mo"
-        data = requests.get(url).json()["chart"]["result"][0]
+        data = get(url).json()["chart"]["result"][0]
         meta = data["meta"]
         指標 = data["indicators"]["quote"][0]
         
