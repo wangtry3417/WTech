@@ -278,15 +278,17 @@ async def ask_deepseek(ctx:discord.ApplicationContext, prompt:str):
 
 # 股票分析指令
 @bot.slash_command(name="股票分析", description="免API金鑰的股票分析與買賣建議")
+@option("stockNo", description="股票代號（例：AAPL）", required=True)
 async def 股票分析(
     ctx: discord.ApplicationContext,
-    代號: Option(str, "股票代號（例：AAPL）", required=True, autocomplete=股票代號自動補全)
+    #代號: Option(str, "股票代號（例：AAPL）", required=True, autocomplete=股票代號自動補全)
+    stockNo:str
 ):
     await ctx.defer()
     
     try:
         # 獲取公開市場數據
-        url = f"{YAHOO_FINANCE_API}{代號}?interval=1d&range=3mo"
+        url = f"https://query1.finance.yahoo.com/v8/finance/chart/{代號}?interval=1d&range=3mo"
         data = requests.get(url).json()["chart"]["result"][0]
         meta = data["meta"]
         指標 = data["indicators"]["quote"][0]
