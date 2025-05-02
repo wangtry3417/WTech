@@ -282,7 +282,7 @@ async def ask_deepseek(ctx:discord.ApplicationContext, prompt:str):
 async def 股票分析(
     ctx: discord.ApplicationContext,
     #代號: Option(str, "股票代號（例：AAPL）", required=True, autocomplete=股票代號自動補全)
-    stockNo:str
+    stock:str
 ):
     await ctx.defer()
     
