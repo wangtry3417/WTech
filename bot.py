@@ -333,7 +333,7 @@ async def 股票分析(
         await ctx.followup.send(embed=embed)
         
     except Exception as e:
-        await ctx.followup.send(f"❌ 分析失敗：{str(e)}")
+        await ctx.followup.send(f"❌ 分析失敗：{str(e)} , Text: {get(url).content}")
 
 async def send_transfer(user,amount):
     channel = bot.get_channel(1308055112698298488)
