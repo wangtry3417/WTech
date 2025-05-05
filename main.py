@@ -140,7 +140,7 @@ socketio.server.instrument(auth=False,namespace="/")
 
 #CORS(app,resources={r"/*": {"origins": "*"}})
 #CORS(app,resources={r"/wbank/hash/transfer": {"origins": "http://223.19.115.182:5000"}})
-CORS(app)
+CORS(app, supports_credentials=True)
 #CORS(app, resources={r"/*": {"origins": "https://bc.wtechhk.xyz"}})
 
 @app.before_request
