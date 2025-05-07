@@ -3,7 +3,6 @@ from discord import option
 import psycopg2
 import re,os,datetime,asyncio
 from requests import get,post
-from transformers import pipeline
 from datetime import datetime
 import random
 
