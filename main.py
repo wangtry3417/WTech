@@ -36,7 +36,7 @@ from flask_login import LoginManager, UserMixin, login_user, logout_user, login_
 from flask_oauthlib.provider import OAuth2Provider
 from wtforms.validators import DataRequired,NumberRange
 from wtforms import StringField,BooleanField,SelectField,FloatField,IntegerField
-from flask_wtf.csrf import CSRFProtect
+from flask_wtf.csrf import CSRFProtect,generate_csrf
 from flask_admin.form import BaseForm
 from flask_qrcode import QRcode
 import json,sys,threading
@@ -3055,6 +3055,15 @@ def wbank_card_hash_action():
     return jsonify(error="Request method is not support")
 
 # Card end
+
+@app.route("/wbank/v2/csrftoken")
+def wbank_auth_gen_csrfToken():
+  if "Authorization" in request.headers:
+    token = request.headers.get("Authorization").split(" ")[1]
+    if token == "wtech666":
+      return jsonify(token=generate_csrf())
+    return jsonify(msg="Your token is invaild", code=403)
+  return jsonify(msg="Cannot find Authorization in your request headers", code=401)
 
 @app.route("/wbank/recordPage")
 @login_required
