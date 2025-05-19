@@ -324,6 +324,7 @@
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 <input type="text" name="user" placeholder="用戶名稱" required>
                 <input type="password" name="pw" id="password" placeholder="密碼" required>
+                {{ recaptcha }}
                 <button type="submit" id="btn1">登入</button>
                 <p>沒有賬號？ <a href="/wbank/new_client">註冊賬號</a></p>
                 <p>忘記了密碼? <a href="#" data-toggle="modal" data-target="#resetPwModal">按此重設密碼</a></p>
