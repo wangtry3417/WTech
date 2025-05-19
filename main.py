@@ -46,6 +46,7 @@ from bot import run_bot
 import threading
 from time import sleep
 from markupsafe import Markup
+from flask_recaptcha import ReCaptcha
 #from nltk.stem import WordNetLemmatizer
 #from nltk.book import *
 
@@ -77,6 +78,11 @@ app.config['OAUTH_CREDENTIALS'] = {
     'client_id': 'WC00001',  # 你的 OAuth 應用程式 ID
     'client_secret': 'Wt0001'  # 你的 OAuth 應用程式密鑰
 }
+app.config.update({
+    "RECAPTCHA_SITE_KEY": "6LduBEArAAAAACf2bL_m4klFZxrtH9o2qBue2x54",
+    "RECAPTCHA_SITE_SECRET": "6LduBEArAAAAAAoKQ4dnkW2j2vW5GbDEfy5nakde",
+    "RECAPTCHA_ENABLED": True
+})
 
 UPLOAD_FOLDER = '/'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -88,6 +94,9 @@ QRcode(app)
 csrf = CSRFProtect(app)
 
 auth = HTTPBasicAuth()
+
+# Human-Verify
+recaptcha = ReCaptcha(app=app)
 
 users = {
     "wangtry": generate_password_hash("Chan1234#"),
@@ -2723,7 +2732,9 @@ def wbank_kyc_verify():
 
     if not all([user, id_number, fname, address, career, ppImage]):
         return f"所有字段都必須填寫 : {user} | {id_number} | {fname} | {address} | {career} || {ppImage}"
-
+    if not recaptcha.verify():
+      flash("請不要使用自動程式進行KYC", "error")
+      return redirect("/wbank")
     # Create a new KYC record
     new_kyc = wbankkyc(
         fname=fname,
@@ -2763,6 +2774,9 @@ def wbank_v2_email_verify():
   code = str(request.headers.get("code"))
   if code == session["verify-code"]:
     return redirect("/wbank/client")
+  if not recaptcha.verify():
+      flash("請不要使用自動程式登入", "error")
+      return redirect("/wbank")
   flash("驗證碼有誤","danger")
   abort(500)
   return redirect("/wbank")
@@ -2819,6 +2833,9 @@ def wbank_auth_client():
                             session.clear()
                             flash('驗證失敗 : 郵件驗證碼發送失敗，請稍後再試。', 'danger') # 提示用戶郵件發送失敗，但允許繼續登入
                             return redirect('/wbank')
+                        if not recaptcha.verify():
+                           flash("請不要使用自動程式Login", "error")
+                           return redirect("/wbank")
                         return redirect(url_for('wbank_client'))
                     else:
                         if "銀行" in user.sub:
