@@ -46,7 +46,6 @@ from bot import run_bot
 import threading
 from time import sleep
 from markupsafe import Markup
-from flask_recaptcha import ReCaptcha
 #from nltk.stem import WordNetLemmatizer
 #from nltk.book import *
 
