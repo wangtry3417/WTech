@@ -457,25 +457,28 @@
 
         // --- 用戶名提交與頻道列表顯示 ---
         submitUsernameButton.addEventListener('click', () => {
-            const rawUsername = usernameInput.value.trim(); // 移除前後空白
-            if (!rawUsername) {
-                alert("請輸入你的客服編號或名稱");
-                return;
-            }
-            // 自動加上「客服」前綴
-            username = `客服${rawUsername}`;
-            console.log(`用戶名設置為: ${username}`);
+           const rawUsername = usernameInput.value.trim();
+           if (!rawUsername) {
+             alert("請輸入你的客服編號或名稱");
+             return;
+           }
+           username = `客服${rawUsername}`;
+           console.log(`用戶名設置為: ${username}`);
 
-            // 切換到頻道列表介面
-            usernameInputArea.style.display = 'none';
-            channelListArea.style.display = 'block'; // 顯示頻道列表區域
-            chatContainer.style.display = 'none'; // 確保聊天容器是隱藏的
+           usernameInputArea.style.display = 'none';
+           channelListArea.style.display = 'block';
+           chatContainer.style.display = 'none';
 
-            // 開始定期載入有效頻道
-            loadAndDisplayChannels();
-            // 每 2 秒檢查一次頻道列表
-            channelFetchInterval = setInterval(loadAndDisplayChannels, 2000); // 儲存 Interval ID
-        });
+           // 第一次立即請求頻道列表
+           console.log('首次請求有效客戶頻道列表...');
+           socket.emit('get_active_channels', { type: 'customer_service_channels' });
+
+           // 設定定時器，每 2 秒請求一次
+           channelFetchInterval = setInterval(() => {
+             console.log('正在定時請求有效客戶頻道列表...');
+             socket.emit('get_active_channels', { type: 'customer_service_channels' });
+           }, 2000);
+});
 
         // --- 獲取並顯示有效頻道列表 ---
         const loadAndDisplayChannels = () => {
@@ -483,66 +486,45 @@
             // 向後端發送請求，獲取所有包含 "客服服務" 開頭的活躍頻道
             // 注意：這裡假設後端知道要返回哪些頻道。您可能需要傳遞某個標識（例如客服部門ID）
             socket.emit('get_active_channels', { type: 'customer_service_channels' });
-            loadActiveChannels();
         };
 
         // 監聽後端發送的有效頻道列表事件
         // 後端應該發送一個包含頻道名稱字符串的陣列
-        const loadActiveChannels = () => {
         socket.on('active_channels', (channels) => {
-             console.log('收到有效客戶頻道列表:', channels);
-            channelListItems.innerHTML = ''; // 清空現有列表
+    console.log('收到有效客戶頻道列表:', channels);
+    channelListItems.innerHTML = ''; // 清空現有列表
 
-            // 過濾出符合「含有客服服務開頭」的頻道 (這步也可以完全在後端做)
-            // 這裡以前端過濾作為一個例子，假設後端可能返回其他類型頻道
-             // const customerServiceChannels = channels.filter(channelName => channelName);
+    if (channels && channels.length > 0) {
+        channels.forEach(channel => {
+            const channelItem = document.createElement('div');
+            channelItem.classList.add('channel-item');
+            channelItem.textContent = channel;
 
-
-            if (channels && channels.length > 0) {
-                channels.forEach(channel => {
-                    const channelItem = document.createElement('div');
-                    channelItem.classList.add('channel-item');
-                    // 顯示頻道名稱
-                    channelItem.textContent = channel;
-                    // channelItem.dataset.room = channel; // 將房間號存在 data 屬性中
-
-                    channelItem.addEventListener('click', () => {
-                        // 如果已經在某個頻道裡，先離開
-                        if (room && room !== channel) {
-                             console.log(`正在離開舊頻道: ${room}`);
-                             socket.emit('leaveChat', { username, room_number: room });
-                             chatMessages.innerHTML = ''; // 清空聊天區域
-                             sessionStorage.removeItem(`chatHistory_${room}`); // 清除舊頻道的歷史記錄
-                        }
-                        room = channel; // 設置當前房間號
-                        console.log(`正在加入頻道: ${room}`);
-
-                        // 加入 SocketIO 房間
-                        socket.emit('joinChat', { username, room_number: room });
-
-                        // 停止定期更新頻道列表，進入聊天模式
-                        clearInterval(channelFetchInterval);
-
-                        // 切換到聊天介面
-                        channelListArea.style.display = 'none'; // 隱藏頻道列表區域
-                        chatContainer.style.display = 'flex'; // 顯示聊天容器區域
-
-                         // 顯示當前聊天頻道的標題
-                         chatTitle.textContent = `正在與頻道 [${room}] 聊天`;
-                         chatTitle.style.display = 'block';
-
-
-                        loadChatHistory(room); // 載入該頻道的聊天歷史
-                    });
-                    channelListItems.appendChild(channelItem);
-                });
-                 noChannelsMessage.style.display = 'none'; // 隱藏無頻道提示
-            } else {
-                 channelListItems.innerHTML = ''; // 確保列表清空
-                 noChannelsMessage.style.display = 'block'; // 顯示無頻道提示
-            }
+            channelItem.addEventListener('click', () => {
+                if (room && room !== channel) {
+                    console.log(`正在離開舊頻道: ${room}`);
+                    socket.emit('leaveChat', { username, room_number: room });
+                    chatMessages.innerHTML = '';
+                    sessionStorage.removeItem(`chatHistory_${room}`);
+                }
+                room = channel;
+                console.log(`正在加入頻道: ${room}`);
+                socket.emit('joinChat', { username, room_number: room });
+                clearInterval(channelFetchInterval); // 停止定時更新
+                channelListArea.style.display = 'none';
+                chatContainer.style.display = 'flex';
+                chatTitle.textContent = `正在與頻道 [${room}] 聊天`;
+                chatTitle.style.display = 'block';
+                loadChatHistory(room);
+            });
+            channelListItems.appendChild(channelItem);
         });
-        }
+        noChannelsMessage.style.display = 'none';
+    } else {
+        channelListItems.innerHTML = '';
+        noChannelsMessage.style.display = 'block';
+    }
+});
 
         // --- 建立訊息元素 (共用函式) ---
         const createMessageElement = (data) => {
