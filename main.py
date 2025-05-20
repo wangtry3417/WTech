@@ -81,6 +81,7 @@ app.config['OAUTH_CREDENTIALS'] = {
 app.config.update({
     "RECAPTCHA_SITE_KEY": "6LduBEArAAAAACf2bL_m4klFZxrtH9o2qBue2x54",
     "RECAPTCHA_SITE_SECRET": "6LduBEArAAAAAAoKQ4dnkW2j2vW5GbDEfy5nakde",
+    "RECAPTCHA_SCORE_THRESHOLD": 0.8 # 自定義分數閾值，0.0到1.0之間，越高越嚴格
     "RECAPTCHA_ENABLED": True
 })
 
@@ -2732,7 +2733,10 @@ def wbank_kyc_verify():
 
     if not all([user, id_number, fname, address, career, ppImage]):
         return f"所有字段都必須填寫 : {user} | {id_number} | {fname} | {address} | {career} || {ppImage}"
-    if not recaptcha.verify():
+    if not request.form.get('g-recaptcha-response'):
+      return "Cannot find google-human-id"
+    recaptcha_token = request.form.get('g-recaptcha-response')
+    if not recaptcha.verify(response=recaptcha_token, action='submit_form', score_threshold=0.8):
       flash("請不要使用自動程式進行KYC", "error")
       return redirect("/wbank")
     # Create a new KYC record
@@ -2772,11 +2776,19 @@ def logout():
 @app.route("/wbank/v2/verify")
 def wbank_v2_email_verify():
   code = str(request.headers.get("code"))
+  recaptcha_token = request.form.get('g-recaptcha-response')
+  if not recaptcha.verify(response=recaptcha_token, action='submit_form', score_threshold=0.8):
+    flash("請不要使用自動程式登入", "error")
+    logout_user()
+    session.clear()
+    return redirect("/wbank")
   if code == session["verify-code"]:
     return redirect("/wbank/client")
-  if not recaptcha.verify():
-      flash("請不要使用自動程式登入", "error")
-      return redirect("/wbank")
+  if not request.form.get('g-recaptcha-response'):
+    flash("找不到Google-Human-ID", "error")
+    logout_user()
+    session.clear()
+    return redirect("/wbank")
   flash("驗證碼有誤","danger")
   abort(500)
   return redirect("/wbank")
@@ -2833,9 +2845,17 @@ def wbank_auth_client():
                             session.clear()
                             flash('驗證失敗 : 郵件驗證碼發送失敗，請稍後再試。', 'danger') # 提示用戶郵件發送失敗，但允許繼續登入
                             return redirect('/wbank')
-                        if not recaptcha.verify():
-                           flash("請不要使用自動程式Login", "error")
-                           return redirect("/wbank")
+                        if not request.form.get('g-recaptcha-response'):
+                          flash("找不到Google-Human-ID", "error")
+                          logout_user()
+                          session.clear()
+                          return redirect("/wbank")
+                        recaptcha_token = request.form.get('g-recaptcha-response')
+                        if not recaptcha.verify(response=recaptcha_token, action='submit_form', score_threshold=0.8):
+                          flash("請不要使用自動程式登入", "error")
+                          logout_user()
+                          session.clear()
+                          return redirect("/wbank")
                         return redirect(url_for('wbank_client'))
                     else:
                         if "銀行" in user.sub:
