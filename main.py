@@ -81,7 +81,7 @@ app.config['OAUTH_CREDENTIALS'] = {
 app.config.update({
     "RECAPTCHA_SITE_KEY": "6LduBEArAAAAACf2bL_m4klFZxrtH9o2qBue2x54",
     "RECAPTCHA_SITE_SECRET": "6LduBEArAAAAAAoKQ4dnkW2j2vW5GbDEfy5nakde",
-    "RECAPTCHA_SCORE_THRESHOLD": 0.8 # 自定義分數閾值，0.0到1.0之間，越高越嚴格
+    "RECAPTCHA_SCORE_THRESHOLD": 0.8, # 自定義分數閾值，0.0到1.0之間，越高越嚴格
     "RECAPTCHA_ENABLED": True
 })
 
