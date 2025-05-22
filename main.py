@@ -2827,11 +2827,35 @@ def wbank_auth_client():
                             session.clear()
                             flash('驗證失敗 : 郵件驗證碼發送失敗，請稍後再試。', 'danger') # 提示用戶郵件發送失敗，但允許繼續登入
                             return redirect('/wbank')
-                        if not request.form.get('g-recaptcha-response'):
-                          flash("找不到Google-Human-ID", "error")
-                          logout_user()
-                          session.clear()
-                          return redirect("/wbank")
+                          turnstile_response = request.form.get('cf-turnstile-response')
+
+                           if not turnstile_response:
+                             flash("CloufFlare Turnstile 驗證失敗：沒有收到驗證碼。", "danger")
+                             return redirect(url_for('wbank'))
+                           verify_url = 'https://challenges.cloudflare.com/turnstile/v0/siteverify'
+        
+                           payload = {
+                              'secret': CF_KEY,
+                              'response': turnstile_response,
+                              # 'remoteip': request.remote_addr # Turnstile 會自動處理 IP，通常不需要傳送
+                             }
+                           try:
+                              resp = requests.post(url=verify_url, data=payload)
+                              result = resp.json()
+                           except requests.exceptions.RequestException as e:
+                               flash(f"與 Cloudflare Turnstile 服務通訊失敗：{e}", "error")
+                                logout_user()
+                                session.clear()
+                               return redirect("/wbank")
+                            if result["success"]:
+                               flash("恭喜，你是人類", "error")
+                               return redirect("/wbank/client")
+                            else:
+                               flash("WBank服務暫不支持非人類登入", "error")
+                                logout_user()
+                                session.clear()
+                                return redirect("/wbank")
+                                
                         return redirect(url_for('wbank_client'))
                     else:
                         if "銀行" in user.sub:
