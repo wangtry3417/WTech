@@ -12,7 +12,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js"></script>
-    {{ recaptcha_v3 }}
     <style>
         body {
             font-family: 'Roboto', sans-serif; /* 使用 Google Font - Roboto */
@@ -608,22 +607,6 @@
     });
 });
         */
-        // 在表單提交前執行 reCAPTCHA
-        document.getElementById('login-stage').addEventListener('submit', function(event) {
-            event.preventDefault(); // 阻止表單默認提交
-
-            // 調用 getRecaptchaToken 函數，傳入你定義的 action
-            // 這個 action 應該與你在後端 verify 方法中期望的 action 匹配
-            getRecaptchaToken('submit_form').then(function(token) {
-                // 將獲取到的 token 設置到隱藏字段中
-                document.getElementById('g-recaptcha-response').value = token;
-                // 手動提交表單
-                document.getElementById('login-stage').submit();
-            }).catch(function(error) {
-                console.error("Error getting reCAPTCHA token:", error);
-                alert("無法獲取 reCAPTCHA 驗證。請重試。");
-            });
-        });
     </script>
 
 </body>
