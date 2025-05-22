@@ -2763,7 +2763,7 @@ def logout():
 @app.route("/wbank/v2/verify")
 def wbank_v2_email_verify():
   code = str(request.headers.get("code"))
-    return redirect("/wbank")
+  return redirect("/wbank")
   if code == session["verify-code"]:
     return redirect("/wbank/client")
   if not request.form.get('g-recaptcha-response'):
