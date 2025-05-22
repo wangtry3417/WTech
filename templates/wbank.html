@@ -289,6 +289,7 @@
             color: green;
         }
     </style>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body>
     <main>
@@ -325,7 +326,7 @@
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 <input type="text" name="user" placeholder="用戶名稱" required>
                 <input type="password" name="pw" id="password" placeholder="密碼" required>
-                <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response">
+                <div class="cf-turnstile" data-sitekey="{{ site_key }}"></div>
                 <button type="submit" id="btn1">登入</button>
                 <p>沒有賬號？ <a href="/wbank/new_client">註冊賬號</a></p>
                 <p>忘記了密碼? <a href="#" data-toggle="modal" data-target="#resetPwModal">按此重設密碼</a></p>
