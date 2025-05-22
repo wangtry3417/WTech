@@ -46,7 +46,6 @@ from bot import run_bot
 import threading
 from time import sleep
 from markupsafe import Markup
-from flask_recaptcha import ReCaptcha
 #from nltk.stem import WordNetLemmatizer
 #from nltk.book import *
 
@@ -78,12 +77,9 @@ app.config['OAUTH_CREDENTIALS'] = {
     'client_id': 'WC00001',  # 你的 OAuth 應用程式 ID
     'client_secret': 'Wt0001'  # 你的 OAuth 應用程式密鑰
 }
-app.config.update({
-    "RECAPTCHA_SITE_KEY": "6LduBEArAAAAACf2bL_m4klFZxrtH9o2qBue2x54",
-    "RECAPTCHA_SITE_SECRET": "6LduBEArAAAAAAoKQ4dnkW2j2vW5GbDEfy5nakde",
-    "RECAPTCHA_SCORE_THRESHOLD": 0.8, # 自定義分數閾值，0.0到1.0之間，越高越嚴格
-    "RECAPTCHA_ENABLED": True
-})
+
+CF_SITES_KEY = os.environ.get("CF_SITES_KEY")
+CF_KEY = os.environ.get("CF_KEY")
 
 UPLOAD_FOLDER = '/'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -95,9 +91,6 @@ QRcode(app)
 csrf = CSRFProtect(app)
 
 auth = HTTPBasicAuth()
-
-# Human-Verify
-recaptcha = ReCaptcha(app=app)
 
 users = {
     "wangtry": generate_password_hash("Chan1234#"),
@@ -2064,7 +2057,7 @@ def wbank():
     elif res.get("countryCode") == "TW":
       return redirect(f"/wtech/bockweb?place=tw&ip={ip_address}&org={org_info}")
     else:
-      return render_template("wbank.html")
+      return render_template("wbank.html", site_key=CF_SITES_KEY)
   else:
     return abort(502)
 
@@ -2733,12 +2726,7 @@ def wbank_kyc_verify():
 
     if not all([user, id_number, fname, address, career, ppImage]):
         return f"所有字段都必須填寫 : {user} | {id_number} | {fname} | {address} | {career} || {ppImage}"
-    if not request.form.get('g-recaptcha-response'):
-      return "Cannot find google-human-id"
     recaptcha_token = request.form.get('g-recaptcha-response')
-    if not recaptcha.verify(response=recaptcha_token, action='submit_form', score_threshold=0.8):
-      flash("請不要使用自動程式進行KYC", "error")
-      return redirect("/wbank")
     # Create a new KYC record
     new_kyc = wbankkyc(
         fname=fname,
@@ -2763,7 +2751,6 @@ def wbank_kyc_verify():
 
     return redirect("/wbank")
 
-
 # 登出視圖函數
 @app.route('/wbank/logout')
 @login_required
@@ -2776,11 +2763,6 @@ def logout():
 @app.route("/wbank/v2/verify")
 def wbank_v2_email_verify():
   code = str(request.headers.get("code"))
-  recaptcha_token = request.form.get('g-recaptcha-response')
-  if not recaptcha.verify(response=recaptcha_token, action='submit_form', score_threshold=0.8):
-    flash("請不要使用自動程式登入", "error")
-    logout_user()
-    session.clear()
     return redirect("/wbank")
   if code == session["verify-code"]:
     return redirect("/wbank/client")
@@ -2847,12 +2829,6 @@ def wbank_auth_client():
                             return redirect('/wbank')
                         if not request.form.get('g-recaptcha-response'):
                           flash("找不到Google-Human-ID", "error")
-                          logout_user()
-                          session.clear()
-                          return redirect("/wbank")
-                        recaptcha_token = request.form.get('g-recaptcha-response')
-                        if not recaptcha.verify(response=recaptcha_token, action='submit_form', score_threshold=0.8):
-                          flash("請不要使用自動程式登入", "error")
                           logout_user()
                           session.clear()
                           return redirect("/wbank")
