@@ -2829,32 +2829,32 @@ def wbank_auth_client():
                             return redirect('/wbank')
                           turnstile_response = request.form.get('cf-turnstile-response')
 
-                           if not turnstile_response:
-                             flash("CloufFlare Turnstile 驗證失敗：沒有收到驗證碼。", "danger")
-                             return redirect(url_for('wbank'))
-                           verify_url = 'https://challenges.cloudflare.com/turnstile/v0/siteverify'
+                          if not turnstile_response:
+                            flash("CloufFlare Turnstile 驗證失敗：沒有收到驗證碼。", "danger")
+                            return redirect(url_for('wbank'))
+                          verify_url = 'https://challenges.cloudflare.com/turnstile/v0/siteverify'
         
-                           payload = {
-                              'secret': CF_KEY,
-                              'response': turnstile_response,
-                              # 'remoteip': request.remote_addr # Turnstile 會自動處理 IP，通常不需要傳送
-                             }
-                           try:
-                              resp = requests.post(url=verify_url, data=payload)
-                              result = resp.json()
-                           except requests.exceptions.RequestException as e:
-                               flash(f"與 Cloudflare Turnstile 服務通訊失敗：{e}", "error")
-                                logout_user()
-                                session.clear()
-                               return redirect("/wbank")
-                            if result["success"]:
-                               flash("恭喜，你是人類", "error")
-                               return redirect("/wbank/client")
-                            else:
-                               flash("WBank服務暫不支持非人類登入", "error")
-                                logout_user()
-                                session.clear()
-                                return redirect("/wbank")
+                          payload = {
+                            'secret': CF_KEY,
+                            'response': turnstile_response,
+                            # 'remoteip': request.remote_addr # Turnstile 會自動處理 IP，通常不需要傳送
+                          }
+                          try:
+                            resp = requests.post(url=verify_url, data=payload)
+                            result = resp.json()
+                          except requests.exceptions.RequestException as e:
+                            flash(f"與 Cloudflare Turnstile 服務通訊失敗：{e}", "error")
+                            logout_user()
+                            session.clear()
+                            return redirect("/wbank")
+                          if result["success"]:
+                            flash("恭喜，你是人類", "error")
+                            return redirect("/wbank/client")
+                          else:
+                            flash("WBank服務暫不支持非人類登入", "error")
+                            logout_user()
+                            session.clear()
+                            return redirect("/wbank")
                                 
                         return redirect(url_for('wbank_client'))
                     else:
