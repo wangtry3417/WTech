@@ -135,6 +135,11 @@
             animation-delay: 0.4s;
         }
 
+        #service-content {
+            display: none; /* 預設隱藏 FAQ 內容 */
+            animation-delay: 0.4s;
+        }
+
         #about-content {
             display: none; /* 預設隱藏 About 內容 */
             animation-delay: 0.6s;
@@ -541,7 +546,7 @@ header {
             document.getElementById('home-content').style.display = 'none';
             document.getElementById('faq-content').style.display = 'none';
             document.getElementById('about-content').style.display = 'none';
-            document.getElementById('services-content').style.display = 'none';
+            document.getElementById('service-content').style.display = 'none';
             document.querySelector('.features').style.display = 'none';
             document.querySelector('.user-interface').style.display = 'none';
 
