@@ -198,7 +198,98 @@
                 opacity: 1;
             }
         }
+        /* Card */
+        /* From Uiverse.io by YeiserBytes */ 
+:root {
+  --primary-color: #0ea5e9;
+  --secondary-color: #f8fafc;
+  --accent-color: #020617;
+}
 
+.card {
+  margin-left: -1rem;
+  margin-right: -1rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  margin-bottom: 2rem;
+  width: 320px;
+  flex-direction: column;
+  border-radius: 1rem;
+  background-color: #020617;
+  padding: 1.5rem;
+}
+
+header {
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-size: 1.2rem;
+  line-height: 2rem;
+  font-weight: 700;
+  color: #f8fafc90;
+}
+
+.price {
+  font-size: 3.75rem;
+  line-height: 1;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.desc {
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.625;
+  text-wrap: pretty;
+  color: #f8fafc90;
+}
+
+.lists {
+  margin-bottom: 1.5rem;
+  flex: 1 1 0%;
+  color: #f8fafc90;
+}
+
+.lists .list {
+  margin-bottom: 0.5rem;
+  display: flex;
+  margin-left: 0.5rem;
+}
+
+.lists .list svg {
+  height: 1.5rem;
+  width: 1.5rem;
+  flex-shrink: 0;
+  margin-right: 0.5rem;
+  color: #0ea5e9;
+}
+
+.action {
+  border: none;
+  outline: none;
+  display: inline-block;
+  border-radius: 0.5rem;
+  background-color: #0ea5e9;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  text-align: center;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: #f8fafc;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    background-color: #0284c7;
+  }
+}
+
+        /* End-Card */
         /* Google Fonts 引入 */
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap');
     </style>
@@ -214,6 +305,7 @@
                 <div class="dropdown-content">
                     <a href="#" onclick="showContent('faq')">FAQ</a>
                     <a href="#" onclick="showContent('sp')">功能與介紹</a>
+                     <a href="#" onclick="showContent('service')">服務計劃</a>
                     <a href="#" onclick="showContent('about')">關於</a>
                 </div>
             </div>
@@ -262,7 +354,131 @@
                 <li><b>答：</b>請點擊「登入/開戶」按鈕後，按右下方的聊天圖標。（客服人員只會在營業時間回覆(9:00-20:00)哦）</li>
                 </ul>
         </section>
-
+        <section id="services-content" class="services-section">
+            <h2>服務計劃</h2>
+            <p>以下是WBank 的戶類型。</p>
+            <!-- Type 1 -->
+            <!-- From Uiverse.io by YeiserBytes --> 
+<section class="card">
+  <header>
+    <h2 class="title">自由理財</h2>
+    <h1 class="price">免費開戶</h1>
+  </header>
+  <p class="desc">為最低級戶口，適合所有人。</p>
+  <ul class="lists">
+    <li class="list">
+      <svg
+        fill="currentColor"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          clip-rule="evenodd"
+          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+          fill-rule="evenodd"
+        ></path>
+      </svg>
+      <p>免費享有安全服務</p>
+    </li>
+    <li class="list">
+      <svg
+        fill="currentColor"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          clip-rule="evenodd"
+          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+          fill-rule="evenodd"
+        ></path>
+      </svg>
+      <p>提供客服服務</p>
+    </li>
+    <li class="list">
+      <svg
+        fill="currentColor"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          clip-rule="evenodd"
+          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+          fill-rule="evenodd"
+        ></path>
+      </svg>
+      <p>所有WBank用戶皆可免費使用wbank-server購買理財</p>
+    </li>
+  </ul>
+  <button class="action" type="button" onclick="window.location.href='/wbank/new_client';">立即開戶</button>
+</section>
+        <!-- Type2 -->
+        <section class="card">
+  <header>
+    <h2 class="title">至尊理財</h2>
+    <h1 class="price">usd$500.00</h1>
+  </header>
+  <p class="desc">目前為最高級別的戶口，適合中高收入人士。</p>
+  <ul class="lists">
+    <li class="list">
+      <svg
+        fill="currentColor"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          clip-rule="evenodd"
+          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+          fill-rule="evenodd"
+        ></path>
+      </svg>
+      <p>免費享有安全服務</p>
+    </li>
+    <li class="list">
+      <svg
+        fill="currentColor"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          clip-rule="evenodd"
+          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+          fill-rule="evenodd"
+        ></path>
+      </svg>
+      <p>提供優質客戶服務</p>
+    </li>
+    <li class="list">
+      <svg
+        fill="currentColor"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          clip-rule="evenodd"
+          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+          fill-rule="evenodd"
+        ></path>
+      </svg>
+      <p>活期存款年利率增加12%</p>
+    </li>
+    <li class="list">
+      <svg
+        fill="currentColor"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          clip-rule="evenodd"
+          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+          fill-rule="evenodd"
+        ></path>
+      </svg>
+      <p>所有WBank用戶皆可免費使用wbank-server購買理財</p>
+    </li>
+  </ul>
+  <button class="action" type="button" onclick="window.location.href='/wbank/new_client';">立即開戶</button>
+</section>
+        </section>
         <section id="about-content" class="content-section">
             <h2>關於我們</h2>
             <p>泓財數字銀行 WBank 是一個致力於提供安全便捷數字銀行服務的平台。</p>
