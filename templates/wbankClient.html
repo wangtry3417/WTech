@@ -510,7 +510,19 @@
                 <button class="button" onclick="wbankLogout()">登出</button>
             </div>
         </div>
-        
+        <!-- Confirm Screen -->
+        <div id="allConfirmModal" class="modal">
+            <div class="model-content">
+              <span class="close" onclick="document.getElementById('allConfirmModal').style.display='none';">&times;</span>
+              <br>
+              <h2>確認操作</h2>
+              <br>
+              <span id="Confirm-detail"></span>
+              <br>
+              <textarea readonly></textarea>
+            </div>
+        </div>
+        <!-- End Screen -->
         <!-- New Screen -->
         <div id="resultModal" class="modal">
         <div class="modal-content">
