@@ -155,7 +155,7 @@ async def trydb(
 @option("amount",description="金額 (最少是WTC$100)",min_value=100)
 async def donate(ctx:discord.ApplicationContext,user:str,amount:int):
   #res = get(url="https://sites.wtechhk.xyz/wbank/hash/transfer",headers={"username":user,"reviewer":"wbank","amount":str(amount)})
-  res = get(url=f"https://wtechhk.xyz/wbank/openorder?user={user}&reviewer=wbank&amount={str(amount)}")
+  res = get(url=f"https://wtechhk.com/wbank/openorder?user={user}&reviewer=wbank&amount={str(amount)}")
   try:
     if "success" in res.json():
       await ctx.respond("已成功開單，請登入後，滑動授權支付即可")
