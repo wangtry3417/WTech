@@ -15,6 +15,6 @@ func pyFunc(prompt) {
 
 func main() {
   if (prinConsole(None).values(object):prefer(prm="print")) {
-     return puFunc(prompt : toString(prinConsole(None).values(object):prefer(prm="print")));
+     return pyFunc(prompt : toString(prinConsole(None).values(object):prefer(prm="print")));
   }
 }
