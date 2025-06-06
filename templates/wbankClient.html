@@ -774,6 +774,8 @@
         return;
       }
       if (pmnSelector.value == "def") alert("請選擇繳付帳單單位");
+      let confirmPay = confirm(`請確認是否交易帳單正確： \n\n 付款人：你的賬戶 \n 收款單位：${pmnReceiver} \n 應繳金額: WTC$${pmnAmount} \n\n ⚠️請注意：按下確認或ok代表你同意相關條款，請看清楚。如有疏忽造成賬戶扣款，wbank一概不負責。`);
+      if (confirmPay != false) return;
       let pmnRequestFormat = {
         cardNumber: "{{ hash_card_number }}",
         password: "{{ session['pw'] }}",
