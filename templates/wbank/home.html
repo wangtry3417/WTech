@@ -336,7 +336,7 @@ header {
                         <div class="modal-body">
                             <b><h3>注意⚠️</h3></b>
                             <br>
-                            <b><p>WBank系統將會更新為2.5版本，其後wcoins中心化系統及頁面將不會進行大更新。</p></b>
+                            <b><p>WBank主機將會進行升級，務求令整體性能提升。</p></b>
                             <br>
                             <b><p>WBank將會在 <span id="date"></span> 天轉為維修模式</p></b>
                         </div>
@@ -558,19 +558,16 @@ header {
         document.addEventListener('DOMContentLoaded', function() {
             showContent('home');
         });
-
-        /*
             $(document).ready(function() {
                 $('#Modal').modal('show');
             });
             let datePlace = document.getElementById("date");
             let hrs = document.getElementById("hrs");
             let dateNow = new Date();
-            let dateTaget = new Date("2025-03-04T08:00:00");
+            let dateTaget = new Date("2025-06-22T20:00:00");
             const differenceInMilliseconds = dateTaget - dateNow;
             const differenceInDays = Math.ceil(differenceInMilliseconds / (1000 * 60 * 60 * 24));
             datePlace.innerHTML = differenceInDays;
-        */
         // Count user
         let userCount = document.getElementById("userCount");
         let uc = {{ count }};
