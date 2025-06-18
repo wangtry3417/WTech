@@ -28,3 +28,4 @@ pandas
 Flask-Security
 google-generativeai
 markupsafe
+gunicorn
