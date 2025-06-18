@@ -555,6 +555,7 @@ header {
         document.addEventListener('DOMContentLoaded', function() {
             showContent('home');
         });
+        /*
             $(document).ready(function() {
                 $('#Modal').modal('show');
             });
@@ -565,6 +566,7 @@ header {
             const differenceInMilliseconds = dateTaget - dateNow;
             const differenceInDays = Math.ceil(differenceInMilliseconds / (1000 * 60 * 60 * 24));
             datePlace.innerHTML = differenceInDays;
+        */
         // Count user
         let userCount = document.getElementById("userCount");
         let uc = {{ count }};
