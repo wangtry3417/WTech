@@ -172,7 +172,7 @@ def before_request():
       elif res.get("countryCode") == "TW":
         return redirect(f"/wtech/bockweb?place=tw&ip={ip_address}&org={org_info}")
       elif res.get("countryCode") == "HK":
-        return redirect(f"/wtech/bockweb?place=tw&ip={ip_address}&org={org_info}")
+        return redirect(f"/wtech/bockweb?place=hk&ip={ip_address}&org={org_info}")
     else: return abort(502)
 
 @app.after_request
