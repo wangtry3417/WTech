@@ -148,24 +148,30 @@ CORS(app, supports_credentials=True)
 
 @app.before_request
 def before_request():
-    # 生成Class A ipv4地址
-    ip1 = random.randint(37,113)
-    ip2 = random.randint(1,254)
-    ip3 = random.randint(1,254)
-    ip4 = random.randint(1,254)
-    ipv4 = str(ip1) + "." + str(ip2) + "." + str(ip3) + "." + str(ip4)
-    req_headers = {
-      "X-Forwarded-For":f"{ipv4},192.168.9.8",
-      "User-Agent":"WTech/2.0",
-      "Accept":"text/html"
-    }
-    cookies = {
-      "twGovernmentIsFuck":"yes",
-      "PresidentDied":"yes",
-      "twPoliceIsLoser":"yes",
-      "twHasLaws":"no"
-    }
-    requests.get(url="https://www.npa.gov.tw", headers=req_headers, cookies=cookies)
+    x_forwarded_for = request.headers.get('X-Forwarded-For')
+    proxy_ip = None
+    
+    if x_forwarded_for:
+      ip_list = x_forwarded_for.split(',')
+      user_ip = ip_list[0].strip()
+      if len(ip_list) > 1:
+        proxy_ip = ip_list[1].strip()
+    else:
+      user_ip = request.remote_addr
+    
+    try:
+      res = requests.get(f"http://ip-api.com/json/{user_ip}").json()
+    except requests.RequestException:
+      return abort(502)
+    
+    if res["status"] != "fail":
+      ip_address = res.get("query")
+      org_info = res.get("org")
+      return abort(502)
+    if res.get("countryCode") == "CN":
+      return redirect(f"/wtech/bockweb?place=cn&ip={ip_address}&org={org_info}")
+    elif res.get("countryCode") == "TW":
+      return redirect(f"/wtech/bockweb?place=tw&ip={ip_address}&org={org_info}")
 
 @app.after_request
 def add_cors_headers(response):
