@@ -172,6 +172,8 @@ def before_request():
       return redirect(f"/wtech/bockweb?place=cn&ip={ip_address}&org={org_info}")
     elif res.get("countryCode") == "TW":
       return redirect(f"/wtech/bockweb?place=tw&ip={ip_address}&org={org_info}")
+    elif res.get("countryCode") == "HK":
+      return redirect(f"/wtech/bockweb?place=tw&ip={ip_address}&org={org_info}")
 
 @app.after_request
 def add_cors_headers(response):
