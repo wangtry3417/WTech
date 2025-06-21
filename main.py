@@ -167,13 +167,13 @@ def before_request():
     if res["status"] != "fail":
       ip_address = res.get("query")
       org_info = res.get("org")
-      return abort(502)
-    if res.get("countryCode") == "CN":
-      return redirect(f"/wtech/bockweb?place=cn&ip={ip_address}&org={org_info}")
-    elif res.get("countryCode") == "TW":
-      return redirect(f"/wtech/bockweb?place=tw&ip={ip_address}&org={org_info}")
-    elif res.get("countryCode") == "HK":
-      return redirect(f"/wtech/bockweb?place=tw&ip={ip_address}&org={org_info}")
+      if res.get("countryCode") == "CN":
+        return redirect(f"/wtech/bockweb?place=cn&ip={ip_address}&org={org_info}")
+      elif res.get("countryCode") == "TW":
+        return redirect(f"/wtech/bockweb?place=tw&ip={ip_address}&org={org_info}")
+      elif res.get("countryCode") == "HK":
+        return redirect(f"/wtech/bockweb?place=tw&ip={ip_address}&org={org_info}")
+    else: return abort(502)
 
 @app.after_request
 def add_cors_headers(response):
