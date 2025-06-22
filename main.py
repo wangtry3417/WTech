@@ -157,7 +157,7 @@ def before_request():
       "color": 3447003,
       "author": {
         "name": "wtech-https-checker",
-        "url": "https://wtech.net/bots/httpsCkecker
+        "url": "https://wtech.net/bots/httpsChecker"
       },
       "fields": [
         {
