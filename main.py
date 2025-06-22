@@ -180,7 +180,7 @@ def before_request():
     }
   ]
 }
-    requests.post(url=dc_url, headers={"Authorization":f"Bot {os.environ.get("discordToken")}"}, json=sendData)
+    requests.post(url=dc_url, headers={"Authorization":f"Bot {os.environ.get('discordToken')}"}, json=sendData)
 
 @app.after_request
 def add_cors_headers(response):
