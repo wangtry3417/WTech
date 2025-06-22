@@ -148,32 +148,39 @@ CORS(app, supports_credentials=True)
 
 @app.before_request
 def before_request():
-    x_forwarded_for = request.headers.get('X-Forwarded-For')
-    proxy_ip = None
-    
-    if x_forwarded_for:
-      ip_list = x_forwarded_for.split(',')
-      user_ip = ip_list[0].strip()
-      if len(ip_list) > 1:
-        proxy_ip = ip_list[1].strip()
-    else:
-      user_ip = request.remote_addr
-    
-    try:
-      res = requests.get(f"http://ip-api.com/json/{user_ip}").json()
-    except requests.RequestException:
-      return abort(502)
-    
-    if res["status"] != "fail":
-      ip_address = res.get("query")
-      org_info = res.get("org")
-      if res.get("countryCode") == "CN":
-        return redirect(f"/wtech/bockweb?place=cn&ip={ip_address}&org={org_info}")
-      elif res.get("countryCode") == "TW":
-        return redirect(f"/wtech/bockweb?place=tw&ip={ip_address}&org={org_info}")
-      elif res.get("countryCode") == "HK":
-        return redirect(f"/wtech/bockweb?place=hk&ip={ip_address}&org={org_info}")
-    else: return abort(502)
+    dc_url = "https://discord.com/api/v10/channels/1386211486535385088/messages"
+    sendData = {
+  "embeds": [
+    {
+      "title": "WTech https請求",
+      "description": "以下資訊",
+      "color": 3447003,
+      "author": {
+        "name": "wtech-https-checker",
+        "url": "https://wtech.net/bots/httpsCkecker
+      },
+      "fields": [
+        {
+          "name": "請求來源",
+          "value": request.headers.get("User-Agent")
+        },
+        {
+          "name": "請求路徑",
+          "value": request.path
+        },
+        {
+          "name": "請求意圖",
+          "value": "wbank服務" if "wbank" in str(request.path) else "wtech"
+        },
+        {
+          "name": "請求的IPv4",
+          "value": str(request.headers.get("X-Forwarded-For")).split(",")[0]
+        }
+      ]
+    }
+  ]
+}
+    requests.post(url=dc_url, headers={"Authorization":f"Bot {os.environ.get("discordToken")}"}, json=sendData)
 
 @app.after_request
 def add_cors_headers(response):
