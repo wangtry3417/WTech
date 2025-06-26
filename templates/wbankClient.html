@@ -889,7 +889,8 @@
       });
     const apPmText = () => {
      let apAmount = document.getElementById("ap-amount");
-     if (!apAmount || apAmount = null) return;
+     if (!apAmount || apAmount == null) return;
+     if (apAmount.value == null) return;
      let apPmText = document.getElementById("pm-ap-text");
      let apPm = document.getElementById("ap-pm");
      if (apPm.value == "default") {
@@ -897,33 +898,33 @@
           除非職員叫你用這個，否則你不會有收款帳號的。
         `;
      } else if (apPm.value == "alipay-hk") {
-        if (parseFloat(apAmount).toFixed(0) < 100) {
+        if (parseFloat(apAmount.value) < 100) {
             alert("你的金額過小");
             apPmText.value = `
           收款帳號：xxxxxxx
-          金額: ${parseFloat(apAmount)}
+          金額: ${parseFloat(apAmount.value)}
           注：金額不要小於100泓幣
         `;
             return;
         }
         apPmText.value = `
           收款帳號：+852-55362770
-          金額: ${parseFloat(apAmount)/10}
+          金額: ${parseFloat(apAmount.value)/10}
           注：可以不用填區號。以及要備注wbank用戶名，否則充公金額。
         `;
      } else if (apPm.value == "bank-hk") {
-        if (parseFloat(apAmount).toFixed(0) < 100) {
+        if (parseFloat(apAmount) < 100) {
             alert("你的金額過小");
             apPmText.value = `
           收款帳號：xxxxxxx
-          金額: ${parseFloat(apAmount)}
+          金額: ${parseFloat(apAmount.value)}
           注：金額不要小於100泓幣
         `;
             return;
         }
         apPmText.value = `
           FPS收款帳號：+852-55362770
-          金額: ${parseFloat(apAmount)/10}
+          金額: ${parseFloat(apAmount.value)/10}
           注：可以不用填區號。以及要備注wbank用戶名，否則充公金額。
         `;
      }
