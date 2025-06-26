@@ -298,6 +298,11 @@
             text-align: left;
             color: green;
         }
+        /* Cash-in-text */
+        #apModal {
+          height: 70px;
+          resize: both;
+        }
     </style>
 </head>
 <body>
@@ -927,7 +932,11 @@
           金額: ${parseFloat(apAmount.value)/10}
           注：可以不用填區號。以及要備注wbank用戶名，否則充公金額。
         `;
-     }
+     } else {
+        apPm.value = "default";
+        apPmText.value = `
+          目前不支援這付款方式，所以你不會有收款帳號的。
+        `;
     };
      // End-cash-in
       document.getElementById("pp").addEventListener("click",() => {
