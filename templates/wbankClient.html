@@ -466,6 +466,32 @@
     </div>
 </div>
         <!-- End of virual-card screen -->
+        <!-- 入金 -->
+        <div id="apModal" class="model">
+    <div class="model-content">
+        <span class="close" onclick="document.getElementById('apModal').style.display='none';">&times;</span>
+        <h3>入金（要自己入金)</h3>
+        <div id="vcard">
+            <label>輸入金額：(WTC$)</label>
+            <input type="number" id="ap-amount">
+            <br>
+            <label>選擇支付方式:</label>
+            <select id="ap-pm" onchange="apPmText()">
+                <option value="default">客服叫我選這個</option>
+                <option value="alipay-hk">Alipay</option>
+                <option value="bank-hk">FPS(只限香港)</option>
+                <option value="line-pay">LinePay</option>
+             </select>
+             <br>
+            <textarea id="pm-ap-text" readonly>
+                除非職員叫你用這個，否則你不會有收款帳號的。
+             </textarea>
+            <br>
+            <p style="color: gray;">付款後，保留截圖，發送至客服部：cs@wtechhk.com 或 加入discord聯繫職員。</p>
+        </div>
+    </div>
+</div>
+        <!-- End of cash-in -->
         <!-- 交費用 -->
         <div id="needPayModal" class="model">
     <div class="model-content">
@@ -859,8 +885,50 @@
       });
      // Cash-in
      document.getElementById("ap").addEventListener("click",()=> {
-       alert("入金請找線上客服人員取得他行(other-bank)資訊，謝謝合作。");
+       document.getElementById("apModal").style.display = "block";
       });
+    const apPmText = () => {
+     let apAmount = document.getElementById("ap-amount");
+     if (!apAmount || apAmount = null) return;
+     let apPmText = document.getElementById("pm-ap-text");
+     let apPm = document.getElementById("ap-pm");
+     if (apPm.value == "default") {
+        apPmText.value = `
+          除非職員叫你用這個，否則你不會有收款帳號的。
+        `;
+     } else if (apPm.value == "alipay-hk") {
+        if (parseFloat(apAmount).toFixed(0) < 100) {
+            alert("你的金額過小");
+            apPmText.value = `
+          收款帳號：xxxxxxx
+          金額: ${parseFloat(apAmount)}
+          注：金額不要小於100泓幣
+        `;
+            return;
+        }
+        apPmText.value = `
+          收款帳號：+852-55362770
+          金額: ${parseFloat(apAmount)/10}
+          注：可以不用填區號。以及要備注wbank用戶名，否則充公金額。
+        `;
+     } else if (apPm.value == "bank-hk") {
+        if (parseFloat(apAmount).toFixed(0) < 100) {
+            alert("你的金額過小");
+            apPmText.value = `
+          收款帳號：xxxxxxx
+          金額: ${parseFloat(apAmount)}
+          注：金額不要小於100泓幣
+        `;
+            return;
+        }
+        apPmText.value = `
+          FPS收款帳號：+852-55362770
+          金額: ${parseFloat(apAmount)/10}
+          注：可以不用填區號。以及要備注wbank用戶名，否則充公金額。
+        `;
+     }
+    };
+     // End-cash-in
       document.getElementById("pp").addEventListener("click",() => {
         let amount = prompt("How much do you wanna buy in?");
         let value = amount*3.5;
