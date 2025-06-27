@@ -94,6 +94,47 @@
             margin-top: 20px;
             color: #777;
         }
+        /* Modal */
+        .model {
+            display: none; /* 初始隱藏 */
+            justify-content: center;
+            align-items: center; /* 置中對齊 */
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7); /* 灰色背景 */
+            z-index: 1000;
+        }
+        .model-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            width: 300px; /* 固定寬度 */
+            position: relative;
+        }
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        /* Textarea */
+        textarea {
+            width: 80%;
+            height: 90px;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: vertical;
+            background-color: #f0f0f0;
+            color: #333;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
@@ -109,7 +150,7 @@
         <h2>第一步：基本信息</h2>
         <form id="form1">
             <label for="user">使用者名稱</label>
-            <input type="text" id="user" name="user" required>
+            <input type="text" id="user" name="user" value="{{ user }}" required>
 
             <label for="fullName">全名</label>
             <input type="text" id="fullName" name="fname" required>
@@ -159,9 +200,33 @@
             <input type="checkbox" required>
             <label>本人已授權wbank管理本人的戶口。</label>
             <br>
+             <input type="checkbox" required>
+            <label>本人已同意 <span id="w-country-bank-text">泓國金融安全及管理局銀行業條款。</span></label>
+            <br>
 
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         </form>
+    </div>
+
+    <div class="model" id="w-bankModal">
+        <div class="model-content">
+            <span class="close" onclick="document.getElementById('w-bankModal').style.display='none';">&times;</span>
+            <h3>泓國金融安全及管理局銀行業條款</h3>
+            <br>
+            <textarea readonly>
+                《泓國金融安全及管理局銀行業條款》
+                1-- 所有在泓國經營的銀行都一定要遵守泓國金融安全及管理局銀行業規定。
+                 2-- 所有在泓國經營的銀行的高管及行長都一定要簽《泓國金融安全及管理局銀行高管及就職協議》。
+                 3-- 泓國官員及領導人如果要就職所有在泓國經營的銀行的一間銀行，都一定要簽《泓國金融安全及管理局--公平公正工作協議》，確保不會不公正情況出現。
+                 4-- 所有在泓國經營的銀行都一定要 要求用戶提供身分證明文件，包括地址、職業等。
+                 5-- 所有在泓國經營的銀行都一定要 要求用戶提供聯繫方式（電話號碼或電郵都可以）。
+                 6-- 所有在泓國經營的銀行都一定要守規定，否則可能被逼結業。
+                 7-- 泓國金融安全及管理局會保障所有在泓國經營的銀行的用戶資料及財務安全，並提供WTC$4,000,000的存款保障。
+                 8-- 泓國金融安全及管理局一向嚴厲打擊犯罪分子及洗錢（洗錢定義是 將黑的髒錢 透過一系列的程序被它洗白 就是變為合法的資金）。
+                 9-- 在泓國，洗錢罪行最高刑罰是封禁8個月，罰款7000萬泓幣。所以切勿以身試法。
+                 10-- 以上就是相關規定，請留意泓國金融安全及管理局最新消息。
+            </textarea>
+        </div>
     </div>
 
     <div class="navigation">
@@ -207,7 +272,10 @@
             const progressPercentage = ((step + 1) / steps.length) * 100;
             progressBar.style.width = progressPercentage + '%';
         }
-
+        document.getElementById("w-country-bank-text").addEventListener("click", () => {
+            document.getElementById('w-bankModal').style.display='flex';
+        });
+        
         nextButton.addEventListener('click', () => {
             //alert("Clicked " + currentStep);
             if (currentStep < steps.length - 1) {
