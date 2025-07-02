@@ -478,9 +478,9 @@
             <label>選擇支付方式:</label>
             <select id="ap-pm" onchange="apPmText()">
                 <option value="default">客服叫我選這個</option>
-                <option value="alipay-hk">Alipay</option>
-                <option value="bank-hk">FPS(只限香港)</option>
-                <option value="line-pay">LinePay</option>
+                <option value="alipay-hk">支付寶-Alipay</option>
+                <option value="bank-hk">轉數快-FPS(只限香港)</option>
+                <option value="line-pay">線之付-LinePay</option>
              </select>
              <br>
             <textarea id="pm-ap-text" height="70px" readonly>
@@ -801,7 +801,7 @@
       }
       if (pmnSelector.value == "def") alert("請選擇繳付帳單單位");
       let confirmPay = confirm(`請確認是否交易帳單正確： \n\n 付款人：你的賬戶 \n 收款單位：${pmnReceiver} \n 應繳金額: WTC$${pmnAmount} \n\n ⚠️請注意：按下確認或ok代表你同意相關條款，請看清楚。如有疏忽造成賬戶扣款，wbank一概不負責。`);
-      if (confirmPay != false) return;
+      if (confirmPay == false) return;
       let pmnRequestFormat = {
         cardNumber: "{{ hash_card_number }}",
         password: "{{ session['pw'] }}",
@@ -965,6 +965,7 @@
         document.getElementById('qrModal').style.display = 'none'; // 隱藏模態框
         }
         //Stock place
+document.getElementById("availableStocks").innerHTML = "<center><b><h3>抱歉，因監管所以停用投資功能。</h3></b></center>";
 function changeBGColor() {
     if (document.getElementById('colorSwitch').checked) {
           document.getElementById('container').style.backgroundColor="rgb(0,0,0)";
