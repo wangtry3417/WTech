@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +8,7 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #1a1a1a; /* 背景顏色 */
+            background-color: #1a1a1a;
             margin: 0;
             padding: 0;
             display: flex;
@@ -19,12 +19,13 @@
         .header {
             display: flex;
             align-items: center;
-            justify-content: center; /* 標題置中 */
+            justify-content: center;
             padding: 10px 20px;
             background-color: #333333;
+            position: relative;
         }
         .back-button {
-            position: absolute; /* 返回按鈕絕對定位 */
+            position: absolute;
             left: 20px;
             background: none;
             border: none;
@@ -46,31 +47,58 @@
             color: #ffffff;
             cursor: pointer;
             text-align: center;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+        .option.active {
+            background-color: #ff8c00;
+            color: #1a1a1a;
         }
         .qr-area {
             flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 2px dashed #ff8c00; /* 虛線框顏色 */
-            width: 80%; /* 調整掃描區域的寬度 */
-            height: 300px; /* 掃描區域的高度 */
+            border: 2px dashed #ff8c00;
+            width: 80%;
+            height: 300px;
             margin: 20px auto;
             border-radius: 10px;
             position: relative;
-            background-color: #2a2a2a; /* 掃描區域背景色 */
+            background-color: #2a2a2a;
         }
         .qr-placeholder {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            color: #ff8c00; /* 文字顏色 */
+            color: #ff8c00;
+            text-align: center;
         }
         #reader {
             width: 100%;
             height: 100%;
-            display: none; /* 初始隱藏掃描器 */
+            display: none;
+        }
+        #stop-scan {
+            display: none;
+            margin: 0 auto 20px;
+            padding: 10px 20px;
+            background-color: #ff8c00;
+            color: #1a1a1a;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .amount-input {
+            display: block;
+            margin: 20px auto;
+            padding: 10px;
+            width: 80%;
+            border-radius: 5px;
+            border: none;
+            background-color: #333;
+            color: white;
         }
     </style>
 </head>
@@ -80,55 +108,121 @@
         <h1 class="title">付款</h1>
     </div>
     <div class="options">
-        <div class="option" onclick="startScan();">一掃即付</div>
-        <div class="option">付款碼</div>
+        <div class="option active" id="scan-option" onclick="startScan();">一掃即付</div>
+        <div class="option" id="code-option" onclick="showPaymentCode();">付款碼</div>
     </div>
+    
+    <input type="number" id="amount" class="amount-input" placeholder="輸入金額" min="1">
+    
     <div class="qr-area">
-        <div class="qr-placeholder">掃描區域</div>
+        <div class="qr-placeholder">掃描區域<br><small>點擊上方"一掃即付"開始掃描</small></div>
         <div id="reader"></div>
     </div>
+    
+    <button id="stop-scan" onclick="stopScan();">停止掃描</button>
 
     <script>
+        let html5QrCode;
+        let isScanning = false;
+        
+        function setActiveOption(optionId) {
+            document.getElementById('scan-option').classList.remove('active');
+            document.getElementById('code-option').classList.remove('active');
+            document.getElementById(optionId).classList.add('active');
+        }
+        
+        function showPaymentCode() {
+            setActiveOption('code-option');
+            stopScan();
+            alert("付款碼功能尚未實現");
+        }
+        
         function startScan() {
-            const qrArea = document.querySelector('.qr-area');
+            if (isScanning) return;
+            
+            const amount = document.getElementById('amount').value;
+            if (!amount || amount <= 0) {
+                alert("請輸入有效的金額");
+                return;
+            }
+            
+            setActiveOption('scan-option');
             const qrPlaceholder = document.querySelector('.qr-placeholder');
             const reader = document.getElementById('reader');
-
+            const stopButton = document.getElementById('stop-scan');
+            
             qrPlaceholder.style.display = 'none';
             reader.style.display = 'block';
-
-            const html5QrCode = new Html5Qrcode("reader");
+            stopButton.style.display = 'block';
+            
+            html5QrCode = new Html5Qrcode("reader");
             html5QrCode.start(
                 { facingMode: "environment" }, 
                 {
                     fps: 10,
                     qrbox: { width: 250, height: 250 }
                 },
-                (decodedText, decodedResult) => {
-                    let url = "/wbank/v1/storecode?code=" + decodedText + "&reviewer=wbank&amount=100";
-            fetch(url)
-                .then(res => res.json())
-                .then(data => {
-                    let urll = `/wbank/openorder?user=${data.payer}&reviewer=${data.reviewer}&amount=${data.amount}`;
-                    fetch (urll)
-                     .then (res=>res.json())
-                     .then (msg=>alert(msg.success))
-                     .catch (err=>alert(err));
-                    })
-                    .catch (err=>alert(err));
-                    html5QrCode.stop().then(() => {
-                        qrPlaceholder.style.display = 'block';
-                        reader.style.display = 'none';
-                    }).catch(err => {
+                async (decodedText, decodedResult) => {
+                    try {
+                        isScanning = false;
+                        const params = new URLSearchParams({
+                            code: decodedText,
+                            amount: amount,
+                            reviewer: "current_user" // 這裡應該替換為實際用戶名
+                        });
+                        
+                        const res = await fetch(`/wbank/v1/storecode?${params}`);
+                        const data = await res.json();
+                        
+                        if (data.success) {
+                            const paymentRes = await fetch(`/wbank/openorder?user=${data.payer}&reviewer=${data.reviewer}&amount=${data.amount}`);
+                            const paymentData = await paymentRes.json();
+                            
+                            if (paymentData.success) {
+                                alert("付款成功！");
+                                window.location.href = "/success"; // 跳轉到成功頁面
+                            } else {
+                                throw new Error(paymentData.message || "付款處理失敗");
+                            }
+                        } else {
+                            throw new Error(data.message || "掃碼驗證失敗");
+                        }
+                    } catch (err) {
                         console.error(err);
-                    });
+                        alert(`付款失敗: ${err.message}`);
+                    } finally {
+                        stopScan();
+                    }
                 },
                 (errorMessage) => {
-                    // 處理掃描過程中的錯誤
-                })
-            .catch(err => {
+                    console.log(`掃描錯誤: ${errorMessage}`);
+                }
+            ).then(() => {
+                isScanning = true;
+            }).catch(err => {
                 console.error(`開始掃描失敗: ${err}`);
+                if (err.message.includes("Permission denied")) {
+                    alert("請允許相機權限以使用掃碼功能");
+                } else {
+                    alert("無法啟動掃描器，請重試");
+                }
+                stopScan();
             });
+        }
+        
+        function stopScan() {
+            if (html5QrCode && isScanning) {
+                html5QrCode.stop().then(() => {
+                    console.log("掃描器已停止");
+                }).catch(err => {
+                    console.error("停止掃描器時出錯:", err);
+                });
+            }
+            
+            isScanning = false;
+            document.querySelector('.qr-placeholder').style.display = 'block';
+            document.getElementById('reader').style.display = 'none';
+            document.getElementById('stop-scan').style.display = 'none';
         }
     </script>
 </body>
