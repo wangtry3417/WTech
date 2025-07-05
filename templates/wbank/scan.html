@@ -168,7 +168,7 @@
                         const params = new URLSearchParams({
                             code: decodedText,
                             amount: amount,
-                            reviewer: "current_user" // 這裡應該替換為實際用戶名
+                            reviewer: "wbank" // 這裡應該替換為實際用戶名
                         });
                         
                         const res = await fetch(`/wbank/v1/storecode?${params}`);
