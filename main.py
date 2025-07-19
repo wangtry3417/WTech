@@ -3141,7 +3141,7 @@ def wbank_create_mfa_key(username):
   key = pyotp.random_base32()
   db.session.execute(text("update wbankwallet set mfa_key=:mfaKey where username=:uname"), {'mfaKey':key, 'uname':username})
   db.session.commit()
-  return key
+  return jsonify(key=str(key))
   
 @app.route("/wbank/mfa/verify")
 @login_required
