@@ -913,9 +913,17 @@
       fetch("/wbank/mfa/remove/"+user);
       window.location.reload();
     });
-    document.getElementById("createMFA").addEventListener("click", ()=> {
-      fetch("/wbank/mfa/create/"+user);
-      window.location.reload();
+    // 前端改進版
+    document.getElementById("createMFA").addEventListener("click", async () => {
+      try {
+        const response = await fetch(`/wbank/mfa/create/${user}`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        window.location.reload();
+      } catch (error) {
+        console.error("創建 MFA 失敗:", error);
+      }
     });
     const apPmText = () => {
      let apAmount = document.getElementById("ap-amount");
