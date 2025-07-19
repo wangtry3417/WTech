@@ -82,7 +82,7 @@
         <form method="GET" id="verify-form">  <div class="mb-3">
                 <label for="verify_code" class="form-label">驗證碼 (6 位數字)</label>
                 <input type="text" class="form-control" id="verify_code" name="verify_code" placeholder="請輸入軟件中的 6 位驗證碼" required>  </div>
-                <input id="redirectURL" value="/wbank/client" type="hidden">
+                <input id="redirectURL" value="{{ url }}" type="hidden">
             <button type="button" id="verify-btn" class="btn btn-primary">驗證</button>
         </form>
         <p class="mt-3 text-muted">注意：請打開Google Auth或其他相關軟件查看驗證碼。</p>
