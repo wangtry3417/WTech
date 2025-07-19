@@ -3151,7 +3151,7 @@ def wbank_mfa_key_verify():
     mfaKey_tuple = db.session.execute(text("select mfa_key from wbankwallet where username=:username"), {'username': user}).fetchone()
     mfaKey = str(mfaKey_tuple[0]) if mfaKey_tuple and mfaKey_tuple[0] is not None else "N/A"
     totp = pyotp.TOTP(mfaKey)
-    if totp.verify(code): return abort(200)
+    if totp.verify(code): return ''
     else: return abort(403)
 # MFA-END
 
