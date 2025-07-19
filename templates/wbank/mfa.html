@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>驗證碼驗證</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: sans-serif; /* 使用更通用的 sans-serif 字體 */
+            background-color: #f8f9fa; /* 更柔和的背景色 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* 更柔和的陰影 */
+            text-align: center;
+            max-width: 500px; /* 限制容器最大寬度 */
+            width: 100%;
+        }
+
+        h2 {
+            color: #343a40; /* 標題顏色 */
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block; /* label 佔據整行 */
+            margin-bottom: 8px;
+            color: #495057; /* label 文字顏色 */
+            text-align: left; /* label 文字靠左對齊 */
+        }
+
+        .form-control {
+            border-radius: 5px;
+            border: 1px solid #ced4da; /* 更柔和的邊框 */
+            padding: 12px;
+        }
+
+        .btn-primary {
+            background-color: #007bff; /* Bootstrap Primary 顏色 */
+            border-color: #007bff;
+            border-radius: 5px;
+            padding: 12px 25px;
+            font-weight: 500;
+            transition: background-color 0.3s ease; /* hover 動畫 */
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3; /* Hover 時顏色變深 */
+            border-color: #0056b3;
+        }
+
+        .text-muted {
+            color: #6c757d; /* muted text 顏色 */
+            font-size: 0.9rem;
+        }
+
+        #feedback-message {
+            margin-top: 20px;
+            color: #dc3545; /* 預設錯誤訊息顏色 */
+            font-weight: bold;
+        }
+
+        #feedback-message.success {
+            color: #28a745; /* 成功訊息顏色 */
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>請輸入驗證碼</h2>
+        <form method="GET" id="verify-form">  <div class="mb-3">
+                <label for="verify_code" class="form-label">驗證碼 (6 位數字)</label>
+                <input type="text" class="form-control" id="verify_code" name="verify_code" placeholder="請輸入軟件中的 6 位驗證碼" required>  </div>
+                <input id="redirectURL" value="/wbank/client" type="hidden">
+            <button type="button" id="verify-btn" class="btn btn-primary">驗證</button>
+        </form>
+        <p class="mt-3 text-muted">注意：請打開Google Auth或其他相關軟件查看驗證碼。</p>
+        <div id="feedback-message" class="mt-3"></div>  </div>
+    <script>
+        document.getElementById("verify-btn").addEventListener("click", () => {
+            const verifyCodeInput = document.getElementById("verify_code");
+            const feedbackMessageDiv = document.getElementById("feedback-message");
+            const verifyCode = verifyCodeInput.value;
+
+            if (!verifyCode || verifyCode.trim() === "") {
+                feedbackMessageDiv.textContent = "請輸入 4 位數字驗證碼。"; // 更友善的提示訊息
+                feedbackMessageDiv.className = "mt-3 text-danger"; // 可以使用 text-danger class 顯示紅色錯誤訊息
+                return; // 停止後續執行
+            }
+
+            feedbackMessageDiv.textContent = "驗證中..."; // 顯示驗證中訊息
+            feedbackMessageDiv.className = "mt-3 text-muted"; // 恢復為 muted 樣式
+
+            fetch("/wbank/mfa/verify", {
+                method: "GET",
+                headers: { code: verifyCode, url: document.getElementById("redirectURL").value }
+            })
+            .then(response => {
+                if (response.ok) { // 檢查 HTTP 狀態碼是否為 2xx (成功)
+                    feedbackMessageDiv.textContent = "驗證成功，正在跳轉..."; // 顯示成功訊息
+                    feedbackMessageDiv.className = "mt-3 text-success"; // 使用 text-success class 顯示綠色成功訊息
+                    setTimeout(() => {
+                        window.location.href = "/wbank/client"; // 延遲後跳轉
+                    }, 1500); // 延遲 1.5 秒後跳轉
+                } else {
+                    feedbackMessageDiv.textContent = "驗證碼錯誤，請檢查後重新輸入。"; // 顯示驗證碼錯誤訊息
+                    feedbackMessageDiv.className = "mt-3 text-danger"; // 使用 text-danger class 顯示紅色錯誤訊息
+                }
+            })
+            .catch(error => {
+                console.error("驗證請求錯誤:", error); // 記錄錯誤到 console，方便除錯
+                feedbackMessageDiv.textContent = "驗證過程中發生錯誤，請稍後再試。"; // 顯示一般錯誤訊息
+                feedbackMessageDiv.className = "mt-3 text-danger"; // 使用 text-danger class 顯示紅色錯誤訊息
+            });
+        });
+    </script>
+</body>
+</html>
