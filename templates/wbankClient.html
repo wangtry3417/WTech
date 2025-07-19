@@ -910,9 +910,9 @@
        document.getElementById("apModal").style.display = "flex";
       });
     document.getElementById("cancelMFA").addEventListener("click", ()=> {
-      fetch("/wbank/remove/mfa?uname="+user);
+      fetch("/wbank/mfa/remove/"+user);
     });
-    document.getElementById("cancelMFA").addEventListener("click", ()=> {
+    document.getElementById("createMFA").addEventListener("click", ()=> {
       let key = fetch("/wbank/mfa/create/"+user);
       alert(key);
       window.reload();
