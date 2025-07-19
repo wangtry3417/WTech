@@ -518,6 +518,24 @@
     </div>
 </div>
         <!-- End screen -->
+        <!-- MFA screen -->
+        <div id="setMFAModal" class="model">
+    <div class="model-content">
+        <span class="close" onclick="document.getElementById('setMFAModal').style.display='none';">&times;</span>
+        <h3>設置MFA-key</h3>
+        <br>
+        {% if userMFA %}
+          <button class="button" id="cancelMFA">取消MFA</button>
+          <br>
+          <p style="color: gray;">恭喜你已經啟用了MFA功能</p>
+        {% else %}
+          <p> 這是MFA-key: {{ mfa_key }} </p>
+          <br>
+          <p style="color: gray;">請到Google Auth或其他相關軟件添加這secret-key</p>
+        {% endif %}
+    </div>
+</div>
+        <!-- End screen -->
         <div id="myPage" class="page">
             <div class="card">
                 <h2>我的</h2>
@@ -531,6 +549,8 @@
                 <h3>用戶設置區</h3>
                 <!-- button class="button" onclick="scan()">掃描QR-code</button> -->
                 <button class="button" data-toggle="modal" data-target="#settingModal">設定</button>
+                <br>
+                <button class="button" data-toggle="modal" data-target="#setMFAModal">設定MFA</button>
                 <br>
                 <br>
                 <button class="button" onclick="wbankLogout()">登出</button>
@@ -887,6 +907,9 @@
      document.getElementById("ap").addEventListener("click",()=> {
        document.getElementById("apModal").style.display = "flex";
       });
+    document.getElementById("cancelMFA").addEventListener("click", ()=> {
+      fetch("/wbank/remove/mfa?uname="+user);
+    });
     const apPmText = () => {
      let apAmount = document.getElementById("ap-amount");
      if (!apAmount || apAmount == null) return;
