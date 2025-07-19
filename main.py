@@ -3137,7 +3137,7 @@ def wbank_auth_gen_csrfToken():
 @app.route("/wbank/mfa/create/<username>")
 def wbank_create_mfa_key(username):
   key = pyotp.random_base32()
-  db.session.execute(text("update wbankwallet set userMFA=:mfaKey where username=:uname"), {'mfaKey':key, 'uname':username})
+  db.session.execute(text("update wbankwallet set mfa_key=:mfaKey where username=:uname"), {'mfaKey':key, 'uname':username})
   db.session.commit()
   return key
 # MFA-END
