@@ -2816,7 +2816,7 @@ def wbank_auth_client():
                           return redirect("/wbank")
                         if user.email == "verify-bot@wtechhk.com":
                           return render_template("wbank/kyc.html",user=user.username,id="0909")
-                        mfaKey = db.session.execute(text("select userMFA from wbankwallet where username=:username"), {'username': user.username})
+                        mfaKey = db.session.execute(text("select mfa_key from wbankwallet where username=:username"), {'username': user.username})
                         if mfaKey != "N/A": userMFA = True
                         
                         login_user(user)
@@ -2961,7 +2961,7 @@ def wbank_client():
             hash_card_number = hashlib.sha256(card_number.encode()).hexdigest()
             # MFA
             userMFA = False
-            mfaKey = db.session.execute(text("select userMFA from wbankwallet where username=:username"), {'username': user_data.username})
+            mfaKey = db.session.execute(text("select mfa_key from wbankwallet where username=:username"), {'username': user_data.username})
             if mfaKey != "N/A": userMFA = True
             return render_template("wbankClient.html", user=user, balance=balance, HK_Value=HK_Value, tw_value=tw_value, US_value=US_value, img=qr_b64, acc_number=acc_number, openpay=openpay, setAmount=setAmount, nowAmount=nowAmount, hash_card_number=hash_card_number, userMFA=userMFA, mfa_key=mfaKey)
     else:
