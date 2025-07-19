@@ -913,10 +913,8 @@
       fetch("/wbank/mfa/remove/"+user);
       window.location.reload();
     });
-    document.getElementById("createMFA").addEventListener("click", async ()=> {
-      let response = await fetch("/wbank/mfa/create/"+user);
-      let key = await response.text();
-      alert("你的密鑰是: \n"+key);
+    document.getElementById("createMFA").addEventListener("click", ()=> {
+      fetch("/wbank/mfa/create/"+user);
       window.location.reload();
     });
     const apPmText = () => {
