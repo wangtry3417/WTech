@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>驗證碼驗證</title>
+    <title>MFA驗證碼驗證</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
@@ -111,7 +111,7 @@
                     feedbackMessageDiv.textContent = "驗證成功，正在跳轉..."; // 顯示成功訊息
                     feedbackMessageDiv.className = "mt-3 text-success"; // 使用 text-success class 顯示綠色成功訊息
                     setTimeout(() => {
-                        window.location.href = "/wbank/client"; // 延遲後跳轉
+                        window.location.href = document.getElementById("redirectURL").value; // 延遲後跳轉
                     }, 1500); // 延遲 1.5 秒後跳轉
                 } else {
                     feedbackMessageDiv.textContent = "驗證碼錯誤，請檢查後重新輸入。"; // 顯示驗證碼錯誤訊息
