@@ -2826,7 +2826,8 @@ def wbank_auth_client():
                         session["pw"] = password
                         session.permanent = True
                         flash('登入成功.', 'success')
-                        if user.email:
+                        num = 300
+                        if user.email and num == 1:
                           vetify_code = str(random.randint(1000, 9999))
                           session["verify-code"] = vetify_code
                           msg = MIMEText(f"""
