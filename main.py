@@ -3154,6 +3154,12 @@ def wbank_mfa_key_verify():
     totp = pyotp.TOTP(mfaKey)
     if totp.verify(code): return ''
     else: return abort(403)
+      
+@app.route("/wbank/mfa/remove/<username>")
+def wbank_remove_mfa_key(username):
+  db.session.execute(text("update wbankwallet set mfa_key=:mfaKey where username=:uname"), {'mfaKey':'N/A', 'uname':username})
+  db.session.commit()
+  return 'Done'
 # MFA-END
 
 @app.route("/wbank/recordPage")
