@@ -2880,7 +2880,7 @@ def wbank_auth_client():
                             flash("WBank服務暫不支持非人類登入", "error")
                             logout_user()
                             session.clear()
-                            return redirect("/wbank")
+                            return redirect("/wbank/client")
                                 
                         return redirect(url_for('wbank'))
                     else:
