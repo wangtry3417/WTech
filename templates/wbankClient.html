@@ -533,7 +533,7 @@
         {% else %}
           <button class="button" id="createMFA">創立MFA-key</button>
           <br>
-          <p style="color: gray;">請到Google Auth或其他相關軟件添加這secret-key。</p>
+          <p style="color: gray;">請到Google Auth或其他相關軟件添加這secret-key。以及 按一下按鈕即可。</p>
         {% endif %}
     </div>
 </div>
@@ -911,11 +911,13 @@
       });
     document.getElementById("cancelMFA").addEventListener("click", ()=> {
       fetch("/wbank/mfa/remove/"+user);
+      window.location.reload();
     });
-    document.getElementById("createMFA").addEventListener("click", ()=> {
-      let key = fetch("/wbank/mfa/create/"+user);
-      alert(key);
-      window.reload();
+    document.getElementById("createMFA").addEventListener("click", async ()=> {
+      let response = await fetch("/wbank/mfa/create/"+user);
+      let key = await response.text();
+      alert("你的密鑰是: \n"+key);
+      window.location.reload();
     });
     const apPmText = () => {
      let apAmount = document.getElementById("ap-amount");
