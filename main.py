@@ -2875,7 +2875,7 @@ def wbank_auth_client():
                             return redirect("/wbank")
                           if result["success"]:
                             flash("恭喜，你是人類", "success")
-                            if userMFA: return render_template("wbank/mfa.html")
+                            if userMFA: return render_template("wbank/mfa.html", url="/wbank/client")
                             return redirect("/wbank/client")
                           else:
                             flash("WBank服務暫不支持非人類登入", "error")
@@ -3141,6 +3141,18 @@ def wbank_create_mfa_key(username):
   db.session.execute(text("update wbankwallet set mfa_key=:mfaKey where username=:uname"), {'mfaKey':key, 'uname':username})
   db.session.commit()
   return key
+  
+@app.route("/wbank/mfa/verify")
+@login_required
+def wbank_mfa_key_verify():
+    user = current_user.username
+    code = request.headers.get("code")
+    url = request.headers.get("url")
+    mfaKey_tuple = db.session.execute(text("select mfa_key from wbankwallet where username=:username"), {'username': user}).fetchone()
+    mfaKey = str(mfaKey_tuple[0]) if mfaKey_tuple and mfaKey_tuple[0] is not None else "N/A"
+    totp = pyotp.TOTP(mfaKey)
+    if totp.verify(code): return abort(200)
+    else: return abort(403)
 # MFA-END
 
 @app.route("/wbank/recordPage")
