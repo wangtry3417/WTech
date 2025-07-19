@@ -525,13 +525,15 @@
         <h3>設置MFA-key</h3>
         <br>
         {% if userMFA %}
+          <p> 這是你的MFA-key: {{ mfa_key }} </p>
+          <br>
           <button class="button" id="cancelMFA">取消MFA</button>
           <br>
           <p style="color: gray;">恭喜你已經啟用了MFA功能</p>
         {% else %}
-          <p> 這是MFA-key: {{ mfa_key }} </p>
+          <button class="button" id="createMFA">創立MFA-key</button>
           <br>
-          <p style="color: gray;">請到Google Auth或其他相關軟件添加這secret-key</p>
+          <p style="color: gray;">請到Google Auth或其他相關軟件添加這secret-key。</p>
         {% endif %}
     </div>
 </div>
@@ -909,6 +911,11 @@
       });
     document.getElementById("cancelMFA").addEventListener("click", ()=> {
       fetch("/wbank/remove/mfa?uname="+user);
+    });
+    document.getElementById("cancelMFA").addEventListener("click", ()=> {
+      let key = fetch("/wbank/mfa/create/"+user);
+      alert(key);
+      window.reload();
     });
     const apPmText = () => {
      let apAmount = document.getElementById("ap-amount");
