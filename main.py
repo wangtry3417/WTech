@@ -39,7 +39,7 @@ from wtforms import StringField,BooleanField,SelectField,FloatField,IntegerField
 from flask_wtf.csrf import CSRFProtect,generate_csrf
 from flask_admin.form import BaseForm
 from flask_qrcode import QRcode
-import json,sys,threading
+import json,sys,threading,pyotp
 from DDos import checkUrl, DDos
 import pandas as pd
 from bot import run_bot
@@ -2804,6 +2804,8 @@ def wbank_auth_client():
             
             tryTimes = session.get("tryTimes", 0)
             
+            userMFA = False
+            
             session.get("verify-code",None)
             
             if user:
@@ -2814,6 +2816,9 @@ def wbank_auth_client():
                           return redirect("/wbank")
                         if user.email == "verify-bot@wtechhk.com":
                           return render_template("wbank/kyc.html",user=user.username,id="0909")
+                        mfaKey = db.session.execute(text("select userMFA from wbankwallet where username=:username"), {'username': user.username})
+                        if mfaKey != "N/A": userMFA = True
+                        
                         login_user(user)
                         session.pop("tryTimes", None)
                         session["username"] = username
@@ -2868,7 +2873,8 @@ def wbank_auth_client():
                             session.clear()
                             return redirect("/wbank")
                           if result["success"]:
-                            flash("恭喜，你是人類", "error")
+                            flash("恭喜，你是人類", "success")
+                             # if userMFA: return render_template("wbank/mfa.html")
                             return redirect("/wbank/client")
                           else:
                             flash("WBank服務暫不支持非人類登入", "error")
@@ -2876,7 +2882,7 @@ def wbank_auth_client():
                             session.clear()
                             return redirect("/wbank")
                                 
-                        return redirect(url_for('wbank_client'))
+                        return redirect(url_for('wbank'))
                     else:
                         if "銀行" in user.sub:
                             flash("抱歉，非泓財銀行帳戶不能登入", "error")
@@ -2953,7 +2959,11 @@ def wbank_client():
             # 泓通卡
             card_number = f"{user_data.accnumber}->{user_data.password}"
             hash_card_number = hashlib.sha256(card_number.encode()).hexdigest()
-            return render_template("wbankClient.html", user=user, balance=balance, HK_Value=HK_Value, tw_value=tw_value, US_value=US_value, img=qr_b64, acc_number=acc_number, openpay=openpay, setAmount=setAmount, nowAmount=nowAmount, hash_card_number=hash_card_number)
+            # MFA
+            userMFA = False
+            mfaKey = db.session.execute(text("select userMFA from wbankwallet where username=:username"), {'username': user_data.username})
+            if mfaKey != "N/A": userMFA = True
+            return render_template("wbankClient.html", user=user, balance=balance, HK_Value=HK_Value, tw_value=tw_value, US_value=US_value, img=qr_b64, acc_number=acc_number, openpay=openpay, setAmount=setAmount, nowAmount=nowAmount, hash_card_number=hash_card_number, userMFA=userMFA, mfa_key=mfaKey)
     else:
         error_message = "找不到該用戶"
     
@@ -3121,6 +3131,15 @@ def wbank_auth_gen_csrfToken():
       return jsonify(token=generate_csrf())
     return jsonify(msg="Your token is invaild", code=403)
   return jsonify(msg="Cannot find Authorization in your request headers", code=401)
+
+# MFA
+@app.route("/wbank/mfa/create/<username>")
+def wbank_create_mfa_key(username):
+  key = pyotp.random_base32()
+  db.session.execute(text("update wbankwallet set userMFA=:mfaKey where username=:uname"), {'mfaKey':key, 'uname':username})
+  db.session.commit()
+  return key
+# MFA-END
 
 @app.route("/wbank/recordPage")
 @login_required
