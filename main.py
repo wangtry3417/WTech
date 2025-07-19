@@ -2816,7 +2816,7 @@ def wbank_auth_client():
                           return redirect("/wbank")
                         if user.email == "verify-bot@wtechhk.com":
                           return render_template("wbank/kyc.html",user=user.username,id="0909")
-                        mfaKey_tuple = db.session.execute(text("select mfa_key from wbankwallet where username=:username"), {'username': user_data.username}).fetchone()
+                        mfaKey_tuple = db.session.execute(text("select mfa_key from wbankwallet where username=:username"), {'username': user.username}).fetchone()
                         mfaKey = str(mfaKey_tuple[0]) if mfaKey_tuple and mfaKey_tuple[0] is not None else "N/A"
                         if mfaKey != "N/A": userMFA = True
                         
@@ -2882,7 +2882,7 @@ def wbank_auth_client():
                             logout_user()
                             session.clear()
                             return redirect("/wbank")
-                        if userMFA: return render_template("wbank/mfa.html")
+                        if userMFA: return render_template("wbank/mfa.html", url="/wbank/client")
                         return redirect("/wbank/client")
                     else:
                         if "銀行" in user.sub:
