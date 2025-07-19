@@ -2961,7 +2961,8 @@ def wbank_client():
             hash_card_number = hashlib.sha256(card_number.encode()).hexdigest()
             # MFA
             userMFA = False
-            mfaKey = db.session.execute(text("select mfa_key from wbankwallet where username=:username"), {'username': user_data.username}).fetchone()
+            mfaKey_tuple = db.session.execute(text("select mfa_key from wbankwallet where username=:username"), {'username': user_data.username}).fetchone()
+            mfaKey = str(mfaKey_tuple[0]) if mfaKey_tuple and mfaKey_tuple[0] is not None else "N/A"
             if mfaKey != "N/A": userMFA = True
             return render_template("wbankClient.html", user=user, balance=balance, HK_Value=HK_Value, tw_value=tw_value, US_value=US_value, img=qr_b64, acc_number=acc_number, openpay=openpay, setAmount=setAmount, nowAmount=nowAmount, hash_card_number=hash_card_number, userMFA=userMFA, mfa_key=mfaKey)
     else:
