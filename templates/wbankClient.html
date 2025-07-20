@@ -531,7 +531,7 @@
           <br>
           <p style="color: gray;">恭喜你已經啟用了MFA功能</p>
         {% else %}
-          <button class="button" id="createMFA">創立MFA-key</button>
+          <button class="button" onclick="fetch('/wbank/mfa/create/'+'{{user}}');">創立MFA-key</button>
           <br>
           <p style="color: gray;">請到Google Auth或其他相關軟件添加這secret-key。以及 按一下按鈕即可。</p>
         {% endif %}
@@ -914,6 +914,7 @@
       window.location.reload();
     });
     // 前端改進版
+    /*
     document.getElementById("createMFA").addEventListener("click", async () => {
       try {
         const response = await fetch(`/wbank/mfa/create/${user}`);
@@ -926,6 +927,7 @@
         console.error("創建 MFA 失敗:", error);
       }
     });
+    */
     const apPmText = () => {
      let apAmount = document.getElementById("ap-amount");
      if (!apAmount || apAmount == null) return;
