@@ -128,7 +128,7 @@ def verify_password(username, password):
     return False
 
 SOCKET_CONFIG = {
-    'async_mode': 'threading',
+    'async_mode': 'eventlet',
     'cors_allowed_origins': "*",
     'manage_session': True,
     'logger': True,
