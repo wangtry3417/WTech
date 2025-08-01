@@ -655,19 +655,21 @@ def wbank_v1_auth_session():
   password = request.form['pw']
   url = request.form['url']
   user = wbankwallet.query.filter_by(username=username).first()
+  userMFA = False
   if user and url:
     if user.password == password:
         if user.sub == None or user.sub == "":
           login_user(user)
-          if current_user.role == "admin":
-           flash("職員不能作弊","info")
-           return redirect(f"/wbank/auth/v1?url={url}")
-          if current_user.role == "staff":
-            flash("職員不能作弊","info")
-            return redirect(f"/wbank/auth/v1?url={url}")
+          mfaKey_tuple = db.session.execute(text("select mfa_key from wbankwallet where username=:username"), {'username': user.username}).fetchone()
+          mfaKey = str(mfaKey_tuple[0]) if mfaKey_tuple and mfaKey_tuple[0] is not None else "N/A"
+          if mfaKey != "N/A": userMFA = True
           if current_user.role == "pendingUser":
             flash("請等待資料審核，暫不能用api","info")
             return redirect(f"/wbank/auth/v1?url={url}")
+          if userMFA:
+            session["authUserPlace"] = { "user": user.username, "pw": user.password }
+            logout_user(user)
+            return render_template("wbank/mfa.html", url=url)
           flash('登入成功.', 'success')
           urll = url+"?username="+user.username+"&intent=login"
           return redirect(urll)
@@ -3144,8 +3146,19 @@ def wbank_create_mfa_key(username):
   return jsonify(key=str(key))
   
 @app.route("/wbank/mfa/verify")
-@login_required
 def wbank_mfa_key_verify():
+    if session["authUserPlace"]:
+      user = session["authUserPlace"]["user"]
+      code = request.headers.get("code")
+      url = request.headers.get("url")
+      mfaKey_tuple = db.session.execute(text("select mfa_key from wbankwallet where username=:username"), {'username': user}).fetchone()
+      mfaKey = str(mfaKey_tuple[0]) if mfaKey_tuple and mfaKey_tuple[0] is not None else "N/A"
+      totp = pyotp.TOTP(mfaKey)
+      if totp.verify(code):
+        login_user(wbankwallet.query.filter_by(username=user).first())
+        session.pop("authUserPlace", None)
+        return ''
+      else: return abort(403)
     user = current_user.username
     code = request.headers.get("code")
     url = request.headers.get("url")
