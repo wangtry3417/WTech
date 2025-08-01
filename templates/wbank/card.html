@@ -224,6 +224,7 @@
                 }
                 const pr = await paymentResponse.json();
                 pr.code == 200 ? showMessage('支付成功！', 'success') : showMessage(`錯誤：${pr.error}`, 'error');
+                if (pr.code == 200) window.location.href="{{url}}?status=success";
             } catch (error) {
                 showMessage(`錯誤：${error.message}`, 'error');
             } finally {
