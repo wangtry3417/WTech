@@ -3126,6 +3126,13 @@ def wbank_card_hash_action():
   else:
     return jsonify(error="Request method is not support")
 
+@app.route("/wbank/card/page/<rece>/<amount>")
+def wbank_card_rePage(rece, amount):
+  url = request.args.get("url")
+  if not url:
+    return jsonify(msg="Not found the redirectURL")
+  return render_template("wbank/card.html", rece=rece, amount=amount, url=url)
+
 # Card end
 
 @app.route("/wbank/v2/csrftoken")
