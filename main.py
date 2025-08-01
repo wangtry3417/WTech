@@ -668,7 +668,7 @@ def wbank_v1_auth_session():
             return redirect(f"/wbank/auth/v1?url={url}")
           if userMFA:
             session["authUserPlace"] = { "user": user.username, "pw": user.password }
-            logout_user(user)
+            logout_user()
             return render_template("wbank/mfa.html", url=url)
           flash('登入成功.', 'success')
           urll = url+"?username="+user.username+"&intent=login"
