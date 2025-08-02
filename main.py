@@ -648,8 +648,7 @@ def wbank_v1_auth_login():
   redirect_url = request.args.get("url")
   if not redirect_url: redirect_url = '/wbank'
   url = str(redirect_url)
-  if current_user.is_authenticated:
-    return redirect("url")
+  if current_user.is_authenticated: return redirect(url)
   return render_template("wbank/login.html",url=url)
 
 @app.route("/wbank/auth/v1/session",methods=["GET","POST"])
