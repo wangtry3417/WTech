@@ -2887,7 +2887,10 @@ def wbank_auth_client():
                             logout_user()
                             session.clear()
                             return redirect("/wbank")
-                        if userMFA: return render_template("wbank/mfa.html", url="/wbank/client")
+                        if userMFA:
+                          session["authUserPlace"] = { "user": user.username, "pw": user.password }
+                          logout_user()
+                          return render_template("wbank/mfa.html", url="/wbank/client")
                         return redirect("/wbank/client")
                     else:
                         if "銀行" in user.sub:
