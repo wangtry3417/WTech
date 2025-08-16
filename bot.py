@@ -256,22 +256,45 @@ async def custom_embed(ctx:discord.ApplicationContext, title:str, content:str, f
     await ctx.respond("已經發送訊息✅")
 
 #Ask deepseek
-"""
 @bot.slash_command(name="問問deepseek",description="調用deepseek-model")
 @option("prompt",description="為Prompt，即請求文本。")
-async def ask_deepseek(ctx:discord.ApplicationContext, prompt:str):
+@option("role",description="為模型設定，讓它可以在你的文本的範圍內找")
+async def ask_deepseek(ctx:discord.ApplicationContext, prompt:str, role:str):
     await ctx.defer()  # 這裡使用 defer() 來延遲響應
     try:
-      global pipe
-      pipe = pipeline("text-generation", model="deepseek-ai/DeepSeek-V3", trust_remote_code=True, device=-1) # 強制使用cpu
-      messages = [
-        {"role": "user", "content": prompt}
-      ]
-      output = pipe(prompt, max_length=120, num_return_sequences=1)
-      await ctx.respond(output[0]['generated_text'])
+      req_headers = {
+        "User-Agent": "cnGOV/5.0",
+        "Content-type": "application/json",
+        "Authorization": f"Bearer {os.environ.get('deepseekKey')}"
+      }
+      req_json = {
+  "model": "deepseek-chat",
+  "temperature": 0.7,
+  "max_tokens": 1400,
+  "messages": [
+    {
+      "role": "system",
+      "content": role
+    },
+    {
+      "role": "user",
+      "content": prompt
+    }
+  ]
+}
+      resp = post(url="https://api.deepseek.com/v1/chat/completions", headers=req_headers, json=req_json)
+      gen_answer = data["choices"][0]["message"]["content"]
+      edited_answer = (
+                answer
+                .replace("**", "") 
+                .replace("### ", "**") 
+                .replace("#### ", "**")  
+                .replace("\n- ", "\n• ") 
+                .replace("---", "") 
+            )
+      await ctx.respond(edited_answer)
     except Exception as e:
       await ctx.respond(f"有錯誤： {e}", ephemeral=True)
-"""
 
 # 股票分析指令
 @bot.slash_command(name="股票分析", description="免API金鑰的股票分析與買賣建議")
