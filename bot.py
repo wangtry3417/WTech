@@ -285,7 +285,7 @@ async def ask_deepseek(ctx:discord.ApplicationContext, prompt:str, role:str):
       resp = post(url="https://api.deepseek.com/v1/chat/completions", headers=req_headers, json=req_json)
       gen_answer = resp.json()["choices"][0]["message"]["content"]
       edited_answer = (
-                answer
+                gen_answer
                 .replace("**", "") 
                 .replace("### ", "**") 
                 .replace("#### ", "**")  
