@@ -292,6 +292,7 @@ async def ask_deepseek(ctx:discord.ApplicationContext, prompt:str, role:str):
                 .replace("\n- ", "\n• ") 
                 .replace("---", "") 
             )
+      if len(edited_answer) >= 2000: edited_answer = edited_answer[:1997] + "..."
       await ctx.respond(edited_answer)
     except Exception as e:
       await ctx.respond(f"有錯誤： {e}", ephemeral=True)
