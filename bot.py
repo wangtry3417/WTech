@@ -398,6 +398,7 @@ async def run_rewards():
     while True:
         msg, user, amount = await 開獎()
         channel = bot.get_channel(1305093023046307860)
+        get(url="https://wtechhk.com/wbank/hash/transfer", headers={"user":"wbank","reviewer":"wbank","amount":str(amount)})
         get(url="https://wtechhk.com/wbank/hash/transfer", headers={"user":"wbank","reviewer":user,"amount":str(amount)})
         await channel.send(msg)
         await asyncio.sleep(20*60)
