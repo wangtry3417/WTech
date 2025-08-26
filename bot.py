@@ -392,11 +392,15 @@ async def on_ready():
     print(f'Logged in as {bot.user}!')
     # 初始化 pipeline (在 Bot 啟動時)
     #print(f"Bot 已登入為 {bot.user}")
+    await run_rewards()
+
+async def run_rewards():
     while True:
         msg, user, amount = await 開獎()
         channel = bot.get_channel(1305093023046307860)
-        get(url="https://wtechhk.com/wbank/hash/transfer", headers={"username":"wbank","reviewer":user,"amount":str(amount)})
+        get(url="https://wtechhk.com/wbank/hash/transfer", headers={"user":"wbank","reviewer":user,"amount":str(amount)})
         await channel.send(msg)
+        await asyncio.sleep(20*60)
     
 # 啟動 Bot
 def run_bot():
