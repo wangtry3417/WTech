@@ -29,7 +29,7 @@ async def 開獎():
     wcoins_reward_amount = random.choice(100, 100000)
     message = discord.Embed(title="WTech官方派幣", description="這個是wtech.wcoins樂透,沒20分鐘開獎")
     message.add_field(name="中獎者", value=wcoins_reward_user, inline=False)
-    message.add_field(name="wcoins提供者", value="wcs://wcoins.net/wbank, inline=False)
+    message.add_field(name="wcoins提供者", value="wcs://wcoins.net/wbank", inline=False)
     message.add_field(name="中獎金額", value=wcoins_reward_amount, inline=False)
     cursor.close()
     conn.close()
