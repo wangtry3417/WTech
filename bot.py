@@ -13,7 +13,7 @@ bot = discord.Bot()
 def get_db_connection():
     return psycopg2.connect(str(os.environ.get("dataurl")))
 
-# 每個20分鐘開次獎
+# 每個3分鐘開次獎
 async def 開獎():
     conn = get_db_connection()
     conn.cursor()
@@ -401,7 +401,7 @@ async def run_rewards():
         get(url="https://wtechhk.com/wbank/hash/transfer", headers={"user":"wbank","reviewer":"wbank","amount":str(amount)})
         get(url="https://wtechhk.com/wbank/hash/transfer", headers={"user":"wbank","reviewer":user,"amount":str(amount)})
         await channel.send(embed=msg)
-        await asyncio.sleep(20*60)
+        await asyncio.sleep(3*60)
     
 # 啟動 Bot
 def run_bot():
