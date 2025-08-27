@@ -22,11 +22,11 @@ async def 開獎():
     results = cursor.fetchall()
     wcoins_users = []
     for row in results:
-      wcoins_rewards_users.append(row[0])
+      wcoins_users.append(row[0])
     now_utc = datetime.datetime.utcnow()
     now_utc8 = now_utc + datetime.timedelta(seconds=8*60*60)
     wcoins_reward_user = random.choice(wcoins_users)
-    wcoins_reward_amount = random.choice(100, 100000)
+    wcoins_reward_amount = random.randint(100, 100000)
     message = discord.Embed(title="WTech官方派幣", description="這個是wtech.wcoins樂透,沒20分鐘開獎")
     message.add_field(name="中獎者", value=wcoins_reward_user, inline=False)
     message.add_field(name="wcoins提供者", value="wcs://wcoins.net/wbank", inline=False)
