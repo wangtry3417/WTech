@@ -16,7 +16,7 @@ def get_db_connection():
 # 每個3分鐘開次獎
 async def 開獎():
     conn = get_db_connection()
-    conn.cursor()
+    cursor = conn.cursor()
     # 中獎名單
     cursor.execute("select username from wbankwallet where balance>=1000") # 此命令一定要有wbankwallet表
     results = cursor.fetchall()
