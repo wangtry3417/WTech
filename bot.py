@@ -27,10 +27,31 @@ async def 開獎():
     now_utc8 = now_utc + datetime.timedelta(seconds=8*60*60)
     wcoins_reward_user = random.choice(wcoins_users)
     wcoins_reward_amount = random.randint(100, 100000)
-    message = discord.Embed(title="WTech官方派幣", description="這個是wtech.wcoins樂透,沒20分鐘開獎")
-    message.add_field(name="中獎者", value=wcoins_reward_user, inline=False)
-    message.add_field(name="wcoins提供者", value="wcs://wcoins.net/wbank", inline=False)
-    message.add_field(name="中獎金額", value=wcoins_reward_amount, inline=False)
+    message = {
+           "embeds": [
+           {
+           "title": "WTech官方派幣",
+           "description": "這個是wtech.wcoins樂透,沒20分鐘開獎",
+           "color": 3447003,
+           "author": {
+           "name": "wcoins/gift"
+           },
+           "fields": [
+              {
+                "name": "中獎者",
+                "value": wcoins_reward_user
+              },
+              {
+                "name": "wcoins提供者",
+                "value": "wcs://wcoins.net/wbank"
+              },
+              {
+                "name": "中獎金額",
+                "value": str(wcoins_reward_amount)
+           ]
+           }
+           ]
+         }
     cursor.close()
     conn.close()
     return message, wcoins_reward_user, wcoins_reward_amount
@@ -400,7 +421,11 @@ async def run_rewards():
         channel = bot.get_channel(1305093023046307860)
         get(url="https://wtechhk.com/wbank/hash/transfer", headers={"user":"wbank","reviewer":"wbank","amount":str(amount)})
         get(url="https://wtechhk.com/wbank/hash/transfer", headers={"user":"wbank","reviewer":user,"amount":str(amount)})
-        await channel.send(embed=msg)
+        headers = {
+          "Content-Type": "application/json",
+          "Authorization": f"Bot {os.environ.get('discordToken')}"
+        }
+        post(url="https://discord.com/api/v10/channels/1305093023046307860/messages", headers=headers, json=msg)
         await asyncio.sleep(3*60)
     
 # 啟動 Bot
