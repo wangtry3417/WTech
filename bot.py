@@ -23,7 +23,7 @@ async def 開獎():
     wcoins_users = []
     for row in results:
       wcoins_users.append(row[0])
-    now_utc = datetime.datetime.utcnow()
+    now_utc = datetime.utcnow()
     now_utc8 = now_utc + datetime.timedelta(seconds=8*60*60)
     wcoins_reward_user = random.choice(wcoins_users)
     wcoins_reward_amount = random.randint(100, 100000)
