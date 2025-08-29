@@ -13,7 +13,7 @@ bot = discord.Bot()
 def get_db_connection():
     return psycopg2.connect(str(os.environ.get("dataurl")))
 
-# 每個3分鐘開次獎
+# 每個50分鐘開次獎
 async def 開獎():
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -433,7 +433,7 @@ async def run_rewards():
           "Authorization": f"Bot {os.environ.get('discordToken')}"
         }
         post(url="https://discord.com/api/v10/channels/1305093023046307860/messages", headers=headers, json=msg)
-        await asyncio.sleep(3*60)
+        await asyncio.sleep(50*60)
     
 # 啟動 Bot
 def run_bot():
