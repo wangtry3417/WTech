@@ -54,6 +54,7 @@ async def 開獎():
               {
                 "name": "時間",
                 "value":  now_utc8.strftime("%Y年 %m月 %d 日，%H:%M:%S")
+              }
            ]
            }
            ]
