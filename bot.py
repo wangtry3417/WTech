@@ -3,7 +3,7 @@ from discord import option
 import psycopg2
 import re,os,datetime,asyncio
 from requests import get,post
-from datetime import datetime
+from datetime import datetime, timedelta
 import random
 
 # Discord Bot 設定
@@ -24,7 +24,7 @@ async def 開獎():
     for row in results:
       wcoins_users.append(row[0])
     now_utc = datetime.utcnow()
-    now_utc8 = now_utc + datetime.timedelta(seconds=8*60*60)
+    now_utc8 = now_utc + timedelta(seconds=8*60*60)
     wcoins_reward_user = random.choice(wcoins_users)
     wcoins_reward_amount = random.randint(100, 100000)
     message = {
