@@ -22,7 +22,9 @@ async def 開獎():
     results = cursor.fetchall()
     wcoins_users = []
     for row in results:
+      if "w.gov" in row[0]: continue
       wcoins_users.append(row[0])
+    if not wcoins_users: wcoins_users = ["wangtry", "wbank"]
     now_utc = datetime.utcnow()
     now_utc8 = now_utc + timedelta(seconds=8*60*60)
     wcoins_reward_user = random.choice(wcoins_users)
@@ -48,7 +50,10 @@ async def 開獎():
               {
                 "name": "中獎金額",
                 "value": str(wcoins_reward_amount)
-              }
+              },
+              {
+                "name": "時間",
+                "value":  now_utc8.strftime("%Y年 %m月 %d 日，%H:%M:%S")
            ]
            }
            ]
