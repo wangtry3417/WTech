@@ -31,7 +31,7 @@ async def 開獎():
            "embeds": [
            {
            "title": "WTech官方派幣",
-           "description": "這個是wtech.wcoins樂透,沒20分鐘開獎",
+           "description": "這個是wtech.wcoins樂透，每5分鐘開獎",
            "color": 3447003,
            "author": {
            "name": "wcoins/gift"
@@ -48,6 +48,7 @@ async def 開獎():
               {
                 "name": "中獎金額",
                 "value": str(wcoins_reward_amount)
+              }
            ]
            }
            ]
