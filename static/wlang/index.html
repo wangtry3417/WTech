@@ -1,0 +1,1460 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>零售公司電腦系統</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', monospace;
+        }
+        
+        body {
+            background-color: #000;
+            color: #0f0;
+            overflow: hidden;
+            height: 100vh;
+        }
+        
+        /* 啟動畫面樣式 */
+        #boot-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+        
+        .boot-logo {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 10px #0f0;
+            animation: pulse 2s infinite;
+        }
+        
+        .boot-progress {
+            width: 80%;
+            height: 20px;
+            background-color: #222;
+            border: 1px solid #0f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .boot-progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: #0f0;
+            transition: width 0.5s;
+        }
+        
+        .boot-message {
+            margin-top: 1rem;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+        
+        /* 終端界面樣式 */
+        #terminal {
+            display: none;
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+            background-color: #000;
+            overflow-y: auto;
+        }
+        
+        .terminal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #0f0;
+            margin-bottom: 20px;
+        }
+        
+        .system-info {
+            font-size: 1.2rem;
+        }
+        
+        .terminal-body {
+            height: calc(100% - 80px);
+            overflow-y: auto;
+        }
+        
+        .command-line {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        
+        .prompt {
+            margin-right: 10px;
+            white-space: nowrap;
+        }
+        
+        .command-input {
+            background: transparent;
+            border: none;
+            color: #0f0;
+            font-size: 1rem;
+            width: 100%;
+            outline: none;
+        }
+        
+        .output {
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+        
+        .success {
+            color: #0f0;
+        }
+        
+        .error {
+            color: #f00;
+        }
+        
+        .warning {
+            color: #ff0;
+        }
+        
+        .info {
+            color: #0af;
+        }
+        
+        /* 動畫效果 */
+        @keyframes pulse {
+            0% { opacity: 0.7; }
+            50% { opacity: 1; }
+            100% { opacity: 0.7; }
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 16px;
+            background-color: #0f0;
+            animation: blink 1s infinite;
+            vertical-align: middle;
+        }
+        /* 添加在現有 CSS 中 */
+.vi-mode {
+    border: 1px solid #0af;
+    padding: 10px;
+    margin: 10px 0;
+    background-color: #001122;
+}
+
+.vi-prompt {
+    color: #0af;
+    font-weight: bold;
+}
+        .vi-container {
+    border: 1px solid #0af;
+    padding: 10px;
+    margin: 10px 0;
+    background-color: #001122;
+    border-radius: 5px;
+}
+
+.vi-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+.vi-btn {
+    background-color: #003366;
+    color: #0af;
+    border: 1px solid #0af;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    flex: 1;
+    min-width: 80px;
+}
+
+.vi-btn:hover {
+    background-color: #004488;
+}
+
+.vi-input-area {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.vi-mode-display {
+    padding: 5px 10px;
+    border-radius: 3px;
+    font-weight: bold;
+}
+
+.vi-mode-display.insert {
+    background-color: #006600;
+    color: #0f0;
+}
+
+.vi-mode-display.command {
+    background-color: #660000;
+    color: #f00;
+}
+
+.vi-help {
+    text-align: center;
+    color: #888;
+    font-size: 0.8rem;
+}
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .boot-logo {
+                font-size: 2rem;
+            }
+            
+            .terminal-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .vi-controls {
+        flex-direction: column;
+    }
+    
+    .vi-btn {
+        min-width: auto;
+        padding: 12px 8px;
+        font-size: 1rem;
+    }
+    
+    .vi-input-area {
+        flex-direction: column;
+    }
+    
+    #vi-input {
+        font-size: 16px; /* 防止手機瀏覽器縮放 */
+    }
+            .system-info {
+                font-size: 1rem;
+                margin-bottom: 10px;
+            }
+        }
+        @media (hover: none) and (pointer: coarse) {
+    .vi-btn {
+        padding: 15px 10px;
+        min-height: 44px; /* 最小觸摸目標尺寸 */
+    }
+    
+    .command-input {
+        min-height: 44px;
+        font-size: 16px; /* 防止 iOS 縮放 */
+    }
+}
+    </style>
+</head>
+<body>
+    <!-- 啟動畫面 -->
+    <div id="boot-screen">
+        <div class="boot-logo">零售公司電腦系統</div>
+        <div class="boot-progress">
+            <div class="boot-progress-bar" id="progress-bar"></div>
+        </div>
+        <div class="boot-message" id="boot-message">正在初始化系統...</div>
+    </div>
+    
+    <!-- 終端界面 -->
+    <div id="terminal">
+        <div class="terminal-header">
+            <div class="system-info">零售公司電腦系統 v2.1.4 | 終端管理面板</div>
+            <div class="system-time" id="system-time"></div>
+        </div>
+        <div class="terminal-body" id="terminal-output">
+            <div class="output info">零售公司電腦系統 v2.1.4 已載入</div>
+            <div class="output info">開發商：泓技（台灣）科技有限公司</div>
+            <div class="output info">核心版本: 5.15.0-91-generic</div>
+            <div class="output info">記憶體: 7.8Gi / 15.6Gi</div>
+            <div class="output info">儲存空間: 128GiB SSD</div>
+            <div class="output info">上次啟動: 2023-12-05 08:15:32</div>
+            <div class="output success">系統初始化完成，歡迎使用管理終端</div>
+            <div class="output">輸入 'help' 查看可用命令</div>
+        </div>
+        <div class="command-line">
+            <div class="prompt">root@retail-system:~#</div>
+            <input type="text" class="command-input" id="command-input" autofocus>
+            <div class="cursor"></div>
+        </div>
+    </div>
+
+    <script>
+        // 啟動過程模擬
+        document.addEventListener('DOMContentLoaded', function() {
+            const bootScreen = document.getElementById('boot-screen');
+            const progressBar = document.getElementById('progress-bar');
+            const bootMessage = document.getElementById('boot-message');
+            const terminal = document.getElementById('terminal');
+            const commandInput = document.getElementById('command-input');
+            const terminalOutput = document.getElementById('terminal-output');
+            const systemTime = document.getElementById('system-time');
+            
+            // 更新系統時間
+            function updateSystemTime() {
+                const now = new Date();
+                systemTime.textContent = now.toLocaleString('zh-TW');
+            }
+            
+            setInterval(updateSystemTime, 1000);
+            updateSystemTime();
+            
+            // 模擬啟動過程
+            const bootSteps = [
+                { progress: 10, message: "Loading BIOS..." },
+                { progress: 20, message: "正在初始化硬體..." },
+                { progress: 35, message: "正在載入核心..." },
+                { progress: 50, message: "正在啟動系統服務..." },
+                { progress: 65, message: "正在載入檔案系統..." },
+                { progress: 80, message: "正在啟動網路服務..." },
+                { progress: 90, message: "正在載入管理面板..." },
+                { progress: 100, message: "啟動完成！" }
+            ];
+            
+            let currentStep = 0;
+            // 在 currentDirectory 變數下面添加檔案系統
+let currentDirectory = '/root';
+
+// 在 fileSystem 結構中添加權限和所有者資訊
+const fileSystem = {
+    '/root': {
+        type: 'directory',
+        children: {
+            '.bashrc': { 
+                type: 'file', 
+                content: '', 
+                created: new Date(),
+                permissions: '644',
+                owner: 'root',
+                group: 'root'
+            },
+            '.profile': { 
+                type: 'file', 
+                content: '', 
+                created: new Date(),
+                permissions: '644',
+                owner: 'root',
+                group: 'root'
+            },
+            'system.log': { 
+                type: 'file', 
+                content: '系統啟動日誌...', 
+                created: new Date(),
+                permissions: '644',
+                owner: 'root',
+                group: 'root'
+            },
+            'documents': { 
+                type: 'directory', 
+                children: {},
+                permissions: '755',
+                owner: 'root',
+                group: 'root'
+            },
+            'reports': { 
+                type: 'directory', 
+                children: {},
+                permissions: '755',
+                owner: 'root',
+                group: 'root'
+            }
+        },
+        permissions: '755',
+        owner: 'root',
+        group: 'root'
+    },
+    '/home': {
+        type: 'directory',
+        children: {
+            'admin': { 
+                type: 'directory', 
+                children: {},
+                permissions: '755',
+                owner: 'admin',
+                group: 'admin'
+            }
+        },
+        permissions: '755',
+        owner: 'root',
+        group: 'root'
+    },
+    '/etc': {
+        type: 'directory',
+        children: {
+            'passwd': { 
+                type: 'file', 
+                content: '用戶資料...', 
+                created: new Date(),
+                permissions: '644',
+                owner: 'root',
+                group: 'root'
+            },
+            'group': { 
+                type: 'file', 
+                content: '群組資料...', 
+                created: new Date(),
+                permissions: '644',
+                owner: 'root',
+                group: 'root'
+            }
+        },
+        permissions: '755',
+        owner: 'root',
+        group: 'root'
+    },
+    '/bin': {
+        type: 'directory',
+        children: {
+            'wtps': {  // 修正這裡，避免重複的 'group' 鍵
+                type: 'file', 
+                content: 'wtps 工具程式', 
+                created: new Date(),
+                permissions: '755',
+                owner: 'root',
+                group: 'root'
+            }
+        },
+        permissions: '755',
+        owner: 'root',
+        group: 'root'
+    }
+};
+
+// 添加系統用戶和群組列表
+const systemUsers = ['root', 'admin', 'manager'];
+const systemGroups = ['root', 'admin', 'sales', 'management', 'staff'];
+            
+            function simulateBoot() {
+                if (currentStep < bootSteps.length) {
+                    const step = bootSteps[currentStep];
+                    progressBar.style.width = step.progress + '%';
+                    bootMessage.textContent = step.message;
+                    currentStep++;
+                    setTimeout(simulateBoot, 800);
+                } else {
+                    // 啟動完成，顯示終端
+                    setTimeout(() => {
+                        bootScreen.style.display = 'none';
+                        terminal.style.display = 'block';
+                        commandInput.focus();
+                    }, 1000);
+                }
+            }
+            
+            // 開始啟動過程
+            setTimeout(simulateBoot, 1000);
+            
+            // 命令處理
+            const commandHistory = [];
+            let historyIndex = -1;
+            
+            commandInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    const command = commandInput.value.trim();
+                    if (command) {
+                        // 添加到歷史記錄
+                        commandHistory.push(command);
+                        historyIndex = commandHistory.length;
+                        
+                        // 處理命令
+                        processCommand(command);
+                        
+                        // 清空輸入框
+                        commandInput.value = '';
+                    }
+                } else if (e.key === 'ArrowUp') {
+                    // 上一個命令
+                    e.preventDefault();
+                    if (commandHistory.length > 0) {
+                        if (historyIndex > 0) {
+                            historyIndex--;
+                        }
+                        commandInput.value = commandHistory[historyIndex] || '';
+                    }
+                } else if (e.key === 'ArrowDown') {
+                    // 下一個命令
+                    e.preventDefault();
+                    if (commandHistory.length > 0) {
+                        if (historyIndex < commandHistory.length - 1) {
+                            historyIndex++;
+                            commandInput.value = commandHistory[historyIndex] || '';
+                        } else {
+                            historyIndex = commandHistory.length;
+                            commandInput.value = '';
+                        }
+                    }
+                } else if (e.key === 'Tab') {
+                    // 自動補全
+                    e.preventDefault();
+                    autoComplete(commandInput.value);
+                }
+            });
+            
+            // 自動補全功能
+            function autoComplete(input) {
+                const commands = [
+                    'useradd', 'usermod', 'userdel', 
+                    'groupadd', 'groupmod', 'groupdel', 
+                    'shutdown', 'help', 'clear', 'whoami',
+                    'ls', 'pwd', 'date', 'users', 'groups',
+                    'cd', 'touch', 'mkdir', 'rm', 'vi', 'chmod', 'chown', 'wtps', 'tryweb'
+                ];
+                
+                const matchingCommands = commands.filter(cmd => 
+                    cmd.startsWith(input)
+                );
+                
+                if (matchingCommands.length === 1) {
+                    commandInput.value = matchingCommands[0] + ' ';
+                } else if (matchingCommands.length > 1) {
+                    // 顯示可能的命令
+                    addOutput('可能的命令: ' + matchingCommands.join(', '), 'info');
+                }
+            }
+            
+            // 處理命令
+            function processCommand(command) {
+                // 顯示輸入的命令
+                addOutput('root@retail-system:~# ' + command, 'command');
+                
+                const parts = command.split(' ');
+                const cmd = parts[0];
+                const args = parts.slice(1);
+                
+                switch(cmd) {
+                    case 'useradd':
+                        handleUserAdd(args);
+                        break;
+                    case 'usermod':
+                        handleUserMod(args);
+                        break;
+                    case 'userdel':
+                        handleUserDel(args);
+                        break;
+                    case 'groupadd':
+                        handleGroupAdd(args);
+                        break;
+                    case 'groupmod':
+                        handleGroupMod(args);
+                        break;
+                    case 'groupdel':
+                        handleGroupDel(args);
+                        break;
+                    case 'shutdown':
+                        handleShutdown();
+                        break;
+                    case 'help':
+                        showHelp();
+                        break;
+                    case 'clear':
+                        clearTerminal();
+                        break;
+                    case 'whoami':
+                        addOutput('root', 'info');
+                        break;
+                    case 'ls':
+                        handleLs(args);
+                        break;
+                    case 'pwd':
+                        addOutput('/root', 'info');
+                        break;
+                    case 'date':
+                        addOutput(new Date().toString(), 'info');
+                        break;
+                    case 'users':
+                        handleUsers();
+                        break;
+                    case 'groups':
+                        handleGroups();
+                        break;
+                    case 'cd':
+                        handleCd(args);
+                        break;
+                    case 'touch':
+                        handleTouch(args);
+           				    break;
+                    case 'mkdir':
+                        handleMkdir(args);
+           				    break;
+                    case 'rm':
+                        handleRm(args);
+           				    break;
+                    case 'vi':
+                        handleVi(args);
+           				    break;
+                    case 'chmod':
+                        handleChmod(args);
+           				    break;
+                    case 'chown':
+                        handleChown(args);
+           				    break;
+                    case 'wtps':
+                        handleWtps(args);
+                         break;
+                    case 'tryweb':
+                         handleTryweb(args);
+                         break;
+                    default:
+                        addOutput(`命令 '${cmd}' 未找到，輸入 'help' 查看可用命令`, 'error');
+                }
+                
+                // 滾動到底部
+                terminalOutput.scrollTop = terminalOutput.scrollHeight;
+            }
+            
+            // 添加輸出到終端
+            function addOutput(text, type = '') {
+                const outputElement = document.createElement('div');
+                outputElement.className = `output ${type}`;
+                outputElement.textContent = text;
+                terminalOutput.appendChild(outputElement);
+            }
+            
+            // 命令處理函數
+            function handleUserAdd(args) {
+                if (args.length < 1) {
+                    addOutput('用法: useradd <用戶名> [選項]', 'error');
+                    return;
+                }
+                
+                const username = args[0];
+                addOutput(`正在創建用戶 '${username}'...`, 'info');
+                
+                // 模擬創建用戶的過程
+                setTimeout(() => {
+                    addOutput(`用戶 '${username}' 已成功創建`, 'success');
+                    addOutput(`已為用戶 '${username}' 創建主目錄`, 'info');
+                    addOutput(`已為用戶 '${username}' 設置默認 shell: /bin/bash`, 'info');
+                }, 800);
+            }
+            
+            function handleUserMod(args) {
+                if (args.length < 2) {
+                    addOutput('用法: usermod <選項> <用戶名>', 'error');
+                    return;
+                }
+                
+                const username = args[args.length - 1];
+                addOutput(`正在修改用戶 '${username}'...`, 'info');
+                
+                setTimeout(() => {
+                    addOutput(`用戶 '${username}' 已成功修改`, 'success');
+                }, 800);
+            }
+            
+            function handleUserDel(args) {
+                if (args.length < 1) {
+                    addOutput('用法: userdel <用戶名>', 'error');
+                    return;
+                }
+                
+                const username = args[0];
+                addOutput(`正在刪除用戶 '${username}'...`, 'warning');
+                
+                setTimeout(() => {
+                    addOutput(`用戶 '${username}' 已成功刪除`, 'success');
+                }, 800);
+            }
+            
+            function handleGroupAdd(args) {
+                if (args.length < 1) {
+                    addOutput('用法: groupadd <組名>', 'error');
+                    return;
+                }
+                
+                const groupname = args[0];
+                addOutput(`正在創建組 '${groupname}'...`, 'info');
+                
+                setTimeout(() => {
+                    addOutput(`組 '${groupname}' 已成功創建`, 'success');
+                }, 800);
+            }
+            
+            function handleGroupMod(args) {
+                if (args.length < 2) {
+                    addOutput('用法: groupmod <選項> <組名>', 'error');
+                    return;
+                }
+                
+                const groupname = args[args.length - 1];
+                addOutput(`正在修改組 '${groupname}'...`, 'info');
+                
+                setTimeout(() => {
+                    addOutput(`組 '${groupname}' 已成功修改`, 'success');
+                }, 800);
+            }
+            
+            function handleGroupDel(args) {
+                if (args.length < 1) {
+                    addOutput('用法: groupdel <組名>', 'error');
+                    return;
+                }
+                
+                const groupname = args[0];
+                addOutput(`正在刪除組 '${groupname}'...`, 'warning');
+                
+                setTimeout(() => {
+                    addOutput(`組 '${groupname}' 已成功刪除`, 'success');
+                }, 800);
+            }
+            
+            function handleShutdown() {
+                addOutput('系統將在 60 秒後關機，請保存您的工作', 'warning');
+                addOutput('按下 Ctrl+C 取消關機', 'info');
+                
+                let countdown = 5; // 簡化為5秒用於演示
+                const shutdownInterval = setInterval(() => {
+                    addOutput(`系統將在 ${countdown} 秒後關機...`, 'warning');
+                    countdown--;
+                    
+                    if (countdown < 0) {
+                        clearInterval(shutdownInterval);
+                        addOutput('正在停止系統服務...', 'info');
+                        
+                        setTimeout(() => {
+                            addOutput('系統已關閉，可以安全關閉電腦', 'info');
+                            document.body.innerHTML = '<div style="display:flex;justify-content:center;align-items:center;height:100vh;background:#000;color:#0f0;font-size:2rem;">系統已關閉</div>';
+                        }, 2000);
+                    }
+                }, 1000);
+            }
+            
+            function showHelp() {
+                addOutput('可用命令:', 'info');
+                addOutput('  useradd <用戶名>    - 創建新用戶', 'info');
+                addOutput('  usermod <選項> <用戶名> - 修改用戶屬性', 'info');
+                addOutput('  userdel <用戶名>    - 刪除用戶', 'info');
+                addOutput('  groupadd <組名>     - 創建新組', 'info');
+                addOutput('  groupmod <選項> <組名> - 修改組屬性', 'info');
+                addOutput('  groupdel <組名>     - 刪除組', 'info');
+                addOutput('  shutdown           - 關閉系統', 'info');
+                addOutput('  clear              - 清除終端屏幕', 'info');
+                addOutput('  whoami             - 顯示當前用戶', 'info');
+                addOutput('  ls                 - 列出目錄內容', 'info');
+                addOutput('  pwd                - 顯示當前目錄', 'info');
+                addOutput('  date               - 顯示系統日期和時間', 'info');
+                addOutput('  users              - 顯示登錄用戶', 'info');
+                addOutput('  groups             - 顯示用戶組', 'info');
+                addOutput('  help               - 顯示此幫助信息', 'info');
+            }
+            
+            function clearTerminal() {
+                terminalOutput.innerHTML = '';
+            }
+            
+            function handleLs(args) {
+    const currentDir = fileSystem[currentDirectory];
+    
+    if (!currentDir) {
+        addOutput(`ls: 無法存取 '${currentDirectory}': 沒有此檔案或目錄`, 'error');
+        return;
+    }
+    
+    const showLong = args.includes('-l');
+    
+    if (showLong) {
+        addOutput(`總用量 ${Object.keys(currentDir.children).length}`, 'info');
+    }
+    
+    addOutput(`目錄 ${currentDirectory}:`, 'info');
+    
+    // 列出目錄內容
+    const children = Object.keys(currentDir.children);
+    
+    if (children.length === 0) {
+        addOutput('  目錄為空', 'info');
+        return;
+    }
+    
+    children.forEach(child => {
+        const item = currentDir.children[child];
+        if (showLong) {
+            // 顯示詳細列表
+            const typeChar = item.type === 'directory' ? 'd' : '-';
+            const permMap = {
+                '0': '---',
+                '1': '--x',
+                '2': '-w-',
+                '3': '-wx',
+                '4': 'r--',
+                '5': 'r-x',
+                '6': 'rw-',
+                '7': 'rwx'
+            };
+            
+            const permissions = typeChar + 
+                              (permMap[item.permissions[0]] || '---') +
+                              (permMap[item.permissions[1]] || '---') +
+                              (permMap[item.permissions[2]] || '---');
+            
+            const owner = item.owner || 'root';
+            const group = item.group || 'root';
+            const size = item.type === 'directory' ? '4096' : (item.content ? item.content.length : '0');
+            const date = item.created ? item.created.toLocaleDateString('zh-TW') : '未知';
+            
+            addOutput(`${permissions} ${owner} ${group} ${size.toString().padStart(8)} ${date} ${child}${item.type === 'directory' ? '/' : ''}`, 'info');
+        } else {
+            // 簡單列表
+            if (item.type === 'directory') {
+                addOutput(`  ${child}/`, 'info');
+            } else {
+                addOutput(`  ${child}`, 'info');
+            }
+        }
+    });
+}
+            
+            function handleUsers() {
+                const users = ['root', 'admin', 'manager'];
+                addOutput('當前登錄用戶:', 'info');
+                users.forEach(user => {
+                    addOutput(`  ${user}`, 'info');
+                });
+            }
+            
+            function handleGroups() {
+                const groups = ['root', 'admin', 'sales', 'management', 'staff'];
+                addOutput('系統中的組:', 'info');
+                groups.forEach(group => {
+                    addOutput(`  ${group}`, 'info');
+                });
+            }
+            function handleCd(args) {
+    if (args.length < 1) {
+        // 沒有參數，回到家目錄
+        currentDirectory = '/root';
+        addOutput(`當前目錄: ${currentDirectory}`, 'info');
+        return;
+    }
+    
+    const targetDir = args[0];
+    let newPath = '';
+    
+    // 處理路徑
+    if (targetDir === '..') {
+        // 回到上層目錄
+        if (currentDirectory === '/') {
+            newPath = '/';
+        } else {
+            const parts = currentDirectory.split('/').filter(part => part !== '');
+            parts.pop();
+            newPath = parts.length > 0 ? '/' + parts.join('/') : '/';
+        }
+    } else if (targetDir === '/') {
+        // 根目錄
+        newPath = '/';
+    } else if (targetDir === '~') {
+        // 家目錄
+        newPath = '/root';
+    } else if (targetDir.startsWith('/')) {
+        // 絕對路徑
+        newPath = targetDir;
+    } else {
+        // 相對路徑
+        if (currentDirectory === '/') {
+            newPath = '/' + targetDir;
+        } else {
+            newPath = currentDirectory + '/' + targetDir;
+        }
+    }
+    
+    // 檢查目錄是否存在
+    if (fileSystem[newPath] && fileSystem[newPath].type === 'directory') {
+        currentDirectory = newPath;
+        addOutput(`當前目錄: ${currentDirectory}`, 'success');
+    } else {
+        addOutput(`cd: ${targetDir}: 沒有此檔案或目錄`, 'error');
+    }
+}
+      // Touch
+      function handleTouch(args) {
+    if (args.length < 1) {
+        addOutput('用法: touch <檔案名稱>', 'error');
+        return;
+    }
+    
+    const filename = args[0];
+    
+    // 確保當前目錄存在於檔案系統中
+    if (!fileSystem[currentDirectory]) {
+        fileSystem[currentDirectory] = { type: 'directory', children: {} };
+    }
+    
+    // 檢查是否已存在
+    if (fileSystem[currentDirectory].children[filename]) {
+        addOutput(`檔案 '${filename}' 已存在，更新時間戳記`, 'info');
+        fileSystem[currentDirectory].children[filename].created = new Date();
+    } else {
+        // 創建新檔案
+        fileSystem[currentDirectory].children[filename] = {
+            type: 'file',
+            content: '',
+            created: new Date()
+        };
+        addOutput(`檔案 '${filename}' 已成功創建`, 'success');
+    }
+    
+    addOutput(`檔案路徑: ${currentDirectory}/${filename}`, 'info');
+}
+       // Make directory
+       function handleMkdir(args) {
+    if (args.length < 1) {
+        addOutput('用法: mkdir <目錄名稱>', 'error');
+        return;
+    }
+    
+    const dirname = args[0];
+    
+    // 確保當前目錄存在
+    if (!fileSystem[currentDirectory]) {
+        fileSystem[currentDirectory] = { type: 'directory', children: {} };
+    }
+    
+    // 檢查是否已存在
+    if (fileSystem[currentDirectory].children[dirname]) {
+        addOutput(`mkdir: 無法創建目錄 '${dirname}': 檔案已存在`, 'error');
+        return;
+    }
+    
+    // 創建新目錄
+    const newDirPath = currentDirectory === '/' ? `/${dirname}` : `${currentDirectory}/${dirname}`;
+    fileSystem[newDirPath] = { type: 'directory', children: {} };
+    fileSystem[currentDirectory].children[dirname] = { type: 'directory' };
+    
+    addOutput(`目錄 '${dirname}' 已成功創建`, 'success');
+}
+     // RM
+     function handleRm(args) {
+    if (args.length < 1) {
+        addOutput('用法: rm <檔案名稱>', 'error');
+        addOutput('       rm -r <目錄名稱>', 'info');
+        return;
+    }
+    
+    const filename = args[0];
+    let recursive = false;
+    let targetName = filename;
+    
+    // 檢查遞迴刪除選項
+    if (filename === '-r' && args.length > 1) {
+        recursive = true;
+        targetName = args[1];
+    }
+    
+    // 檢查檔案是否存在
+    if (!fileSystem[currentDirectory] || !fileSystem[currentDirectory].children[targetName]) {
+        addOutput(`rm: 無法刪除 '${targetName}': 沒有此檔案或目錄`, 'error');
+        return;
+    }
+    
+    const target = fileSystem[currentDirectory].children[targetName];
+    
+    // 如果是目錄且沒有使用 -r 選項
+    if (target.type === 'directory' && !recursive) {
+        addOutput(`rm: 無法刪除 '${targetName}': 是一個目錄`, 'error');
+        addOutput('使用 rm -r 來刪除目錄', 'info');
+        return;
+    }
+    
+    // 執行刪除
+    addOutput(`正在刪除 '${targetName}'...`, 'warning');
+    
+    setTimeout(() => {
+        if (target.type === 'directory') {
+            // 刪除目錄及其所有內容
+            const dirPath = currentDirectory === '/' ? `/${targetName}` : `${currentDirectory}/${targetName}`;
+            delete fileSystem[dirPath];
+        }
+        
+        // 從當前目錄中移除
+        delete fileSystem[currentDirectory].children[targetName];
+        addOutput(`'${targetName}' 已成功刪除`, 'success');
+    }, 800);
+}
+    // VI-Editor
+    function handleVi(args) {
+    if (args.length < 1) {
+        addOutput('用法: vi <檔案名稱>', 'error');
+        return;
+    }
+    
+    const filename = args[0];
+    
+    // 檢查檔案是否存在
+    if (!fileSystem[currentDirectory] || !fileSystem[currentDirectory].children[filename]) {
+        addOutput(`檔案 '${filename}' 不存在，創建新檔案`, 'info');
+        
+        // 確保當前目錄存在
+        if (!fileSystem[currentDirectory]) {
+            fileSystem[currentDirectory] = { type: 'directory', children: {} };
+        }
+        
+        // 創建新檔案
+        fileSystem[currentDirectory].children[filename] = {
+            type: 'file',
+            content: '',
+            created: new Date()
+        };
+    }
+    
+    const file = fileSystem[currentDirectory].children[filename];
+    
+    if (file.type !== 'file') {
+        addOutput(`vi: '${filename}' 不是一個檔案`, 'error');
+        return;
+    }
+    
+    // 進入 vi 編輯模式
+    addOutput(`正在使用 vi 編輯 '${filename}'`, 'info');
+    addOutput('--- VI 編輯模式 ---', 'warning');
+    addOutput('手機版: 使用下方按鈕控制', 'info');
+    addOutput('', 'info');
+    
+    // 顯示檔案內容
+    if (file.content) {
+        const lines = file.content.split('\n');
+        lines.forEach((line, index) => {
+            addOutput(`${index + 1}  ${line}`, 'info');
+        });
+    } else {
+        addOutput('1  [檔案為空]', 'info');
+    }
+    
+    // 創建手機友好的 vi 編輯器界面
+    const viContainer = document.createElement('div');
+    viContainer.className = 'vi-container';
+    viContainer.innerHTML = `
+        <div class="vi-controls">
+            <button class="vi-btn" id="vi-insert">插入模式</button>
+            <button class="vi-btn" id="vi-command">命令模式</button>
+            <button class="vi-btn" id="vi-save">儲存 (:w)</button>
+            <button class="vi-btn" id="vi-save-exit">儲存離開 (:wq)</button>
+            <button class="vi-btn" id="vi-exit">離開 (:q)</button>
+            <button class="vi-btn" id="vi-force-exit">強制離開 (:q!)</button>
+        </div>
+        <div class="vi-input-area">
+            <div class="vi-mode-display" id="vi-mode">模式: 命令</div>
+            <input type="text" class="command-input" id="vi-input" placeholder="輸入文字或命令...">
+            <button class="vi-btn" id="vi-newline">換行</button>
+            <button class="vi-btn" id="vi-clear">清除輸入</button>
+        </div>
+        <div class="vi-help">
+            <small>提示: 命令模式輸入 :wq, :q, :q!, :w</small>
+        </div>
+    `;
+    terminalOutput.appendChild(viContainer);
+    
+    const viInput = document.getElementById('vi-input');
+    const viModeDisplay = document.getElementById('vi-mode');
+    let viContent = file.content || '';
+    let viMode = 'command'; // insert 或 command
+    
+    viInput.focus();
+    
+    // 更新模式顯示
+    function updateModeDisplay() {
+        viModeDisplay.textContent = `模式: ${viMode === 'insert' ? '插入' : '命令'}`;
+        viModeDisplay.className = `vi-mode-display ${viMode}`;
+        
+        if (viMode === 'insert') {
+            viInput.placeholder = '輸入文字...';
+        } else {
+            viInput.placeholder = '輸入 vi 命令 (:wq, :q, :q!, :w)';
+        }
+    }
+    
+    updateModeDisplay();
+    
+    // 處理按鈕點擊事件
+    document.getElementById('vi-insert').addEventListener('click', function() {
+        viMode = 'insert';
+        updateModeDisplay();
+        viInput.focus();
+    });
+    
+    document.getElementById('vi-command').addEventListener('click', function() {
+        viMode = 'command';
+        updateModeDisplay();
+        viInput.focus();
+    });
+    
+    document.getElementById('vi-save').addEventListener('click', function() {
+        file.content = viContent;
+        addOutput(`'${filename}' 已儲存`, 'success');
+    });
+    
+    document.getElementById('vi-save-exit').addEventListener('click', function() {
+        file.content = viContent;
+        addOutput(`'${filename}' 已儲存並離開`, 'success');
+        viContainer.remove();
+    });
+    
+    document.getElementById('vi-exit').addEventListener('click', function() {
+        if (viContent === file.content) {
+            viContainer.remove();
+        } else {
+            addOutput('尚有未儲存的修改，使用強制離開', 'error');
+        }
+    });
+    
+    document.getElementById('vi-force-exit').addEventListener('click', function() {
+        addOutput('離開而不儲存', 'warning');
+        viContainer.remove();
+    });
+    
+    document.getElementById('vi-newline').addEventListener('click', function() {
+        if (viMode === 'insert') {
+            viContent += '\n';
+            addOutput('', 'info'); // 添加空行
+        } else {
+            viInput.value += ' ';
+        }
+        viInput.focus();
+    });
+    
+    document.getElementById('vi-clear').addEventListener('click', function() {
+        viInput.value = '';
+        viInput.focus();
+    });
+    
+    // 處理鍵盤輸入
+    viInput.addEventListener('keydown', function handleViKey(e) {
+        if (e.key === 'Enter') {
+            if (viMode === 'insert') {
+                // 插入模式：添加文字
+                const text = viInput.value;
+                if (text) {
+                    viContent += text + '\n';
+                    addOutput(text, 'info');
+                    viInput.value = '';
+                }
+            } else {
+                // 命令模式：處理命令
+                const command = viInput.value.trim();
+                viInput.value = '';
+                
+                processViCommand(command);
+            }
+            e.preventDefault();
+        }
+    });
+    
+    // 處理 vi 命令
+    function processViCommand(command) {
+        switch(command) {
+            case ':wq':
+            case ':x':
+                // 儲存並離開
+                file.content = viContent;
+                addOutput(`'${filename}' 已儲存`, 'success');
+                viContainer.remove();
+                break;
+            case ':w':
+                // 儲存但不離開
+                file.content = viContent;
+                addOutput(`'${filename}' 已儲存`, 'success');
+                break;
+            case ':q':
+                // 離開（如果沒有修改）
+                if (viContent === file.content) {
+                    viContainer.remove();
+                } else {
+                    addOutput('尚有未儲存的修改，使用 :q! 強制離開', 'error');
+                }
+                break;
+            case ':q!':
+                // 強制離開不儲存
+                addOutput('離開而不儲存', 'warning');
+                viContainer.remove();
+                break;
+            case ':i':
+                // 切換到插入模式
+                viMode = 'insert';
+                updateModeDisplay();
+                break;
+            case ':c':
+                // 切換到命令模式
+                viMode = 'command';
+                updateModeDisplay();
+                break;
+            default:
+                if (command) {
+                    addOutput(`未知命令: ${command}`, 'error');
+                }
+        }
+    }
+}
+        //Chmod
+        function handleChmod(args) {
+    if (args.length < 2) {
+        addOutput('用法: chmod <權限> <檔案或目錄>', 'error');
+        addOutput('       chmod <權限> <檔案1> <檔案2> ...', 'info');
+        addOutput('範例: chmod 755 script.sh', 'info');
+        addOutput('      chmod u+x file.txt', 'info');
+        addOutput('      chmod g-w,o-r file.txt', 'info');
+        return;
+    }
+    
+    const permissions = args[0];
+    const targets = args.slice(1);
+    
+    // 檢查每個目標檔案/目錄
+    targets.forEach(target => {
+        // 檢查目標是否存在
+        if (!fileSystem[currentDirectory] || !fileSystem[currentDirectory].children[target]) {
+            addOutput(`chmod: 無法存取 '${target}': 沒有此檔案或目錄`, 'error');
+            return;
+        }
+        
+        const item = fileSystem[currentDirectory].children[target];
+        let newPermissions = '';
+        
+        // 解析權限
+        if (/^[0-7]{3,4}$/.test(permissions)) {
+            // 數字格式 (如 755, 644)
+            newPermissions = permissions.padStart(3, '0').substring(0, 3);
+        } else if (/^[ugoa]*[+-=][rwxXst]+$/.test(permissions)) {
+            // 符號格式 (如 u+x, g-w, o=r)
+            newPermissions = parseSymbolicPermissions(item.permissions, permissions, target);
+            if (!newPermissions) return;
+        } else {
+            addOutput(`chmod: 無效的權限模式 '${permissions}'`, 'error');
+            return;
+        }
+        
+        // 更新權限
+        const oldPermissions = item.permissions;
+        item.permissions = newPermissions;
+        
+        addOutput(`權限已變更: '${target}' ${oldPermissions} -> ${newPermissions}`, 'success');
+        
+        // 顯示詳細權限資訊
+        setTimeout(() => {
+            showPermissionDetails(target, newPermissions);
+        }, 300);
+    });
+}
+
+// 解析符號格式權限
+function parseSymbolicPermissions(currentPerm, symbolicPerm, filename) {
+    // 將數字權限轉換為符號格式
+    const permMap = {
+        '0': '---',
+        '1': '--x',
+        '2': '-w-',
+        '3': '-wx',
+        '4': 'r--',
+        '5': 'r-x',
+        '6': 'rw-',
+        '7': 'rwx'
+    };
+    
+    let currentSymbolic = '';
+    for (let i = 0; i < 3; i++) {
+        currentSymbolic += permMap[currentPerm[i]] || '---';
+    }
+    
+    // 簡單的符號權限解析（簡化版）
+    const matches = symbolicPerm.match(/^([ugoa]*)([+-=])([rwxXst]+)$/);
+    if (!matches) {
+        addOutput(`chmod: 無效的符號權限 '${symbolicPerm}'`, 'error');
+        return null;
+    }
+    
+    const [, who, op, what] = matches;
+    
+    // 這裡簡化處理，實際應該根據符號權限計算新權限
+    // 為了簡單起見，我們返回一個合理的預設值
+    addOutput(`已應用符號權限: ${symbolicPerm} 於 ${filename}`, 'info');
+    
+    // 根據操作類型返回新權限
+    if (op === '+') {
+        // 添加權限 - 簡單實現：設置為 755（目錄）或 644（檔案）
+        const item = fileSystem[currentDirectory].children[filename];
+        return item.type === 'directory' ? '755' : '644';
+    } else if (op === '-') {
+        // 移除權限 - 簡單實現：設置為 700 或 600
+        const item = fileSystem[currentDirectory].children[filename];
+        return item.type === 'directory' ? '700' : '600';
+    } else {
+        // 設置權限 - 簡單實現：設置為 755 或 644
+        const item = fileSystem[currentDirectory].children[filename];
+        return item.type === 'directory' ? '755' : '644';
+    }
+}
+
+// 顯示詳細權限資訊
+function showPermissionDetails(filename, permissions) {
+    const permMap = {
+        '0': '---',
+        '1': '--x',
+        '2': '-w-',
+        '3': '-wx',
+        '4': 'r--',
+        '5': 'r-x',
+        '6': 'rw-',
+        '7': 'rwx'
+    };
+    
+    const symbolic = permMap[permissions[0]] + permMap[permissions[1]] + permMap[permissions[2]];
+    const item = fileSystem[currentDirectory].children[filename];
+    
+    addOutput(`詳細權限: ${symbolic} (${permissions}) ${item.owner}:${item.group} ${filename}`, 'info');
+}
+        // Chown
+        function handleChown(args) {
+    if (args.length < 2) {
+        addOutput('用法: chown <使用者>[:群組] <檔案或目錄>', 'error');
+        addOutput('       chown <使用者>[:群組] <檔案1> <檔案2> ...', 'info');
+        addOutput('       chown :群組 <檔案或目錄>', 'info');
+        addOutput('範例: chown admin file.txt', 'info');
+        addOutput('      chown sales:sales report.doc', 'info');
+        addOutput('      chown :staff directory/', 'info');
+        return;
+    }
+    
+    const ownership = args[0];
+    const targets = args.slice(1);
+    
+    // 解析所有權格式
+    let newOwner = '';
+    let newGroup = '';
+    
+    if (ownership.includes(':')) {
+        [newOwner, newGroup] = ownership.split(':');
+    } else {
+        newOwner = ownership;
+    }
+    
+    // 檢查使用者是否存在
+    if (newOwner && !systemUsers.includes(newOwner)) {
+        addOutput(`chown: 無效的使用者 '${newOwner}'`, 'error');
+        return;
+    }
+    
+    // 檢查群組是否存在
+    if (newGroup && !systemGroups.includes(newGroup)) {
+        addOutput(`chown: 無效的群組 '${newGroup}'`, 'error');
+        return;
+    }
+    
+    // 檢查每個目標檔案/目錄
+    targets.forEach(target => {
+        // 檢查目標是否存在
+        if (!fileSystem[currentDirectory] || !fileSystem[currentDirectory].children[target]) {
+            addOutput(`chown: 無法存取 '${target}': 沒有此檔案或目錄`, 'error');
+            return;
+        }
+        
+        const item = fileSystem[currentDirectory].children[target];
+        const oldOwner = item.owner;
+        const oldGroup = item.group;
+        
+        // 更新所有權
+        if (newOwner) {
+            item.owner = newOwner;
+        }
+        if (newGroup) {
+            item.group = newGroup;
+        }
+        
+        // 顯示變更結果
+        let changeMessage = `所有權已變更: '${target}' `;
+        if (newOwner && newGroup) {
+            changeMessage += `${oldOwner}:${oldGroup} -> ${newOwner}:${newGroup}`;
+        } else if (newOwner) {
+            changeMessage += `使用者 ${oldOwner} -> ${newOwner}`;
+        } else if (newGroup) {
+            changeMessage += `群組 ${oldGroup} -> ${newGroup}`;
+        }
+        
+        addOutput(changeMessage, 'success');
+    });
+}
+        // wtps
+function handleWtps(args) {
+    // wtps get <url>
+    if (args[0] == "get") {
+        if (!args[1] || args[1] == "") {
+            addOutput("wtps: 請求錯誤 - 缺少 URL", "error");
+        } else if (args[1] == "wtps://test123.wtechhk.com") {
+            // 確保 /bin 目錄存在
+            if (!fileSystem['/bin']) {
+                fileSystem['/bin'] = {
+                    type: 'directory',
+                    children: {},
+                    permissions: '755',
+                    owner: 'root',
+                    group: 'root'
+                };
+            }
+            
+            fileSystem['/bin'].children["wtech-test123.tar.gz"] = {
+                type: 'file',
+                content: '下載的檔案內容...',
+                created: new Date(),
+                permissions: '644',
+                owner: 'root',
+                group: 'root'
+            };
+            addOutput("wtps: 請求成功 - 檔案已下載到 /bin/wtech-test123.tar.gz", "success");
+        } 
+         else if (args[1] == "tryweb") {
+            addOutput("wtps-package: 下載安裝中", "success"); 
+            if (!fileSystem['/bin']) {
+                fileSystem['/bin'] = {
+                    type: 'directory',
+                    children: {},
+                    permissions: '755',
+                    owner: 'root',
+                    group: 'root'
+                };
+            }
+            
+            fileSystem['/bin'].children["tryweb"] = {
+                type: 'directory',
+                content: '',
+                created: new Date(),
+                permissions: '644',
+                owner: 'root',
+                group: 'root'
+            };
+            addOutput("wtps-package: 安裝tryweb成功", "success"); 
+        } else { 
+            addOutput("wtps: 請求錯誤 - 無效的 URL", "error"); 
+        }
+    } else { 
+        addOutput("用法: wtps get <URL>", "error"); 
+    }
+}
+        // tryweb
+        function handleTryweb(args) {
+           if (!fileSystem['/bin'].children["tryweb"]) { addOutput("請安裝tryweb", "error"); return;}
+           status = args[0];
+           addOutput("恭喜", "success");
+}
+        });
+    </script>
+</body>
+</html>
