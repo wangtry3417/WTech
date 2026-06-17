@@ -70,7 +70,7 @@ class AIModules:
 
 app = Flask("WTech")
 #app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = str(os.environ.get("dataurl"))
+app.config['SQLALCHEMY_DATABASE_URI'] = str(os.environ.get("dataurl", "")).strip()
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
 app.config['SECRET_KEY'] = hashlib.sha256("WTech2225556".encode()).hexdigest()
@@ -250,7 +250,7 @@ def load_user(username):
     return wbankwallet.query.filter_by(username=username).first()
 
 # 創建 Flask-Admin 管理界面
-admin = Admin(app, name='泓財銀行--管理介面', template_mode='bootstrap4')
+admin = Admin(app, name='泓財銀行--管理介面')
 
 #admin.add_view(walletView(wbankwallet, db.session))
 
@@ -3283,35 +3283,16 @@ def style():
 # ═══════════════════════════════════════════════
 
 def start_web():
-    """Run app using SocketIO with SSL, port 8080 (http) + 8443 (https).
-    Portproxy on Windows: 80→8080, 443→8443 (already configured)."""
-    import ssl as sslmod
+    """Run app on port 8080 with SocketIO.
+    Portproxy on Windows: 80→8080, 443→8443 (both to same port)."""
     from threading import Thread
 
-    cert_file = "E:\\wbank\\cert.pem"
-    key_file = "E:\\wbank\\key.pem"
     HTTP_PORT = int(os.environ.get("HTTP_PORT", 8080))
-    HTTPS_PORT = int(os.environ.get("HTTPS_PORT", 8443))
 
-    def run_http():
-        print(f"[+] HTTP with SocketIO on 0.0.0.0:{HTTP_PORT}")
-        socketio.run(app, host="0.0.0.0", port=HTTP_PORT,
-                     allow_unsafe_werkzeug=True, use_debugger=False, use_reloader=False)
-
-    def run_https():
-        context = sslmod.SSLContext(sslmod.PROTOCOL_TLS_SERVER)
-        context.load_cert_chain(cert_file, key_file)
-        print(f"[+] HTTPS with SocketIO on 0.0.0.0:{HTTPS_PORT}")
-        socketio.run(app, host="0.0.0.0", port=HTTPS_PORT,
-                     ssl_context=context,
-                     allow_unsafe_werkzeug=True, use_debugger=False, use_reloader=False)
-
-    t1 = Thread(target=run_http, daemon=True)
-    t2 = Thread(target=run_https, daemon=True)
-    t1.start()
-    t2.start()
-    t1.join()
-    t2.join()
+    print(f"[+] SocketIO server on 0.0.0.0:{HTTP_PORT}")
+    print(f"[+] Portproxy: 80 → {HTTP_PORT}, 443 → {HTTP_PORT}")
+    socketio.run(app, host="0.0.0.0", port=HTTP_PORT,
+                 allow_unsafe_werkzeug=True, log_output=False)
 
 
 # Create DB tables if they don't exist yet
