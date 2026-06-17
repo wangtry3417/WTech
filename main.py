@@ -29,7 +29,7 @@ import discord
 from flask_socketio import SocketIO,emit,join_room,leave_room,rooms
 from flask_admin import Admin,expose, BaseView
 from flask_admin.contrib.sqla import ModelView
-from flask_sqlalchemy import SQLAlchemy
+# from flask_sqlalchemy import SQLAlchemy — moved to extensions.py
 from sqlalchemy import text
 from flask_babel import Babel
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
@@ -46,6 +46,8 @@ from bot import run_bot
 import threading
 from time import sleep
 from markupsafe import Markup
+from extensions import db
+from models import *
 #from nltk.stem import WordNetLemmatizer
 #from nltk.book import *
 
@@ -182,364 +184,46 @@ def before_request():
 }
     requests.post(url=dc_url, headers={"Authorization":f"Bot {os.environ.get('discordToken')}"}, json=sendData)
 
+@app.before_request
+def restrict_routes():
+    """Restrict all routes except /, /wbank, /wbank/*, /admin/*, /static/*"""
+    path = request.path
+    
+    # Always allow these paths
+    ALLOWED_PREFIXES = (
+        '/',  # root - but we'll be more specific below
+        '/admin/',
+        '/static/',
+    )
+    
+    # Special handling for /wbank (with or without trailing path)
+    if path == '/' or path == '/wbank' or path.startswith('/wbank/'):
+        return None  # allow
+    
+    # Allow Flask-Admin, SocketIO, and static files
+    if path.startswith('/admin/') or path.startswith('/static/') or path.startswith('/socket.io/'):
+        return None
+    
+    # Allow the style CSS route
+    if path == '/style/css/simple':
+        return None
+    
+    # Block everything else
+    return jsonify({"error": "Route disabled", "path": path}), 404
+
 @app.after_request
 def add_cors_headers(response):
     response.headers['Access-Control-Allow-Origin'] = '*'
     response.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
     return response
 
-db = SQLAlchemy(app)
+db.init_app(app)  # from extensions.py
 
 # 創建 Flask-Login 管理器
 login_manager = LoginManager()
 login_manager.init_app(app)
 
 babel = Babel(app)
-
-# 定義 SQLAlchemy 模型
-class wbankwallet(db.Model,UserMixin):
-    username = db.Column(db.String(64), primary_key=True, nullable=False)
-    balance = db.Column(db.String(120), nullable=False)
-    password = db.Column(db.String(120), nullable=False)
-    verify = db.Column(db.String(64), nullable=False, default='no')
-    sub = db.Column(db.String(64), nullable=True)
-    accnumber = db.Column(db.String(60), nullable=True)
-    openpay = db.Column(db.Boolean, nullable=True, default=False)
-    role = db.Column(db.String(60),nullable=False,default='NonVerify')
-    setamount = db.Column(db.Integer,nullable=False,default=20000)
-    nowamount = db.Column(db.Integer,nullable=False,default=0)
-    email = db.Column(db.String(70),nullable=True)
-    def __init__(self,username,balance,password,verify,sub,accnumber,openpay,role,setamount,nowamount,email):
-      self.username = username
-      self.balance = balance
-      self.password = password
-      self.verify = verify
-      self.sub = sub
-      self.accnumber = accnumber
-      self.openpay = openpay
-      self.role = role
-      self.setamount = setamount
-      self.nowamount = nowamount
-      self.email = email
-    def get_id(self):
-        return self.username
-
-class wbankrecord(db.Model):
-  username = db.Column(db.String(64), primary_key=True, nullable=False)
-  action = db.Column(db.String(120), nullable=True)
-  time = db.Column(db.DateTime, nullable=False)
-  def __init__(self,username,action,time):
-    self.username = username
-    self.action = action
-    self.time = time
-
-class oauth_client(db.Model):
-  __tablename__ = "clients"
-  clientID = db.Column(db.String(120), nullable=False, primary_key=True)
-  clientSecret = db.Column(db.String(120), nullable=False)
-  scrope = db.Column(db.String(64), nullable=False)
-  def __init__(self,clientID,clientSecret,scrope):
-    self.clientID = clientID
-    self.clientSecret = clientSecret
-    self.scrope = scrope
-
-class oauth_client_view(ModelView):
-  column_list = ('clientID','clientSecret','scrope')
-  column_display_pk=True
-  column_labels = {
-        'clientID': u'ClientID',
-        'clientSecret': u'Client_Secret',
-        'scrope': u'scrope'
-    }
-
-"""
-class wbankRecordView(ModelView):
-  column_list = ('username','action','time')
-  can_export = True
-  export_types = ['csv','html']
-  column_searchable_list = ('username',)
-  can_create = False
-  can_edit = False
-  can_delete = False
-  column_display_pk=True
-  can_view_details = True
-  column_filters = ['time']
-  column_labels = {
-        'username': '帳戶名',
-        'action': '動作',
-        'time': '時間'
-    }
-  details_modal = True
-"""
-
-class WBankRecordView(BaseView):
-    @expose('/')
-    def index(self):
-        return self.render('admin/wbankrecord.html')
-
-    @expose('/execute_query', methods=['POST'])
-    def execute_query(self):
-        user = request.form.get('username')
-        query = text("SELECT * FROM wbankrecord WHERE username=:username ORDER BY time DESC")
-        res = db.session.execute(query, {'username': user})
-        records = res.fetchall()
-
-        result = [{'username': record[0], 'action': record[1], 'time': record[2]} for record in records]
-        return jsonify(result)
-
-    @expose('/export', methods=['GET'])
-    def export_data(self):
-        query = text("SELECT * FROM wbankrecord")
-        res = db.session.execute(query)
-        records = res.fetchall()
-
-        # 將數據轉換為 DataFrame 並導出為 CSV
-        df = pd.DataFrame(records, columns=['username', 'action', 'time'])
-        csv = df.to_csv(index=False)
-
-        return Response(
-            csv,
-            mimetype='text/csv',
-            headers={"Content-disposition": "attachment; filename=wbankrecord.csv"}
-        )
-
-
-class wbankkyc(db.Model):
-    __tablename__ = 'wbankkyc'
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    fname = db.Column(db.String(120), nullable=False)
-    id_number = db.Column(db.String(120), nullable=False)
-    address = db.Column(db.String(255), nullable=False)
-    career = db.Column(db.String(120), nullable=False)
-    username = db.Column(db.String(64), db.ForeignKey('wbankwallet.username'), nullable=False)
-    pp_image = db.Column(db.Text, nullable=True)
-    @auth.login_required
-    def is_accessible(self):
-        return True  # 只要通過認證，就可以訪問
-
-    @auth.login_required
-    def inaccessible_callback(self, name, **kwargs):
-        return unauthorized()  # 使用自定義的未授權響應
-
-class wbankauthpay(db.Model):
-  __tablename__ = 'wbankauthpay'
-  id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-  payer = db.Column(db.String(64), db.ForeignKey('wbankwallet.username'), nullable=False)
-  reviewer = db.Column(db.String(64), nullable=False)
-  amount = db.Column(db.Integer, nullable=False)
-  def __init__(self,payer,reviewer,amount):
-    self.payer = payer
-    self.reviewer = reviewer
-    self.amount = amount
-
-class IDBrandForm(BaseForm):
-    username = StringField('用戶名', validators=[DataRequired()])
-    balance = StringField('餘額', validators=[DataRequired()])
-    password = StringField('密碼', validators=[DataRequired()])
-    verify = StringField('驗證狀態', validators=[DataRequired()])
-    sub = SelectField('備註', choices=[], validators=[])  # 初始化為空選項
-    role = StringField('目前身分', validators=[DataRequired()])
-    openpay = BooleanField('是否開啟Pay mode')
-    nowamount = IntegerField("總共轉帳金額", validators=[NumberRange(min=0)])
-    email = StringField('電郵')
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        # 在這裡可以設置選項
-        self.sub.choices = self.get_dynamic_choices()
-
-    def get_dynamic_choices(self):
-        # 根據需要返回選項列表
-        return [('', ''), ('由於閣下的資料存在問題，因此將會被暫時凍結', '資料問題凍結'), ('由於閣下的帳戶存在洗錢，因此將被暫時凍結', '使錢凍結'), ('可能存在不明原因，建議尋找WBank分行解決此問題','不明原因凍結')]
-      
-class walletView(ModelView):
-  #column_list = ('username','balance','password','verify','sub')
-  """
-  form_args = {
-    'username': {
-       'validators' : [DataRequired()],
-     },
-    'balance' : {
-      'validators' : [DataRequired()],
-    },
-    'password' : {
-      'validators' : [DataRequired()],
-    },
-    'verify' : {
-      'validators' : [DataRequired()],
-    },
-    'sub' : {
-      'validators' : [],
-    },
-    'openpay' : {
-      'validators' : [],
-    }
-  }
-  """
-  column_display_pk=True
-  column_searchable_list = ('username', 'sub')
-  column_labels = {
-        'username': '用戶名',
-        'balance': '餘額',
-        'password': '密碼',
-        'verify': '驗證狀態',
-        'sub':'備註',
-        'openpay':'是否開啟Pay mode',
-        'setamount':'設置交易限額',
-        'nowamount':'目前交易額'
-  }
-    
-  edit_modal=True
-  form = IDBrandForm
-  def is_accessible(self):
-    return (
-            current_user.is_active
-            and current_user.is_authenticated
-            and current_user.role=="staff"
-            or current_user.role=="admin"
-    )
-  def _handle_view(self, name, **kwargs):
-        """
-        Override builtin _handle_view in order to redirect users when a view is not
-        accessible.
-        """
-        if not self.is_accessible():
-            if current_user.is_authenticated:
-                # permission denied
-                return jsonify({"msg":u"非管理人員不能訪問"})
-            else:
-                # login
-                return redirect("/wbank")
-
-class kycView(ModelView):
-  column_list = ('username','fname','id_number','address','career','pp_image')
-  column_searchable_list = ('fname', 'id_number')
-  form_args = {
-    'username': {
-       'validators' : [DataRequired()],
-     },
-    'fname' : {
-      'validators' : [DataRequired()],
-    },
-    'id_number' : {
-      'validators' : [DataRequired()],
-    },
-    'address' : {
-      'validators' : [DataRequired()],
-    },
-    'career' : {
-      'validators' : [DataRequired()],
-    },
-    'pp_image' : {
-      'validators' : []
-    }
-  }
-  column_display_pk=True
-  edit_modal=True
-  column_labels = {
-        'username': '用戶名或帳戶號碼',
-        'fname': '全名',
-        'id_number': '護照號碼',
-        'address': '地址',
-        'career':'職業',
-        'pp_image':'護照b64Code'
-    }  
-  def _format_passport_image(view, ctx, model, name):
-    if model.pp_image:
-      return Markup(f"<img src={model.pp_image} style='width: 50px; height: 50px;' />")
-    return "沒有護照圖片或翻譯失敗"
-  column_formatters = {
-    'pp_image' : _format_passport_image
-  }
-  def is_accessible(self):
-    return (
-            current_user.is_active
-            and current_user.is_authenticated
-            and current_user.role=="admin"
-    )
-  def _handle_view(self, name, **kwargs):
-        """
-        Override builtin _handle_view in order to redirect users when a view is not
-        accessible.
-        """
-        if not self.is_accessible():
-            if current_user.is_authenticated:
-                # permission denied
-                return jsonify({"msg":"Only authenticated user can use"})
-            else:
-                # login
-                return redirect("/wbank")
-"""
-class CustomModelView(ModelView):
-    column_display_all_fields = True
-    page_size = sys.maxsize
-    can_set_page_size = True
-    def __init__(self, model, session, **kwargs):
-        super(CustomModelView, self).__init__(model, session, **kwargs)
-    def get_query(self):
-        query = self.session.query(self.model)
-        return query
-    def get_count_and_objects(self, query, page, sort_column, sort_direction,
-                              search, filters, page_size=None):
-      objects = query.all()
-      return len(objects), objects
-"""
-
-with app.app_context():
-  db.create_all()
-
-class cashout(db.Model):
-    __tablename__ = "cashout"
-    id = db.Column(db.Integer, primary_key=True,autoincrement=True)
-    name = db.Column(db.String(100), nullable=False)
-    amount = db.Column(db.Float, nullable=False)
-    status = db.Column(db.String(20), default='待處理Pending')  # 初始化狀態
-
-class cashForm(BaseForm):
-    name = StringField('用戶名稱', validators=[DataRequired()])
-    amount = FloatField('金額(WTC$)', validators=[DataRequired()])
-    status = SelectField('狀態', validators=[DataRequired()])
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        # 在這裡可以設置選項
-        self.status.choices = self.get_dynamic_choices()
-
-    def get_dynamic_choices(self):
-        # 根據需要返回選項列表
-        return [("待處理Pending","Pending"),("成功","Done"),("失敗","Fail")]
-
-class cashView(ModelView):
-  column_display_pk=True
-  column_searchable_list = ('id', 'name','status')
-  column_labels = {
-        'id': '序號',
-        'name': '用戶名稱',
-        'amount': '金額(WTC$)',
-        'status': '狀態'
-  }
-    
-  edit_modal=True
-  form = cashForm
-  def is_accessible(self):
-    return (
-            current_user.is_active
-            and current_user.is_authenticated
-            and current_user.role=="staff"
-            or current_user.role=="admin"
-    )
-  def _handle_view(self, name, **kwargs):
-        """
-        Override builtin _handle_view in order to redirect users when a view is not
-        accessible.
-        """
-        if not self.is_accessible():
-            if current_user.is_authenticated:
-                # permission denied
-                return jsonify({"msg":u"非管理人員不能訪問"})
-            else:
-                # login
-                return redirect("/wbank")
-      
 
 # 定義用戶類
 class User(UserMixin):
@@ -584,34 +268,6 @@ def after_request(response):
     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
     return response
 
-
-conn = psycopg2.connect(database="verceldb", user="default", 
-password="Gd2MsST3QYWF", host="ep-hidden-salad-a1a7pob9-pooler.ap-southeast-1.aws.neon.tech", 
-port=5432,sslmode="require")
-
-
-"""
-conn = psycopg2.connect(database="wbank", user="root", 
-password="r7wPtW1z6ltgw4oW8hW6qeIzJacfgwCM", host="dpg-cop0h6779t8c73fimlm0-a.singapore-postgres.render.com", 
-port=5432)
-"""
-
-"""
-conn = psycopg2.connect(database="verceldb", user="default", 
-password="Gd2MsST3QYWF", host="ep-hidden-salad-a1a7pob9-pooler.ap-southeast-1.aws.neon.tech", 
-port=5432,sslmode="""
-"""
-paypalrestsdk.configure({
-  'mode': 'sandbox', 
-  'client_id': 'ASK8RjfrdCzGvCQRDvnfa321S_5OBGMK4KDGac5PreKf6NU-0d0MUPPrYe_S-fq4tcoHN22P8Nz4xZs3',
-  'client_secret': 'EB1-tdfv74XcCxkdDWjueV19ePB4Wf8uMKwdhE2robSWQF21i6nC6pm57zzVARTzJ03ah6X4ARc1GhBQ'
-})
-"""
-paypalrestsdk.configure({
-  'mode': 'live', 
-  'client_id': 'AZsh7JUNnTOO2eYLuwhfwMltWUUCcDS--qf2TzNVDCvlDK20lhbUrbRXYfZgfJEaDskmPi5nmssIQWme',
-  'client_secret': 'ELlPg1idvYkNyzL1nBip5r2qL-fLBhHUpuz_aFQUD6OC7D1AlYj7qxPislk8_0igdkcp0afgPw2O5K0a'
-})
 
 def hash_value(user):
   u = user.encode()
@@ -3621,36 +3277,58 @@ def transferCrypto():
 def style():
   return render_template("style.css")
 
-def start_web():
-  socketio.run(app,host="0.0.0.0",port=5000,allow_unsafe_werkzeug=True)
 
-def start_boost():
-  while True:
-    sleep(5)
-    requests.get(url="https://bc.wtechhk.xyz",headers={"X-Forward-For":"237.45.67.78,33.45.67.89","User-Agent":"WTech/2.0"})
-        
-def req_random_ip():
-  while True:
-    sleep(1)
-    ip1 = random.randint(0,255)
-    ip2 = random.randint(0,255)
-    ip3 = random.randint(0,255)
-    ip4 = random.randint(0,255)
-    ipv4 = f"{ip1}.{ip2}.{ip3}.{ip4}"
-    headers = {
-     "User-Agent":"WTech/2.0",
-     "X-Forwarded-For":f"{ipv4},127.0.0.1,223.45.67.89"
-    }
-    res = requests.get(url="https://wbank-atm.wtechhk.com",headers=headers)
-    print(f"[HTTPS-ATTack] 127.0.0.1 -- https://vproxy.cloud/ Response: {res}")
+# ═══════════════════════════════════════════════
+# Startup
+# ═══════════════════════════════════════════════
+
+def start_web():
+    """Run app using SocketIO with SSL, port 8080 (http) + 8443 (https).
+    Portproxy on Windows: 80→8080, 443→8443 (already configured)."""
+    import ssl as sslmod
+    from threading import Thread
+
+    cert_file = "E:\\wbank\\cert.pem"
+    key_file = "E:\\wbank\\key.pem"
+    HTTP_PORT = int(os.environ.get("HTTP_PORT", 8080))
+    HTTPS_PORT = int(os.environ.get("HTTPS_PORT", 8443))
+
+    def run_http():
+        print(f"[+] HTTP with SocketIO on 0.0.0.0:{HTTP_PORT}")
+        socketio.run(app, host="0.0.0.0", port=HTTP_PORT,
+                     allow_unsafe_werkzeug=True, use_debugger=False, use_reloader=False)
+
+    def run_https():
+        context = sslmod.SSLContext(sslmod.PROTOCOL_TLS_SERVER)
+        context.load_cert_chain(cert_file, key_file)
+        print(f"[+] HTTPS with SocketIO on 0.0.0.0:{HTTPS_PORT}")
+        socketio.run(app, host="0.0.0.0", port=HTTPS_PORT,
+                     ssl_context=context,
+                     allow_unsafe_werkzeug=True, use_debugger=False, use_reloader=False)
+
+    t1 = Thread(target=run_http, daemon=True)
+    t2 = Thread(target=run_https, daemon=True)
+    t1.start()
+    t2.start()
+    t1.join()
+    t2.join()
+
+
+# Create DB tables if they don't exist yet
+with app.app_context():
+    db.create_all()
 
 from wchatBot import run_model
-thread1 = threading.Thread(target=start_web)
-thread2 = threading.Thread(target=run_bot)
-thread3 = threading.Thread(target=run_model)
+
+thread1 = threading.Thread(target=start_web, daemon=True)
+thread2 = threading.Thread(target=run_bot, daemon=True)
+thread3 = threading.Thread(target=run_model, daemon=True)
 thread1.start()
 thread2.start()
 thread3.start()
-thread1.join()
-thread2.join()
-thread3.join()
+try:
+    thread1.join()
+    thread2.join()
+    thread3.join()
+except KeyboardInterrupt:
+    print("[WBank] Shutting down...")
