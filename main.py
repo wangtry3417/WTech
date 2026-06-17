@@ -70,7 +70,10 @@ class AIModules:
 
 app = Flask("WTech")
 #app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = str(os.environ.get("dataurl", "")).strip()
+# SQLAlchemy database URI — loaded from config.py
+from config import DATABASE_URL
+_dataurl = DATABASE_URL
+app.config['SQLALCHEMY_DATABASE_URI'] = _dataurl.strip()
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
 app.config['SECRET_KEY'] = hashlib.sha256("WTech2225556".encode()).hexdigest()
@@ -130,7 +133,7 @@ def verify_password(username, password):
     return False
 
 SOCKET_CONFIG = {
-    'async_mode': 'eventlet',
+    'async_mode': 'threading',
     'cors_allowed_origins': "*",
     'manage_session': True,
     'logger': True,
@@ -141,7 +144,6 @@ SOCKET_CONFIG = {
 socketio = SocketIO(app,**SOCKET_CONFIG)
 
 socketio.init_app(app)
-socketio.server.instrument(auth=False,namespace="/")
 
 #CORS(app,resources={r"/*": {"origins": "*"}})
 #CORS(app,resources={r"/wbank/hash/transfer": {"origins": "http://223.19.115.182:5000"}})
@@ -3283,16 +3285,37 @@ def style():
 # ═══════════════════════════════════════════════
 
 def start_web():
-    """Run app on port 8080 with SocketIO.
-    Portproxy on Windows: 80→8080, 443→8443 (both to same port)."""
+    """Run app SocketIO on port 8080 (http) + 8443 (https).
+    Portproxy: 80→8080, 443→8443"""
     from threading import Thread
 
     HTTP_PORT = int(os.environ.get("HTTP_PORT", 8080))
+    HTTPS_PORT = int(os.environ.get("HTTPS_PORT", 8443))
 
-    print(f"[+] SocketIO server on 0.0.0.0:{HTTP_PORT}")
-    print(f"[+] Portproxy: 80 → {HTTP_PORT}, 443 → {HTTP_PORT}")
-    socketio.run(app, host="0.0.0.0", port=HTTP_PORT,
-                 allow_unsafe_werkzeug=True, log_output=False)
+    def run_http():
+        print(f"[+] HTTP on 0.0.0.0:{HTTP_PORT} (portproxy 80)")
+        socketio.run(app, host="0.0.0.0", port=HTTP_PORT,
+                     allow_unsafe_werkzeug=True,
+                     use_debugger=False, use_reloader=False)
+
+    def run_https():
+        import ssl as sslmod
+        cert_file = "E:\\wbank\\cert.pem"
+        key_file = "E:\\wbank\\key.pem"
+        context = sslmod.SSLContext(sslmod.PROTOCOL_TLS_SERVER)
+        context.load_cert_chain(cert_file, key_file)
+        print(f"[+] HTTPS on 0.0.0.0:{HTTPS_PORT} (portproxy 443)")
+        socketio.run(app, host="0.0.0.0", port=HTTPS_PORT,
+                     ssl_context=context,
+                     allow_unsafe_werkzeug=True,
+                     use_debugger=False, use_reloader=False)
+
+    t1 = Thread(target=run_http, daemon=True)
+    t2 = Thread(target=run_https, daemon=True)
+    t1.start()
+    t2.start()
+    t1.join()
+    t2.join()
 
 
 # Create DB tables if they don't exist yet
